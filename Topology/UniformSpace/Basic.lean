@@ -63,8 +63,8 @@ lemma IsOpen.relComp
 .inter ht.preimage (by fun_prop) exact isOpen_iUnion fun a => hs.preimage (by fun_prop)
 
 中文:
-引理 IsOpen.relComp
-  结论: [TopologicalSpace α] [TopologicalSpace β] [TopologicalSpace γ]
+引理 是开集.relComp
+  结论: [拓扑空间 α] [拓扑空间 β] [拓扑空间 γ]
   证明: by
   conv =>
     arg 1; equals ⋃ b, (fun p => (p.1, b)) ⁻¹' s inter (fun p => (b, p.2)) ⁻¹' t => ext ⟨_, _⟩; simp
@@ -87,8 +87,8 @@ lemma IsOpen.relInv
   proof: hs.preimage continuous_swap
 
 中文:
-引理 IsOpen.relInv
-  结论: [TopologicalSpace α] [TopologicalSpace β]
+引理 是开集.relInv
+  结论: [拓扑空间 α] [拓扑空间 β]
   证明: hs.preimage continuous_swap
 
 Depends on / 依赖: continuous_swap, hs.preimage, preimage
@@ -108,8 +108,8 @@ lemma IsOpen.relImage
 exact isOpen_biUnion fun _ _ => hs.preimage .prodMk_right _
 
 中文:
-引理 IsOpen.relImage
-  结论: [TopologicalSpace α] [TopologicalSpace β]
+引理 是开集.relImage
+  结论: [拓扑空间 α] [拓扑空间 β]
   证明: by
   simp_rw [SetRel.image, ← exists_prop, Set.ofPred_exists]
 exact isOpen_biUnion fun _ _ => hs.preimage .prodMk_right _
@@ -130,8 +130,8 @@ lemma IsOpen.relPreimage
   proof: hs.relInv.relImage
 
 中文:
-引理 IsOpen.relPreimage
-  结论: [TopologicalSpace α] [TopologicalSpace β]
+引理 是开集.relPreimage
+  结论: [拓扑空间 α] [拓扑空间 β]
   证明: hs.relInv.relImage
 
 Depends on / 依赖: hs.relInv.relImage, relImage, relInv
@@ -149,8 +149,8 @@ lemma IsClosed.relInv
   proof: hs.preimage continuous_swap
 
 中文:
-引理 IsClosed.relInv
-  结论: [TopologicalSpace α] [TopologicalSpace β]
+引理 是闭集.relInv
+  结论: [拓扑空间 α] [拓扑空间 β]
   证明: hs.preimage continuous_swap
 
 Depends on / 依赖: continuous_swap, hs.preimage, preimage
@@ -170,8 +170,8 @@ lemma IsClosed.relImage_of_finite
 exact ht.isClosed_biUnion fun _ _ => hs.preimage .prodMk_right _
 
 中文:
-引理 IsClosed.relImage_of_finite
-  结论: [TopologicalSpace α] [TopologicalSpace β]
+引理 是闭集.relImage_of_finite
+  结论: [拓扑空间 α] [拓扑空间 β]
   证明: by
   simp_rw [SetRel.image, ← exists_prop, Set.ofPred_exists]
 exact ht.isClosed_biUnion fun _ _ => hs.preimage .prodMk_right _
@@ -192,8 +192,8 @@ lemma IsClosed.relPreimage_of_finite
   proof: hs.relInv.relImage_of_finite ht
 
 中文:
-引理 IsClosed.relPreimage_of_finite
-  结论: [TopologicalSpace α] [TopologicalSpace β]
+引理 是闭集.relPreimage_of_finite
+  结论: [拓扑空间 α] [拓扑空间 β]
   证明: hs.relInv.relImage_of_finite ht
 
 Depends on / 依赖: hs.relInv.relImage_of_finite, relImage_of_finite, relInv
@@ -286,8 +286,8 @@ lemma isOpen_ball
 
 中文:
 引理 isOpen_ball
-  条件: (x : α) {V : SetRel α α} (hV : IsOpen V)
-  结论: IsOpen (ball x V)
+  条件: (x : α) {V : SetRel α α} (hV : 是开集 V)
+  结论: 是开集 (ball x V)
   证明: hV.preimage .prodMk_right _
 
 Depends on / 依赖: hV.preimage, preimage, prodMk_right
@@ -306,8 +306,8 @@ lemma isClosed_ball
 
 中文:
 引理 isClosed_ball
-  条件: (x : α) {V : SetRel α α} (hV : IsClosed V)
-  结论: IsClosed (ball x V)
+  条件: (x : α) {V : SetRel α α} (hV : 是闭集 V)
+  结论: 是闭集 (ball x V)
   证明: hV.preimage .prodMk_right _
 
 Depends on / 依赖: hV.preimage, preimage, prodMk_right
@@ -521,8 +521,8 @@ theorem UniformSpace.has_seq_basis
   ⟨U, hbasis, fun n => (hsym n).2⟩
 
 中文:
-定理 UniformSpace.has_seq_basis
-  条件: [IsCountablyGenerated <| 𝓤 α]
+定理 一致空间.has_seq_basis
+  条件: [是余untablyGenerated <| 𝓤 α]
   证明: let ⟨U, hsym, hbasis⟩ := (@UniformSpace.hasBasis_symmetric α _).exists_antitone_subbasis
   ⟨U, hbasis, fun n => (hsym n).2⟩
 
@@ -550,7 +550,7 @@ theorem closure_eq_uniformity
 
 中文:
 定理 closure_eq_uniformity
-  条件: (s : Set <| α × α)
+  条件: (s : 集合 <| α × α)
   证明: by
   ext ⟨x, y⟩
   simp +contextual only
@@ -631,7 +631,7 @@ theorem Filter.HasBasis.uniformity_closure
   proof: (@uniformity_eq_uniformity_closure α _).symm ▸ h.lift'_closure
 
 中文:
-定理 Filter.HasBasis.uniformity_closure
+定理 滤子.有基.uniformity_closure
   结论: {p : ι -> 命题} {U : ι -> SetRel α α}
   证明: (@uniformity_eq_uniformity_closure α _).symm ▸ h.lift'_closure
 
@@ -651,7 +651,7 @@ theorem uniformity_hasBasis_closure
 
 中文:
 定理 uniformity_hasBasis_closure
-  结论: HasBasis (𝓤 α) (fun V : SetRel α α => V in 𝓤 α) closure
+  结论: 有基 (𝓤 α) (fun V : SetRel α α => V in 𝓤 α) closure
   证明: (𝓤 α).basis_sets.uniformity_closure
 
 Depends on / 依赖: basis_sets, basis_sets.uniformity_closure, uniformity_closure
@@ -773,7 +773,7 @@ theorem mem_uniformity_isClosed
 中文:
 定理 mem_uniformity_isClosed
   条件: {s : SetRel α α} (h : s in 𝓤 α)
-  结论: 存在 t in 𝓤 α, IsClosed t ∧ t subseteq s
+  结论: 存在 t in 𝓤 α, 是闭集 t ∧ t subseteq s
   证明: let ⟨t, ⟨ht_mem, htc⟩, hts⟩ := uniformity_hasBasis_closed.mem_iff.1 h
   ⟨t, ht_mem, htc, hts⟩
 
@@ -801,7 +801,7 @@ theorem isOpen_iff_isOpen_ball_subset
 
 中文:
 定理 isOpen_iff_isOpen_ball_subset
-  条件: {s : Set α}
+  条件: {s : 集合 α}
   证明: by
   rw [isOpen_iff_ball_subset]
   constructor <;> intro h x hx
@@ -857,8 +857,8 @@ theorem Dense.biUnion_uniformity_ball
   exact ⟨x, hxs, hxy⟩
 
 中文:
-定理 Dense.biUnion_uniformity_ball
-  条件: {s : Set α} {U : SetRel α α} (hs : Dense s) (hU : U in 𝓤 α)
+定理 稠密.biUnion_uniformity_ball
+  条件: {s : 集合 α} {U : SetRel α α} (hs : 稠密 s) (hU : U in 𝓤 α)
   证明: by
   refine iUnion₂_eq_univ_iff.2 fun y => ?_
   rcases hs.inter_nhds_nonempty (mem_nhds_right y hU) with ⟨x, hxs, hxy : (x, y) in U⟩
@@ -912,7 +912,7 @@ theorem uniformity_hasBasis_open
 
 中文:
 定理 uniformity_hasBasis_open
-  结论: HasBasis (𝓤 α) (fun V : SetRel α α => V in 𝓤 α ∧ IsOpen V) id
+  结论: 有基 (𝓤 α) (fun V : SetRel α α => V in 𝓤 α ∧ 是开集 V) id
   证明: hasBasis_self.2 fun s hs =>
     ⟨interior s, interior_mem_uniformity hs, isOpen_interior, interior_subset⟩
 
@@ -931,7 +931,7 @@ theorem Filter.HasBasis.mem_uniformity_iff
   proof: h.mem_iff.trans by simp only [Prod.forall, subset_def]
 
 中文:
-定理 Filter.HasBasis.mem_uniformity_iff
+定理 滤子.有基.mem_uniformity_iff
   结论: {p : β -> 命题} {s : β -> SetRel α α}
   证明: h.mem_iff.trans by simp only [Prod.forall, subset_def]
 
@@ -1016,7 +1016,7 @@ instance :
 
 中文:
 实例 :
-  签名: PartialOrder (UniformSpace α)
+  签名: 偏序 (一致空间 α)
   定义体: PartialOrder.lift (fun u => 𝓤[u]) fun _ _ => UniformSpace.ext
 -/
 instance : PartialOrder (UniformSpace α) :=
@@ -1032,8 +1032,8 @@ theorem UniformSpace.le_def
   proof: Iff.rfl
 
 中文:
-定理 UniformSpace.le_def
-  条件: {u₁ u₂ : UniformSpace α}
+定理 一致空间.le_def
+  条件: {u₁ u₂ : 一致空间 α}
   结论: u₁ <= u₂ ↔ 𝓤[u₁] <= 𝓤[u₂]
   证明: Iff.rfl
 -/
@@ -1056,7 +1056,7 @@ instance :
 
 中文:
 实例 :
-  签名: InfSet (UniformSpace α)
+  签名: 下确界集 (一致空间 α)
   定义体: ⟨fun s =>
     UniformSpace.ofCore
       { uniformity := ⨅ u in s, 𝓤[u]
@@ -1085,8 +1085,8 @@ theorem UniformSpace.sInf_le
   proof: show ⨅ u in tt, 𝓤[u] <= 𝓤[t] from iInf₂_le t h
 
 中文:
-定理 UniformSpace.sInf_le
-  结论: {tt : Set (UniformSpace α)} {t : UniformSpace α}
+定理 一致空间.sInf_le
+  结论: {tt : 集合 (一致空间 α)} {t : 一致空间 α}
   证明: show ⨅ u in tt, 𝓤[u] <= 𝓤[t] from iInf₂_le t h
 -/
 protected theorem UniformSpace.sInf_le {tt : Set (UniformSpace α)} {t : UniformSpace α}
@@ -1102,8 +1102,8 @@ theorem UniformSpace.le_sInf
   proof: show 𝓤[t] <= ⨅ u in tt, 𝓤[u] from le_iInf₂ h
 
 中文:
-定理 UniformSpace.le_sInf
-  结论: {tt : Set (UniformSpace α)} {t : UniformSpace α}
+定理 一致空间.le_sInf
+  结论: {tt : 集合 (一致空间 α)} {t : 一致空间 α}
   证明: show 𝓤[t] <= ⨅ u in tt, 𝓤[u] from le_iInf₂ h
 -/
 protected theorem UniformSpace.le_sInf {tt : Set (UniformSpace α)} {t : UniformSpace α}
@@ -1120,8 +1120,8 @@ theorem UniformSpace.isGLB_sInf
   proof: ⟨fun _ => UniformSpace.sInf_le, fun _ => UniformSpace.le_sInf⟩
 
 中文:
-定理 UniformSpace.isGLB_sInf
-  条件: {tt : Set (UniformSpace α)}
+定理 一致空间.isGLB_sInf
+  条件: {tt : 集合 (一致空间 α)}
   结论: IsGLB tt (sInf tt)
   证明: ⟨fun _ => UniformSpace.sInf_le, fun _ => UniformSpace.le_sInf⟩
 -/
@@ -1138,7 +1138,7 @@ instance :
 
 中文:
 实例 :
-  签名: Top (UniformSpace α)
+  签名: 顶元素 (一致空间 α)
   定义体: ⟨@UniformSpace.mk α ⊤ ⊤ le_top le_top fun x => by simp only [nhds_top, comap_top]⟩
 -/
 instance : Top (UniformSpace α) :=
@@ -1159,7 +1159,7 @@ comp := lift'_le (mem_principal_self _) principal_mono.2 (SetRel.id_comp _).subs
 
 中文:
 实例 :
-  签名: Bot (UniformSpace α)
+  签名: 底元素 (一致空间 α)
   定义体: ⟨{ toTopologicalSpace := ⊥
       uniformity := 𝓟 SetRel.id
       symm := by simp [Tendsto, SetRel.id]
@@ -1192,7 +1192,7 @@ comp := (lift'_inf_le _ _ _).trans inf_le_inf u₁.comp u₂.comp
 
 中文:
 实例 :
-  签名: Min (UniformSpace α)
+  签名: 最小值 (一致空间 α)
   定义体: ⟨fun u₁ u₂ =>
     { uniformity := 𝓤[u₁] ⊓ 𝓤[u₂]
       symm := u₁.symm.inf u₂.symm
@@ -1228,7 +1228,7 @@ instance :
 
 中文:
 实例 :
-  签名: CompleteLattice (UniformSpace α)
+  签名: 完备格 (一致空间 α)
   定义体: sInf { x | a <= x ∧ b <= x }
   le_sup_left _ _ := UniformSpace.le_sInf fun _ ⟨h, _⟩ => h
   le_sup_right _ _ := UniformSpace.le_sInf fun _ ⟨_, h⟩ => h
@@ -1263,7 +1263,7 @@ theorem iInf_uniformity
 
 中文:
 定理 iInf_uniformity
-  条件: {ι : Sort*} {u : ι -> UniformSpace α}
+  条件: {ι : 类型层*} {u : ι -> 一致空间 α}
   结论: 𝓤[iInf u] = ⨅ i, 𝓤[u i]
   证明: iInf_range
 
@@ -1283,7 +1283,7 @@ theorem inf_uniformity
 
 中文:
 定理 inf_uniformity
-  条件: {u v : UniformSpace α}
+  条件: {u v : 一致空间 α}
   结论: 𝓤[u ⊓ v] = 𝓤[u] ⊓ 𝓤[v]
   证明: rfl
 -/
@@ -1299,7 +1299,7 @@ lemma bot_uniformity
 
 中文:
 引理 bot_uniformity
-  结论: 𝓤[(⊥ : UniformSpace α)] = 𝓟 SetRel.id
+  结论: 𝓤[(⊥ : 一致空间 α)] = 𝓟 SetRel.id
   证明: rfl
 -/
 lemma bot_uniformity : 𝓤[(⊥ : UniformSpace α)] = 𝓟 SetRel.id := rfl
@@ -1314,7 +1314,7 @@ lemma top_uniformity
 
 中文:
 引理 top_uniformity
-  结论: 𝓤[(⊤ : UniformSpace α)] = ⊤
+  结论: 𝓤[(⊤ : 一致空间 α)] = ⊤
   证明: rfl
 -/
 lemma top_uniformity : 𝓤[(⊤ : UniformSpace α)] = ⊤ := rfl
@@ -1329,7 +1329,7 @@ instance inhabitedUniformSpace
 
 中文:
 实例 inhabitedUniformSpace
-  签名: : Inhabited (UniformSpace α)
+  签名: : 可居 (一致空间 α)
   定义体: ⟨⊥⟩
 -/
 instance inhabitedUniformSpace : Inhabited (UniformSpace α) :=
@@ -1345,7 +1345,7 @@ instance inhabitedUniformSpaceCore
 
 中文:
 实例 inhabitedUniformSpaceCore
-  签名: : Inhabited (UniformSpace.Core α)
+  签名: : 可居 (一致空间.核 α)
   定义体: ⟨@UniformSpace.toCore _ default⟩
 
 Depends on / 依赖: UniformSpace, UniformSpace.toCore, toCore
@@ -1363,8 +1363,8 @@ instance [Subsingleton
     rw [SetRel.id]; rw [← diagonal]; rw [diagonal_eq_univ]; exact univ_mem
 
 中文:
-实例 [Subsingleton
-  签名: α] : Unique (UniformSpace α) where
+实例 [子单例
+  签名: α] : 唯一 (一致空间 α) where
   定义体: bot_unique le_principal_iff.2 by
     rw [SetRel.id]; rw [← diagonal]; rw [diagonal_eq_univ]; exact univ_mem
 
@@ -1391,8 +1391,8 @@ abbreviation UniformSpace.comap
       · ex
 
 中文:
-缩写 UniformSpace.comap
-  签名: (f : α -> β) (u : UniformSpace β)
+缩写 一致空间.comap
+  签名: (f : α -> β) (u : 一致空间 β)
   定义体: 𝓤[u].comap fun p : α × α => (f p.1, f p.2)
   symm := by
     simp only [tendsto_comap_iff]
@@ -1428,7 +1428,7 @@ theorem uniformity_comap
 
 中文:
 定理 uniformity_comap
-  条件: {_ : UniformSpace β} (f : α -> β)
+  条件: {_ : 一致空间 β} (f : α -> β)
   证明: rfl
 -/
 theorem uniformity_comap {_ : UniformSpace β} (f : α -> β) :
@@ -1475,7 +1475,7 @@ theorem uniformSpace_comap_id
 中文:
 定理 uniformSpace_comap_id
   条件: {α : 类型}
-  结论: UniformSpace.comap (id : α -> α) = id
+  结论: 一致空间.comap (id : α -> α) = id
   证明: by
   ext : 2
   rw [uniformity_comap]; rw [Prod.map_id]; rw [comap_id]
@@ -1497,8 +1497,8 @@ theorem UniformSpace.comap_comap
   simp only [uniformity_comap, Filter.comap_comap, Prod.map_comp_map]
 
 中文:
-定理 UniformSpace.comap_comap
-  条件: {α β γ} {uγ : UniformSpace γ} {f : α -> β} {g : β -> γ}
+定理 一致空间.comap_comap
+  条件: {α β γ} {uγ : 一致空间 γ} {f : α -> β} {g : β -> γ}
   证明: by
   ext1
   simp only [uniformity_comap, Filter.comap_comap, Prod.map_comp_map]
@@ -1519,8 +1519,8 @@ theorem UniformSpace.comap_inf
   proof: UniformSpace.ext Filter.comap_inf
 
 中文:
-定理 UniformSpace.comap_inf
-  条件: {α γ} {u₁ u₂ : UniformSpace γ} {f : α -> γ}
+定理 一致空间.comap_inf
+  条件: {α γ} {u₁ u₂ : 一致空间 γ} {f : α -> γ}
   证明: UniformSpace.ext Filter.comap_inf
 
 Depends on / 依赖: Filter, Filter.comap_inf, UniformSpace, UniformSpace.ext, comap_inf
@@ -1540,8 +1540,8 @@ theorem UniformSpace.comap_iInf
   simp [uniformity_comap, iInf_uniformity]
 
 中文:
-定理 UniformSpace.comap_iInf
-  条件: {ι α γ} {u : ι -> UniformSpace γ} {f : α -> γ}
+定理 一致空间.comap_iInf
+  条件: {ι α γ} {u : ι -> 一致空间 γ} {f : α -> γ}
   证明: by
   ext : 1
   simp [uniformity_comap, iInf_uniformity]
@@ -1563,7 +1563,7 @@ theorem UniformSpace.comap_mono
   Filter.comap_mono hu
 
 中文:
-定理 UniformSpace.comap_mono
+定理 一致空间.comap_mono
   条件: {α γ} {f : α -> γ}
   证明: fun _ _ hu =>
   Filter.comap_mono hu
@@ -1585,7 +1585,7 @@ alias uniformContinuous_iff := uniformContinuous_iff_le_comap
 
 中文:
 定理 uniformContinuous_iff_le_comap
-  结论: {α β} {uα : UniformSpace α} {uβ : UniformSpace β}
+  结论: {α β} {uα : 一致空间 α} {uβ : 一致空间 β}
   证明: Filter.map_le_iff_le_comap
 
 @[deprecated (since := "2026-05-23")]
@@ -1611,7 +1611,7 @@ theorem le_iff_uniformContinuous_id
 
 中文:
 定理 le_iff_uniformContinuous_id
-  条件: {u v : UniformSpace α}
+  条件: {u v : 一致空间 α}
   证明: by
   rw [uniformContinuous_iff_le_comap]; rw [uniformSpace_comap_id]; rw [id]
 
@@ -1631,7 +1631,7 @@ theorem uniformContinuous_comap
 
 中文:
 定理 uniformContinuous_comap
-  条件: {f : α -> β} [u : UniformSpace β]
+  条件: {f : α -> β} [u : 一致空间 β]
   证明: tendsto_comap
 
 Depends on / 依赖: tendsto_comap
@@ -1650,7 +1650,7 @@ theorem uniformContinuous_comap'
 
 中文:
 定理 uniformContinuous_comap'
-  结论: {f : γ -> β} {g : α -> γ} [v : UniformSpace β] [u : UniformSpace α]
+  结论: {f : γ -> β} {g : α -> γ} [v : 一致空间 β] [u : 一致空间 α]
   证明: tendsto_comap_iff.2 h
 
 Depends on / 依赖: tendsto_comap_iff
@@ -1672,7 +1672,7 @@ theorem to_nhds_mono
 
 中文:
 定理 to_nhds_mono
-  条件: {u₁ u₂ : UniformSpace α} (h : u₁ <= u₂) (a : α)
+  条件: {u₁ u₂ : 一致空间 α} (h : u₁ <= u₂) (a : α)
   证明: by
   rw [@nhds_eq_uniformity α u₁ a]; rw [@nhds_eq_uniformity α u₂ a]; exact lift'_mono h le_rfl
 
@@ -1693,7 +1693,7 @@ theorem toTopologicalSpace_mono
 
 中文:
 定理 toTopologicalSpace_mono
-  条件: {u₁ u₂ : UniformSpace α} (h : u₁ <= u₂)
+  条件: {u₁ u₂ : 一致空间 α} (h : u₁ <= u₂)
   证明: le_of_nhds_le_nhds to_nhds_mono h
 
 Depends on / 依赖: le_of_nhds_le_nhds, to_nhds_mono
@@ -1712,7 +1712,7 @@ theorem toTopologicalSpace_comap
 
 中文:
 定理 toTopologicalSpace_comap
-  条件: {f : α -> β} {u : UniformSpace β}
+  条件: {f : α -> β} {u : 一致空间 β}
   证明: rfl
 -/
 theorem toTopologicalSpace_comap {f : α -> β} {u : UniformSpace β} :
@@ -1731,7 +1731,7 @@ lemma uniformSpace_eq_bot
 
 中文:
 引理 uniformSpace_eq_bot
-  条件: {u : UniformSpace α}
+  条件: {u : 一致空间 α}
   结论: u = ⊥ ↔ SetRel.id in 𝓤[u]
   证明: le_bot_iff.symm.trans le_principal_iff
 
@@ -1750,7 +1750,7 @@ lemma _root_.Filter.HasBasis.uniformSpace_eq_bot
   simp [uniformSpace_eq_bot, h.mem_iff, subset_def, Pairwise, not_imp_not]
 
 中文:
-引理 _root_.Filter.HasBasis.uniformSpace_eq_bot
+引理 _root_.滤子.有基.uniformSpace_eq_bot
   结论: {ι p} {s : ι -> SetRel α α}
   证明: by
   simp [uniformSpace_eq_bot, h.mem_iff, subset_def, Pairwise, not_imp_not]
@@ -1770,7 +1770,7 @@ theorem toTopologicalSpace_bot
 
 中文:
 定理 toTopologicalSpace_bot
-  结论: @UniformSpace.toTopologicalSpace α ⊥ = ⊥
+  结论: @一致空间.toTopologicalSpace α ⊥ = ⊥
   证明: rfl
 -/
 theorem toTopologicalSpace_bot : @UniformSpace.toTopologicalSpace α ⊥ = ⊥ := rfl
@@ -1785,7 +1785,7 @@ theorem toTopologicalSpace_top
 
 中文:
 定理 toTopologicalSpace_top
-  结论: @UniformSpace.toTopologicalSpace α ⊤ = ⊤
+  结论: @一致空间.toTopologicalSpace α ⊤ = ⊤
   证明: rfl
 -/
 theorem toTopologicalSpace_top : @UniformSpace.toTopologicalSpace α ⊤ = ⊤ := rfl
@@ -1801,7 +1801,7 @@ theorem toTopologicalSpace_iInf
 
 中文:
 定理 toTopologicalSpace_iInf
-  条件: {ι : Sort*} {u : ι -> UniformSpace α}
+  条件: {ι : 类型层*} {u : ι -> 一致空间 α}
   证明: TopologicalSpace.ext_nhds fun a => by simp only [@nhds_eq_comap_uniformity _ (iInf u), nhds_iInf,
     iInf_uniformity, @nhds_eq_comap_uniformity _ (u _), Filter.comap_iInf]
 
@@ -1824,7 +1824,7 @@ theorem toTopologicalSpace_sInf
 
 中文:
 定理 toTopologicalSpace_sInf
-  条件: {s : Set (UniformSpace α)}
+  条件: {s : 集合 (一致空间 α)}
   证明: by
   rw [sInf_eq_iInf]
   simp only [← toTopologicalSpace_iInf]
@@ -1846,7 +1846,7 @@ theorem toTopologicalSpace_inf
 
 中文:
 定理 toTopologicalSpace_inf
-  条件: {u v : UniformSpace α}
+  条件: {u v : 一致空间 α}
   证明: rfl
 -/
 theorem toTopologicalSpace_inf {u v : UniformSpace α} :
@@ -1873,9 +1873,9 @@ theorem UniformContinuous.continuous
 @[fun_prop]
 
 中文:
-定理 UniformContinuous.continuous
-  条件: (hf : UniformContinuous f)
-  结论: Continuous f
+定理 一致连续.continuous
+  条件: (hf : 一致连续 f)
+  结论: 连续 f
   证明: continuous_iff_le_induced.mpr UniformSpace.toTopologicalSpace_mono
     uniformContinuous_iff_le_comap.1 hf
 
@@ -1897,8 +1897,8 @@ lemma UniformContinuous.uniformContinuousOn
   proof: tendsto_inf_left hf
 
 中文:
-引理 UniformContinuous.uniformContinuousOn
-  条件: (hf : UniformContinuous f)
+引理 一致连续.uniformContinuousOn
+  条件: (hf : 一致连续 f)
   证明: tendsto_inf_left hf
 
 Depends on / 依赖: tendsto_inf_left
@@ -1941,7 +1941,7 @@ lemma UniformContinuousOn.congr
 
 中文:
 引理 UniformContinuousOn.congr
-  结论: {f g : α -> β} {s : Set α}
+  结论: {f g : α -> β} {s : 集合 α}
   证明: by
   apply hf.congr'
   apply EventuallyEq.filter_mono _ inf_le_right
@@ -1974,7 +1974,7 @@ lemma UniformContinuousOn.comp
 
 中文:
 引理 UniformContinuousOn.comp
-  结论: {g : β -> γ} {t : Set β} (hg : UniformContinuousOn g t)
+  结论: {g : β -> γ} {t : 集合 β} (hg : UniformContinuousOn g t)
   证明: by
   change Tendsto ((fun x => (g x.1, g x.2)) ∘ (fun x => (f x.1, f x.2))) (𝓤 α ⊓ 𝓟 (s ×ˢ s)) (𝓤 γ)
   apply Tendsto.comp hg
@@ -2002,7 +2002,7 @@ lemma UniformContinuous.comp_uniformContinuousOn
   proof: (hg.uniformContinuousOn (s := univ)).comp hf (mapsTo_univ _ _)
 
 中文:
-引理 UniformContinuous.comp_uniformContinuousOn
+引理 一致连续.comp_uniformContinuousOn
   结论: {g : β -> γ}
   证明: (hg.uniformContinuousOn (s := univ)).comp hf (mapsTo_univ _ _)
 
@@ -2023,8 +2023,8 @@ instance ULift.uniformSpace
   body: UniformSpace.comap ULift.down ‹_›
 
 中文:
-实例 ULift.uniformSpace
-  签名: [UniformSpace α]
+实例 类型层提升.uniformSpace
+  签名: [一致空间 α]
   定义体: UniformSpace.comap ULift.down ‹_›
 
 Depends on / 依赖: ULift.down, UniformSpace, UniformSpace.comap
@@ -2042,7 +2042,7 @@ instance OrderDual.instUniformSpace
 
 中文:
 实例 OrderDual.instUniformSpace
-  签名: [UniformSpace α]
+  签名: [一致空间 α]
   定义体: ‹UniformSpace α›
 
 Depends on / 依赖: UniformSpace
@@ -2062,8 +2062,8 @@ theorem UniformContinuous.inf_rng
   proof: tendsto_inf.mpr ⟨h₁, h₂⟩
 
 中文:
-定理 UniformContinuous.inf_rng
-  结论: {f : α -> β} {u₁ : UniformSpace α} {u₂ u₃ : UniformSpace β}
+定理 一致连续.inf_rng
+  结论: {f : α -> β} {u₁ : 一致空间 α} {u₂ u₃ : 一致空间 β}
   证明: tendsto_inf.mpr ⟨h₁, h₂⟩
 
 Depends on / 依赖: tendsto_inf, tendsto_inf.mpr
@@ -2082,8 +2082,8 @@ theorem UniformContinuous.inf_dom_left
   proof: tendsto_inf_left hf
 
 中文:
-定理 UniformContinuous.inf_dom_left
-  结论: {f : α -> β} {u₁ u₂ : UniformSpace α} {u₃ : UniformSpace β}
+定理 一致连续.inf_dom_left
+  结论: {f : α -> β} {u₁ u₂ : 一致空间 α} {u₃ : 一致空间 β}
   证明: tendsto_inf_left hf
 
 Depends on / 依赖: tendsto_inf_left
@@ -2101,8 +2101,8 @@ theorem UniformContinuous.inf_dom_right
   proof: tendsto_inf_right hf
 
 中文:
-定理 UniformContinuous.inf_dom_right
-  结论: {f : α -> β} {u₁ u₂ : UniformSpace α} {u₃ : UniformSpace β}
+定理 一致连续.inf_dom_right
+  结论: {f : α -> β} {u₁ u₂ : 一致空间 α} {u₃ : 一致空间 β}
   证明: tendsto_inf_right hf
 
 Depends on / 依赖: tendsto_inf_right
@@ -2124,7 +2124,7 @@ theorem uniformContinuous_sInf_dom
 
 中文:
 定理 uniformContinuous_sInf_dom
-  结论: {f : α -> β} {u₁ : Set (UniformSpace α)} {u₂ : UniformSpace β}
+  结论: {f : α -> β} {u₁ : 集合 (一致空间 α)} {u₂ : 一致空间 β}
   证明: by
   delta UniformContinuous
   rw [sInf_eq_iInf']; rw [iInf_uniformity]
@@ -2151,7 +2151,7 @@ theorem uniformContinuous_sInf_rng
 
 中文:
 定理 uniformContinuous_sInf_rng
-  条件: {f : α -> β} {u₁ : UniformSpace α} {u₂ : Set (UniformSpace β)}
+  条件: {f : α -> β} {u₁ : 一致空间 α} {u₂ : 集合 (一致空间 β)}
   证明: by
   delta UniformContinuous
   rw [sInf_eq_iInf']; rw [iInf_uniformity]; rw [tendsto_iInf]; rw [SetCoe.forall]
@@ -2176,7 +2176,7 @@ theorem uniformContinuous_iInf_dom
 
 中文:
 定理 uniformContinuous_iInf_dom
-  结论: {f : α -> β} {u₁ : ι -> UniformSpace α} {u₂ : UniformSpace β}
+  结论: {f : α -> β} {u₁ : ι -> 一致空间 α} {u₂ : 一致空间 β}
   证明: by
   delta UniformContinuous
   rw [iInf_uniformity]
@@ -2202,7 +2202,7 @@ theorem uniformContinuous_iInf_rng
 
 中文:
 定理 uniformContinuous_iInf_rng
-  条件: {f : α -> β} {u₁ : UniformSpace α} {u₂ : ι -> UniformSpace β}
+  条件: {f : α -> β} {u₁ : 一致空间 α} {u₂ : ι -> 一致空间 β}
   证明: by
   delta UniformContinuous
   rw [iInf_uniformity]; rw [tendsto_iInf]
@@ -2226,7 +2226,7 @@ theorem discreteTopology_of_discrete_uniformity
 
 中文:
 定理 discreteTopology_of_discrete_uniformity
-  结论: [hα : UniformSpace α]
+  结论: [hα : 一致空间 α]
   证明: ⟨(UniformSpace.ext h.symm : ⊥ = hα) ▸ rfl⟩
 
 Depends on / 依赖: UniformSpace, UniformSpace.ext, h.symm
@@ -2245,7 +2245,7 @@ instance :
 
 中文:
 实例 :
-  签名: UniformSpace Empty
+  签名: 一致空间 空
   定义体: ⊥
 -/
 instance : UniformSpace Empty := ⊥
@@ -2259,7 +2259,7 @@ instance :
 
 中文:
 实例 :
-  签名: UniformSpace PUnit
+  签名: 一致空间 命题单元
   定义体: ⊥
 -/
 instance : UniformSpace PUnit := ⊥
@@ -2273,7 +2273,7 @@ instance :
 
 中文:
 实例 :
-  签名: UniformSpace 布尔
+  签名: 一致空间 布尔值
   定义体: ⊥
 -/
 instance : UniformSpace Bool := ⊥
@@ -2287,7 +2287,7 @@ instance :
 
 中文:
 实例 :
-  签名: UniformSpace 自然数
+  签名: 一致空间 自然数
   定义体: ⊥
 -/
 instance : UniformSpace Nat := ⊥
@@ -2301,7 +2301,7 @@ instance :
 
 中文:
 实例 :
-  签名: UniformSpace 整数
+  签名: 一致空间 整数
   定义体: ⊥
 -/
 instance : UniformSpace Int := ⊥
@@ -2322,7 +2322,7 @@ instance :
 
 中文:
 实例 :
-  签名: UniformSpace (Additive α)
+  签名: 一致空间 (加性 α)
   定义体: ‹UniformSpace α›
 -/
 instance : UniformSpace (Additive α) := ‹UniformSpace α›
@@ -2338,7 +2338,7 @@ instance :
 
 中文:
 实例 :
-  签名: UniformSpace (Multiplicative α)
+  签名: 一致空间 (Multiplicative α)
   定义体: ‹UniformSpace α›
 
 @[fun_prop]
@@ -2360,7 +2360,7 @@ theorem uniformContinuous_ofMul
 
 中文:
 定理 uniformContinuous_ofMul
-  结论: UniformContinuous (ofMul : α -> Additive α)
+  结论: 一致连续 (ofMul : α -> 加性 α)
   证明: uniformContinuous_id
 
 @[fun_prop]
@@ -2383,7 +2383,7 @@ theorem uniformContinuous_toMul
 
 中文:
 定理 uniformContinuous_toMul
-  结论: UniformContinuous (toMul : Additive α -> α)
+  结论: 一致连续 (toMul : 加性 α -> α)
   证明: uniformContinuous_id
 
 @[fun_prop]
@@ -2406,7 +2406,7 @@ theorem uniformContinuous_ofAdd
 
 中文:
 定理 uniformContinuous_ofAdd
-  结论: UniformContinuous (ofAdd : α -> Multiplicative α)
+  结论: 一致连续 (ofAdd : α -> Multiplicative α)
   证明: uniformContinuous_id
 
 @[fun_prop]
@@ -2427,7 +2427,7 @@ theorem uniformContinuous_toAdd
 
 中文:
 定理 uniformContinuous_toAdd
-  结论: UniformContinuous (toAdd : Multiplicative α -> α)
+  结论: 一致连续 (toAdd : Multiplicative α -> α)
   证明: uniformContinuous_id
 
 Depends on / 依赖: uniformContinuous_id
@@ -2445,7 +2445,7 @@ theorem uniformity_additive
 
 中文:
 定理 uniformity_additive
-  结论: 𝓤 (Additive α) = (𝓤 α).map (Prod.map ofMul ofMul)
+  结论: 𝓤 (加性 α) = (𝓤 α).map (积类型.map ofMul ofMul)
   证明: rfl
 -/
 theorem uniformity_additive : 𝓤 (Additive α) = (𝓤 α).map (Prod.map ofMul ofMul) := rfl
@@ -2460,7 +2460,7 @@ theorem uniformity_multiplicative
 
 中文:
 定理 uniformity_multiplicative
-  结论: 𝓤 (Multiplicative α) = (𝓤 α).map (Prod.map ofAdd ofAdd)
+  结论: 𝓤 (Multiplicative α) = (𝓤 α).map (积类型.map ofAdd ofAdd)
   证明: rfl
 -/
 theorem uniformity_multiplicative : 𝓤 (Multiplicative α) = (𝓤 α).map (Prod.map ofAdd ofAdd) := rfl
@@ -2477,7 +2477,7 @@ instance instUniformSpaceSubtype
 
 中文:
 实例 instUniformSpaceSubtype
-  签名: {p : α -> 命题} [t : UniformSpace α]
+  签名: {p : α -> 命题} [t : 一致空间 α]
   定义体: UniformSpace.comap Subtype.val t
 
 Depends on / 依赖: Subtype, Subtype.val, UniformSpace, UniformSpace.comap
@@ -2495,7 +2495,7 @@ theorem uniformity_subtype
 
 中文:
 定理 uniformity_subtype
-  条件: {p : α -> 命题} [UniformSpace α]
+  条件: {p : α -> 命题} [一致空间 α]
   证明: rfl
 -/
 theorem uniformity_subtype {p : α -> Prop} [UniformSpace α] :
@@ -2512,7 +2512,7 @@ theorem uniformity_setCoe
 
 中文:
 定理 uniformity_setCoe
-  条件: {s : Set α} [UniformSpace α]
+  条件: {s : 集合 α} [一致空间 α]
   证明: rfl
 -/
 theorem uniformity_setCoe {s : Set α} [UniformSpace α] :
@@ -2532,7 +2532,7 @@ theorem map_uniformity_set_coe
 
 中文:
 定理 map_uniformity_set_coe
-  条件: {s : Set α} [UniformSpace α]
+  条件: {s : 集合 α} [一致空间 α]
   证明: by
   rw [uniformity_setCoe]; rw [map_comap]; rw [range_prodMap]; rw [Subtype.range_val]
 
@@ -2557,7 +2557,7 @@ theorem uniformContinuous_subtype_val
 
 中文:
 定理 uniformContinuous_subtype_val
-  条件: {p : α -> 命题} [UniformSpace α]
+  条件: {p : α -> 命题} [一致空间 α]
   证明: uniformContinuous_comap
 
 @[fun_prop]
@@ -2578,8 +2578,8 @@ theorem UniformContinuous.subtype_mk
   proof: uniformContinuous_comap' hf
 
 中文:
-定理 UniformContinuous.subtype_mk
-  结论: {p : α -> 命题} [UniformSpace α] [UniformSpace β] {f : β -> α}
+定理 一致连续.subtype_mk
+  结论: {p : α -> 命题} [一致空间 α] [一致空间 β] {f : β -> α}
   证明: uniformContinuous_comap' hf
 
 Depends on / 依赖: uniformContinuous_comap
@@ -2598,8 +2598,8 @@ theorem UniformContinuous.subtype_map
   proof: (hf.comp uniformContinuous_subtype_val).subtype_mk _
 
 中文:
-定理 UniformContinuous.subtype_map
-  结论: [UniformSpace α] [UniformSpace β] {p : α -> 命题}
+定理 一致连续.subtype_map
+  结论: [一致空间 α] [一致空间 β] {p : α -> 命题}
   证明: (hf.comp uniformContinuous_subtype_val).subtype_mk _
 
 Depends on / 依赖: hf.comp, subtype_mk, uniformContinuous_subtype_val
@@ -2624,7 +2624,7 @@ alias ⟨UniformContinuousOn.restrict, UniformContinuousOn.of_restrict⟩ :=
 
 中文:
 定理 uniformContinuousOn_iff_restrict
-  条件: [UniformSpace α] [UniformSpace β] {f : α -> β} {s : Set α}
+  条件: [一致空间 α] [一致空间 β] {f : α -> β} {s : 集合 α}
   证明: by
   delta UniformContinuousOn UniformContinuous
   rw [← map_uniformity_set_coe]; rw [tendsto_map'_iff]; rfl
@@ -2656,7 +2656,7 @@ theorem tendsto_of_uniformContinuous_subtype
 
 中文:
 定理 tendsto_of_uniformContinuous_subtype
-  结论: [UniformSpace α] [UniformSpace β] {f : α -> β}
+  结论: [一致空间 α] [一致空间 β] {f : α -> β}
   证明: by
   rw [(@map_nhds_subtype_coe_eq_nhds α _ (· in s) a (mem_of_mem_nhds ha) ha).symm]
   exact tendsto_map' hf.continuous.continuousAt
@@ -2685,7 +2685,7 @@ theorem UniformContinuousOn.continuousOn
 
 中文:
 定理 UniformContinuousOn.continuousOn
-  结论: [UniformSpace α] [UniformSpace β] {f : α -> β} {s : Set α}
+  结论: [一致空间 α] [一致空间 β] {f : α -> β} {s : 集合 α}
   证明: by
   rw [uniformContinuousOn_iff_restrict] at h
   rw [continuousOn_iff_continuous_domRestrict]
@@ -2710,8 +2710,8 @@ instance [UniformSpace
 @[to_additive]
 
 中文:
-实例 [UniformSpace
-  签名: α] [(𝓤 α).IsCountablyGenerated] (s
+实例 [一致空间
+  签名: α] [(𝓤 α).是余untablyGenerated] (s
   定义体: Filter.comap.isCountablyGenerated _ _
 
 @[to_additive]
@@ -2733,8 +2733,8 @@ instance [UniformSpace
 @[to_additive]
 
 中文:
-实例 [UniformSpace
-  签名: α] : UniformSpace αᵐᵒᵖ
+实例 [一致空间
+  签名: α] : 一致空间 αᵐᵒᵖ
   定义体: UniformSpace.comap MulOpposite.unop ‹_›
 
 @[to_additive]
@@ -2757,7 +2757,7 @@ theorem uniformity_mulOpposite
 
 中文:
 定理 uniformity_mulOpposite
-  条件: [UniformSpace α]
+  条件: [一致空间 α]
   证明: rfl
 
 @[to_additive (attr := simp)]
@@ -2778,7 +2778,7 @@ theorem comap_uniformity_mulOpposite
 
 中文:
 定理 comap_uniformity_mulOpposite
-  条件: [UniformSpace α]
+  条件: [一致空间 α]
   证明: by
   simpa [uniformity_mulOpposite, comap_comap, (· ∘ ·)] using! comap_id
 
@@ -2804,8 +2804,8 @@ theorem uniformContinuous_unop
 
 中文:
 定理 uniformContinuous_unop
-  条件: [UniformSpace α]
-  结论: UniformContinuous (unop : αᵐᵒᵖ -> α)
+  条件: [一致空间 α]
+  结论: 一致连续 (unop : αᵐᵒᵖ -> α)
   证明: uniformContinuous_comap
 
 @[to_additive (attr := fun_prop)]
@@ -2827,8 +2827,8 @@ theorem uniformContinuous_op
 
 中文:
 定理 uniformContinuous_op
-  条件: [UniformSpace α]
-  结论: UniformContinuous (op : α -> αᵐᵒᵖ)
+  条件: [一致空间 α]
+  结论: 一致连续 (op : α -> αᵐᵒᵖ)
   证明: uniformContinuous_comap' uniformContinuous_id
 
 Depends on / 依赖: uniformContinuous_comap, uniformContinuous_id
@@ -2852,7 +2852,7 @@ instance instUniformSpaceProd
 
 中文:
 实例 instUniformSpaceProd
-  签名: [u₁ : UniformSpace α] [u₂ : UniformSpace β]
+  签名: [u₁ : 一致空间 α] [u₂ : 一致空间 β]
   定义体: u₁.comap Prod.fst ⊓ u₂.comap Prod.snd
 
 Depends on / 依赖: Prod.fst, Prod.snd
@@ -2875,7 +2875,7 @@ theorem uniformity_prod
 
 中文:
 定理 uniformity_prod
-  条件: [UniformSpace α] [UniformSpace β]
+  条件: [一致空间 α] [一致空间 β]
   证明: rfl
 -/
 theorem uniformity_prod [UniformSpace α] [UniformSpace β] :
@@ -2895,8 +2895,8 @@ instance [UniformSpace
   infer_instance
 
 中文:
-实例 [UniformSpace
-  签名: α] [IsCountablyGenerated (𝓤 α)]
+实例 [一致空间
+  签名: α] [是余untablyGenerated (𝓤 α)]
   定义体: by
   rw [uniformity_prod]
   infer_instance
@@ -2919,7 +2919,7 @@ theorem uniformity_prod_eq_comap_prod
 
 中文:
 定理 uniformity_prod_eq_comap_prod
-  条件: [UniformSpace α] [UniformSpace β]
+  条件: [一致空间 α] [一致空间 β]
   证明: by
   simp_rw [uniformity_prod, prod_eq_inf, Filter.comap_inf, Filter.comap_comap, Function.comp_def]
 
@@ -2941,7 +2941,7 @@ theorem uniformity_prod_eq_prod
 
 中文:
 定理 uniformity_prod_eq_prod
-  条件: [UniformSpace α] [UniformSpace β]
+  条件: [一致空间 α] [一致空间 β]
   证明: by
   rw [map_swap4_eq_comap]; rw [uniformity_prod_eq_comap_prod]
 
@@ -2964,7 +2964,7 @@ theorem mem_uniformity_of_uniformContinuous_invariant
 
 中文:
 定理 mem_uniformity_of_uniformContinuous_invariant
-  结论: [UniformSpace α] [UniformSpace β]
+  结论: [一致空间 α] [一致空间 β]
   证明: by
   rw [UniformContinuous]; rw [uniformity_prod_eq_prod]; rw [tendsto_map'_iff] at hf
   rcases mem_prod_iff.1 (mem_map.1 <| hf hs) with ⟨u, hu, v, hv, huvt⟩
@@ -3024,7 +3024,7 @@ theorem entourageProd_mem_uniformity
 
 中文:
 定理 entourageProd_mem_uniformity
-  结论: [t₁ : UniformSpace α] [t₂ : UniformSpace β] {u : SetRel α α}
+  结论: [t₁ : 一致空间 α] [t₂ : 一致空间 β] {u : SetRel α α}
   证明: by
   rw [uniformity_prod]; exact inter_mem_inf (preimage_mem_comap hu) (preimage_mem_comap hv)
 
@@ -3068,7 +3068,7 @@ instance IsSymm_entourageProd
 
 中文:
 实例 IsSymm_entourageProd
-  签名: {u : SetRel α α} {v : SetRel β β} [u.IsSymm] [v.IsSymm]
+  签名: {u : SetRel α α} {v : SetRel β β} [u.是Symm] [v.是Symm]
   定义体: .imp u.symm v.symm
 
 @[simp]
@@ -3117,7 +3117,7 @@ theorem image_entourageProd_prod
 
 中文:
 定理 image_entourageProd_prod
-  条件: (u : SetRel α α) (v : SetRel β β) (s : Set α) (t : Set β)
+  条件: (u : SetRel α α) (v : SetRel β β) (s : 集合 α) (t : 集合 β)
   证明: by
   ext
   simp only [mem_entourageProd, SetRel.mem_image, Set.mem_prod, Prod.exists]
@@ -3144,7 +3144,7 @@ theorem preimage_entourageProd_prod
 
 中文:
 定理 preimage_entourageProd_prod
-  条件: (u : SetRel α α) (v : SetRel β β) (s : Set α) (t : Set β)
+  条件: (u : SetRel α α) (v : SetRel β β) (s : 集合 α) (t : 集合 β)
   证明: image_entourageProd_prod u.inv v.inv s t
 
 Depends on / 依赖: image_entourageProd_prod, u.inv, v.inv
@@ -3162,8 +3162,8 @@ theorem Filter.HasBasis.uniformity_prod
   proof: (ha.comap _).inf (hb.comap _)
 
 中文:
-定理 Filter.HasBasis.uniformity_prod
-  结论: {ιa ιb : 类型} [UniformSpace α] [UniformSpace β]
+定理 滤子.有基.uniformity_prod
+  结论: {ιa ιb : 类型} [一致空间 α] [一致空间 β]
   证明: (ha.comap _).inf (hb.comap _)
 
 Depends on / 依赖: ha.comap, hb.comap
@@ -3187,7 +3187,7 @@ theorem entourageProd_subset
 
 中文:
 定理 entourageProd_subset
-  结论: [UniformSpace α] [UniformSpace β]
+  结论: [一致空间 α] [一致空间 β]
   证明: by
   rcases (((𝓤 α).basis_sets.uniformity_prod (𝓤 β).basis_sets).mem_iff' s).1 h with ⟨w, hw⟩
   use w.1, hw.1.1, w.2, hw.1.2, hw.2
@@ -3210,7 +3210,7 @@ theorem tendsto_prod_uniformity_fst
 
 中文:
 定理 tendsto_prod_uniformity_fst
-  条件: [UniformSpace α] [UniformSpace β]
+  条件: [一致空间 α] [一致空间 β]
   证明: le_trans (map_mono inf_le_left) map_comap_le
 
 Depends on / 依赖: inf_le_left, le_trans, map_comap_le, map_mono
@@ -3231,7 +3231,7 @@ theorem tendsto_prod_uniformity_snd
 
 中文:
 定理 tendsto_prod_uniformity_snd
-  条件: [UniformSpace α] [UniformSpace β]
+  条件: [一致空间 α] [一致空间 β]
   证明: le_trans (map_mono inf_le_right) map_comap_le
 
 @[fun_prop]
@@ -3255,7 +3255,7 @@ theorem uniformContinuous_fst
 
 中文:
 定理 uniformContinuous_fst
-  条件: [UniformSpace α] [UniformSpace β]
+  条件: [一致空间 α] [一致空间 β]
   证明: tendsto_prod_uniformity_fst
 
 @[fun_prop]
@@ -3277,7 +3277,7 @@ theorem uniformContinuous_snd
 
 中文:
 定理 uniformContinuous_snd
-  条件: [UniformSpace α] [UniformSpace β]
+  条件: [一致空间 α] [一致空间 β]
   证明: tendsto_prod_uniformity_snd
 
 Depends on / 依赖: tendsto_prod_uniformity_snd
@@ -3300,8 +3300,8 @@ theorem UniformContinuous.prodMk
   exact tendsto_inf.2 ⟨tendsto_comap_iff.2 h₁, tendsto_comap_iff.2 h₂⟩
 
 中文:
-定理 UniformContinuous.prodMk
-  结论: {f₁ : α -> β} {f₂ : α -> γ} (h₁ : UniformContinuous f₁)
+定理 一致连续.prodMk
+  结论: {f₁ : α -> β} {f₂ : α -> γ} (h₁ : 一致连续 f₁)
   证明: by
   rw [UniformContinuous]; rw [uniformity_prod]
   exact tendsto_inf.2 ⟨tendsto_comap_iff.2 h₁, tendsto_comap_iff.2 h₂⟩
@@ -3322,8 +3322,8 @@ theorem UniformContinuous.prodMk_left
   proof: h.comp (uniformContinuous_id.prodMk uniformContinuous_const)
 
 中文:
-定理 UniformContinuous.prodMk_left
-  条件: {f : α × β -> γ} (h : UniformContinuous f) (b)
+定理 一致连续.prodMk_left
+  条件: {f : α × β -> γ} (h : 一致连续 f) (b)
   证明: h.comp (uniformContinuous_id.prodMk uniformContinuous_const)
 
 Depends on / 依赖: h.comp, prodMk, uniformContinuous_const, uniformContinuous_id, uniformContinuous_id.prodMk
@@ -3343,8 +3343,8 @@ theorem UniformContinuous.prodMk_right
 @[fun_prop]
 
 中文:
-定理 UniformContinuous.prodMk_right
-  条件: {f : α × β -> γ} (h : UniformContinuous f) (a)
+定理 一致连续.prodMk_right
+  条件: {f : α × β -> γ} (h : 一致连续 f) (a)
   证明: h.comp (uniformContinuous_const.prodMk uniformContinuous_id)
 
 @[fun_prop]
@@ -3367,8 +3367,8 @@ theorem UniformContinuous.prodMap
 @[fun_prop]
 
 中文:
-定理 UniformContinuous.prodMap
-  结论: [UniformSpace δ] {f : α -> γ} {g : β -> δ}
+定理 一致连续.prodMap
+  结论: [一致空间 δ] {f : α -> γ} {g : β -> δ}
   证明: (hf.comp uniformContinuous_fst).prodMk (hg.comp uniformContinuous_snd)
 
 @[fun_prop]
@@ -3407,7 +3407,7 @@ theorem toTopologicalSpace_prod
 
 中文:
 定理 toTopologicalSpace_prod
-  条件: {α} {β} [u : UniformSpace α] [v : UniformSpace β]
+  条件: {α} {β} [u : 一致空间 α] [v : 一致空间 β]
   证明: rfl
 -/
 theorem toTopologicalSpace_prod {α} {β} [u : UniformSpace α] [v : UniformSpace β] :
@@ -3429,7 +3429,7 @@ theorem uniformContinuous_inf_dom_left₂
 
 中文:
 定理 uniformContinuous_inf_dom_left₂
-  结论: {α β γ} {f : α -> β -> γ} {ua1 ua2 : UniformSpace α}
+  结论: {α β γ} {f : α -> β -> γ} {ua1 ua2 : 一致空间 α}
   证明: ua1 ⊓ ua2; haveI := ub1 ⊓ ub2
       exact UniformContinuous fun p : α × β => f p.1 p.2 := by
   -- proof essentially copied from `continuous_inf_dom_left₂`
@@ -3464,7 +3464,7 @@ theorem uniformContinuous_inf_dom_right₂
 
 中文:
 定理 uniformContinuous_inf_dom_right₂
-  结论: {α β γ} {f : α -> β -> γ} {ua1 ua2 : UniformSpace α}
+  结论: {α β γ} {f : α -> β -> γ} {ua1 ua2 : 一致空间 α}
   证明: ua1 ⊓ ua2; haveI := ub1 ⊓ ub2
       exact UniformContinuous fun p : α × β => f p.1 p.2 := by
   -- proof essentially copied from `continuous_inf_dom_right₂`
@@ -3500,7 +3500,7 @@ theorem uniformContinuous_sInf_dom₂
 
 中文:
 定理 uniformContinuous_sInf_dom₂
-  结论: {α β γ} {f : α -> β -> γ} {uas : Set (UniformSpace α)}
+  结论: {α β γ} {f : α -> β -> γ} {uas : 集合 (一致空间 α)}
   证明: sInf uas; haveI := sInf ubs
       exact @UniformContinuous _ _ _ uc fun p : α × β => f p.1 p.2 := by
   -- proof essentially copied from `continuous_sInf_dom`
@@ -3623,7 +3623,7 @@ theorem UniformContinuous₂.comp
 
 中文:
 定理 UniformContinuous₂.comp
-  结论: {f : α -> β -> γ} {g : γ -> δ} (hg : UniformContinuous g)
+  结论: {f : α -> β -> γ} {g : γ -> δ} (hg : 一致连续 g)
   证明: hg.comp hf
 
 @[fun_prop]
@@ -3667,7 +3667,7 @@ theorem toTopologicalSpace_subtype
 
 中文:
 定理 toTopologicalSpace_subtype
-  条件: [u : UniformSpace α] {p : α -> 命题}
+  条件: [u : 一致空间 α] {p : α -> 命题}
   证明: rfl
 -/
 theorem toTopologicalSpace_subtype [u : UniformSpace α] {p : α -> Prop} :
@@ -3697,8 +3697,8 @@ instance Sum.instUniformSpace
     rcases comp_mem_uniformity_sets hs.
 
 中文:
-实例 Sum.instUniformSpace
-  签名: : UniformSpace (α oplus β) where
+实例 和.instUniformSpace
+  签名: : 一致空间 (α oplus β) where
   定义体: map (fun p : α × α => (inl p.1, inl p.2)) (𝓤 α) ⊔
     map (fun p : β × β => (inr p.1, inr p.2)) (𝓤 β)
   symm := fun _ hs => ⟨symm_le_uniformity hs.1, symm_le_uniformity hs.2⟩
@@ -3749,8 +3749,8 @@ theorem Sum.uniformity
   proof: rfl
 
 中文:
-定理 Sum.uniformity
-  结论: 𝓤 (α oplus β) = map (Prod.map inl inl) (𝓤 α) ⊔ map (Prod.map inr inr) (𝓤 β)
+定理 和.uniformity
+  结论: 𝓤 (α oplus β) = map (积类型.map inl inl) (𝓤 α) ⊔ map (积类型.map inr inr) (𝓤 β)
   证明: rfl
 -/
 theorem Sum.uniformity : 𝓤 (α oplus β) = map (Prod.map inl inl) (𝓤 α) ⊔ map (Prod.map inr inr) (𝓤 β) :=
@@ -3766,7 +3766,7 @@ lemma uniformContinuous_inl
 
 中文:
 引理 uniformContinuous_inl
-  结论: UniformContinuous (Sum.inl : α -> α oplus β)
+  结论: 一致连续 (和.inl : α -> α oplus β)
   证明: le_sup_left
 -/
 @[fun_prop] lemma uniformContinuous_inl : UniformContinuous (Sum.inl : α -> α oplus β) := le_sup_left
@@ -3780,7 +3780,7 @@ lemma uniformContinuous_inr
 
 中文:
 引理 uniformContinuous_inr
-  结论: UniformContinuous (Sum.inr : β -> α oplus β)
+  结论: 一致连续 (和.inr : β -> α oplus β)
   证明: le_sup_right
 -/
 @[fun_prop] lemma uniformContinuous_inr : UniformContinuous (Sum.inr : β -> α oplus β) := le_sup_right
@@ -3796,8 +3796,8 @@ instance [IsCountablyGenerated
   infer_instance
 
 中文:
-实例 [IsCountablyGenerated
-  签名: (𝓤 α)] [IsCountablyGenerated (𝓤 β)] :
+实例 [是余untablyGenerated
+  签名: (𝓤 α)] [是余untablyGenerated (𝓤 β)] :
   定义体: by
   rw [Sum.uniformity]
   infer_instance
@@ -3842,7 +3842,7 @@ theorem tendsto_nhds_right
 
 中文:
 定理 tendsto_nhds_right
-  条件: {f : Filter β} {u : β -> α} {a : α}
+  条件: {f : 滤子 β} {u : β -> α} {a : α}
   证明: by
   rw [nhds_eq_comap_uniformity]; rw [tendsto_comap_iff]; rfl
 
@@ -3863,7 +3863,7 @@ theorem tendsto_nhds_left
 
 中文:
 定理 tendsto_nhds_left
-  条件: {f : Filter β} {u : β -> α} {a : α}
+  条件: {f : 滤子 β} {u : β -> α} {a : α}
   证明: by
   rw [nhds_eq_comap_uniformity']; rw [tendsto_comap_iff]; rfl
 
@@ -3884,7 +3884,7 @@ theorem continuousAt_iff'_right
 
 中文:
 定理 continuousAt_iff'_right
-  条件: [TopologicalSpace β] {f : β -> α} {b : β}
+  条件: [拓扑空间 β] {f : β -> α} {b : β}
   证明: by
   rw [ContinuousAt]; rw [tendsto_nhds_right]
 
@@ -3905,7 +3905,7 @@ theorem continuousAt_iff'_left
 
 中文:
 定理 continuousAt_iff'_left
-  条件: [TopologicalSpace β] {f : β -> α} {b : β}
+  条件: [拓扑空间 β] {f : β -> α} {b : β}
   证明: by
   rw [ContinuousAt]; rw [tendsto_nhds_left]
 -/
@@ -3924,7 +3924,7 @@ continuousAt_iff'_left.2 H.comp tendsto_id.prodMk_nhds tendsto_const_nhds⟩
 
 中文:
 定理 continuousAt_iff_prod
-  条件: [TopologicalSpace β] {f : β -> α} {b : β}
+  条件: [拓扑空间 β] {f : β -> α} {b : β}
   证明: ⟨fun H => le_trans (H.prodMap' H) (nhds_le_uniformity _), fun H =>
 continuousAt_iff'_left.2 H.comp tendsto_id.prodMk_nhds tendsto_const_nhds⟩
 
@@ -3946,7 +3946,7 @@ theorem continuousWithinAt_iff'_right
 
 中文:
 定理 continuousWithinAt_iff'_right
-  条件: [TopologicalSpace β] {f : β -> α} {b : β} {s : Set β}
+  条件: [拓扑空间 β] {f : β -> α} {b : β} {s : 集合 β}
   证明: by
   rw [ContinuousWithinAt]; rw [tendsto_nhds_right]
 
@@ -3967,7 +3967,7 @@ theorem continuousWithinAt_iff'_left
 
 中文:
 定理 continuousWithinAt_iff'_left
-  条件: [TopologicalSpace β] {f : β -> α} {b : β} {s : Set β}
+  条件: [拓扑空间 β] {f : β -> α} {b : β} {s : 集合 β}
   证明: by
   rw [ContinuousWithinAt]; rw [tendsto_nhds_left]
 -/
@@ -3986,7 +3986,7 @@ theorem continuousOn_iff'_right
 
 中文:
 定理 continuousOn_iff'_right
-  条件: [TopologicalSpace β] {f : β -> α} {s : Set β}
+  条件: [拓扑空间 β] {f : β -> α} {s : 集合 β}
   证明: by
   simp [ContinuousOn, continuousWithinAt_iff'_right]
 
@@ -4007,7 +4007,7 @@ theorem continuousOn_iff'_left
 
 中文:
 定理 continuousOn_iff'_left
-  条件: [TopologicalSpace β] {f : β -> α} {s : Set β}
+  条件: [拓扑空间 β] {f : β -> α} {s : 集合 β}
   证明: by
   simp [ContinuousOn, continuousWithinAt_iff'_left]
 -/
@@ -4025,7 +4025,7 @@ theorem continuous_iff'_right
 
 中文:
 定理 continuous_iff'_right
-  条件: [TopologicalSpace β] {f : β -> α}
+  条件: [拓扑空间 β] {f : β -> α}
   证明: continuous_iff_continuousAt.trans forall_congr' fun _ => tendsto_nhds_right
 
 Depends on / 依赖: continuous_iff_continuousAt, continuous_iff_continuousAt.trans, forall_congr, tendsto_nhds_right
@@ -4044,7 +4044,7 @@ theorem continuous_iff'_left
 
 中文:
 定理 continuous_iff'_left
-  条件: [TopologicalSpace β] {f : β -> α}
+  条件: [拓扑空间 β] {f : β -> α}
   证明: continuous_iff_continuousAt.trans forall_congr' fun _ => tendsto_nhds_left
 -/
 theorem continuous_iff'_left [TopologicalSpace β] {f : β -> α} :
@@ -4064,7 +4064,7 @@ lemma exists_is_open_mem_uniformity_of_forall_mem_eq
     have B : {z | (g x,
 
 中文:
-引理 exists_is_open_mem_uniformity_of_forall_mem_eq
+引理 存在_is_open_mem_uniformity_of_对任意_mem_eq
   证明: by
   have A : forall x in s, exists t, IsOpen t ∧ x in t ∧ forall z in t, (f z, g z) in r := by
     intro x hx
@@ -4108,8 +4108,8 @@ theorem Filter.Tendsto.congr_uniformity
   proof: Uniform.tendsto_nhds_right.2 (Uniform.tendsto_nhds_right.1 hf).uniformity_trans hg
 
 中文:
-定理 Filter.Tendsto.congr_uniformity
-  结论: {α β} [UniformSpace β] {f g : α -> β} {l : Filter α} {b : β}
+定理 滤子.收敛.congr_uniformity
+  结论: {α β} [一致空间 β] {f g : α -> β} {l : 滤子 α} {b : β}
   证明: Uniform.tendsto_nhds_right.2 (Uniform.tendsto_nhds_right.1 hf).uniformity_trans hg
 
 Depends on / 依赖: Uniform, Uniform.tendsto_nhds_right, tendsto_nhds_right, uniformity_trans
@@ -4127,8 +4127,8 @@ theorem Uniform.tendsto_congr
   proof: ⟨fun h => h.congr_uniformity hfg, fun h => h.congr_uniformity hfg.uniformity_symm⟩
 
 中文:
-定理 Uniform.tendsto_congr
-  结论: {α β} [UniformSpace β] {f g : α -> β} {l : Filter α} {b : β}
+定理 一致.tendsto_congr
+  结论: {α β} [一致空间 β] {f g : α -> β} {l : 滤子 α} {b : β}
   证明: ⟨fun h => h.congr_uniformity hfg, fun h => h.congr_uniformity hfg.uniformity_symm⟩
 
 Depends on / 依赖: congr_uniformity, h.congr_uniformity, hfg.uniformity_symm, uniformity_symm

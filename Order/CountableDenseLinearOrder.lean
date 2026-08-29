@@ -52,8 +52,8 @@ theorem exists_between_finsets
         ⟨m, fun x hx => lt_of_le_of_lt (Finset.le_max' lo x hx) hm.1, 
 
 中文:
-定理 exists_between_finsets
-  结论: [DenselyOrdered α] [NoMinOrder α]
+定理 存在_between_finsets
+  结论: [稠密序 α] [NoMin序 α]
   证明: if nlo : lo.Nonempty then
     if nhi : hi.Nonempty then
       -- both sets are nonempty, use `DenselyOrdered`
@@ -102,8 +102,8 @@ lemma exists_orderEmbedding_insert
       exists_and_le
 
 中文:
-引理 exists_orderEmbedding_insert
-  结论: [DenselyOrdered β] [NoMinOrder β] [NoMaxOrder β]
+引理 存在_orderEmbedding_insert
+  结论: [稠密序 β] [NoMin序 β] [NoMax序 β]
   证明: by
   let Slt := {x in S.attach | x.val < a}.image f
   let Sgt := {x in S.attach | a < x.val}.image f
@@ -161,7 +161,7 @@ deriving Preorder
 
 中文:
 定义 PartialIso
-  签名: : Type _
+  签名: : 类型 _
   定义体: { f : Finset (α × β) //
     forall p in f, forall q in f,
       cmp (Prod.fst p) (Prod.fst q) = cmp (Prod.snd p) (Prod.snd q) }
@@ -187,7 +187,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (PartialIso α β)
+  签名: 可居 (PartialIso α β)
   定义体: ⟨⟨∅, fun _p h _q => (Finset.notMem_empty _ h).elim⟩⟩
 
 Depends on / 依赖: Finset, Finset.notMem_empty, notMem_empty
@@ -213,8 +213,8 @@ theorem exists_across
     rw [Finset.mem_image] at hx
 
 中文:
-定理 exists_across
-  结论: [DenselyOrdered β] [NoMinOrder β] [NoMaxOrder β] [Nonempty β]
+定理 存在_across
+  结论: [稠密序 β] [NoMin序 β] [NoMax序 β] [非空 β]
   证明: by
   by_cases h : exists b, (a, b) in f.val
   · obtain ⟨b, hb⟩ := h
@@ -315,7 +315,7 @@ definition definedAtLeft
 
 中文:
 定义 definedAtLeft
-  签名: [DenselyOrdered β] [NoMinOrder β] [NoMaxOrder β] [Nonempty β] (a : α)
+  签名: [稠密序 β] [NoMin序 β] [NoMax序 β] [非空 β] (a : α)
   定义体: {f | exists b : β, (a, b) in f.val}
   isCofinal f := by
     obtain ⟨b, a_b⟩ := exists_across f a
@@ -361,7 +361,7 @@ definition definedAtRight
 
 中文:
 定义 definedAtRight
-  签名: [DenselyOrdered α] [NoMinOrder α] [NoMaxOrder α] [Nonempty α] (b : β)
+  签名: [稠密序 α] [NoMin序 α] [NoMax序 α] [非空 α] (b : β)
   定义体: {f | exists a, (a, b) in f.val}
   isCofinal f := by
     rcases (definedAtLeft α b).isCofinal f.comm with ⟨f', ⟨a, ha⟩, hl⟩
@@ -396,7 +396,7 @@ definition funOfIdeal
 
 中文:
 定义 funOfIdeal
-  签名: [DenselyOrdered β] [NoMinOrder β] [NoMaxOrder β] [Nonempty β] (a : α)
+  签名: [稠密序 β] [NoMin序 β] [NoMax序 β] [非空 β] (a : α)
   定义体: Classical.indefiniteDescription _ ∘ fun ⟨f, ⟨b, hb⟩, hf⟩ => ⟨b, f, hf, hb⟩
 
 Depends on / 依赖: Classical, Classical.indefiniteDescription, indefiniteDescription
@@ -416,7 +416,7 @@ definition invOfIdeal
 
 中文:
 定义 invOfIdeal
-  签名: [DenselyOrdered α] [NoMinOrder α] [NoMaxOrder α] [Nonempty α] (b : β)
+  签名: [稠密序 α] [NoMin序 α] [NoMax序 α] [非空 α] (b : β)
   定义体: Classical.indefiniteDescription _ ∘ fun ⟨f, ⟨a, ha⟩, hf⟩ => ⟨a, f, hf, ha⟩
 
 Depends on / 依赖: Classical, Classical.indefiniteDescription, indefiniteDescription
@@ -449,7 +449,7 @@ theorem embedding_from_countable_to_dense
 
 中文:
 定理 embedding_from_countable_to_dense
-  条件: [Countable α] [DenselyOrdered β] [Nontrivial β]
+  条件: [可数 α] [稠密序 β] [非平凡 β]
   证明: by
   cases nonempty_encodable α
   rcases exists_pair_lt β with ⟨x, y, hxy⟩
@@ -494,7 +494,7 @@ theorem iso_of_countable_dense
 
 中文:
 定理 iso_of_countable_dense
-  结论: [Countable α] [DenselyOrdered α] [NoMinOrder α] [NoMaxOrder α]
+  结论: [可数 α] [稠密序 α] [NoMin序 α] [NoMax序 α]
   证明: by
   cases nonempty_encodable α
   cases nonempty_encodable β

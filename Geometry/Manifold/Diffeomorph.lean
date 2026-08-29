@@ -89,7 +89,7 @@ structure Diffeomorph
     - contMDiff_invFun : CMDiff n toEquiv.symm
 
 中文:
-结构 Diffeomorph
+结构 微分同胚
   参数: extends M ≃ M'
   继承: M ≃ M'
   公理与运算 (2 个):
@@ -127,7 +127,7 @@ theorem toEquiv_injective
 
 中文:
 定理 toEquiv_injective
-  结论: Injective (Diffeomorph.toEquiv : (M ≃ₘ^n⟮I, I'⟯ M') -> M ≃ M')
+  结论: 单射 (微分同胚.toEquiv : (M ≃ₘ^n⟮I, I'⟯ M') -> M ≃ M')
 -/
 theorem toEquiv_injective : Injective (Diffeomorph.toEquiv : (M ≃ₘ^n⟮I, I'⟯ M') -> M ≃ M')
   | ⟨_, _, _⟩, ⟨_, _, _⟩, rfl => rfl
@@ -146,7 +146,7 @@ coe_injective' _ _ h _ := toEquiv_injective DFunLike.ext' h
 
 中文:
 实例 :
-  签名: EquivLike (M ≃ₘ^n⟮I, I'⟯ M') M M'
+  签名: 等价状 (M ≃ₘ^n⟮I, I'⟯ M') M M'
   定义体: Φ.toEquiv
   inv Φ := Φ.toEquiv.symm
   left_inv Φ := Φ.left_inv
@@ -217,7 +217,7 @@ theorem continuous
 中文:
 定理 continuous
   条件: (h : M ≃ₘ^n⟮I, I'⟯ M')
-  结论: Continuous h
+  结论: 连续 h
   证明: h.contMDiff_toFun.continuous
 -/
 protected theorem continuous (h : M ≃ₘ^n⟮I, I'⟯ M') : Continuous h :=
@@ -289,7 +289,7 @@ theorem contDiff
 中文:
 定理 contDiff
   条件: (h : E ≃ₘ^n⟮𝓘(𝕜, E), 𝓘(𝕜, E')⟯ E')
-  结论: ContDiff 𝕜 n h
+  结论: 连续可微 𝕜 n h
   证明: h.contMDiff.contDiff
 -/
 protected theorem contDiff (h : E ≃ₘ^n⟮𝓘(𝕜, E), 𝓘(𝕜, E')⟯ E') : ContDiff 𝕜 n h :=
@@ -326,7 +326,7 @@ theorem mdifferentiableOn
 
 中文:
 定理 mdifferentiableOn
-  条件: (h : M ≃ₘ^n⟮I, I'⟯ M') (s : Set M) (hn : n != 0)
+  条件: (h : M ≃ₘ^n⟮I, I'⟯ M') (s : 集合 M) (hn : n != 0)
   结论: MDiff[s] h
   证明: (h.mdifferentiable hn).mdifferentiableOn
 
@@ -414,7 +414,7 @@ theorem coeFn_injective
 
 中文:
 定理 coeFn_injective
-  结论: Injective ((↑) : (M ≃ₘ^n⟮I, I'⟯ M') -> (M -> M'))
+  结论: 单射 ((↑) : (M ≃ₘ^n⟮I, I'⟯ M') -> (M -> M'))
   证明: DFunLike.coe_injective
 
 @[ext]
@@ -455,7 +455,7 @@ instance :
 
 中文:
 实例 :
-  签名: ContinuousMapClass (M ≃ₘ⟮I, J⟯ N) M N
+  签名: 连续映射类 (M ≃ₘ⟮I, J⟯ N) M N
   定义体: f.continuous
 
 Depends on / 依赖: continuous, f.continuous
@@ -506,7 +506,7 @@ theorem refl_toEquiv
 
 中文:
 定理 refl_toEquiv
-  结论: (Diffeomorph.refl I M n).toEquiv = Equiv.refl _
+  结论: (微分同胚.refl I M n).toEquiv = 等价.refl _
   证明: rfl
 
 @[simp]
@@ -525,7 +525,7 @@ theorem coe_refl
 
 中文:
 定理 coe_refl
-  结论: ⇑(Diffeomorph.refl I M n) = id
+  结论: ⇑(微分同胚.refl I M n) = id
   证明: rfl
 -/
 theorem coe_refl : ⇑(Diffeomorph.refl I M n) = id :=
@@ -576,7 +576,7 @@ theorem trans_refl
 中文:
 定理 trans_refl
   条件: (h : M ≃ₘ^n⟮I, I'⟯ M')
-  结论: h.trans (Diffeomorph.refl I' M' n) = h
+  结论: h.trans (微分同胚.refl I' M' n) = h
   证明: ext fun _ => rfl
 
 @[simp]
@@ -599,7 +599,7 @@ theorem refl_trans
 中文:
 定理 refl_trans
   条件: (h : M ≃ₘ^n⟮I, I'⟯ M')
-  结论: (Diffeomorph.refl I M n).trans h = h
+  结论: (微分同胚.refl I M n).trans h = h
   证明: ext fun _ => rfl
 
 @[simp]
@@ -717,7 +717,7 @@ theorem symm_refl
 
 中文:
 定理 symm_refl
-  结论: (Diffeomorph.refl I M n).symm = Diffeomorph.refl I M n
+  结论: (微分同胚.refl I M n).symm = 微分同胚.refl I M n
   证明: ext fun _ => rfl
 
 @[simp]
@@ -740,7 +740,7 @@ theorem self_trans_symm
 中文:
 定理 self_trans_symm
   条件: (h : M ≃ₘ^n⟮I, J⟯ N)
-  结论: h.trans h.symm = Diffeomorph.refl I M n
+  结论: h.trans h.symm = 微分同胚.refl I M n
   证明: ext h.symm_apply_apply
 
 @[simp]
@@ -765,7 +765,7 @@ theorem symm_trans_self
 中文:
 定理 symm_trans_self
   条件: (h : M ≃ₘ^n⟮I, J⟯ N)
-  结论: h.symm.trans h = Diffeomorph.refl J N n
+  结论: h.symm.trans h = 微分同胚.refl J N n
   证明: ext h.apply_symm_apply
 
 @[simp]
@@ -850,7 +850,7 @@ theorem image_eq_preimage_symm
 
 中文:
 定理 image_eq_preimage_symm
-  条件: (h : M ≃ₘ^n⟮I, J⟯ N) (s : Set M)
+  条件: (h : M ≃ₘ^n⟮I, J⟯ N) (s : 集合 M)
   结论: h '' s = h.symm ⁻¹' s
   证明: h.toEquiv.image_eq_preimage_symm s
 
@@ -877,7 +877,7 @@ nonrec theorem range_comp {α} (h : M ≃ₘ^n⟮I, J⟯ N) (f : α -> M) :
 
 中文:
 定理 symm_image_eq_preimage
-  条件: (h : M ≃ₘ^n⟮I, J⟯ N) (s : Set N)
+  条件: (h : M ≃ₘ^n⟮I, J⟯ N) (s : 集合 N)
   结论: h.symm '' s = h ⁻¹' s
   证明: h.symm.image_eq_preimage_symm s
 
@@ -912,7 +912,7 @@ theorem image_symm_image
 
 中文:
 定理 image_symm_image
-  条件: (h : M ≃ₘ^n⟮I, J⟯ N) (s : Set N)
+  条件: (h : M ≃ₘ^n⟮I, J⟯ N) (s : 集合 N)
   结论: h '' h.symm '' s = s
   证明: h.toEquiv.image_symm_image s
 
@@ -935,7 +935,7 @@ theorem symm_image_image
 
 中文:
 定理 symm_image_image
-  条件: (h : M ≃ₘ^n⟮I, J⟯ N) (s : Set M)
+  条件: (h : M ≃ₘ^n⟮I, J⟯ N) (s : 集合 M)
   结论: h.symm '' h '' s = s
   证明: h.toEquiv.symm_image_image s
 
@@ -1311,7 +1311,7 @@ theorem uniqueMDiffOn_image_aux
 
 中文:
 定理 uniqueMDiffOn_image_aux
-  结论: (h : M ≃ₘ^n⟮I, J⟯ N) (hn : n != 0) {s : Set M}
+  结论: (h : M ≃ₘ^n⟮I, J⟯ N) (hn : n != 0) {s : 集合 M}
   证明: by
   convert! hs.uniqueMDiffOn_preimage (h.toOpenPartialHomeomorph_mdifferentiable hn)
   simp [h.image_eq_preimage_symm]
@@ -1339,7 +1339,7 @@ theorem uniqueMDiffOn_image
 
 中文:
 定理 uniqueMDiffOn_image
-  条件: (h : M ≃ₘ^n⟮I, J⟯ N) (hn : n != 0) {s : Set M}
+  条件: (h : M ≃ₘ^n⟮I, J⟯ N) (hn : n != 0) {s : 集合 M}
   证明: ⟨fun hs => h.symm_image_image s ▸ h.symm.uniqueMDiffOn_image_aux hn hs,
     h.uniqueMDiffOn_image_aux hn⟩
 
@@ -1365,7 +1365,7 @@ theorem uniqueMDiffOn_preimage
 
 中文:
 定理 uniqueMDiffOn_preimage
-  条件: (h : M ≃ₘ^n⟮I, J⟯ N) (hn : n != 0) {s : Set N}
+  条件: (h : M ≃ₘ^n⟮I, J⟯ N) (hn : n != 0) {s : 集合 N}
   证明: h.symm_image_eq_preimage s ▸ h.symm.uniqueMDiffOn_image hn
 
 @[simp]
@@ -1390,7 +1390,7 @@ theorem uniqueDiffOn_image
 
 中文:
 定理 uniqueDiffOn_image
-  条件: (h : E ≃ₘ^n⟮𝓘(𝕜, E), 𝓘(𝕜, F)⟯ F) (hn : n != 0) {s : Set E}
+  条件: (h : E ≃ₘ^n⟮𝓘(𝕜, E), 𝓘(𝕜, F)⟯ F) (hn : n != 0) {s : 集合 E}
   证明: by
   simp only [← uniqueMDiffOn_iff_uniqueDiffOn, uniqueMDiffOn_image _ hn]
 
@@ -1413,7 +1413,7 @@ theorem uniqueDiffOn_preimage
 
 中文:
 定理 uniqueDiffOn_preimage
-  条件: (h : E ≃ₘ^n⟮𝓘(𝕜, E), 𝓘(𝕜, F)⟯ F) (hn : n != 0) {s : Set F}
+  条件: (h : E ≃ₘ^n⟮𝓘(𝕜, E), 𝓘(𝕜, F)⟯ F) (hn : n != 0) {s : 集合 F}
   证明: h.symm_image_eq_preimage s ▸ h.symm.uniqueDiffOn_image hn
 
 Depends on / 依赖: h.symm.uniqueDiffOn_image, h.symm_image_eq_preimage, symm_image_eq_preimage, uniqueDiffOn_image
@@ -1538,7 +1538,7 @@ definition transContinuousLinearEquiv
 
 中文:
 定义 transContinuousLinearEquiv
-  签名: : ModelWithCorners 𝕜 E' H where
+  签名: : 带角模型 𝕜 E' H where
   定义体: I.toPartialEquiv.trans e.toEquiv.toPartialEquiv
   source_eq := by simp
   convex_range' := by
@@ -1709,7 +1709,7 @@ instance instIsManifoldtransContinuousLinearEquiv
 
 中文:
 实例 instIsManifoldtransContinuousLinearEquiv
-  签名: [IsManifold I n M]
+  签名: [是流形 I n M]
   定义体: by
   refine isManifold_of_contDiffOn (I.transContinuousLinearEquiv e) n M fun e₁ e₂ h₁ h₂ => ?_
   refine e.contDiff.comp_contDiffOn
@@ -2061,7 +2061,7 @@ definition prodComm
 
 中文:
 定义 prodComm
-  签名: : (M × N) ≃ₘ^n⟮I.prod J, J.prod I⟯ N × M where
+  签名: : (M × N) ≃ₘ^n⟮I.乘积 J, J.乘积 I⟯ N × M where
   定义体: contMDiff_snd.prodMk contMDiff_fst
   contMDiff_invFun := contMDiff_snd.prodMk contMDiff_fst
   toEquiv := Equiv.prodComm M N
@@ -2107,7 +2107,7 @@ theorem coe_prodComm
 
 中文:
 定理 coe_prodComm
-  结论: ⇑(prodComm I J M N n) = Prod.swap
+  结论: ⇑(prodComm I J M N n) = 积类型.swap
   证明: rfl
 -/
 theorem coe_prodComm : ⇑(prodComm I J M N n) = Prod.swap :=
@@ -2128,7 +2128,7 @@ definition prodAssoc
 
 中文:
 定义 prodAssoc
-  签名: : ((M × N) × N') ≃ₘ^n⟮(I.prod J).prod J', I.prod (J.prod J')⟯ M × N × N' where
+  签名: : ((M × N) × N') ≃ₘ^n⟮(I.乘积 J).乘积 J', I.乘积 (J.乘积 J')⟯ M × N × N' where
   定义体: (contMDiff_fst.comp contMDiff_fst).prodMk
       ((contMDiff_snd.comp contMDiff_fst).prodMk contMDiff_snd)
   contMDiff_invFun :=
@@ -2170,7 +2170,7 @@ definition sumCongr
 
 中文:
 定义 sumCongr
-  签名: (φ : Diffeomorph I J M N n) (ψ : Diffeomorph I J M' N' n)
+  签名: (φ : 微分同胚 I J M N n) (ψ : 微分同胚 I J M' N' n)
   定义体: Equiv.sumCongr φ.toEquiv ψ.toEquiv
   contMDiff_toFun := ContMDiff.sumMap φ.contMDiff_toFun ψ.contMDiff_toFun
   contMDiff_invFun := ContMDiff.sumMap φ.contMDiff_invFun ψ.contMDiff_invFun
@@ -2195,7 +2195,7 @@ lemma sumCongr_symm_symm
 
 中文:
 引理 sumCongr_symm_symm
-  条件: (φ : Diffeomorph I J M N n) (ψ : Diffeomorph I J M' N' n)
+  条件: (φ : 微分同胚 I J M N n) (ψ : 微分同胚 I J M' N' n)
   证明: rfl
 
 @[simp, mfld_simps]
@@ -2214,7 +2214,7 @@ lemma sumCongr_coe
 
 中文:
 引理 sumCongr_coe
-  条件: (φ : Diffeomorph I J M N n) (ψ : Diffeomorph I J M' N' n)
+  条件: (φ : 微分同胚 I J M N n) (ψ : 微分同胚 I J M' N' n)
   证明: rfl
 -/
 lemma sumCongr_coe (φ : Diffeomorph I J M N n) (ψ : Diffeomorph I J M' N' n) :
@@ -2230,7 +2230,7 @@ lemma sumCongr_inl
 
 中文:
 引理 sumCongr_inl
-  条件: (φ : Diffeomorph I J M N n) (ψ : Diffeomorph I J M' N' n)
+  条件: (φ : 微分同胚 I J M N n) (ψ : 微分同胚 I J M' N' n)
   证明: rfl
 -/
 lemma sumCongr_inl (φ : Diffeomorph I J M N n) (ψ : Diffeomorph I J M' N' n) :
@@ -2246,7 +2246,7 @@ lemma sumCongr_inr
 
 中文:
 引理 sumCongr_inr
-  条件: (φ : Diffeomorph I J M N n) (ψ : Diffeomorph I J M' N' n)
+  条件: (φ : 微分同胚 I J M N n) (ψ : 微分同胚 I J M' N' n)
   证明: rfl
 -/
 lemma sumCongr_inr (φ : Diffeomorph I J M N n) (ψ : Diffeomorph I J M' N' n) :
@@ -2267,7 +2267,7 @@ definition sumComm
 
 中文:
 定义 sumComm
-  签名: : Diffeomorph I I (M oplus M') (M' oplus M) n where
+  签名: : 微分同胚 I I (M oplus M') (M' oplus M) n where
   定义体: Equiv.sumComm M M'
   contMDiff_toFun := ContMDiff.swap
   contMDiff_invFun := ContMDiff.swap
@@ -2294,7 +2294,7 @@ theorem sumComm_coe
 
 中文:
 定理 sumComm_coe
-  结论: (Diffeomorph.sumComm I M n M' : (M oplus M') -> (M' oplus M)) = Sum.swap
+  结论: (微分同胚.sumComm I M n M' : (M oplus M') -> (M' oplus M)) = 和.swap
   证明: rfl
 
 @[simp, mfld_simps]
@@ -2312,7 +2312,7 @@ theorem sumComm_symm
 
 中文:
 定理 sumComm_symm
-  结论: (Diffeomorph.sumComm I M n M').symm = Diffeomorph.sumComm I M' n M
+  结论: (微分同胚.sumComm I M n M').symm = 微分同胚.sumComm I M' n M
   证明: rfl
 -/
 theorem sumComm_symm : (Diffeomorph.sumComm I M n M').symm = Diffeomorph.sumComm I M' n M := rfl
@@ -2330,7 +2330,7 @@ lemma sumComm_inl
 
 中文:
 引理 sumComm_inl
-  结论: (Diffeomorph.sumComm I M n M') ∘ Sum.inl = Sum.inr
+  结论: (微分同胚.sumComm I M n M') ∘ 和.inl = 和.inr
   证明: by
   ext
   exact Sum.swap_inl
@@ -2354,7 +2354,7 @@ lemma sumComm_inr
 
 中文:
 引理 sumComm_inr
-  结论: (Diffeomorph.sumComm I M n M') ∘ Sum.inr = Sum.inl
+  结论: (微分同胚.sumComm I M n M') ∘ 和.inr = 和.inl
   证明: by
   ext
   exact Sum.swap_inr
@@ -2384,7 +2384,7 @@ definition sumAssoc
 
 中文:
 定义 sumAssoc
-  签名: : Diffeomorph I I ((M oplus M') oplus M'') (M oplus (M' oplus M'')) n where
+  签名: : 微分同胚 I I ((M oplus M') oplus M'') (M oplus (M' oplus M'')) n where
   定义体: Equiv.sumAssoc M M' M''
   contMDiff_toFun := by
     apply ContMDiff.sumElim
@@ -2438,7 +2438,7 @@ definition sumEmpty
 
 中文:
 定义 sumEmpty
-  签名: [IsEmpty M']
+  签名: [是空 M']
   定义体: Equiv.sumEmpty M M'
   contMDiff_toFun := contMDiff_id.sumElim fun x => (IsEmpty.false x).elim
   contMDiff_invFun := ContMDiff.inl
@@ -2466,8 +2466,8 @@ theorem sumEmpty_toEquiv
 
 中文:
 定理 sumEmpty_toEquiv
-  条件: [IsEmpty M']
-  结论: (sumEmpty I M n).toEquiv = Equiv.sumEmpty M M'
+  条件: [是空 M']
+  结论: (sumEmpty I M n).toEquiv = 等价.sumEmpty M M'
   证明: rfl
 
 @[simp, mfld_simps]
@@ -2486,8 +2486,8 @@ lemma sumEmpty_apply_inl
 
 中文:
 引理 sumEmpty_apply_inl
-  条件: [IsEmpty M'] (x : M)
-  结论: (sumEmpty I M (M' := M') n) (Sum.inl x) = x
+  条件: [是空 M'] (x : M)
+  结论: (sumEmpty I M (M' := M') n) (和.inl x) = x
   证明: rfl
 
 Depends on / 依赖: Sum.inl
@@ -2506,7 +2506,7 @@ definition empty
 
 中文:
 定义 empty
-  签名: [IsEmpty M] [IsEmpty M']
+  签名: [是空 M] [是空 M']
   定义体: Equiv.equivOfIsEmpty M M'
   contMDiff_toFun x := (IsEmpty.false x).elim
   contMDiff_invFun x := (IsEmpty.false x).elim

@@ -63,7 +63,7 @@ definition even
 
 中文:
 定义 even
-  签名: : Subalgebra R (CliffordAlgebra Q)
+  签名: : 子代数 R (CliffordAlgebra Q)
   定义体: (evenOdd Q 0).toSubalgebra (SetLike.one_mem_graded _) fun _x _y hx hy =>
     add_zero (0 : ZMod 2) ▸ SetLike.mul_mem_graded hx hy
 
@@ -86,7 +86,7 @@ theorem even_toSubmodule
 
 中文:
 定理 even_toSubmodule
-  结论: Subalgebra.toSubmodule (even Q) = evenOdd Q 0
+  结论: 子代数.toSubmodule (even Q) = evenOdd Q 0
   证明: rfl
 -/
 theorem even_toSubmodule : Subalgebra.toSubmodule (even Q) = evenOdd Q 0 :=
@@ -108,7 +108,7 @@ structure EvenHom
     - contract_mid((m₁ m₂ m₃ : M)) : bilin m₁ m₂ * bilin m₂ m₃ = Q m₂ • bilin m₁ m₃
 
 中文:
-结构 EvenHom
+结构 Even态射
   参数: where
   公理与运算 (3 个):
     - bilin : M ->ₗ[R] M ->ₗ[R] A
@@ -136,8 +136,8 @@ contract _m := (f.congr_arg <| g.contract _).trans f.commutes _
 (map_mul f _ _).symm.trans (f.congr_arg <| g.contract_mid _ _ _).trans map_smul f _ _
 
 中文:
-定义 EvenHom.compr₂
-  签名: (g : EvenHom Q A) (f : A ->ₐ[R] B)
+定义 Even态射.compr₂
+  签名: (g : Even态射 Q A) (f : A ->ₐ[R] B)
   定义体: g.bilin.compr₂ f.toLinearMap
 contract _m := (f.congr_arg <| g.contract _).trans f.commutes _
   contract_mid _m₁ _m₂ _m₃ :=
@@ -179,7 +179,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (EvenHom Q (even Q))
+  签名: 可居 (Even态射 Q (even Q))
   定义体: ⟨even.ι Q⟩
 -/
 instance : Inhabited (EvenHom Q (even Q)) :=
@@ -256,7 +256,7 @@ definition S
 
 中文:
 定义 S
-  签名: : Submodule R (M ->ₗ[R] A)
+  签名: : 子模 R (M ->ₗ[R] A)
   定义体: Submodule.span R
     {f' | exists x m₂, f' = LinearMap.lcomp R _ (f.bilin.flip m₂) (LinearMap.mulRight R x)}
 -/
@@ -425,7 +425,7 @@ definition aux
 
 中文:
 定义 aux
-  签名: (f : EvenHom Q A)
+  签名: (f : Even态射 Q A)
   定义体: by
   refine ?_ ∘ₗ (even Q).val.toLinearMap
   exact LinearMap.fst R _ _ ∘ₗ foldr Q (fFold f) (fFold_fFold f) (1, 0)
@@ -596,7 +596,7 @@ right_inv _ := even.algHom_ext Q EvenHom.ext LinearMap.ext₂ even.lift.aux_ι _
 
 中文:
 定义 even.lift
-  签名: : EvenHom Q A ≃ (CliffordAlgebra.even Q ->ₐ[R] A) where
+  签名: : Even态射 Q A ≃ (CliffordAlgebra.even Q ->ₐ[R] A) where
   定义体: AlgHom.ofLinearMap (aux f) (aux_one f) (aux_mul f)
   invFun F := (even.ι Q).compr₂ F
 left_inv f := EvenHom.ext LinearMap.ext₂ even.lift.aux_ι f
@@ -623,7 +623,7 @@ theorem even.lift_ι
 
 中文:
 定理 even.lift_ι
-  条件: (f : EvenHom Q A) (m₁ m₂ : M)
+  条件: (f : Even态射 Q A) (m₁ m₂ : M)
   证明: even.lift.aux_ι _ _ _
 
 Depends on / 依赖: even.lift.aux_

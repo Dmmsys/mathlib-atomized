@@ -32,8 +32,8 @@ instance [NonUnitalCStarAlgebra
   signature: A] : NonUnitalCStarAlgebra (α ->ᵇ A) where
 
 中文:
-实例 [NonUnitalCStarAlgebra
-  签名: A] : NonUnitalCStarAlgebra (α ->ᵇ A) where
+实例 [非幺CStar代数
+  签名: A] : 非幺CStar代数 (α ->ᵇ A) where
 -/
 instance [NonUnitalCStarAlgebra A] : NonUnitalCStarAlgebra (α ->ᵇ A) where
 
@@ -45,8 +45,8 @@ instance [NonUnitalCommCStarAlgebra
   signature: A] : NonUnitalCommCStarAlgebra (α ->ᵇ A) where
 
 中文:
-实例 [NonUnitalCommCStarAlgebra
-  签名: A] : NonUnitalCommCStarAlgebra (α ->ᵇ A) where
+实例 [非幺交换CStar代数
+  签名: A] : 非幺交换CStar代数 (α ->ᵇ A) where
 -/
 instance [NonUnitalCommCStarAlgebra A] : NonUnitalCommCStarAlgebra (α ->ᵇ A) where
 
@@ -58,8 +58,8 @@ instance [CStarAlgebra
   signature: A] : CStarAlgebra (α ->ᵇ A) where
 
 中文:
-实例 [CStarAlgebra
-  签名: A] : CStarAlgebra (α ->ᵇ A) where
+实例 [CStar代数
+  签名: A] : CStar代数 (α ->ᵇ A) where
 -/
 instance [CStarAlgebra A] : CStarAlgebra (α ->ᵇ A) where
 
@@ -71,8 +71,8 @@ instance [CommCStarAlgebra
   signature: A] : CommCStarAlgebra (α ->ᵇ A) where
 
 中文:
-实例 [CommCStarAlgebra
-  签名: A] : CommCStarAlgebra (α ->ᵇ A) where
+实例 [交换CStar代数
+  签名: A] : 交换CStar代数 (α ->ᵇ A) where
 -/
 instance [CommCStarAlgebra A] : CommCStarAlgebra (α ->ᵇ A) where
 
@@ -90,8 +90,8 @@ instance [NonUnitalCStarAlgebra
   signature: A] : NonUnitalCStarAlgebra C(α, A) where
 
 中文:
-实例 [NonUnitalCStarAlgebra
-  签名: A] : NonUnitalCStarAlgebra C(α, A) where
+实例 [非幺CStar代数
+  签名: A] : 非幺CStar代数 C(α, A) where
 -/
 instance [NonUnitalCStarAlgebra A] : NonUnitalCStarAlgebra C(α, A) where
 
@@ -103,8 +103,8 @@ instance [NonUnitalCommCStarAlgebra
   signature: A] : NonUnitalCommCStarAlgebra C(α, A) where
 
 中文:
-实例 [NonUnitalCommCStarAlgebra
-  签名: A] : NonUnitalCommCStarAlgebra C(α, A) where
+实例 [非幺交换CStar代数
+  签名: A] : 非幺交换CStar代数 C(α, A) where
 -/
 instance [NonUnitalCommCStarAlgebra A] : NonUnitalCommCStarAlgebra C(α, A) where
 
@@ -116,8 +116,8 @@ instance [CStarAlgebra
   signature: A] : CStarAlgebra C(α, A) where
 
 中文:
-实例 [CStarAlgebra
-  签名: A] : CStarAlgebra C(α, A) where
+实例 [CStar代数
+  签名: A] : CStar代数 C(α, A) where
 -/
 instance [CStarAlgebra A] : CStarAlgebra C(α, A) where
 
@@ -129,8 +129,8 @@ instance [CommCStarAlgebra
   signature: A] : CommCStarAlgebra C(α, A) where
 
 中文:
-实例 [CommCStarAlgebra
-  签名: A] : CommCStarAlgebra C(α, A) where
+实例 [交换CStar代数
+  签名: A] : 交换CStar代数 C(α, A) where
 -/
 instance [CommCStarAlgebra A] : CommCStarAlgebra C(α, A) where
 
@@ -148,8 +148,8 @@ instance [TopologicalSpace
   signature: α] [NonUnitalCStarAlgebra A] : NonUnitalCStarAlgebra C₀(α, A) where
 
 中文:
-实例 [TopologicalSpace
-  签名: α] [NonUnitalCStarAlgebra A] : NonUnitalCStarAlgebra C₀(α, A) where
+实例 [拓扑空间
+  签名: α] [非幺CStar代数 A] : 非幺CStar代数 C₀(α, A) where
 -/
 instance [TopologicalSpace α] [NonUnitalCStarAlgebra A] : NonUnitalCStarAlgebra C₀(α, A) where
 
@@ -161,8 +161,8 @@ instance [TopologicalSpace
   signature: α] [NonUnitalCommCStarAlgebra A] :
 
 中文:
-实例 [TopologicalSpace
-  签名: α] [NonUnitalCommCStarAlgebra A] :
+实例 [拓扑空间
+  签名: α] [非幺交换CStar代数 A] :
 -/
 instance [TopologicalSpace α] [NonUnitalCommCStarAlgebra A] :
     NonUnitalCommCStarAlgebra C₀(α, A) where

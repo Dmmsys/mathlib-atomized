@@ -57,7 +57,7 @@ definition toMon
 
 中文:
 定义 toMon
-  签名: (M : Monad C)
+  签名: (M : 单子 C)
   定义体: (M : C ⥤ C)
 -/
 def toMon (M : Monad C) : Mon (C ⥤ C) where
@@ -78,7 +78,7 @@ definition monadToMon
 
 中文:
 定义 monadToMon
-  签名: : Monad C ⥤ Mon (C ⥤ C) where
+  签名: : 单子 C ⥤ 幺半群 (C ⥤ C) where
   定义体: toMon
   map f := .mk' f.toNatTrans
 -/
@@ -106,7 +106,7 @@ definition ofMon
 
 中文:
 定义 ofMon
-  签名: (M : Mon (C ⥤ C))
+  签名: (M : 幺半群 (C ⥤ C))
   定义体: M.X
   «η» := η[M.X]
   «μ» := μ[M.X]
@@ -140,7 +140,7 @@ lemma ofMon_obj
 
 中文:
 引理 ofMon_obj
-  条件: (M : Mon (C ⥤ C)) (X : C)
+  条件: (M : 幺半群 (C ⥤ C)) (X : C)
   结论: (ofMon M).obj X = M.X.obj X
   证明: rfl
 -/
@@ -167,7 +167,7 @@ definition monToMonad
 
 中文:
 定义 monToMonad
-  签名: : Mon (C ⥤ C) ⥤ Monad C where
+  签名: : 幺半群 (C ⥤ C) ⥤ 单子 C where
   定义体: ofMon
   map {X Y} f :=
     { f.hom with
@@ -206,7 +206,7 @@ definition monadMonEquiv
 
 中文:
 定义 monadMonEquiv
-  签名: : Monad C ≌ Mon (C ⥤ C) where
+  签名: : 单子 C ≌ 幺半群 (C ⥤ C) where
   定义体: monadToMon _
   inverse := monToMonad _
   unitIso :=

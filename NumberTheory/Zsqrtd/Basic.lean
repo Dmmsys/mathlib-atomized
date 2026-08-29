@@ -71,7 +71,7 @@ definition ofInt
   body: ⟨n, 0⟩
 
 中文:
-定义 ofInt
+定义 of整数
   签名: (n : 整数)
   定义体: ⟨n, 0⟩
 -/
@@ -88,7 +88,7 @@ theorem re_ofInt
   proof: rfl
 
 中文:
-定理 re_ofInt
+定理 re_of整数
   条件: (n : 整数)
   结论: (of整数 n : 整数√d).re = n
   证明: rfl
@@ -106,7 +106,7 @@ theorem im_ofInt
   proof: rfl
 
 中文:
-定理 im_ofInt
+定理 im_of整数
   条件: (n : 整数)
   结论: (of整数 n : 整数√d).im = 0
   证明: rfl
@@ -126,7 +126,7 @@ instance :
 
 中文:
 实例 :
-  签名: Zero (整数√d)
+  签名: 零 (整数√d)
   定义体: ⟨ofInt 0⟩
 
 @[simp]
@@ -182,7 +182,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (整数√d)
+  签名: 可居 (整数√d)
   定义体: ⟨0⟩
 -/
 instance : Inhabited (Int√d) :=
@@ -200,7 +200,7 @@ instance :
 
 中文:
 实例 :
-  签名: One (整数√d)
+  签名: 幺 (整数√d)
   定义体: ⟨ofInt 1⟩
 
 @[simp]
@@ -316,7 +316,7 @@ instance :
 
 中文:
 实例 :
-  签名: Add (整数√d)
+  签名: 加法 (整数√d)
   定义体: ⟨fun z w => ⟨z.1 + w.1, z.2 + w.2⟩⟩
 
 @[simp]
@@ -401,7 +401,7 @@ instance :
 
 中文:
 实例 :
-  签名: Neg (整数√d)
+  签名: 取负 (整数√d)
   定义体: ⟨fun z => ⟨-z.1, -z.2⟩⟩
 
 @[simp]
@@ -463,7 +463,7 @@ instance :
 
 中文:
 实例 :
-  签名: Mul (整数√d)
+  签名: 乘法 (整数√d)
   定义体: ⟨fun z w => ⟨z.1 * w.1 + d * z.2 * w.2, z.1 * w.2 + z.2 * w.1⟩⟩
 
 @[simp]
@@ -534,7 +534,7 @@ instance addCommGroup
 
 中文:
 实例 addCommGroup
-  签名: : AddCommGroup (整数√d)
+  签名: : 加法交换群 (整数√d)
   定义体: by
   refine
   { sub := fun a b => a + -b
@@ -618,7 +618,7 @@ instance addGroupWithOne
 
 中文:
 实例 addGroupWithOne
-  签名: : AddGroupWithOne (整数√d)
+  签名: : 加法带幺群 (整数√d)
   定义体: { Zsqrtd.addCommGroup with
     natCast := fun n => ofInt n
     intCast := ofInt }
@@ -655,7 +655,7 @@ instance commRing
 
 中文:
 实例 commRing
-  签名: : CommRing (整数√d)
+  签名: : 交换环 (整数√d)
   定义体: by
   refine
   { Zsqrtd.addGroupWithOne with
@@ -703,7 +703,7 @@ instance :
 
 中文:
 实例 :
-  签名: AddMonoid (整数√d)
+  签名: 加法幺半群 (整数√d)
   定义体: by infer_instance
 
 Depends on / 依赖: infer_instance
@@ -720,7 +720,7 @@ instance :
 
 中文:
 实例 :
-  签名: Monoid (整数√d)
+  签名: 幺半群 (整数√d)
   定义体: by infer_instance
 
 Depends on / 依赖: infer_instance
@@ -737,7 +737,7 @@ instance :
 
 中文:
 实例 :
-  签名: CommMonoid (整数√d)
+  签名: 交换幺半群 (整数√d)
   定义体: by infer_instance
 
 Depends on / 依赖: infer_instance
@@ -754,7 +754,7 @@ instance :
 
 中文:
 实例 :
-  签名: CommSemigroup (整数√d)
+  签名: 交换半群 (整数√d)
   定义体: by infer_instance
 
 Depends on / 依赖: infer_instance
@@ -771,7 +771,7 @@ instance :
 
 中文:
 实例 :
-  签名: Semigroup (整数√d)
+  签名: 半群 (整数√d)
   定义体: by infer_instance
 
 Depends on / 依赖: infer_instance
@@ -788,7 +788,7 @@ instance :
 
 中文:
 实例 :
-  签名: AddCommSemigroup (整数√d)
+  签名: 加法交换半群 (整数√d)
   定义体: by infer_instance
 
 Depends on / 依赖: infer_instance
@@ -805,7 +805,7 @@ instance :
 
 中文:
 实例 :
-  签名: AddSemigroup (整数√d)
+  签名: 加法半群 (整数√d)
   定义体: by infer_instance
 
 Depends on / 依赖: infer_instance
@@ -822,7 +822,7 @@ instance :
 
 中文:
 实例 :
-  签名: CommSemiring (整数√d)
+  签名: 交换半环 (整数√d)
   定义体: by infer_instance
 
 Depends on / 依赖: infer_instance
@@ -839,7 +839,7 @@ instance :
 
 中文:
 实例 :
-  签名: Semiring (整数√d)
+  签名: 半环 (整数√d)
   定义体: by infer_instance
 
 Depends on / 依赖: infer_instance
@@ -856,7 +856,7 @@ instance :
 
 中文:
 实例 :
-  签名: Ring (整数√d)
+  签名: 环 (整数√d)
   定义体: by infer_instance
 
 Depends on / 依赖: infer_instance
@@ -892,7 +892,7 @@ instance :
 
 中文:
 实例 :
-  签名: Star (整数√d)
+  签名: 对合 (整数√d)
   定义体: ⟨z.1, -z.2⟩
 
 @[simp]
@@ -977,7 +977,7 @@ instance :
 
 中文:
 实例 :
-  签名: StarRing (整数√d)
+  签名: 对合环 (整数√d)
   定义体: Zsqrtd.ext rfl (neg_neg _)
   star_mul a b := by ext <;> simp <;> ring
   star_add _ _ := Zsqrtd.ext rfl (neg_add _ _)
@@ -1002,7 +1002,7 @@ instance nontrivial
 
 中文:
 实例 nontrivial
-  签名: : Nontrivial (整数√d)
+  签名: : 非平凡 (整数√d)
   定义体: ⟨⟨0, 1, Zsqrtd.ext_iff.not.mpr (by simp)⟩⟩
 
 @[simp]
@@ -1048,7 +1048,7 @@ theorem re_ofNat
 @[simp]
 
 中文:
-定理 re_ofNat
+定理 re_of自然数
   条件: (n : 自然数) [n.AtLeastTwo]
   结论: (of自然数(n) : 整数√d).re = n
   证明: rfl
@@ -1092,7 +1092,7 @@ theorem im_ofNat
   proof: rfl
 
 中文:
-定理 im_ofNat
+定理 im_of自然数
   条件: (n : 自然数) [n.AtLeastTwo]
   结论: (of自然数(n) : 整数√d).im = 0
   证明: rfl
@@ -1191,7 +1191,7 @@ instance :
 
 中文:
 实例 :
-  签名: CharZero (整数√d)
+  签名: 特征零 (整数√d)
   定义体: by simp [Zsqrtd.ext_iff]
 
 @[simp]
@@ -1213,7 +1213,7 @@ theorem ofInt_eq_intCast
 @[simp]
 
 中文:
-定理 ofInt_eq_intCast
+定理 of整数_eq_intCast
   条件: (n : 整数)
   结论: (of整数 n : 整数√d) = n
   证明: by ext <;> simp [re_ofInt, im_ofInt]
@@ -1508,7 +1508,7 @@ theorem gcd_eq_zero_iff
 中文:
 定理 gcd_eq_zero_iff
   条件: (a : 整数√d)
-  结论: 整数.gcd a.re a.im = 0 ↔ a = 0
+  结论: 整数.最大公约数 a.re a.im = 0 ↔ a = 0
   证明: by
   simp only [Int.gcd_eq_zero_iff, Zsqrtd.ext_iff, im_zero, re_zero]
 
@@ -1529,7 +1529,7 @@ theorem gcd_pos_iff
 中文:
 定理 gcd_pos_iff
   条件: (a : 整数√d)
-  结论: 0 < 整数.gcd a.re a.im ↔ a != 0
+  结论: 0 < 整数.最大公约数 a.re a.im ↔ a != 0
   证明: pos_iff_ne_zero.trans not_congr a.gcd_eq_zero_iff
 
 Depends on / 依赖: a.gcd_eq_zero_iff, gcd_eq_zero_iff, not_congr, pos_iff_ne_zero, pos_iff_ne_zero.trans
@@ -1600,8 +1600,8 @@ theorem exists_coprime_of_gcd_pos
   · rw [Int.isCoprime_iff_gcd_eq_one, H1]
 
 中文:
-定理 exists_coprime_of_gcd_pos
-  条件: {a : 整数√d} (hgcd : 0 < 整数.gcd a.re a.im)
+定理 存在_coprime_of_gcd_pos
+  条件: {a : 整数√d} (hgcd : 0 < 整数.最大公约数 a.re a.im)
   证明: by
   obtain ⟨re, im, H1, Hre, Him⟩ := Int.exists_gcd_one hgcd
   rw [mul_comm] at Hre Him
@@ -2258,7 +2258,7 @@ isUnit_iff_dvd_one.2
 中文:
 定理 norm_eq_one_iff
   条件: {x : 整数√d}
-  结论: x.norm.natAbs = 1 ↔ IsUnit x
+  结论: x.norm.natAbs = 1 ↔ 是单位 x
   证明: ⟨fun h =>
 isUnit_iff_dvd_one.2
       (le_total 0 (norm x)).casesOn
@@ -2303,7 +2303,7 @@ theorem isUnit_iff_norm_isUnit
 中文:
 定理 isUnit_iff_norm_isUnit
   条件: {d : 整数} (z : 整数√d)
-  结论: IsUnit z ↔ IsUnit z.norm
+  结论: 是单位 z ↔ 是单位 z.norm
   证明: by
   rw [Int.isUnit_iff_natAbs_eq]; rw [norm_eq_one_iff]
 
@@ -2325,7 +2325,7 @@ theorem norm_eq_one_iff'
 中文:
 定理 norm_eq_one_iff'
   条件: {d : 整数} (hd : d <= 0) (z : 整数√d)
-  结论: z.norm = 1 ↔ IsUnit z
+  结论: z.norm = 1 ↔ 是单位 z
   证明: by
   rw [← norm_eq_one_iff]; rw [← Int.natCast_inj]; rw [Int.natAbs_of_nonneg (norm_nonneg hd z)]; rw [Int.ofNat_one]
 
@@ -2485,7 +2485,7 @@ instance decidableNonneg
 
 中文:
 实例 decidableNonneg
-  签名: : 对任意 a : 整数√d, Decidable (Nonneg a)
+  签名: : 对任意 a : 整数√d, 可判定 (Nonneg a)
 -/
 instance decidableNonneg : forall a : Int√d, Decidable (Nonneg a)
   | ⟨_, _⟩ => Zsqrtd.decidableNonnegg _ _ _ _
@@ -2740,7 +2740,7 @@ instance preorder
 
 中文:
 实例 preorder
-  签名: : Preorder (整数√d) where
+  签名: : 预序 (整数√d) where
   定义体: show Nonneg (a - a) by simp only [sub_self]; trivial
   le_trans a b c hab hbc := by simpa [sub_add_sub_cancel'] using! hab.add hbc
   lt_iff_le_not_ge a b := by
@@ -3268,7 +3268,7 @@ le_antisymm := fun _ _ ab ba => eq_of_sub_eq_zero nonneg_antisymm ba (by rwa [ne
 
 中文:
 实例 linearOrder
-  签名: : LinearOrder (整数√d)
+  签名: : 线性序 (整数√d)
   定义体: { Zsqrtd.preorder with
 le_antisymm := fun _ _ ab ba => eq_of_sub_eq_zero nonneg_antisymm ba (by rwa [neg_sub])
     le_total := fun a b => by
@@ -3354,7 +3354,7 @@ instance :
 
 中文:
 实例 :
-  签名: NoZeroDivisors (整数√d)
+  签名: 无零因子 (整数√d)
   定义体: Zsqrtd.eq_zero_or_eq_zero_of_mul_eq_zero
 
 Depends on / 依赖: Zsqrtd, Zsqrtd.eq_zero_or_eq_zero_of_mul_eq_zero, eq_zero_or_eq_zero_of_mul_eq_zero
@@ -3372,7 +3372,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsDomain (整数√d)
+  签名: 是整环 (整数√d)
   定义体: NoZeroDivisors.to_isDomain _
 
 Depends on / 依赖: NoZeroDivisors, NoZeroDivisors.to_isDomain, to_isDomain
@@ -3419,7 +3419,7 @@ instance :
 
 中文:
 实例 :
-  签名: ZeroLEOneClass (整数√d)
+  签名: ZeroLEOne类 (整数√d)
   定义体: { zero_le_one := by trivial }
 
 Depends on / 依赖: zero_le_one
@@ -3439,7 +3439,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsOrderedAddMonoid (整数√d)
+  签名: 是OrderedAdd幺半群 (整数√d)
   定义体: { add_le_add_left := fun a b ab c => show Nonneg _ by rwa [add_sub_add_right_eq_sub] }
 
 @[deprecated _root_.le_of_add_le_add_left (since := "2026-02-19")]
@@ -3507,7 +3507,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsStrictOrderedRing (整数√d)
+  签名: 是StrictOrdered环 (整数√d)
   定义体: .of_mul_pos Zsqrtd.mul_pos
 
 Depends on / 依赖: Zsqrtd, Zsqrtd.mul_pos, mul_pos, of_mul_pos
@@ -3582,7 +3582,7 @@ theorem hom_ext
 
 中文:
 定理 hom_ext
-  条件: [NonAssocRing R] {d : 整数} (f g : 整数√d ->+* R) (h : f sqrtd = g sqrtd)
+  条件: [非结合环 R] {d : 整数} (f g : 整数√d ->+* R) (h : f sqrtd = g sqrtd)
   结论: f = g
   证明: by
   ext ⟨re_x, im_x⟩
@@ -3668,7 +3668,7 @@ theorem lift_injective
 
 中文:
 定理 lift_injective
-  结论: [CharZero R] {d : 整数} (r : { r : R // r * r = ↑d })
+  结论: [特征零 R] {d : 整数} (r : { r : R // r * r = ↑d })
   证明: (injective_iff_map_eq_zero (lift r)).mpr fun a ha => by
     have h_inj : Function.Injective ((↑) : Int -> R) := Int.cast_injective
     suffices lift r a.norm = 0 by
@@ -3725,7 +3725,7 @@ theorem mker_norm_eq_unitary
 中文:
 定理 mker_norm_eq_unitary
   条件: {d : 整数}
-  结论: MonoidHom.mker (@normMonoidHom d) = unitary (整数√d)
+  结论: 幺半群态射.mker (@normMonoidHom d) = unitary (整数√d)
   证明: Submonoid.ext fun _ => norm_eq_one_iff_mem_unitary
 
 Depends on / 依赖: Submonoid, Submonoid.ext, norm_eq_one_iff_mem_unitary

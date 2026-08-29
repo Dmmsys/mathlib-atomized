@@ -113,7 +113,7 @@ theorem mem_range_rank_of_le
 
 中文:
 定理 mem_range_rank_of_le
-  条件: {o : Ordinal} (ha : Acc r a) (ho : o <= ha.rank)
+  条件: {o : 序数} (ha : Acc r a) (ho : o <= ha.rank)
   证明: by
   obtain rfl | ho := ho.eq_or_lt
   · exact ⟨a, ha, rfl⟩
@@ -220,8 +220,8 @@ theorem mem_range_rank_of_le
 
 中文:
 定理 mem_range_rank_of_le
-  条件: {o : Ordinal} (h : o <= rank r a)
-  结论: o in Set.range (rank r)
+  条件: {o : 序数} (h : o <= rank r a)
+  结论: o in 集合.range (rank r)
   证明: by
   obtain ⟨b, hb, rfl⟩ := Acc.mem_range_rank_of_le (hwf.apply r a) h
   exact ⟨b, rfl⟩
@@ -244,7 +244,7 @@ theorem WellFoundedLT.rank_strictMono
 
 中文:
 定理 WellFoundedLT.rank_strictMono
-  条件: [Preorder α] [WellFoundedLT α]
+  条件: [预序 α] [WellFoundedLT α]
   证明: fun _ _ => IsWellFounded.rank_lt_of_rel
 
 Depends on / 依赖: ProperSpace, secondCountable_of_proper
@@ -265,7 +265,7 @@ theorem WellFoundedGT.rank_strictAnti
 
 中文:
 定理 WellFoundedGT.rank_strictAnti
-  条件: [Preorder α] [WellFoundedGT α]
+  条件: [预序 α] [WellFoundedGT α]
   证明: fun _ _ a => IsWellFounded.rank_lt_of_rel a
 
 @[simp]
@@ -290,9 +290,9 @@ theorem IsWellFounded.rank_eq_typein
     fun a b h => mem_range_rank_of_le h.le⟩) (Ordinal.typein r) a
 
 中文:
-定理 IsWellFounded.rank_eq_typein
-  条件: (r) [IsWellOrder α r]
-  结论: rank r = Ordinal.typein r
+定理 是良基.rank_eq_typein
+  条件: (r) [是良序 α r]
+  结论: rank r = 序数.typein r
   证明: by
   classical
   let := linearOrderOfSTO r

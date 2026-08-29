@@ -233,7 +233,7 @@ theorem MemLp.const_smul'
 
 中文:
 定理 MemLp.const_smul'
-  条件: [ContinuousConstSMul 𝕜 ε] (hf : MemLp f p μ) (c : 𝕜)
+  条件: [连续常数标量乘法 𝕜 ε] (hf : MemLp f p μ) (c : 𝕜)
   证明: ⟨hf.1.const_smul c, eLpNorm_const_smul_le'.trans_lt (ENNReal.mul_lt_top ENNReal.coe_lt_top hf.2)⟩
 
 Depends on / 依赖: ENNReal, ENNReal.coe_lt_top, ENNReal.mul_lt_top, coe_lt_top, const_smul, eLpNorm_const_smul_le, mul_lt_top, trans_lt
@@ -345,7 +345,7 @@ refine le_antisymm eLpNorm_const_smul_le ENNReal.mul_le_of_le_div' ?_
 
 中文:
 定理 eLpNorm_const_smul
-  条件: (c : 𝕜) (f : α -> F) (p : 实数>=0∞) (μ : Measure α)
+  条件: (c : 𝕜) (f : α -> F) (p : 实数>=0∞) (μ : 测度 α)
   证明: by
   obtain rfl | hc := eq_or_ne c 0
   · simp
@@ -374,7 +374,7 @@ lemma eLpNorm_nsmul
 
 中文:
 引理 eLpNorm_nsmul
-  条件: [NormedSpace 实数 F] (n : 自然数) (f : α -> F)
+  条件: [赋范空间 实数 F] (n : 自然数) (f : α -> F)
   证明: by
   simpa [Nat.cast_smul_eq_nsmul] using eLpNorm_const_smul (n : Real) f ..
 

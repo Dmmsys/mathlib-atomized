@@ -41,7 +41,7 @@ theorem map_prime
 
 中文:
 定理 map_prime
-  结论: (f : S.LocalizationMap N) {m : M} (prime : Prime m)
+  结论: (f : S.Localization映射 N) {m : M} (prime : 素 m)
   证明: by
   refine ⟨n0, nu, fun n₁ n₂ dvd => ?_⟩
   have ⟨⟨m₁, s₁⟩, eq₁⟩ := f.surj n₁
@@ -84,7 +84,7 @@ theorem eq_isUnit_map_mul_irreducible_of_irreducible_map
 
 中文:
 定理 eq_isUnit_map_mul_irreducible_of_irreducible_map
-  结论: [WfDvdMonoid M] (f : S.LocalizationMap N)
+  结论: [WfDvdMonoid M] (f : S.Localization映射 N)
   证明: by
   induction m using WfDvdMonoid.induction_on_irreducible with
   | zero => exact (hm.ne_zero f.map_zero).elim
@@ -125,7 +125,7 @@ theorem uniqueFactorizationMonoid
 
 中文:
 定理 uniqueFactorizationMonoid
-  结论: (f : S.LocalizationMap N)
+  结论: (f : S.Localization映射 N)
   证明: have := f.isCancelMulZero
   .of_exists_prime_factors fun n hn => by
     classical
@@ -167,8 +167,8 @@ theorem UniqueFactorizationMonoid.of_isLocalization
   proof: (IsLocalization.toLocalizationMap S N).uniqueFactorizationMonoid
 
 中文:
-定理 UniqueFactorizationMonoid.of_isLocalization
-  结论: (N : 类型) [CommSemiring N] [Algebra M N]
+定理 唯一分解幺半群.of_isLocalization
+  结论: (N : 类型) [交换半环 N] [代数 M N]
   证明: (IsLocalization.toLocalizationMap S N).uniqueFactorizationMonoid
 
 Depends on / 依赖: IsLocalization, IsLocalization.toLocalizationMap, toLocalizationMap, uniqueFactorizationMonoid
@@ -186,8 +186,8 @@ instance [UniqueFactorizationMonoid
   body: (Localization.monoidOf S).uniqueFactorizationMonoid
 
 中文:
-实例 [UniqueFactorizationMonoid
-  签名: M] : UniqueFactorizationMonoid (Localization S)
+实例 [唯一分解幺半群
+  签名: M] : 唯一分解幺半群 (Localization S)
   定义体: (Localization.monoidOf S).uniqueFactorizationMonoid
 
 Depends on / 依赖: Localization, Localization.monoidOf, monoidOf, uniqueFactorizationMonoid

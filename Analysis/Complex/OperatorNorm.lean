@@ -35,7 +35,7 @@ theorem det_conjLIE
 
 中文:
 定理 det_conjLIE
-  结论: LinearMap.det (conjLIE.toLinearEquiv : Complex ->ₗ[实数] Complex) = -1
+  结论: 线性映射.det (conjLIE.toLinearEquiv : 复形 ->ₗ[实数] 复形) = -1
   证明: det_conjAe
 
 Depends on / 依赖: det_conjAe
@@ -57,7 +57,7 @@ theorem linearEquiv_det_conjLIE
 
 中文:
 定理 linearEquiv_det_conjLIE
-  结论: LinearEquiv.det conjLIE.toLinearEquiv = -1
+  结论: 线性等价.det conjLIE.toLinearEquiv = -1
   证明: linearEquiv_det_conjAe
 
 @[simp]
@@ -234,7 +234,7 @@ theorem conjCLE_norm
 
 中文:
 定理 conjCLE_norm
-  结论: ‖(conjCLE : Complex ->L[实数] Complex)‖ = 1
+  结论: ‖(conjCLE : 复形 ->L[实数] 复形)‖ = 1
   证明: conjLIE.toLinearIsometry.norm_toContinuousLinearMap
 
 @[simp]
@@ -257,7 +257,7 @@ theorem conjCLE_enorm
 
 中文:
 定理 conjCLE_enorm
-  结论: ‖(conjCLE : Complex ->L[实数] Complex)‖ₑ = 1
+  结论: ‖(conjCLE : 复形 ->L[实数] 复形)‖ₑ = 1
   证明: by simp [← ofReal_norm]
 
 @[simp]
@@ -279,7 +279,7 @@ theorem conjCLE_nnorm
 
 中文:
 定理 conjCLE_nnorm
-  结论: ‖(conjCLE : Complex ->L[实数] Complex)‖₊ = 1
+  结论: ‖(conjCLE : 复形 ->L[实数] 复形)‖₊ = 1
   证明: Subtype.ext conjCLE_norm
 
 @[simp]
@@ -301,7 +301,7 @@ theorem ofRealCLM_norm
 @[simp]
 
 中文:
-定理 ofRealCLM_norm
+定理 of实数CLM_norm
   结论: ‖of实数CLM‖ = 1
   证明: ofRealLI.norm_toContinuousLinearMap
 
@@ -324,7 +324,7 @@ theorem ofRealCLM_enorm
 @[simp]
 
 中文:
-定理 ofRealCLM_enorm
+定理 of实数CLM_enorm
   结论: ‖of实数CLM‖ₑ = 1
   证明: by simp [← ofReal_norm]
 
@@ -344,7 +344,7 @@ theorem ofRealCLM_nnnorm
   proof: Subtype.ext ofRealCLM_norm
 
 中文:
-定理 ofRealCLM_nnnorm
+定理 of实数CLM_nnnorm
   结论: ‖of实数CLM‖₊ = 1
   证明: Subtype.ext ofRealCLM_norm
 

@@ -112,7 +112,7 @@ theorem mem_map_range
 
 中文:
 定理 mem_map_range
-  条件: {R S : 类型} [Ring R] [Ring S] (f : R ->+* S) {p : S[X]}
+  条件: {R S : 类型} [环 R] [环 S] (f : R ->+* S) {p : S[X]}
   证明: mem_map_rangeS f
 
 Depends on / 依赖: mem_map_rangeS
@@ -131,7 +131,7 @@ theorem notMem_map_range
 
 中文:
 定理 notMem_map_range
-  条件: {R S : 类型} [Ring R] [Ring S] (f : R ->+* S) {p : S[X]}
+  条件: {R S : 类型} [环 R] [环 S] (f : R ->+* S) {p : S[X]}
   证明: notMem_map_rangeS f
 
 Depends on / 依赖: notMem_map_rangeS

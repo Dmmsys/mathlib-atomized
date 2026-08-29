@@ -52,7 +52,7 @@ definition HasLift
     (_ : c'.Rel i' (e.f j)), K.d i' _ ≫ φ.f j = 0
 
 中文:
-定义 HasLift
+定义 有Lift
   签名: (φ : K.restriction e ⟶ L)
   定义体: forall (j : ι) (_ : e.BoundaryGE j) (i' : ι')
     (_ : c'.Rel i' (e.f j)), K.d i' _ ≫ φ.f j = 0
@@ -146,7 +146,7 @@ lemma comm
 
 中文:
 引理 comm
-  条件: (hφ : e.HasLift φ) (i' j' : ι')
+  条件: (hφ : e.有Lift φ) (i' j' : ι')
   证明: by
   by_cases hij' : c'.Rel i' j'
   · by_cases hi' : exists i, e.f i = i'
@@ -516,7 +516,7 @@ lemma homRestrict_liftExtend
 
 中文:
 引理 homRestrict_liftExtend
-  条件: (φ : K.restriction e ⟶ L) (hφ : e.HasLift φ)
+  条件: (φ : K.restriction e ⟶ L) (hφ : e.有Lift φ)
   证明: by
   ext i
   simp [e.homRestrict_f _ rfl, e.liftExtend_f _ _ rfl]

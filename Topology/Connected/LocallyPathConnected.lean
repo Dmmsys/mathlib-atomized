@@ -66,10 +66,10 @@ class LocallyPathConnectedSpace
     - path_connected_basis : forall x : X, (𝓝 x).HasBasis (fun s : Set X => s in 𝓝 x ∧ IsPathConnected s) id
 
 中文:
-类 LocallyPathConnectedSpace
-  参数: (X : 类型) [TopologicalSpace X]
+类 LocallyPathConnected空间
+  参数: (X : 类型) [拓扑空间 X]
   公理与运算 (1 个):
-    - path_connected_basis : 对任意 x : X, (𝓝 x).HasBasis (fun s : Set X => s in 𝓝 x ∧ IsPathConnected s) id
+    - path_connected_basis : 对任意 x : X, (𝓝 x).有基 (fun s : 集合 X => s in 𝓝 x ∧ 是道路连通 s) id
 -/
 class LocallyPathConnectedSpace (X : Type*) [TopologicalSpace X] : Prop where
   /-- Each neighborhood filter has a basis of path-connected neighborhoods. -/
@@ -98,8 +98,8 @@ theorem LocallyPathConnectedSpace.of_bases
 alias LocPathConnectedSpace.of_bases := LocallyPathConnectedSpace.of_bases
 
 中文:
-定理 LocallyPathConnectedSpace.of_bases
-  结论: {p : X -> ι -> 命题} {s : X -> ι -> Set X}
+定理 LocallyPathConnected空间.of_bases
+  结论: {p : X -> ι -> 命题} {s : X -> ι -> 集合 X}
   证明: by
     rw [hasBasis_self]
     intro t ht
@@ -139,8 +139,8 @@ exact mem_of_superset hs.1.1 pathComponentIn_congr hy ▸
     hs.1.2.subset_pathComponentIn (mem_of_mem_nhds hs.1.1) hs.2
 
 中文:
-定理 IsOpen.pathComponentIn
-  条件: (hF : IsOpen F) (x : X)
+定理 是开集.pathComponentIn
+  条件: (hF : 是开集 F) (x : X)
   证明: by
   rw [isOpen_iff_mem_nhds]
   intro y hy
@@ -168,9 +168,9 @@ theorem IsOpen.pathComponent
   exact isOpen_univ.pathComponentIn _
 
 中文:
-定理 IsOpen.pathComponent
+定理 是开集.pathComponent
   条件: (x : X)
-  结论: IsOpen (pathComponent x)
+  结论: 是开集 (pathComponent x)
   证明: by
   rw [← pathComponentIn_univ]
   exact isOpen_univ.pathComponentIn _
@@ -194,9 +194,9 @@ theorem IsClosed.pathComponent
 exact hxy hxz.trans (hVc.joinedIn _ hz _ (mem_of_mem_nhds hVy)).joined
 
 中文:
-定理 IsClosed.pathComponent
+定理 是闭集.pathComponent
   条件: (x : X)
-  结论: IsClosed (pathComponent x)
+  结论: 是闭集 (pathComponent x)
   证明: by
   rw [← isOpen_compl_iff]; rw [isOpen_iff_mem_nhds]
   intro y hxy
@@ -270,9 +270,9 @@ theorem PathConnectedSpace.of_locallyPathConnectedSpace
 alias PathConnectedSpace.of_locPathConnectedSpace := PathConnectedSpace.of_locallyPathConnectedSpace
 
 中文:
-定理 PathConnectedSpace.of_locallyPathConnectedSpace
-  条件: [ConnectedSpace X]
-  结论: PathConnectedSpace X
+定理 道路连通空间.of_locallyPathConnectedSpace
+  条件: [连通空间 X]
+  结论: 道路连通空间 X
   证明: ⟨inferInstance, by simp [← mem_pathComponent_iff, IsClopen.pathComponent _ |>.eq_univ]⟩
 
 @[deprecated (since := "2026-06-21")]
@@ -296,7 +296,7 @@ theorem pathConnectedSpace_iff_connectedSpace
 
 中文:
 定理 pathConnectedSpace_iff_connectedSpace
-  结论: PathConnectedSpace X ↔ ConnectedSpace X
+  结论: 道路连通空间 X ↔ 连通空间 X
   证明: ⟨fun _ => inferInstance, fun _ => .of_locallyPathConnectedSpace⟩
 
 Depends on / 依赖: of_locallyPathConnectedSpace
@@ -465,7 +465,7 @@ theorem pathConnected_subset_basis
 
 中文:
 定理 pathConnected_subset_basis
-  条件: {U : Set X} (h : IsOpen U) (hx : x in U)
+  条件: {U : 集合 X} (h : 是开集 U) (hx : x in U)
   证明: (path_connected_basis x).hasBasis_self_subset (IsOpen.mem_nhds h hx)
 
 Depends on / 依赖: IsOpen, IsOpen.mem_nhds, hasBasis_self_subset, mem_nhds, path_connected_basis
@@ -518,8 +518,8 @@ he.basis_nhds pathConnected_subset_basis he.isOpen_range (mem_range_self _)
 
 
 中文:
-定理 Topology.IsOpenEmbedding.locallyPathConnectedSpace
-  条件: {e : Y -> X} (he : IsOpenEmbedding e)
+定理 拓扑.是开嵌入.locallyPathConnectedSpace
+  条件: {e : Y -> X} (he : 是开嵌入 e)
   证明: have (y : Y) :
       (𝓝 y).HasBasis (fun s => s in 𝓝 (e y) ∧ IsPathConnected s ∧ s subseteq range e) (e ⁻¹' ·) :=
 he.basis_nhds pathConnected_subset_basis he.isOpen_range (mem_range_self _)
@@ -554,9 +554,9 @@ theorem IsOpen.locallyPathConnectedSpace
 alias IsOpen.locPathConnectedSpace := IsOpen.locallyPathConnectedSpace
 
 中文:
-定理 IsOpen.locallyPathConnectedSpace
-  条件: {U : Set X} (h : IsOpen U)
-  结论: LocallyPathConnectedSpace U
+定理 是开集.locallyPathConnectedSpace
+  条件: {U : 集合 X} (h : 是开集 U)
+  结论: LocallyPathConnected空间 U
   证明: h.isOpenEmbedding_subtypeVal.locallyPathConnectedSpace
 
 @[deprecated (since := "2026-06-21")]
@@ -582,8 +582,8 @@ theorem IsOpen.isConnected_iff_isPathConnected
   exact pathConnectedSpace_iff_connectedSpace.symm
 
 中文:
-定理 IsOpen.isConnected_iff_isPathConnected
-  条件: {U : Set X} (U_op : IsOpen U)
+定理 是开集.isConnected_iff_isPathConnected
+  条件: {U : 集合 X} (U_op : 是开集 U)
   证明: by
   rw [isConnected_iff_connectedSpace]; rw [isPathConnected_iff_pathConnectedSpace]
   have := U_op.locallyPathConnectedSpace
@@ -611,7 +611,7 @@ instance :
 
 中文:
 实例 :
-  签名: LocallyConnectedSpace X
+  签名: 局部连通空间 X
   定义体: by
   refine ⟨forall_imp (fun x h => ⟨fun s => ?_⟩) isOpen_isPathConnected_basis⟩
   refine ⟨fun hs => ?_, fun ⟨u, ⟨hu, hxu, _⟩, hus⟩ => mem_nhds_iff.mpr ⟨u, hus, hu, hxu⟩⟩
@@ -640,7 +640,7 @@ lemma locallyPathConnectedSpace_iff_isOpen_pathComponentIn
 
 中文:
 引理 locallyPathConnectedSpace_iff_isOpen_pathComponentIn
-  条件: {X : 类型} [TopologicalSpace X]
+  条件: {X : 类型} [拓扑空间 X]
   证明: ⟨fun _ _ _ hu => hu.pathComponentIn _, fun h => ⟨fun x => ⟨fun s => by
     refine ⟨fun hs => ?_, fun ⟨_, ht⟩ => Filter.mem_of_superset ht.1.1 ht.2⟩
     let ⟨u, hu⟩ := mem_nhds_iff.mp hs
@@ -677,7 +677,7 @@ lemma locallyPathConnectedSpace_iff_pathComponentIn_mem_nhds
 
 中文:
 引理 locallyPathConnectedSpace_iff_pathComponentIn_mem_nhds
-  条件: {X : 类型} [TopologicalSpace X]
+  条件: {X : 类型} [拓扑空间 X]
   证明: by
   rw [locallyPathConnectedSpace_iff_isOpen_pathComponentIn]
   simp_rw [forall_comm (β := Set X), ← imp_forall_iff]
@@ -716,7 +716,7 @@ isOpen_coinduced.mpr isOpen_iff_mem_nhds.mpr fun x hx => ?_
   refin
 
 中文:
-引理 LocallyPathConnectedSpace.coinduced
+引理 LocallyPathConnected空间.coinduced
   条件: {Y : 类型} (f : X -> Y)
   证明: by
   let _ := TopologicalSpace.coinduced f ‹_›; have hf : Continuous f := continuous_coinduced_rng
@@ -756,8 +756,8 @@ alias Topology.IsQuotientMap.locPathConnectedSpace :=
   Topology.IsQuotientMap.locallyPathConnectedSpace
 
 中文:
-引理 Topology.IsQuotientMap.locallyPathConnectedSpace
-  条件: {f : X -> Y} (h : IsQuotientMap f)
+引理 拓扑.是商映射.locallyPathConnectedSpace
+  条件: {f : X -> Y} (h : 是商映射 f)
   证明: h.isCoinducing.eq_coinduced ▸ LocallyPathConnectedSpace.coinduced f
 
 @[deprecated (since := "2026-06-21")]
@@ -786,7 +786,7 @@ instance Quot.locallyPathConnectedSpace
 alias Quot.locPathConnectedSpace := Quot.locallyPathConnectedSpace
 
 中文:
-实例 Quot.locallyPathConnectedSpace
+实例 商.locallyPathConnectedSpace
   签名: {r : X -> X -> 命题}
   定义体: isQuotientMap_quot_mk.locallyPathConnectedSpace
 
@@ -813,8 +813,8 @@ instance Quotient.locallyPathConnectedSpace
 alias Quotient.locPathConnectedSpace := Quotient.locallyPathConnectedSpace
 
 中文:
-实例 Quotient.locallyPathConnectedSpace
-  签名: {s : Setoid X}
+实例 商.locallyPathConnectedSpace
+  签名: {s : 集合等价关系 X}
   定义体: isQuotientMap_quotient_mk'.locallyPathConnectedSpace
 
 @[deprecated (since := "2026-06-21")]
@@ -843,8 +843,8 @@ instance Sum.locallyPathConnectedSpace
       · exact (isPathConnected_pathComponentIn (by exact 
 
 中文:
-实例 Sum.locallyPathConnectedSpace
-  签名: [LocallyPathConnectedSpace Y]
+实例 和.locallyPathConnectedSpace
+  签名: [LocallyPathConnected空间 Y]
   定义体: by
   rw [locallyPathConnectedSpace_iff_pathComponentIn_mem_nhds]; intro x u hu hxu; rw [mem_nhds_iff]
   obtain x | y := x
@@ -889,7 +889,7 @@ instance Sigma.locallyPathConnectedSpace
     · exact (isPathConnected_pathComponentIn (by exact hxu)).imag
 
 中文:
-实例 Sigma.locallyPathConnectedSpace
+实例 依赖和类型.locallyPathConnectedSpace
   签名: {X : ι -> 类型}
   定义体: by
   rw [locallyPathConnectedSpace_iff_pathComponentIn_mem_nhds]; intro x u hu hxu; rw [mem_nhds_iff]
@@ -927,8 +927,8 @@ instance Prod.locallyPathConnectedSpace
       (isPathConnected_pathComponentIn (mem_of_mem_nhds hu)
 
 中文:
-实例 Prod.locallyPathConnectedSpace
-  签名: [LocallyPathConnectedSpace Y]
+实例 积类型.locallyPathConnectedSpace
+  签名: [LocallyPathConnected空间 Y]
   定义体: fun (x, y) => hasBasis_self.mpr fun U hU => by
     obtain ⟨u, hu, v, hv, huv⟩ := mem_nhds_prod_iff.mp hU
     exact ⟨pathComponentIn u x ×ˢ pathComponentIn v y,
@@ -961,7 +961,7 @@ theorem Pi.locallyPathConnectedSpace_of_finite_not_pathConnectedSpace
       set_pi_mem_nhds (hJ.union hfinite) fun i _ => pathComponentIn_mem_nhds (h
 
 中文:
-定理 Pi.locallyPathConnectedSpace_of_finite_not_pathConnectedSpace
+定理 依赖函数类型.locallyPathConnectedSpace_of_finite_not_pathConnectedSpace
   结论: {Z : ι -> 类型}
   证明: hasBasis_self.mpr fun U hU => by
     rw [nhds_pi]; rw [Filter.mem_pi] at hU
@@ -1002,8 +1002,8 @@ instance Pi.locallyPathConnectedSpace_of_finite
   body: locallyPathConnectedSpace_of_finite_not_pathConnectedSpace (toFinite _)
 
 中文:
-实例 Pi.locallyPathConnectedSpace_of_finite
-  签名: [Finite ι] {Z : ι -> 类型}
+实例 依赖函数类型.locallyPathConnectedSpace_of_finite
+  签名: [有限 ι] {Z : ι -> 类型}
   定义体: locallyPathConnectedSpace_of_finite_not_pathConnectedSpace (toFinite _)
 
 Depends on / 依赖: locallyPathConnectedSpace_of_finite_not_pathConnectedSpace, toFinite
@@ -1023,8 +1023,8 @@ instance Pi.locallyPathConnectedSpace
     (finite_empty.subset fun _ hi => hi inferInstance)
 
 中文:
-实例 Pi.locallyPathConnectedSpace
-  签名: {Z : ι -> 类型} [对任意 i, TopologicalSpace (Z i)]
+实例 依赖函数类型.locallyPathConnectedSpace
+  签名: {Z : ι -> 类型} [对任意 i, 拓扑空间 (Z i)]
   定义体: locallyPathConnectedSpace_of_finite_not_pathConnectedSpace
     (finite_empty.subset fun _ hi => hi inferInstance)
 
@@ -1053,8 +1053,8 @@ theorem Pi.locallyPathConnectedSpace_iff
     
 
 中文:
-定理 Pi.locallyPathConnectedSpace_iff
-  条件: {Z : ι -> 类型} [对任意 i, TopologicalSpace (Z i)]
+定理 依赖函数类型.locallyPathConnectedSpace_iff
+  条件: {Z : ι -> 类型} [对任意 i, 拓扑空间 (Z i)]
   证明: by
   refine ⟨fun h => ?_, ?_⟩
   · rcases isEmpty_or_nonempty (forall i, Z i) with he | hne
@@ -1153,7 +1153,7 @@ instance :
 
 中文:
 实例 :
-  签名: DiscreteTopology ZerothHomotopy X
+  签名: 离散拓扑 ZerothHomotopy X
   定义体: by
   refine discreteTopology_iff_isOpen_singleton.mpr fun c => ?_
   obtain ⟨x, rfl⟩ := ZerothHomotopy.mk_surjective c
@@ -1177,8 +1177,8 @@ instance [CompactSpace
   body: finite_of_compact_of_discrete
 
 中文:
-实例 [CompactSpace
-  签名: X] : Finite ZerothHomotopy X
+实例 [紧空间
+  签名: X] : 有限 ZerothHomotopy X
   定义体: finite_of_compact_of_discrete
 
 Depends on / 依赖: finite_of_compact_of_discrete

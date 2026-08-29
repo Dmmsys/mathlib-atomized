@@ -238,13 +238,13 @@ inductive Cont'
     - fix: Code -> Cont' -> Cont'
 
 中文:
-归纳类型 Cont'
+归纳类型 余nt'
   构造子 (5 个):
     - halt: 
-    - cons₁: Code -> Cont' -> Cont'
-    - cons₂: Cont' -> Cont'
-    - comp: Code -> Cont' -> Cont'
-    - fix: Code -> Cont' -> Cont'
+    - cons₁: 余de -> 余nt' -> 余nt'
+    - cons₂: 余nt' -> 余nt'
+    - comp: 余de -> 余nt' -> 余nt'
+    - fix: 余de -> 余nt' -> 余nt'
 -/
 inductive Cont'
   | halt
@@ -272,14 +272,14 @@ inductive Λ'
 中文:
 归纳类型 Λ'
   构造子 (8 个):
-    - move: (p : Γ' -> 布尔) (k₁ k₂ : K') (q : Λ')
-    - clear: (p : Γ' -> 布尔) (k : K') (q : Λ')
+    - move: (p : Γ' -> 布尔值) (k₁ k₂ : K') (q : Λ')
+    - clear: (p : Γ' -> 布尔值) (k : K') (q : Λ')
     - copy: (q : Λ')
-    - push: (k : K') (s : Option Γ' -> Option Γ') (q : Λ')
-    - read: (f : Option Γ' -> Λ')
+    - push: (k : K') (s : 选项类型 Γ' -> 选项类型 Γ') (q : Λ')
+    - read: (f : 选项类型 Γ' -> Λ')
     - succ: (q : Λ')
     - pred: (q₁ q₂ : Λ')
-    - ret: (k : Cont')
+    - ret: (k : 余nt')
 -/
 inductive Λ'
   | move (p : Γ' -> Bool) (k₁ k₂ : K') (q : Λ')
@@ -306,7 +306,7 @@ instance Λ'.instInhabited
 
 中文:
 实例 Λ'.instInhabited
-  签名: : Inhabited Λ'
+  签名: : 可居 Λ'
   定义体: ⟨Λ'.ret Cont'.halt⟩
 -/
 instance Λ'.instInhabited : Inhabited Λ' :=
@@ -394,7 +394,7 @@ definition natEnd
 
 中文:
 定义 natEnd
-  签名: : Γ' -> 布尔
+  签名: : Γ' -> 布尔值
 -/
 def natEnd : Γ' -> Bool
   | Γ'.consₗ => true
@@ -546,7 +546,7 @@ definition trNormal
 
 中文:
 定义 trNormal
-  签名: : Code -> Cont' -> Λ'
+  签名: : 余de -> 余nt' -> Λ'
 -/
 def trNormal : Code -> Cont' -> Λ'
 | Code.zero', k => (Λ'.push main fun _ => some Γ'.cons) Λ'.ret k
@@ -719,7 +719,7 @@ theorem tr_copy
 中文:
 定理 tr_copy
   条件: (q)
-  结论: tr (Λ'.copy q) = pop' rev (branch Option.isSome
+  结论: tr (Λ'.copy q) = pop' rev (branch 选项类型.isSome
   证明: rfl
 
 @[simp]
@@ -795,7 +795,7 @@ theorem tr_ret_cons₁
 中文:
 定理 tr_ret_cons₁
   条件: (fs k)
-  结论: tr (Λ'.ret (Cont'.cons₁ fs k)) = goto fun _ =>
+  结论: tr (Λ'.ret (余nt'.cons₁ fs k)) = goto fun _ =>
   证明: rfl
 
 @[simp]
@@ -820,7 +820,7 @@ theorem tr_ret_cons₂
 中文:
 定理 tr_ret_cons₂
   条件: (k)
-  结论: tr (Λ'.ret (Cont'.cons₂ k)) =
+  结论: tr (Λ'.ret (余nt'.cons₂ k)) =
   证明: rfl
 
 @[simp]
@@ -843,7 +843,7 @@ theorem tr_ret_comp
 中文:
 定理 tr_ret_comp
   条件: (f k)
-  结论: tr (Λ'.ret (Cont'.comp f k)) = goto fun _ => trNormal f k
+  结论: tr (Λ'.ret (余nt'.comp f k)) = goto fun _ => trNormal f k
   证明: rfl
 
 @[simp]
@@ -865,7 +865,7 @@ theorem tr_ret_fix
 中文:
 定理 tr_ret_fix
   条件: (f k)
-  结论: tr (Λ'.ret (Cont'.fix f k)) = pop' main (goto fun s =>
+  结论: tr (Λ'.ret (余nt'.fix f k)) = pop' main (goto fun s =>
   证明: rfl
 
 @[simp]
@@ -885,7 +885,7 @@ theorem tr_ret_halt
 
 中文:
 定理 tr_ret_halt
-  结论: tr (Λ'.ret Cont'.halt) = (load fun _ => none) halt
+  结论: tr (Λ'.ret 余nt'.halt) = (load fun _ => none) halt
   证明: rfl
 -/
 theorem tr_ret_halt : tr (Λ'.ret Cont'.halt) = (load fun _ => none) halt := rfl
@@ -899,7 +899,7 @@ definition trCont
 
 中文:
 定义 trCont
-  签名: : Cont -> Cont'
+  签名: : 余nt -> 余nt'
 -/
 def trCont : Cont -> Cont'
   | Cont.halt => Cont'.halt
@@ -917,7 +917,7 @@ definition trPosNum
 
 中文:
 定义 trPosNum
-  签名: : PosNum -> List Γ'
+  签名: : PosNum -> 列表 Γ'
 -/
 def trPosNum : PosNum -> List Γ'
   | PosNum.one => [Γ'.bit1]
@@ -933,7 +933,7 @@ definition trNum
 
 中文:
 定义 trNum
-  签名: : Num -> List Γ'
+  签名: : Num -> 列表 Γ'
 -/
 def trNum : Num -> List Γ'
   | Num.zero => []
@@ -950,7 +950,7 @@ definition trNat
 @[simp]
 
 中文:
-定义 trNat
+定义 tr自然数
   签名: (n : 自然数)
   定义体: trNum n
 
@@ -969,7 +969,7 @@ theorem trNat_zero
   proof: by rw [trNat, Nat.cast_zero]; rfl
 
 中文:
-定理 trNat_zero
+定理 tr自然数_zero
   结论: tr自然数 0 = []
   证明: by rw [trNat, Nat.cast_zero]; rfl
 
@@ -986,7 +986,7 @@ theorem trNat_default
   proof: trNat_zero
 
 中文:
-定理 trNat_default
+定理 tr自然数_default
   结论: tr自然数 default = []
   证明: trNat_zero
 
@@ -1015,7 +1015,7 @@ definition trList
 
 中文:
 定义 trList
-  签名: : List 自然数 -> List Γ'
+  签名: : 列表 自然数 -> 列表 Γ'
 -/
 def trList : List Nat -> List Γ'
   | [] => []
@@ -1042,7 +1042,7 @@ definition trLList
 
 中文:
 定义 trLList
-  签名: : List (List 自然数) -> List Γ'
+  签名: : 列表 (列表 自然数) -> 列表 Γ'
 -/
 def trLList : List (List Nat) -> List Γ'
   | [] => []
@@ -1060,7 +1060,7 @@ definition contStack
 
 中文:
 定义 contStack
-  签名: : Cont -> List (List 自然数)
+  签名: : 余nt -> 列表 (列表 自然数)
 -/
 def contStack : Cont -> List (List Nat)
   | Cont.halt => []
@@ -1079,7 +1079,7 @@ definition trContStack
 
 中文:
 定义 trContStack
-  签名: (k : Cont)
+  签名: (k : 余nt)
   定义体: trLList (contStack k)
 
 Depends on / 依赖: contStack, trLList
@@ -1096,7 +1096,7 @@ definition K'.elim
 
 中文:
 定义 K'.elim
-  签名: (a b c d : List Γ')
+  签名: (a b c d : 列表 Γ')
 -/
 def K'.elim (a b c d : List Γ') : K' -> List Γ'
   | K'.main => a
@@ -1278,7 +1278,7 @@ definition halt
 
 中文:
 定义 halt
-  签名: (v : List 自然数)
+  签名: (v : 列表 自然数)
   定义体: ⟨none, none, K'.elim (trList v) [] [] []⟩
 
 Depends on / 依赖: trList
@@ -1313,7 +1313,7 @@ definition splitAtPred
 
 中文:
 定义 splitAtPred
-  签名: {α} (p : α -> 布尔)
+  签名: {α} (p : α -> 布尔值)
   定义体: splitAtPred p as
       ⟨a::l₁, o, l₂⟩
 
@@ -1342,7 +1342,7 @@ theorem splitAtPred_eq
 
 中文:
 定理 splitAtPred_eq
-  条件: {α} (p : α -> 布尔)
+  条件: {α} (p : α -> 布尔值)
   证明: splitAtPred_eq p L
     rcases o with - | o
     · rcases l₁ with - | ⟨a', l₁⟩ <;> rcases h₂ with ⟨⟨⟩, rfl⟩
@@ -1383,7 +1383,7 @@ theorem splitAtPred_false
 
 中文:
 定理 splitAtPred_false
-  条件: {α} (L : List α)
+  条件: {α} (L : 列表 α)
   结论: splitAtPred (fun _ => false) L = (L, none, [])
   证明: splitAtPred_eq _ _ _ _ _ (fun _ _ => rfl) ⟨rfl, rfl⟩
 
@@ -1411,7 +1411,7 @@ theorem move_ok
 
 中文:
 定理 move_ok
-  结论: {p k₁ k₂ q s L₁ o L₂} {S : K' -> List Γ'} (h₁ : k₁ != k₂)
+  结论: {p k₁ k₂ q s L₁ o L₂} {S : K' -> 列表 Γ'} (h₁ : k₁ != k₂)
   证明: by
   induction L₁ generalizing S s with
   | nil =>
@@ -1463,7 +1463,7 @@ theorem unrev_ok
 
 中文:
 定理 unrev_ok
-  条件: {q s} {S : K' -> List Γ'}
+  条件: {q s} {S : K' -> 列表 Γ'}
   证明: move_ok (by decide) splitAtPred_false _
 
 Depends on / 依赖: move_ok, splitAtPred_false
@@ -1489,7 +1489,7 @@ theorem move₂_ok
 
 中文:
 定理 move₂_ok
-  结论: {p k₁ k₂ q s L₁ o L₂} {S : K' -> List Γ'} (h₁ : k₁ != rev ∧ k₂ != rev ∧ k₁ != k₂)
+  结论: {p k₁ k₂ q s L₁ o L₂} {S : K' -> 列表 Γ'} (h₁ : k₁ != rev ∧ k₂ != rev ∧ k₁ != k₂)
   证明: by
   refine (move_ok h₁.1 e).trans (TransGen.head rfl ?_)
   simp only [TM2.step, Option.mem_def, Option.elim]
@@ -1540,7 +1540,7 @@ theorem clear_ok
 
 中文:
 定理 clear_ok
-  条件: {p k q s L₁ o L₂} {S : K' -> List Γ'} (e : splitAtPred p (S k) = (L₁, o, L₂))
+  条件: {p k q s L₁ o L₂} {S : K' -> 列表 Γ'} (e : splitAtPred p (S k) = (L₁, o, L₂))
   证明: by
   induction L₁ generalizing S s with
   | nil =>
@@ -1672,7 +1672,7 @@ theorem trNat_natEnd
   proof: trNum_natEnd _
 
 中文:
-定理 trNat_natEnd
+定理 tr自然数_natEnd
   条件: (n)
   结论: 对任意 x in tr自然数 n, natEnd x = false
   证明: trNum_natEnd _
@@ -1730,7 +1730,7 @@ theorem head_main_ok
 
 中文:
 定理 head_main_ok
-  条件: {q s L} {c d : List Γ'}
+  条件: {q s L} {c d : 列表 Γ'}
   证明: by
   let o : Option Γ' := List.casesOn L none fun _ _ => some Γ'.cons
   refine
@@ -1844,7 +1844,7 @@ theorem succ_ok
 
 中文:
 定理 succ_ok
-  条件: {q s n} {c d : List Γ'}
+  条件: {q s n} {c d : 列表 Γ'}
   证明: by
   simp only [trList, trNat.eq_1, Nat.cast_succ, Num.add_one]
   rcases (n : Num) with - | a
@@ -1914,7 +1914,7 @@ theorem pred_ok
 
 中文:
 定理 pred_ok
-  条件: (q₁ q₂ s v) (c d : List Γ')
+  条件: (q₁ q₂ s v) (c d : 列表 Γ')
   结论: 存在 s',
   证明: by
   rcases v with (_ | ⟨_ | n, v⟩)
@@ -2148,7 +2148,7 @@ definition init
 
 中文:
 定义 init
-  签名: (c : Code) (v : List 自然数)
+  签名: (c : 余de) (v : 列表 自然数)
   定义体: ⟨some (trNormal c Cont'.halt), none, K'.elim (trList v) [] [] []⟩
 
 Depends on / 依赖: trList, trNormal
@@ -2194,7 +2194,7 @@ theorem tr_eval
 中文:
 定理 tr_eval
   条件: (c v)
-  结论: eval (TM2.step tr) (init c v) = halt < > Code.eval c v
+  结论: eval (TM2.step tr) (init c v) = halt < > 余de.eval c v
   证明: by
   obtain ⟨i, h₁, h₂⟩ := tr_init c v
   refine Part.ext fun x => ?_
@@ -2230,7 +2230,7 @@ definition trStmts₁
 
 中文:
 定义 trStmts₁
-  签名: : Λ' -> Finset Λ'
+  签名: : Λ' -> 有限集 Λ'
 -/
 def trStmts₁ : Λ' -> Finset Λ'
 | Q@(Λ'.move _ _ _ q) => insert Q trStmts₁ q
@@ -2326,7 +2326,7 @@ definition codeSupp'
 
 中文:
 定义 codeSupp'
-  签名: : Code -> Cont' -> Finset Λ'
+  签名: : 余de -> 余nt' -> 有限集 Λ'
 -/
 def codeSupp' : Code -> Cont' -> Finset Λ'
   | c@Code.zero', k => trStmts₁ (trNormal c k)
@@ -2381,7 +2381,7 @@ definition contSupp
 
 中文:
 定义 contSupp
-  签名: : Cont' -> Finset Λ'
+  签名: : 余nt' -> 有限集 Λ'
 -/
 def contSupp : Cont' -> Finset Λ'
   | Cont'.cons₁ fs k =>
@@ -2407,7 +2407,7 @@ definition codeSupp
 
 中文:
 定义 codeSupp
-  签名: (c : Code) (k : Cont')
+  签名: (c : 余de) (k : 余nt')
   定义体: codeSupp' c k union contSupp k
 
 @[simp]
@@ -2457,7 +2457,7 @@ theorem codeSupp_zero
 中文:
 定理 codeSupp_zero
   条件: (k)
-  结论: codeSupp Code.zero' k = trStmts₁ (trNormal Code.zero' k) union contSupp k
+  结论: codeSupp 余de.zero' k = trStmts₁ (trNormal 余de.zero' k) union contSupp k
   证明: rfl
 
 @[simp]
@@ -2480,7 +2480,7 @@ theorem codeSupp_succ
 中文:
 定理 codeSupp_succ
   条件: (k)
-  结论: codeSupp Code.succ k = trStmts₁ (trNormal Code.succ k) union contSupp k
+  结论: codeSupp 余de.succ k = trStmts₁ (trNormal 余de.succ k) union contSupp k
   证明: rfl
 
 @[simp]
@@ -2503,7 +2503,7 @@ theorem codeSupp_tail
 中文:
 定理 codeSupp_tail
   条件: (k)
-  结论: codeSupp Code.tail k = trStmts₁ (trNormal Code.tail k) union contSupp k
+  结论: codeSupp 余de.tail k = trStmts₁ (trNormal 余de.tail k) union contSupp k
   证明: rfl
 
 @[simp]
@@ -2690,7 +2690,7 @@ theorem contSupp_comp
 中文:
 定理 contSupp_comp
   条件: (f k)
-  结论: contSupp (Cont'.comp f k) = codeSupp f k
+  结论: contSupp (余nt'.comp f k) = codeSupp f k
   证明: rfl
 -/
 theorem contSupp_comp (f k) : contSupp (Cont'.comp f k) = codeSupp f k :=
@@ -2712,7 +2712,7 @@ theorem contSupp_fix
 中文:
 定理 contSupp_fix
   条件: (f k)
-  结论: contSupp (Cont'.fix f k) = codeSupp f (Cont'.fix f k)
+  结论: contSupp (余nt'.fix f k) = codeSupp f (余nt'.fix f k)
   证明: by
   simp +contextual [codeSupp, codeSupp', contSupp, Finset.union_assoc,
     Finset.subset_iff, -Finset.singleton_union, -Finset.union_singleton]
@@ -2736,7 +2736,7 @@ theorem contSupp_halt
 
 中文:
 定理 contSupp_halt
-  结论: contSupp Cont'.halt = ∅
+  结论: contSupp 余nt'.halt = ∅
   证明: rfl
 -/
 theorem contSupp_halt : contSupp Cont'.halt = ∅ :=
@@ -2751,7 +2751,7 @@ definition Λ'.Supports
 
 中文:
 定义 Λ'.Supports
-  签名: (S : Finset Λ')
+  签名: (S : 有限集 Λ')
 -/
 def Λ'.Supports (S : Finset Λ') : Λ' -> Prop
   | Λ'.move _ _ _ q => Λ'.Supports S q
@@ -2773,7 +2773,7 @@ definition Supports
 
 中文:
 定义 Supports
-  签名: (K S : Finset Λ')
+  签名: (K S : 有限集 Λ')
   定义体: forall q in K, TM2.SupportsStmt S (tr q)
 
 Depends on / 依赖: SupportsStmt, TM2.SupportsStmt
@@ -2851,7 +2851,7 @@ theorem supports_biUnion
 
 中文:
 定理 supports_biUnion
-  条件: {K : Option Γ' -> Finset Λ'} {S}
+  条件: {K : 选项类型 Γ' -> 有限集 Λ'} {S}
   证明: by
   simpa [Supports] using forall_comm
 

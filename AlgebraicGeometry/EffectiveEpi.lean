@@ -56,7 +56,7 @@ instance effectiveEpi_base_of_flat
 
 中文:
 实例 effectiveEpi_base_of_flat
-  签名: {X Y : Scheme.{u}} {f : X ⟶ Y} [Flat f] [Surjective f]
+  签名: {X Y : 概形.{u}} {f : X ⟶ Y} [平坦 f] [满射 f]
   定义体: by
   rw [TopCat.effectiveEpi_iff_isQuotientMap]
   exact Flat.isQuotientMap_of_surjective _
@@ -85,7 +85,7 @@ lemma of_isAffine_target
 
 中文:
 引理 of_isAffine_target
-  结论: {X Y S : Scheme.{u}} [IsAffine X] [IsAffine Y] (π : X ⟶ Y)
+  结论: {X Y S : 概形.{u}} [是仿射 X] [是仿射 Y] (π : X ⟶ Y)
   证明: by
   have : EffectiveEpi (AffineScheme.ofHom π) := by
     apply AffineScheme.equivCommRingCat.functor.effectiveEpi_of_map
@@ -126,8 +126,8 @@ lemma exists_openCover_exists
       
 
 中文:
-引理 exists_openCover_exists
-  结论: {X Y S : Scheme.{u}} [IsAffine X] [IsAffine Y] (π : X ⟶ Y)
+引理 存在_openCover_存在
+  结论: {X Y S : 概形.{u}} [是仿射 X] [是仿射 Y] (π : X ⟶ Y)
   证明: by
   obtain ⟨b, hfac⟩ : exists (u : Y.carrier ⟶ S.carrier), π.base ≫ u = f.base := by
     apply IsRegularEpi.exists_of_isKernelPair _ (IsPullback.of_hasPullback _ _)

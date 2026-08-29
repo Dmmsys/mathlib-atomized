@@ -32,7 +32,7 @@ definition monoEquivOfFin
 
 中文:
 定义 monoEquivOfFin
-  签名: (α : 类型) [Fintype α] [LinearOrder α] {k : 自然数} (h : Fintype.card α = k)
+  签名: (α : 类型) [有限类型 α] [线性序 α] {k : 自然数} (h : 有限类型.card α = k)
   定义体: (univ.orderIsoOfFin h).trans (OrderIso.setCongr _ _ coe_univ).trans OrderIso.Set.univ
 
 Depends on / 依赖: OrderIso, OrderIso.Set.univ, OrderIso.setCongr, coe_univ, orderIsoOfFin, setCongr, univ.orderIsoOfFin
@@ -90,7 +90,7 @@ theorem finSumEquivOfFinset_inl
 
 中文:
 定理 finSumEquivOfFinset_inl
-  条件: (hm : #s = m) (hn : #sᶜ = n) (i : Fin m)
+  条件: (hm : #s = m) (hn : #sᶜ = n) (i : 有限集 m)
   证明: rfl
 
 @[simp]
@@ -110,7 +110,7 @@ theorem finSumEquivOfFinset_inr
 
 中文:
 定理 finSumEquivOfFinset_inr
-  条件: (hm : #s = m) (hn : #sᶜ = n) (i : Fin n)
+  条件: (hm : #s = m) (hn : #sᶜ = n) (i : 有限集 n)
   证明: rfl
 -/
 theorem finSumEquivOfFinset_inr (hm : #s = m) (hn : #sᶜ = n) (i : Fin n) :

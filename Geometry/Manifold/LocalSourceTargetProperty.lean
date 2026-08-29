@@ -67,9 +67,9 @@ structure IsLocalSourceTargetProperty
     - congr : forall {f g : M -> N}, forall {φ : OpenPartialHomeomorph M H}, forall {ψ : OpenPartialHomeomorph N G}, EqOn f g φ.source -> P f φ ψ -> P g φ ψ
 
 中文:
-结构 IsLocalSourceTargetProperty
+结构 是LocalSourceTargetProperty
   公理与运算 (2 个):
-    - mono_source : 对任意 {f : M -> N}, 对任意 {φ : OpenPartialHomeomorph M H}, 对任意 {ψ : OpenPartialHomeomorph N G}, 对任意 {s : Set M}, IsOpen s -> P f φ ψ -> P f (φ.restr s) ψ
+    - mono_source : 对任意 {f : M -> N}, 对任意 {φ : OpenPartialHomeomorph M H}, 对任意 {ψ : OpenPartialHomeomorph N G}, 对任意 {s : 集合 M}, 是开集 s -> P f φ ψ -> P f (φ.restr s) ψ
     - congr : 对任意 {f g : M -> N}, 对任意 {φ : OpenPartialHomeomorph M H}, 对任意 {ψ : OpenPartialHomeomorph N G}, EqOn f g φ.source -> P f φ ψ -> P g φ ψ
 -/
 structure IsLocalSourceTargetProperty
@@ -106,8 +106,8 @@ structure LocalPresentationAt
     - codChart : OpenPartialHomeomorph N G
     - mem_domChart_source : x in domChart.source
     - mem_codChart_source : f x in codChart.source
-    - domChart_mem_maximalAtlas : domChart in IsManifold.maximalAtlas I n M
-    - codChart_mem_maximalAtlas : codChart in IsManifold.maximalAtlas J n N
+    - domChart_mem_maximalAtlas : domChart in 是流形.maximalAtlas I n M
+    - codChart_mem_maximalAtlas : codChart in 是流形.maximalAtlas J n N
     - source_subset_preimage_source : domChart.source subseteq f ⁻¹' codChart.source
     - property : P f domChart codChart
 -/
@@ -196,7 +196,7 @@ definition localPresentationAt
 
 中文:
 定义 localPresentationAt
-  签名: (h : LiftSourceTarget命题ertyAt I J n f x P)
+  签名: (h : LiftSourceTargetPropertyAt I J n f x P)
   定义体: Classical.choice h
 
 Depends on / 依赖: Classical, Classical.choice, choice
@@ -215,7 +215,7 @@ definition domChart
 
 中文:
 定义 domChart
-  签名: (h : LiftSourceTarget命题ertyAt I J n f x P)
+  签名: (h : LiftSourceTargetPropertyAt I J n f x P)
   定义体: h.localPresentationAt.domChart
 
 Depends on / 依赖: domChart, h.localPresentationAt.domChart, localPresentationAt
@@ -234,7 +234,7 @@ definition codChart
 
 中文:
 定义 codChart
-  签名: (h : LiftSourceTarget命题ertyAt I J n f x P)
+  签名: (h : LiftSourceTargetPropertyAt I J n f x P)
   定义体: h.localPresentationAt.codChart
 
 Depends on / 依赖: codChart, h.localPresentationAt.codChart, localPresentationAt
@@ -253,7 +253,7 @@ lemma mem_domChart_source
 
 中文:
 引理 mem_domChart_source
-  条件: (h : LiftSourceTarget命题ertyAt I J n f x P)
+  条件: (h : LiftSourceTargetPropertyAt I J n f x P)
   证明: h.localPresentationAt.mem_domChart_source
 
 Depends on / 依赖: h.localPresentationAt.mem_domChart_source, localPresentationAt, mem_domChart_source
@@ -272,7 +272,7 @@ lemma mem_codChart_source
 
 中文:
 引理 mem_codChart_source
-  条件: (h : LiftSourceTarget命题ertyAt I J n f x P)
+  条件: (h : LiftSourceTargetPropertyAt I J n f x P)
   证明: h.localPresentationAt.mem_codChart_source
 
 Depends on / 依赖: h.localPresentationAt.mem_codChart_source, localPresentationAt, mem_codChart_source
@@ -291,7 +291,7 @@ lemma domChart_mem_maximalAtlas
 
 中文:
 引理 domChart_mem_maximalAtlas
-  条件: (h : LiftSourceTarget命题ertyAt I J n f x P)
+  条件: (h : LiftSourceTargetPropertyAt I J n f x P)
   证明: h.localPresentationAt.domChart_mem_maximalAtlas
 
 Depends on / 依赖: domChart_mem_maximalAtlas, h.localPresentationAt.domChart_mem_maximalAtlas, localPresentationAt
@@ -310,7 +310,7 @@ lemma codChart_mem_maximalAtlas
 
 中文:
 引理 codChart_mem_maximalAtlas
-  条件: (h : LiftSourceTarget命题ertyAt I J n f x P)
+  条件: (h : LiftSourceTargetPropertyAt I J n f x P)
   证明: h.localPresentationAt.codChart_mem_maximalAtlas
 
 Depends on / 依赖: codChart_mem_maximalAtlas, h.localPresentationAt.codChart_mem_maximalAtlas, localPresentationAt
@@ -329,7 +329,7 @@ lemma source_subset_preimage_source
 
 中文:
 引理 source_subset_preimage_source
-  条件: (h : LiftSourceTarget命题ertyAt I J n f x P)
+  条件: (h : LiftSourceTargetPropertyAt I J n f x P)
   证明: h.localPresentationAt.source_subset_preimage_source
 
 Depends on / 依赖: h.localPresentationAt.source_subset_preimage_source, localPresentationAt, source_subset_preimage_source
@@ -351,7 +351,7 @@ omit [ChartedSpace H M] [ChartedSpace G N] in
 
 中文:
 引理 property
-  条件: (h : LiftSourceTarget命题ertyAt I J n f x P)
+  条件: (h : LiftSourceTargetPropertyAt I J n f x P)
   结论: P f h.domChart h.codChart
   证明: h.localPresentationAt.property
 
@@ -373,7 +373,7 @@ lemma congr_iff
 
 中文:
 引理 congr_iff
-  结论: (hP : IsLocalSourceTarget命题erty P) {f g : M -> N}
+  结论: (hP : 是LocalSourceTargetProperty P) {f g : M -> N}
   证明: ⟨hP.congr hfg, hP.congr hfg.symm⟩
 
 Depends on / 依赖: hP.congr, hfg.symm
@@ -436,7 +436,7 @@ lemma congr_of_eventuallyEq
 
 中文:
 引理 congr_of_eventuallyEq
-  结论: (hP : IsLocalSourceTarget命题erty P)
+  结论: (hP : 是LocalSourceTargetProperty P)
   证明: by
   obtain ⟨s', hxs', hfg⟩ := h'.exists_mem
   obtain ⟨s, hss', hs, hxs⟩ := mem_nhds_iff.mp hxs'
@@ -472,7 +472,7 @@ lemma congr_iff_of_eventuallyEq
 
 中文:
 引理 congr_iff_of_eventuallyEq
-  条件: (hP : IsLocalSourceTarget命题erty P) (h' : f =ᶠ[nhds x] g)
+  条件: (hP : 是LocalSourceTargetProperty P) (h' : f =ᶠ[邻域滤子 x] g)
   证明: ⟨fun hf => hf.congr_of_eventuallyEq hP h', fun hg => hg.congr_of_eventuallyEq hP h'.symm⟩
 
 Depends on / 依赖: congr_of_eventuallyEq, hf.congr_of_eventuallyEq, hg.congr_of_eventuallyEq
@@ -495,7 +495,7 @@ lemma _root_.IsOpen.liftSourceTargetPropertyAt
   refine ⟨hx.domChart.source, fun y hy => 
 
 中文:
-引理 _root_.IsOpen.liftSourceTargetPropertyAt
+引理 _root_.是开集.liftSourceTargetPropertyAt
   证明: by
   rw [isOpen_iff_forall_mem_open]
   intro x hx
@@ -534,7 +534,7 @@ lemma prodMap
 
 中文:
 引理 prodMap
-  结论: [IsManifold I n M] [IsManifold I' n M'] [IsManifold J n N] [IsManifold J' n N']
+  结论: [是流形 I n M] [是流形 I' n M'] [是流形 J n N] [是流形 J' n N']
   证明: by
   use hf.domChart.prod hg.domChart, hf.codChart.prod hg.codChart
   · simp [hf.mem_domChart_source, hg.mem_domChart_source]

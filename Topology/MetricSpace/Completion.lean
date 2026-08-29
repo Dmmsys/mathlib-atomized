@@ -43,7 +43,7 @@ instance :
 
 中文:
 实例 :
-  签名: Dist (Completion α)
+  签名: Dist (完备化 α)
   定义体: ⟨Completion.extension₂ dist⟩
 
 Depends on / 依赖: Completion, Completion.extension
@@ -76,7 +76,7 @@ theorem continuous_dist
 
 中文:
 定理 continuous_dist
-  结论: [TopologicalSpace β] {f g : β -> Completion α} (hf : Continuous f)
+  结论: [拓扑空间 β] {f g : β -> 完备化 α} (hf : 连续 f)
   证明: Completion.uniformContinuous_dist.continuous.comp (hf.prodMk hg :)
 -/
 protected theorem continuous_dist [TopologicalSpace β] {f g : β -> Completion α} (hf : Continuous f)
@@ -97,7 +97,7 @@ theorem dist_eq
 中文:
 定理 dist_eq
   条件: (x y : α)
-  结论: dist (x : Completion α) y = dist x y
+  结论: dist (x : 完备化 α) y = dist x y
   证明: Completion.extension₂_coe_coe uniformContinuous_dist _ _
 -/
 protected theorem dist_eq (x y : α) : dist (x : Completion α) y = dist x y :=
@@ -120,7 +120,7 @@ theorem dist_self
 
 中文:
 定理 dist_self
-  条件: (x : Completion α)
+  条件: (x : 完备化 α)
   结论: dist x x = 0
   证明: by
   refine induction_on x ?_ ?_
@@ -152,7 +152,7 @@ theorem dist_comm
 
 中文:
 定理 dist_comm
-  条件: (x y : Completion α)
+  条件: (x y : 完备化 α)
   结论: dist x y = dist y x
   证明: by
   refine induction_on₂ x y ?_ ?_
@@ -185,7 +185,7 @@ theorem dist_triangle
 
 中文:
 定理 dist_triangle
-  条件: (x y z : Completion α)
+  条件: (x y z : 完备化 α)
   结论: dist x z <= dist x y + dist y z
   证明: by
   refine induction_on₃ x y z ?_ ?_
@@ -217,7 +217,7 @@ theorem mem_uniformity_dist
 
 中文:
 定理 mem_uniformity_dist
-  条件: (s : Set (Completion α × Completion α))
+  条件: (s : 集合 (完备化 α × 完备化 α))
   证明: by
   constructor
   · /- Start from an entourage `s`. It contains a closed entourage `t`. Its pullback in `α` is an
@@ -314,7 +314,7 @@ theorem uniformity_dist
 
 中文:
 定理 uniformity_dist
-  结论: 𝓤 (Completion α) = ⨅ ε > 0, 𝓟 { p | dist p.1 p.2 < ε }
+  结论: 𝓤 (完备化 α) = ⨅ ε > 0, 𝓟 { p | dist p.1 p.2 < ε }
   证明: by
   simpa [iInf_subtype] using @Completion.uniformity_dist' α _
 -/
@@ -337,7 +337,7 @@ instance instMetricSpace
 
 中文:
 实例 instMetricSpace
-  签名: : MetricSpace (Completion α)
+  签名: : 度量空间 (完备化 α)
   定义体: @MetricSpace.ofT0PseudoMetricSpace _
     { dist_self := Completion.dist_self
       dist_comm := Completion.dist_comm
@@ -369,7 +369,7 @@ theorem coe_isometry
 
 中文:
 定理 coe_isometry
-  结论: Isometry ((↑) : α -> Completion α)
+  结论: 等距 ((↑) : α -> 完备化 α)
   证明: Isometry.of_dist_eq Completion.dist_eq
 
 @[simp]
@@ -392,7 +392,7 @@ theorem edist_eq
 中文:
 定理 edist_eq
   条件: (x y : α)
-  结论: edist (x : Completion α) y = edist x y
+  结论: edist (x : 完备化 α) y = edist x y
   证明: coe_isometry x y
 -/
 protected theorem edist_eq (x y : α) : edist (x : Completion α) y = edist x y :=
@@ -429,7 +429,7 @@ theorem LipschitzWith.completion_extension
 
 中文:
 定理 LipschitzWith.completion_extension
-  结论: [MetricSpace β] [CompleteSpace β] {f : α -> β}
+  结论: [度量空间 β] [完备空间 β] {f : α -> β}
   证明: LipschitzWith.of_dist_le_mul fun x y => induction_on₂ x y
 (isClosed_le (by fun_prop) (by fun_prop)) by
       simpa only [extension_coe h.uniformContinuous, Completion.dist_eq] using h.dist_le_mul
@@ -452,7 +452,7 @@ theorem LipschitzWith.completion_map
 
 中文:
 定理 LipschitzWith.completion_map
-  结论: [PseudoMetricSpace β] {f : α -> β} {K : 实数>=0}
+  结论: [伪度量空间 β] {f : α -> β} {K : 实数>=0}
   证明: one_mul K ▸ (coe_isometry.lipschitz.comp h).completion_extension
 
 Depends on / 依赖: coe_isometry, coe_isometry.lipschitz.comp, completion_extension, lipschitz, one_mul
@@ -472,8 +472,8 @@ theorem Isometry.completion_extension
       simp only [extension_coe h.uniformContinuous, Completion.dist_eq, h.dist_eq]
 
 中文:
-定理 Isometry.completion_extension
-  结论: [PseudoMetricSpace β] [CompleteSpace β] [T0Space β]
+定理 等距.completion_extension
+  结论: [伪度量空间 β] [完备空间 β] [T0空间 β]
   证明: Isometry.of_dist_eq fun x y => induction_on₂ x y
     (isClosed_eq (by fun_prop) (by fun_prop)) fun _ _ => by
       simp only [extension_coe h.uniformContinuous, Completion.dist_eq, h.dist_eq]
@@ -495,8 +495,8 @@ theorem Isometry.completion_map
   proof: (coe_isometry.comp h).completion_extension
 
 中文:
-定理 Isometry.completion_map
-  结论: [PseudoMetricSpace β] {f : α -> β}
+定理 等距.completion_map
+  结论: [伪度量空间 β] {f : α -> β}
   证明: (coe_isometry.comp h).completion_extension
 
 Depends on / 依赖: coe_isometry, coe_isometry.comp, completion_extension
@@ -521,8 +521,8 @@ definition Isometry.extensionHom
 @[simp]
 
 中文:
-定义 Isometry.extensionHom
-  签名: [CompleteSpace β] [T0Space β] {f : α ->+* β} (h : Isometry f)
+定义 等距.extensionHom
+  签名: [完备空间 β] [T0空间 β] {f : α ->+* β} (h : 等距 f)
   定义体: Completion.extensionHom f h.continuous
 
 @[simp]
@@ -542,8 +542,8 @@ theorem Isometry.extensionHom_coe
   proof: Completion.extensionHom_coe f h.continuous _
 
 中文:
-定理 Isometry.extensionHom_coe
-  结论: [CompleteSpace β] [T0Space β] {f : α ->+* β} (h : Isometry f)
+定理 等距.extensionHom_coe
+  结论: [完备空间 β] [T0空间 β] {f : α ->+* β} (h : 等距 f)
   证明: Completion.extensionHom_coe f h.continuous _
 
 Depends on / 依赖: Completion, Completion.extensionHom_coe, continuous, extensionHom_coe, h.continuous
@@ -560,8 +560,8 @@ definition Isometry.mapRingHom
   body: Completion.mapRingHom f h.continuous
 
 中文:
-定义 Isometry.mapRingHom
-  签名: {f : α ->+* β} (h : Isometry f)
+定义 等距.mapRingHom
+  签名: {f : α ->+* β} (h : 等距 f)
   定义体: Completion.mapRingHom f h.continuous
 
 Depends on / 依赖: Completion, Completion.mapRingHom, continuous, h.continuous, mapRingHom
@@ -579,8 +579,8 @@ theorem Isometry.mapRingHom_coe
   proof: Completion.mapRingHom_coe h.uniformContinuous.continuous _
 
 中文:
-定理 Isometry.mapRingHom_coe
-  条件: {f : α ->+* β} (h : Isometry f) (x : α)
+定理 等距.mapRingHom_coe
+  条件: {f : α ->+* β} (h : 等距 f) (x : α)
   结论: h.mapRingHom x = f x
   证明: Completion.mapRingHom_coe h.uniformContinuous.continuous _
 
@@ -603,9 +603,9 @@ theorem Isometry.isometry_mapRingHom
     | ih x y => simp only [Completion.dist_eq, mapRingHom_coe, h.dist_eq
 
 中文:
-定理 Isometry.isometry_mapRingHom
-  条件: {f : α ->+* β} (h : Isometry f)
-  结论: Isometry h.mapRingHom
+定理 等距.isometry_mapRingHom
+  条件: {f : α ->+* β} (h : 等距 f)
+  结论: 等距 h.mapRingHom
   证明: Isometry.of_dist_eq fun x y => by
     induction x, y using induction_on₂ with
     | hp => exact isClosed_eq (continuous_dist.comp₂ (continuous_map.comp continuous_fst)

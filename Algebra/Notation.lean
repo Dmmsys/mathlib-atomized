@@ -30,7 +30,7 @@ class PosPart
     - posPart : α -> α
 
 中文:
-类 PosPart
+类 正部
   参数: (α : 类型)
   公理与运算 (1 个):
     - posPart : α -> α
@@ -70,7 +70,7 @@ class NegPart
     - negPart : α -> α
 
 中文:
-类 NegPart
+类 负部
   参数: (α : 类型)
   公理与运算 (1 个):
     - negPart : α -> α

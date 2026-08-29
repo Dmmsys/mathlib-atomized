@@ -53,8 +53,8 @@ theorem exists_translation
   simp only [Fin.getElem_fin, Int.ofNat_
 
 中文:
-定理 exists_translation
-  结论: 存在 tr : Fin n -> 整数, 对任意 i j, val i <= val j ↔ tr i <= tr j
+定理 存在_translation
+  结论: 存在 tr : 有限集 n -> 整数, 对任意 i j, val i <= val j ↔ tr i <= tr j
   证明: by
   let li := List.ofFn val
   let sli := li.mergeSort
@@ -101,8 +101,8 @@ definition toInt
   body: (exists_translation val).choose k
 
 中文:
-定义 toInt
-  签名: (k : Fin n)
+定义 to整数
+  签名: (k : 有限集 n)
   定义体: (exists_translation val).choose k
 
 Depends on / 依赖: exists_translation
@@ -122,7 +122,7 @@ theorem toInt_le_toInt
   simp [toInt, (exists_translation val).choose_spec]
 
 中文:
-定理 toInt_le_toInt
+定理 to整数_le_to整数
   结论: to整数 val i <= to整数 val j ↔ val i <= val j
   证明: by
   simp [toInt, (exists_translation val).choose_spec]
@@ -142,7 +142,7 @@ theorem toInt_lt_toInt
   simpa using (toInt_le_toInt val j i).not
 
 中文:
-定理 toInt_lt_toInt
+定理 to整数_lt_to整数
   结论: to整数 val i < to整数 val j ↔ val i < val j
   证明: by
   simpa using (toInt_le_toInt val j i).not
@@ -162,7 +162,7 @@ theorem toInt_eq_toInt
   simp [toInt_le_toInt, le_antisymm_iff]
 
 中文:
-定理 toInt_eq_toInt
+定理 to整数_eq_to整数
   结论: to整数 val i = to整数 val j ↔ val i = val j
   证明: by
   simp [toInt_le_toInt, le_antisymm_iff]
@@ -182,7 +182,7 @@ theorem toInt_ne_toInt
   simpa using (toInt_eq_toInt val i j).not
 
 中文:
-定理 toInt_ne_toInt
+定理 to整数_ne_to整数
   结论: to整数 val i != to整数 val j ↔ val i != val j
   证明: by
   simpa using (toInt_eq_toInt val i j).not
@@ -202,7 +202,7 @@ theorem toInt_nle_toInt
   simpa using toInt_lt_toInt val j i
 
 中文:
-定理 toInt_nle_toInt
+定理 to整数_nle_to整数
   结论: ¬to整数 val i <= to整数 val j ↔ ¬val i <= val j
   证明: by
   simpa using toInt_lt_toInt val j i
@@ -222,7 +222,7 @@ theorem toInt_nlt_toInt
   simpa using toInt_le_toInt val j i
 
 中文:
-定理 toInt_nlt_toInt
+定理 to整数_nlt_to整数
   结论: ¬to整数 val i < to整数 val j ↔ ¬val i < val j
   证明: by
   simpa using toInt_le_toInt val j i
@@ -241,7 +241,7 @@ theorem toInt_sup_toInt_eq_toInt
   simp [le_antisymm_iff, sup_le_iff, le_sup_iff, toInt_le_toInt]
 
 中文:
-定理 toInt_sup_toInt_eq_toInt
+定理 to整数_sup_to整数_eq_to整数
   证明: by
   simp [le_antisymm_iff, sup_le_iff, le_sup_iff, toInt_le_toInt]
 
@@ -260,7 +260,7 @@ theorem toInt_inf_toInt_eq_toInt
   simp [le_antisymm_iff, inf_le_iff, le_inf_iff, toInt_le_toInt]
 
 中文:
-定理 toInt_inf_toInt_eq_toInt
+定理 to整数_inf_to整数_eq_to整数
   证明: by
   simp [le_antisymm_iff, inf_le_iff, le_inf_iff, toInt_le_toInt]
 
@@ -289,7 +289,7 @@ definition mkFinFun
 
 中文:
 定义 mkFinFun
-  签名: {u : Level} {α : Q(Type $u)} (atoms : Array Q($α))
+  签名: {u : Level} {α : Q(类型 $u)} (atoms : 数组 Q($α))
   定义体: do
   if h : atoms.isEmpty then
     return q(Fin.elim0 : Fin 0 -> $α)
@@ -323,8 +323,8 @@ if ← withReducible isDefEq type (← inferType atom) then
       idxToAtom := idxToAtom.insert 
 
 中文:
-定义 translateToInt
-  签名: {u : Lean.Level} (type : Q(类型u)) (inst : Q(LinearOrder $type))
+定义 translateTo整数
+  签名: {u : Lean.Level} (type : Q(类型u)) (inst : Q(线性序 $type))
   定义体: do
   let mut idxToAtom : Std.HashMap Nat Q($type) := ∅
   for atom in (← get).atoms do

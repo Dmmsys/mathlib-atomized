@@ -165,7 +165,7 @@ theorem imageToKernel_zero_left
 
 中文:
 定理 imageToKernel_zero_left
-  条件: [HasKernels V] [HasZeroObject V] {w}
+  条件: [有Kernels V] [有ZeroObject V] {w}
   证明: by
   ext
   simp
@@ -186,7 +186,7 @@ theorem imageToKernel_zero_right
 
 中文:
 定理 imageToKernel_zero_right
-  条件: [HasImages V] {w}
+  条件: [有Images V] {w}
   证明: by
   simp
 -/
@@ -264,7 +264,7 @@ theorem imageToKernel_comp_mono
 
 中文:
 定理 imageToKernel_comp_mono
-  条件: {D : V} (h : C ⟶ D) [Mono h] (w)
+  条件: {D : V} (h : C ⟶ D) [单态射 h] (w)
   证明: by
   ext
   simp
@@ -291,7 +291,7 @@ theorem imageToKernel_epi_comp
 
 中文:
 定理 imageToKernel_epi_comp
-  条件: {Z : V} (h : Z ⟶ A) [Epi h] (w)
+  条件: {Z : V} (h : Z ⟶ A) [满态射 h] (w)
   证明: by
   ext
   simp
@@ -318,7 +318,7 @@ theorem imageToKernel_comp_hom_inv_comp
 
 中文:
 定理 imageToKernel_comp_hom_inv_comp
-  条件: [HasEqualizers V] [HasImages V] {Z : V} {i : B ≅ Z} (w)
+  条件: [HasEqualizers V] [有Images V] {Z : V} {i : B ≅ Z} (w)
   证明: by
   ext
   simp
@@ -342,7 +342,7 @@ instance imageToKernel_epi_of_zero_of_mono
 
 中文:
 实例 imageToKernel_epi_of_zero_of_mono
-  签名: [HasKernels V] [HasZeroObject V] [Mono g]
+  签名: [有Kernels V] [有ZeroObject V] [单态射 g]
   定义体: epi_of_target_iso_zero _ (kernelSubobjectIso g ≪≫ kernel.ofMono g)
 
 Depends on / 依赖: epi_of_target_iso_zero, kernel, kernel.ofMono, kernelSubobjectIso, ofMono
@@ -365,7 +365,7 @@ instance imageToKernel_epi_of_epi_of_zero
 
 中文:
 实例 imageToKernel_epi_of_epi_of_zero
-  签名: [HasImages V] [Epi f]
+  签名: [有Images V] [满态射 f]
   定义体: by
   simp only [imageToKernel_zero_right]
   have := epi_image_of_epi f

@@ -44,8 +44,8 @@ theorem PartitionOfUnity.finsum_smul_mem_convex
   proof: ht.finsum_mem (fun _ => f.nonneg _ _) (f.sum_eq_one hx) hg
 
 中文:
-定理 PartitionOfUnity.finsum_smul_mem_convex
-  结论: {s : Set X} (f : PartitionOfUnity ι X s)
+定理 单位分解.finsum_smul_mem_convex
+  结论: {s : 集合 X} (f : 单位分解 ι X s)
   证明: ht.finsum_mem (fun _ => f.nonneg _ _) (f.sum_eq_one hx) hg
 
 Depends on / 依赖: f.nonneg, f.sum_eq_one, finsum_mem, ht.finsum_mem, nonneg, sum_eq_one
@@ -72,8 +72,8 @@ theorem exists_continuous_forall_mem_convex_of_local
     hf.continuous_finsum_smul (
 
 中文:
-定理 exists_continuous_forall_mem_convex_of_local
-  结论: (ht : 对任意 x, Convex 实数 (t x))
+定理 存在_continuous_对任意_mem_convex_of_local
+  结论: (ht : 对任意 x, 凸 实数 (t x))
   证明: by
   choose U hU g hgc hgt using H
   obtain ⟨f, hf⟩ := PartitionOfUnity.exists_isSubordinate isClosed_univ (fun x => interior (U x))
@@ -105,8 +105,8 @@ theorem exists_continuous_forall_mem_convex_of_local_const
     ⟨_, hc, fun _ => c, continuousOn_const, fun _ => id⟩
 
 中文:
-定理 exists_continuous_forall_mem_convex_of_local_const
-  结论: (ht : 对任意 x, Convex 实数 (t x))
+定理 存在_continuous_对任意_mem_convex_of_local_const
+  结论: (ht : 对任意 x, 凸 实数 (t x))
   证明: exists_continuous_forall_mem_convex_of_local ht fun x =>
     let ⟨c, hc⟩ := H x
     ⟨_, hc, fun _ => c, continuousOn_const, fun _ => id⟩

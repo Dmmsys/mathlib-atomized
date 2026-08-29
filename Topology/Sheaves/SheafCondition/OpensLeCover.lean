@@ -61,7 +61,7 @@ deriving Category
 
 中文:
 定义 OpensLeCover
-  签名: : Type w
+  签名: : 类型 w
   定义体: ObjectProperty.FullSubcategory fun V : Opens X => exists i, V <= U i
 deriving Category
 
@@ -81,7 +81,7 @@ instance [h
 
 中文:
 实例 [h
-  签名: : Nonempty ι] : Inhabited (OpensLeCover U)
+  签名: : 非空 ι] : 可居 (OpensLeCover U)
   定义体: ⟨⟨⊥, let ⟨i⟩ := h; ⟨i, bot_le⟩⟩⟩
 
 Depends on / 依赖: bot_le
@@ -142,7 +142,7 @@ definition opensLeCoverCocone
 
 中文:
 定义 opensLeCoverCocone
-  签名: : Cocone (Object命题erty.ι _ : OpensLeCover U ⥤ Opens X) where
+  签名: : 余锥 (ObjectProperty.ι _ : OpensLeCover U ⥤ Opens X) where
   定义体: iSup U
   ι := { app := fun V : OpensLeCover U => V.homToIndex ≫ Opens.leSupr U _ }
 -/
@@ -422,8 +422,8 @@ theorem IsSheaf.isSheafOpensLeCover
   apply presieveOfCovering.mem_grothendieckTopology
 
 中文:
-定理 IsSheaf.isSheafOpensLeCover
-  条件: (h : F.IsSheaf)
+定理 是层.isSheafOpensLeCover
+  条件: (h : F.是层)
   证明: by
   rw [(isLimitOpensLeEquivGenerate₁ F U rfl).nonempty_congr]
   apply (Presheaf.isSheaf_iff_isLimit _ _).mp h
@@ -453,7 +453,7 @@ theorem isSheaf_iff_isSheafOpensLeCover
 
 中文:
 定理 isSheaf_iff_isSheafOpensLeCover
-  结论: F.IsSheaf ↔ F.IsSheafOpensLeCover
+  结论: F.是层 ↔ F.IsSheafOpensLeCover
   证明: by
   refine ⟨fun h _ => h.isSheafOpensLeCover,
     fun h => (Presheaf.isSheaf_iff_isLimit _ _).mpr fun Y S => ?_⟩

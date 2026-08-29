@@ -82,7 +82,7 @@ definition approxOrderOf
 
 中文:
 定义 approxOrderOf
-  签名: (A : 类型) [SeminormedGroup A] (n : 自然数) (δ : 实数)
+  签名: (A : 类型) [半赋范群 A] (n : 自然数) (δ : 实数)
   定义体: thickening δ {y | orderOf y = n}
 
 @[to_additive mem_approx_add_orderOf_iff]
@@ -104,7 +104,7 @@ theorem mem_approxOrderOf_iff
 
 中文:
 定理 mem_approxOrderOf_iff
-  条件: {A : 类型} [SeminormedGroup A] {n : 自然数} {δ : 实数} {a : A}
+  条件: {A : 类型} [半赋范群 A] {n : 自然数} {δ : 实数} {a : A}
   证明: by
   simp only [approxOrderOf, thickening_eq_biUnion_ball, mem_iUnion₂, mem_ofPred_eq, exists_prop]
 
@@ -133,7 +133,7 @@ definition wellApproximable
 
 中文:
 定义 wellApproximable
-  签名: (A : 类型) [SeminormedGroup A] (δ : 自然数 -> 实数)
+  签名: (A : 类型) [半赋范群 A] (δ : 自然数 -> 实数)
   定义体: blimsup (fun n => approxOrderOf A n (δ n)) atTop fun n => 0 < n
 
 @[to_additive mem_add_wellApproximable_iff]
@@ -154,7 +154,7 @@ theorem mem_wellApproximable_iff
 
 中文:
 定理 mem_wellApproximable_iff
-  条件: {A : 类型} [SeminormedGroup A] {δ : 自然数 -> 实数} {a : A}
+  条件: {A : 类型} [半赋范群 A] {δ : 自然数 -> 实数} {a : A}
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -436,7 +436,7 @@ theorem addWellApproximable_ae_empty_or_univ
 
 中文:
 定理 addWellApproximable_ae_empty_or_univ
-  条件: (δ : 自然数 -> 实数) (hδ : Tendsto δ atTop (𝓝 0))
+  条件: (δ : 自然数 -> 实数) (hδ : 收敛 δ atTop (𝓝 0))
   证明: by
   /- Sketch of proof:
 
@@ -586,7 +586,7 @@ lemma _root_.NormedAddCommGroup.exists_norm_nsmul_le
     refine ⟨j - i, ⟨le_tsub_of
 
 中文:
-引理 _root_.NormedAddCommGroup.exists_norm_nsmul_le
+引理 _root_.赋范交换加群.存在_norm_nsmul_le
   结论: {A : 类型}
   证明: by
   let B : Icc 0 n -> Set A := fun j => closedBall ((j : Nat) • ξ) (δ / 2)
@@ -640,7 +640,7 @@ lemma exists_norm_nsmul_le
   rw [AddCircle.measure_univ]; rw [volume_closedBall]; rw [← ENNReal.ofReal_nsmul]; rw [mul_div_cancel₀ _ two_ne_zero]; rw [min_eq_right (div_le_self hT.out.le <| by simp)]; rw [nsmul_eq_mul]; rw [mul_div_cancel₀ _ (Nat.cast_ne_ze
 
 中文:
-引理 exists_norm_nsmul_le
+引理 存在_norm_nsmul_le
   条件: (ξ : 𝕊) {n : 自然数} (hn : 0 < n)
   证明: by
   apply NormedAddCommGroup.exists_norm_nsmul_le (μ := volume) ξ hn

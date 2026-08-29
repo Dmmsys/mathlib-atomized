@@ -71,7 +71,7 @@ lemma FormallySmooth.of_formallySmooth_residueField_tensor_aux
   let φ 
 
 中文:
-引理 FormallySmooth.of_formallySmooth_residueField_tensor_aux
+引理 形式光滑.of_formallySmooth_residueField_tensor_aux
   证明: by
   /-
   From the given presentation `0 → I → P → S → 0`, we construct the presentation
@@ -168,8 +168,8 @@ lemma FormallySmooth.of_formallySmooth_residueField_tensor
   obtain ⟨n, f₀, hf₀⟩
 
 中文:
-引理 FormallySmooth.of_formallySmooth_residueField_tensor
-  结论: (M : Submonoid P)
+引理 形式光滑.of_formallySmooth_residueField_tensor
+  结论: (M : 子幺半群 P)
   证明: by
   /-
   By the fact that `S` is essentially of finite presentation, we get
@@ -304,8 +304,8 @@ lemma Smooth.of_formallySmooth_fiber
   exact .of_formallySmooth_fiber (q.asIdeal.under R) _
 
 中文:
-引理 Smooth.of_formallySmooth_fiber
-  结论: [Algebra.FinitePresentation R S]
+引理 光滑.of_formallySmooth_fiber
+  结论: [代数.有限呈现 R S]
   证明: by
   refine ⟨smoothLocus_eq_univ_iff.mp (Set.eq_univ_iff_forall.mpr fun q => ?_), ‹_›⟩
   exact .of_formallySmooth_fiber (q.asIdeal.under R) _
@@ -330,8 +330,8 @@ lemma Etale.of_formallyUnramified_of_flat
   ⟨⟨inferInstance, inferInstance⟩, ‹_›⟩
 
 中文:
-引理 Etale.of_formallyUnramified_of_flat
-  结论: {R S : 类型} [CommRing R] [CommRing S] [Algebra R S]
+引理 平展.of_formallyUnramified_of_flat
+  结论: {R S : 类型} [交换环 R] [交换环 S] [代数 R S]
   证明: have : Smooth R S := .of_formallySmooth_fiber inferInstance
   ⟨⟨inferInstance, inferInstance⟩, ‹_›⟩
 

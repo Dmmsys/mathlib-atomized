@@ -64,7 +64,7 @@ abbreviation addMonoidWithOneOfCommSemiring
 
 中文:
 缩写 addMonoidWithOneOfCommSemiring
-  签名: (α : 类型) [CommSemiring α]
+  签名: (α : 类型) [交换半环 α]
   定义体: inferInstance
 -/
 abbrev addMonoidWithOneOfCommSemiring (α : Type*) [CommSemiring α] : AddMonoidWithOne α :=
@@ -80,7 +80,7 @@ abbreviation leOfPartialOrder
 
 中文:
 缩写 leOfPartialOrder
-  签名: (α : 类型) [PartialOrder α]
+  签名: (α : 类型) [偏序 α]
   定义体: inferInstance
 -/
 abbrev leOfPartialOrder (α : Type*) [PartialOrder α] : LE α := inferInstance
@@ -99,7 +99,7 @@ abbreviation ltOfPartialOrder
 
 中文:
 缩写 ltOfPartialOrder
-  签名: (α : 类型) [PartialOrder α]
+  签名: (α : 类型) [偏序 α]
   定义体: inferInstance
 
 @[deprecated (since := "2026-05-27")] alias amwo_of_cs := addMonoidWithOneOfCommSemiring
@@ -139,7 +139,7 @@ theorem add_le_add_left
 
 中文:
 定理 add_le_add_left
-  结论: {α : 类型} [CommSemiring α] [PartialOrder α] [IsOrderedRing α]
+  结论: {α : 类型} [交换半环 α] [偏序 α] [是Ordered环 α]
   证明: _root_.add_le_add_left bc a
 
 Depends on / 依赖: _root_, _root_.add_le_add_left, add_le_add_left
@@ -159,7 +159,7 @@ theorem add_le_of_nonpos_left
 
 中文:
 定理 add_le_of_nonpos_left
-  结论: {α : 类型} [CommSemiring α] [PartialOrder α] [IsOrderedRing α]
+  结论: {α : 类型} [交换半环 α] [偏序 α] [是Ordered环 α]
   证明: _root_.add_le_of_nonpos_left h
 
 Depends on / 依赖: _root_, _root_.add_le_of_nonpos_left, add_le_of_nonpos_left
@@ -179,7 +179,7 @@ theorem le_add_of_nonneg_left
 
 中文:
 定理 le_add_of_nonneg_left
-  结论: {α : 类型} [CommSemiring α] [PartialOrder α] [IsOrderedRing α]
+  结论: {α : 类型} [交换半环 α] [偏序 α] [是Ordered环 α]
   证明: _root_.le_add_of_nonneg_left h
 
 Depends on / 依赖: _root_, _root_.le_add_of_nonneg_left, le_add_of_nonneg_left
@@ -199,7 +199,7 @@ theorem add_lt_add_left
 
 中文:
 定理 add_lt_add_left
-  结论: {α : 类型} [CommSemiring α] [PartialOrder α] [IsStrictOrderedRing α]
+  结论: {α : 类型} [交换半环 α] [偏序 α] [是StrictOrdered环 α]
   证明: _root_.add_lt_add_left bc a
 
 Depends on / 依赖: _root_, _root_.add_lt_add_left, add_lt_add_left
@@ -219,7 +219,7 @@ theorem add_lt_of_neg_left
 
 中文:
 定理 add_lt_of_neg_left
-  结论: {α : 类型} [CommSemiring α] [PartialOrder α] [IsStrictOrderedRing α]
+  结论: {α : 类型} [交换半环 α] [偏序 α] [是StrictOrdered环 α]
   证明: _root_.add_lt_of_neg_left a h
 
 Depends on / 依赖: _root_, _root_.add_lt_of_neg_left, add_lt_of_neg_left
@@ -239,7 +239,7 @@ theorem lt_add_of_pos_left
 
 中文:
 定理 lt_add_of_pos_left
-  结论: {α : 类型} [CommSemiring α] [PartialOrder α] [IsStrictOrderedRing α]
+  结论: {α : 类型} [交换半环 α] [偏序 α] [是StrictOrdered环 α]
   证明: _root_.lt_add_of_pos_left a h
 
 Depends on / 依赖: _root_, _root_.lt_add_of_pos_left, lt_add_of_pos_left

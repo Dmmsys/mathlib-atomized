@@ -95,7 +95,7 @@ theorem LinearIndepOn.union_of_quotient
 
 中文:
 定理 LinearIndepOn.union_of_quotient
-  结论: {s t : Set ι} {f : ι -> M} (hs : LinearIndepOn R f s)
+  结论: {s t : 集合 ι} {f : ι -> M} (hs : LinearIndepOn R f s)
   证明: by
   apply hs.union ht.of_comp
   convert! (Submodule.range_ker_disjoint ht).symm
@@ -123,7 +123,7 @@ theorem LinearIndepOn.union_id_of_quotient
 
 中文:
 定理 LinearIndepOn.union_id_of_quotient
-  结论: {M' : Submodule R M}
+  结论: {M' : 子模 R M}
   证明: hs'.union_of_quotient by
     rw [image_id]
     exact ht.of_comp ((span R s).mapQ M' (LinearMap.id) (span_le.2 hs))
@@ -151,7 +151,7 @@ theorem linearIndepOn_union_iff_quotient
 
 中文:
 定理 linearIndepOn_union_iff_quotient
-  条件: {s t : Set ι} {f : ι -> M} (hst : Disjoint s t)
+  条件: {s t : 集合 ι} {f : ι -> M} (hst : Disjoint s t)
   证明: by
   refine ⟨fun h => ⟨?_, ?_⟩, fun h => h.1.union_of_quotient h.2⟩
   · exact h.mono subset_union_left
@@ -179,7 +179,7 @@ theorem LinearIndepOn.quotient_iff_union
 
 中文:
 定理 LinearIndepOn.quotient_iff_union
-  结论: {s t : Set ι} {f : ι -> M} (hs : LinearIndepOn R f s)
+  结论: {s t : 集合 ι} {f : ι -> M} (hs : LinearIndepOn R f s)
   证明: by
   rw [linearIndepOn_union_iff_quotient hst]; rw [and_iff_right hs]
 
@@ -205,7 +205,7 @@ theorem rank_quotient_add_rank_le
 
 中文:
 定理 rank_quotient_add_rank_le
-  条件: [Nontrivial R] (M' : Submodule R M)
+  条件: [非平凡 R] (M' : 子模 R M)
   证明: by
   conv_lhs => simp only [Module.rank_def]
   rw [Cardinal.ciSup_add_ciSup _ bddAbove_of_small _ bddAbove_of_small]
@@ -235,8 +235,8 @@ theorem rank_quotient_le
 
 中文:
 定理 rank_quotient_le
-  条件: (p : Submodule R M)
-  结论: Module.rank R (M ⧸ p) <= Module.rank R M
+  条件: (p : 子模 R M)
+  结论: 模.rank R (M ⧸ p) <= 模.rank R M
   证明: (mkQ p).rank_le_of_surjective Quot.mk_surjective
 
 Depends on / 依赖: Quot.mk_surjective, mk_surjective, rank_le_of_surjective
@@ -254,8 +254,8 @@ theorem Submodule.finrank_quotient_le
     (rank_lt_aleph0 _ _)
 
 中文:
-定理 Submodule.finrank_quotient_le
-  结论: [StrongRankCondition R] [Module.Finite R M]
+定理 子模.finrank_quotient_le
+  结论: [StrongRankCondition R] [模.有限 R M]
   证明: toNat_le_toNat ((Submodule.mkQ s).rank_le_of_surjective Quot.mk_surjective)
     (rank_lt_aleph0 _ _)
 
@@ -286,7 +286,7 @@ theorem rank_ulift
 
 中文:
 定理 rank_ulift
-  结论: Module.rank R (ULift.{w} M) = Cardinal.lift.{w} (Module.rank R M)
+  结论: 模.rank R (类型层提升.{w} M) = 基数.lift.{w} (模.rank R M)
   证明: Cardinal.lift_injective.{v} Eq.symm (lift_lift _).trans ULift.moduleEquiv.symm.lift_rank_eq
 
 @[simp]
@@ -308,7 +308,7 @@ theorem finrank_ulift
 
 中文:
 定理 finrank_ulift
-  结论: finrank R (ULift M) = finrank R M
+  结论: finrank R (类型层提升 M) = finrank R M
   证明: by
   simp_rw [finrank, rank_ulift, toNat_lift]
 
@@ -338,7 +338,7 @@ theorem rank_add_rank_le_rank_prod
 
 中文:
 定理 rank_add_rank_le_rank_prod
-  条件: [Nontrivial R]
+  条件: [非平凡 R]
   证明: by
   conv_lhs => simp only [Module.rank_def]
   rw [Cardinal.ciSup_add_ciSup _ bddAbove_of_small _ bddAbove_of_small]
@@ -367,7 +367,7 @@ theorem lift_rank_add_lift_rank_le_rank_prod
 
 中文:
 定理 lift_rank_add_lift_rank_le_rank_prod
-  条件: [Nontrivial R]
+  条件: [非平凡 R]
   证明: by
   rw [← rank_ulift]; rw [← rank_ulift]
   exact (rank_add_rank_le_rank_prod R _).trans_eq
@@ -401,7 +401,7 @@ theorem rank_prod
 
 中文:
 定理 rank_prod
-  结论: Module.rank R (M × M') =
+  结论: 模.rank R (M × M') =
   证明: by
   simpa [rank_eq_card_chooseBasisIndex R M, rank_eq_card_chooseBasisIndex R M', lift_umax]
     using ((chooseBasis R M).prod (chooseBasis R M')).mk_eq_rank.symm
@@ -423,7 +423,7 @@ theorem rank_prod'
 
 中文:
 定理 rank_prod'
-  结论: Module.rank R (M × M₁) = Module.rank R M + Module.rank R M₁
+  结论: 模.rank R (M × M₁) = 模.rank R M + 模.rank R M₁
   证明: by simp
 -/
 theorem rank_prod' : Module.rank R (M × M₁) = Module.rank R M + Module.rank R M₁ := by simp
@@ -440,8 +440,8 @@ theorem Module.finrank_prod
   simp [finrank, rank_lt_aleph0 R M, rank_lt_aleph0 R M']
 
 中文:
-定理 Module.finrank_prod
-  条件: [Module.Finite R M] [Module.Finite R M']
+定理 模.finrank_prod
+  条件: [模.有限 R M] [模.有限 R M']
   证明: by
   simp [finrank, rank_lt_aleph0 R M, rank_lt_aleph0 R M']
 
@@ -473,7 +473,7 @@ theorem rank_finsupp
 
 中文:
 定理 rank_finsupp
-  条件: (ι : Type w)
+  条件: (ι : 类型 w)
   证明: by
   obtain ⟨⟨_, bs⟩⟩ := Module.Free.exists_basis (R := R) (M := M)
   rw [← bs.mk_eq_rank'']; rw [← (Finsupp.basis fun _ : ι => bs).mk_eq_rank'']; rw [Cardinal.mk_sigma]; rw [Cardinal.sum_const]
@@ -498,7 +498,7 @@ theorem rank_finsupp'
 中文:
 定理 rank_finsupp'
   条件: (ι : 类型v)
-  结论: Module.rank R (ι ->₀ M) = #ι * Module.rank R M
+  结论: 模.rank R (ι ->₀ M) = #ι * 模.rank R M
   证明: by
   simp [rank_finsupp]
 
@@ -519,8 +519,8 @@ theorem rank_finsupp_self
 
 中文:
 定理 rank_finsupp_self
-  条件: (ι : Type w)
-  结论: Module.rank R (ι ->₀ R) = Cardinal.lift.{u} #ι
+  条件: (ι : 类型 w)
+  结论: 模.rank R (ι ->₀ R) = 基数.lift.{u} #ι
   证明: by
   simp
 -/
@@ -539,7 +539,7 @@ theorem rank_finsupp_self'
 中文:
 定理 rank_finsupp_self'
   条件: {ι : 类型u}
-  结论: Module.rank R (ι ->₀ R) = #ι
+  结论: 模.rank R (ι ->₀ R) = #ι
   证明: by simp
 -/
 theorem rank_finsupp_self' {ι : Type u} : Module.rank R (ι ->₀ R) = #ι := by simp
@@ -559,7 +559,7 @@ theorem rank_directSum
 
 中文:
 定理 rank_directSum
-  结论: {ι : 类型v} (M : ι -> Type w) [对任意 i : ι, AddCommMonoid (M i)]
+  结论: {ι : 类型v} (M : ι -> 类型 w) [对任意 i : ι, 加法交换幺半群 (M i)]
   证明: by
   let B i := chooseBasis R (M i)
   let b : Basis _ R (⨁ i, M i) := DFinsupp.basis fun i => B i
@@ -592,7 +592,7 @@ theorem rank_matrix_module
 
 中文:
 定理 rank_matrix_module
-  条件: (m : Type w) (n : Type w') [Finite m] [Finite n]
+  条件: (m : 类型 w) (n : 类型 w') [有限 m] [有限 n]
   证明: by
   cases nonempty_fintype m
   cases nonempty_fintype n
@@ -626,7 +626,7 @@ theorem rank_matrix_module'
 
 中文:
 定理 rank_matrix_module'
-  条件: (m n : Type w) [Finite m] [Finite n]
+  条件: (m n : 类型 w) [有限 m] [有限 n]
   证明: by
   rw [rank_matrix_module]; rw [lift_mul]; rw [lift_umax.{w]; rw [v}]
 
@@ -648,7 +648,7 @@ theorem rank_matrix
 
 中文:
 定理 rank_matrix
-  条件: (m : 类型v) (n : Type w) [Finite m] [Finite n]
+  条件: (m : 类型v) (n : 类型 w) [有限 m] [有限 n]
   证明: by
   rw [rank_matrix_module]; rw [rank_self]; rw [lift_one]; rw [mul_one]; rw [← lift_lift.{v]; rw [max u w}]; rw [lift_id]; rw [← lift_lift.{w]; rw [max u v}]; rw [lift_id]
 
@@ -670,7 +670,7 @@ theorem rank_matrix'
 
 中文:
 定理 rank_matrix'
-  条件: (m n : 类型v) [Finite m] [Finite n]
+  条件: (m n : 类型v) [有限 m] [有限 n]
   证明: by
   rw [rank_matrix]; rw [lift_mul]; rw [lift_umax.{v]; rw [u}]
 
@@ -690,7 +690,7 @@ theorem rank_matrix''
 
 中文:
 定理 rank_matrix''
-  条件: (m n : 类型u) [Finite m] [Finite n]
+  条件: (m n : 类型u) [有限 m] [有限 n]
   证明: by simp
 -/
 theorem rank_matrix'' (m n : Type u) [Finite m] [Finite n] :
@@ -713,7 +713,7 @@ theorem finrank_finsupp
 
 中文:
 定理 finrank_finsupp
-  条件: {ι : 类型v} [Fintype ι]
+  条件: {ι : 类型v} [有限类型 ι]
   结论: finrank R (ι ->₀ M) = card ι * finrank R M
   证明: by
   rw [finrank]; rw [finrank]; rw [rank_finsupp]; rw [← mk_toNat_eq_card]; rw [toNat_mul]; rw [toNat_lift]; rw [toNat_lift]
@@ -737,7 +737,7 @@ theorem finrank_finsupp_self
 
 中文:
 定理 finrank_finsupp_self
-  条件: {ι : 类型v} [Fintype ι]
+  条件: {ι : 类型v} [有限类型 ι]
   结论: finrank R (ι ->₀ R) = card ι
   证明: by
   rw [finrank]; rw [rank_finsupp_self]; rw [← mk_toNat_eq_card]; rw [toNat_lift]
@@ -761,7 +761,7 @@ theorem finrank_directSum
 
 中文:
 定理 finrank_directSum
-  结论: {ι : 类型v} [Fintype ι] (M : ι -> Type w) [对任意 i : ι, AddCommMonoid (M i)]
+  结论: {ι : 类型v} [有限类型 ι] (M : ι -> 类型 w) [对任意 i : ι, 加法交换幺半群 (M i)]
   证明: by
   simp only [finrank, fun i => rank_eq_card_chooseBasisIndex R (M i), rank_directSum, ← mk_sigma,
     mk_toNat_eq_card, card_sigma]
@@ -784,7 +784,7 @@ theorem finrank_matrix
 
 中文:
 定理 finrank_matrix
-  条件: (m n : 类型) [Fintype m] [Fintype n]
+  条件: (m n : 类型) [有限类型 m] [有限类型 n]
   证明: by simp [finrank]
 
 Depends on / 依赖: finrank
@@ -823,8 +823,8 @@ theorem rank_pi
 
 中文:
 定理 rank_pi
-  条件: [Finite η]
-  结论: Module.rank R (对任意 i, φ i) =
+  条件: [有限 η]
+  结论: 模.rank R (对任意 i, φ i) =
   证明: by
   cases nonempty_fintype η
   let B i := chooseBasis R (φ i)
@@ -852,8 +852,8 @@ theorem Module.finrank_pi
   simp [finrank]
 
 中文:
-定理 Module.finrank_pi
-  条件: {ι : 类型v} [Fintype ι]
+定理 模.finrank_pi
+  条件: {ι : 类型v} [有限类型 ι]
   证明: by
   simp [finrank]
 
@@ -874,7 +874,7 @@ theorem Module.finrank_pi_fintype
     mk_toNat_eq_card, Fintype.card_sigma]
 
 中文:
-定理 Module.finrank_pi_fintype
+定理 模.finrank_pi_fintype
   证明: by
   simp only [finrank, fun i => rank_eq_card_chooseBasisIndex R (M i), rank_pi, ← mk_sigma,
     mk_toNat_eq_card, Fintype.card_sigma]
@@ -902,7 +902,7 @@ theorem rank_fun
 
 中文:
 定理 rank_fun
-  条件: {M η : 类型u} [Fintype η] [AddCommMonoid M] [Module R M] [Module.Free R M]
+  条件: {M η : 类型u} [有限类型 η] [加法交换幺半群 M] [模 R M] [模.自由 R M]
   证明: by
   rw [rank_pi]; rw [Cardinal.sum_const']; rw [Cardinal.mk_fintype]
 
@@ -923,7 +923,7 @@ theorem rank_fun_eq_lift_mul
 
 中文:
 定理 rank_fun_eq_lift_mul
-  结论: Module.rank R (η -> M) =
+  结论: 模.rank R (η -> M) =
   证明: by
   rw [rank_pi]; rw [Cardinal.sum_const]; rw [Cardinal.mk_fintype]; rw [Cardinal.lift_natCast]
 
@@ -944,7 +944,7 @@ theorem rank_fun'
 
 中文:
 定理 rank_fun'
-  结论: Module.rank R (η -> R) = Fintype.card η
+  结论: 模.rank R (η -> R) = 有限类型.card η
   证明: by
   rw [rank_fun_eq_lift_mul]; rw [rank_self]; rw [Cardinal.lift_one]; rw [mul_one]
 
@@ -965,7 +965,7 @@ theorem rank_fin_fun
 中文:
 定理 rank_fin_fun
   条件: (n : 自然数)
-  结论: Module.rank R (Fin n -> R) = n
+  结论: 模.rank R (有限集 n -> R) = n
   证明: by simp
 -/
 theorem rank_fin_fun (n : Nat) : Module.rank R (Fin n -> R) = n := by simp
@@ -983,8 +983,8 @@ theorem Module.finrank_fintype_fun_eq_card
   proof: finrank_eq_of_rank_eq rank_fun'
 
 中文:
-定理 Module.finrank_fintype_fun_eq_card
-  结论: finrank R (η -> R) = Fintype.card η
+定理 模.finrank_fintype_fun_eq_card
+  结论: finrank R (η -> R) = 有限类型.card η
   证明: finrank_eq_of_rank_eq rank_fun'
 
 Depends on / 依赖: finrank_eq_of_rank_eq, rank_fun
@@ -1002,9 +1002,9 @@ theorem Module.finrank_fin_fun
   proof: by simp
 
 中文:
-定理 Module.finrank_fin_fun
+定理 模.finrank_fin_fun
   条件: {n : 自然数}
-  结论: finrank R (Fin n -> R) = n
+  结论: finrank R (有限集 n -> R) = n
   证明: by simp
 -/
 theorem Module.finrank_fin_fun {n : Nat} : finrank R (Fin n -> R) = n := by simp
@@ -1028,7 +1028,7 @@ definition finDimVectorspaceEquiv
 
 中文:
 定义 finDimVectorspaceEquiv
-  签名: (n : 自然数) (hn : Module.rank R M = n)
+  签名: (n : 自然数) (hn : 模.rank R M = n)
   定义体: by
   haveI := nontrivial_of_invariantBasisNumber R
   have : Cardinal.lift.{u} (n : Cardinal.{v}) = Cardinal.lift.{v} (n : Cardinal.{u}) := by simp
@@ -1111,7 +1111,7 @@ theorem Module.rank_baseChange
   proof: by simp
 
 中文:
-定理 Module.rank_baseChange
+定理 模.rank_baseChange
   证明: by simp
 -/
 theorem Module.rank_baseChange :
@@ -1127,7 +1127,7 @@ theorem Module.finrank_tensorProduct
   proof: by simp [finrank]
 
 中文:
-定理 Module.finrank_tensorProduct
+定理 模.finrank_tensorProduct
   证明: by simp [finrank]
 
 Depends on / 依赖: finrank
@@ -1144,7 +1144,7 @@ theorem Module.finrank_baseChange
   proof: by simp
 
 中文:
-定理 Module.finrank_baseChange
+定理 模.finrank_baseChange
   结论: finrank R (R otimes[S] M') = finrank S M'
   证明: by simp
 -/
@@ -1170,7 +1170,7 @@ theorem lt_of_le_of_finrank_lt_finrank
 
 中文:
 定理 lt_of_le_of_finrank_lt_finrank
-  结论: {s t : Submodule R M} (le : s <= t)
+  结论: {s t : 子模 R M} (le : s <= t)
   证明: lt_of_le_of_ne le fun h => ne_of_lt lt (by rw [h])
 
 Depends on / 依赖: lt_of_le_of_ne, ne_of_lt
@@ -1191,7 +1191,7 @@ theorem lt_top_of_finrank_lt_finrank
 
 中文:
 定理 lt_top_of_finrank_lt_finrank
-  条件: {s : Submodule R M} (lt : finrank R s < finrank R M)
+  条件: {s : 子模 R M} (lt : finrank R s < finrank R M)
   证明: by
   rw [← finrank_top R M] at lt
   exact lt_of_le_of_finrank_lt_finrank le_top lt
@@ -1216,8 +1216,8 @@ theorem Submodule.finrank_le
   proof: toNat_le_toNat (Submodule.rank_le s) (rank_lt_aleph0 _ _)
 
 中文:
-定理 Submodule.finrank_le
-  条件: [Module.Finite R M] (s : Submodule R M)
+定理 子模.finrank_le
+  条件: [模.有限 R M] (s : 子模 R M)
   证明: toNat_le_toNat (Submodule.rank_le s) (rank_lt_aleph0 _ _)
 
 Depends on / 依赖: Submodule, Submodule.rank_le, rank_le, rank_lt_aleph0, toNat_le_toNat
@@ -1234,7 +1234,7 @@ theorem Submodule.finrank_map_le
   proof: finrank_le_finrank_of_rank_le_rank (lift_rank_map_le _ _) (rank_lt_aleph0 _ _)
 
 中文:
-定理 Submodule.finrank_map_le
+定理 子模.finrank_map_le
   证明: finrank_le_finrank_of_rank_le_rank (lift_rank_map_le _ _) (rank_lt_aleph0 _ _)
 
 Depends on / 依赖: finrank_le_finrank_of_rank_le_rank, lift_rank_map_le, rank_lt_aleph0
@@ -1253,8 +1253,8 @@ theorem Submodule.finrank_mono
   proof: Cardinal.toNat_le_toNat (Submodule.rank_mono hst) (rank_lt_aleph0 R ↥t)
 
 中文:
-定理 Submodule.finrank_mono
-  条件: {s t : Submodule R M} [Module.Finite R t] (hst : s <= t)
+定理 子模.finrank_mono
+  条件: {s t : 子模 R M} [模.有限 R t] (hst : s <= t)
   证明: Cardinal.toNat_le_toNat (Submodule.rank_mono hst) (rank_lt_aleph0 R ↥t)
 
 Depends on / 依赖: Cardinal, Cardinal.toNat_le_toNat, Submodule, Submodule.rank_mono, rank_lt_aleph0, rank_mono, toNat_le_toNat
@@ -1286,8 +1286,8 @@ theorem rank_span_le
 
 中文:
 定理 rank_span_le
-  条件: (s : Set M)
-  结论: Module.rank R (span R s) <= #s
+  条件: (s : 集合 M)
+  结论: 模.rank R (span R s) <= #s
   证明: by
   rw [Finsupp.span_eq_range_linearCombination]; rw [← lift_strictMono.le_iff_le]
   refine (lift_rank_range_le _).trans ?_
@@ -1314,8 +1314,8 @@ theorem rank_span_finset_le
 
 中文:
 定理 rank_span_finset_le
-  条件: (s : Finset M)
-  结论: Module.rank R (span R (s : Set M)) <= s.card
+  条件: (s : 有限集 M)
+  结论: 模.rank R (span R (s : 集合 M)) <= s.card
   证明: by
   simpa using rank_span_le (s : Set M)
 
@@ -1335,8 +1335,8 @@ theorem rank_span_of_finset
 
 中文:
 定理 rank_span_of_finset
-  条件: (s : Finset M)
-  结论: Module.rank R (span R (s : Set M)) < ℵ₀
+  条件: (s : 有限集 M)
+  结论: 模.rank R (span R (s : 集合 M)) < ℵ₀
   证明: (rank_span_finset_le s).trans_lt natCast_lt_aleph0
 
 Depends on / 依赖: natCast_lt_aleph0, rank_span_finset_le, trans_lt
@@ -1357,7 +1357,7 @@ definition noncomputable
 
 中文:
 定义 noncomputable
-  签名: def Set.finrank (s : Set M)
+  签名: def 集合.finrank (s : 集合 M)
   定义体: finrank R (span R s)
 -/
 protected noncomputable def Set.finrank (s : Set M) : Nat :=
@@ -1374,7 +1374,7 @@ theorem finrank_span_le_card
 
 中文:
 定理 finrank_span_le_card
-  条件: (s : Set M) [Fintype s]
+  条件: (s : 集合 M) [有限类型 s]
   结论: finrank R (span R s) <= s.toFinset.card
   证明: finrank_le_of_rank_le (by simpa using rank_span_le (R := R) s)
 
@@ -1396,8 +1396,8 @@ theorem finrank_span_finset_le_card
 
 中文:
 定理 finrank_span_finset_le_card
-  条件: (s : Finset M)
-  结论: (s : Set M).finrank R <= s.card
+  条件: (s : 有限集 M)
+  结论: (s : 集合 M).finrank R <= s.card
   证明: calc
     (s : Set M).finrank R <= (s : Set M).toFinset.card := finrank_span_le_card (M := M) s
     _ = s.card := by simp
@@ -1423,7 +1423,7 @@ theorem finrank_range_le_card
 
 中文:
 定理 finrank_range_le_card
-  条件: {ι : 类型} [Fintype ι] (b : ι -> M)
+  条件: {ι : 类型} [有限类型 ι] (b : ι -> M)
   证明: by
   classical
   refine (finrank_span_le_card _).trans ?_
@@ -1453,7 +1453,7 @@ theorem finrank_span_eq_card
 
 中文:
 定理 finrank_span_eq_card
-  结论: [Nontrivial R] {ι : 类型} [Fintype ι] {b : ι -> M}
+  结论: [非平凡 R] {ι : 类型} [有限类型 ι] {b : ι -> M}
   证明: finrank_eq_of_rank_eq
     (by
       have : Module.rank R (span R (Set.range b)) = #(Set.range b) := rank_span hb
@@ -1484,7 +1484,7 @@ theorem finrank_span_set_eq_card
 
 中文:
 定理 finrank_span_set_eq_card
-  条件: {s : Set M} [Fintype s] (hs : LinearIndepOn R id s)
+  条件: {s : 集合 M} [有限类型 s] (hs : LinearIndepOn R id s)
   证明: finrank_eq_of_rank_eq
     (by
       have : Module.rank R (span R s) = #s := rank_span_set hs
@@ -1512,7 +1512,7 @@ theorem finrank_span_finset_eq_card
 
 中文:
 定理 finrank_span_finset_eq_card
-  条件: {s : Finset M} (hs : LinearIndepOn R id (s : Set M))
+  条件: {s : 有限集 M} (hs : LinearIndepOn R id (s : 集合 M))
   证明: by
   convert! finrank_span_set_eq_card (s := (s : Set M)) hs
   ext
@@ -1537,7 +1537,7 @@ theorem span_lt_of_subset_of_card_lt_finrank
 
 中文:
 定理 span_lt_of_subset_of_card_lt_finrank
-  结论: {s : Set M} [Fintype s] {t : Submodule R M}
+  结论: {s : 集合 M} [有限类型 s] {t : 子模 R M}
   证明: lt_of_le_of_finrank_lt_finrank (span_le.mpr subset)
     (lt_of_le_of_lt (finrank_span_le_card _) card_lt)
 
@@ -1558,7 +1558,7 @@ theorem span_lt_top_of_card_lt_finrank
 
 中文:
 定理 span_lt_top_of_card_lt_finrank
-  结论: {s : Set M} [Fintype s]
+  结论: {s : 集合 M} [有限类型 s]
   证明: lt_top_of_finrank_lt_finrank (lt_of_le_of_lt (finrank_span_le_card _) card_lt)
 
 Depends on / 依赖: card_lt, finrank_span_le_card, lt_of_le_of_lt, lt_top_of_finrank_lt_finrank
@@ -1582,7 +1582,7 @@ lemma finrank_le_of_span_eq_top
 
 中文:
 引理 finrank_le_of_span_eq_top
-  结论: {ι : 类型} [Fintype ι] {v : ι -> M}
+  结论: {ι : 类型} [有限类型 ι] {v : ι -> M}
   证明: by
   classical
   rw [← finrank_top]; rw [← hv]
@@ -1612,8 +1612,8 @@ lemma Pi.dim_spanSubset
 exact Set.ncard_image_of_injective s (Pi.basisFun R ι).injective
 
 中文:
-引理 Pi.dim_spanSubset
-  条件: [Finite ι] [Nontrivial R] {s : Set ι}
+引理 依赖函数类型.dim_spanSubset
+  条件: [有限 ι] [非平凡 R] {s : 集合 ι}
   证明: by
   classical
   have := Fintype.ofFinite ι
@@ -1651,8 +1651,8 @@ theorem Subalgebra.rank_toSubmodule
 @[simp]
 
 中文:
-定理 Subalgebra.rank_toSubmodule
-  条件: (S : Subalgebra F E)
+定理 子代数.rank_toSubmodule
+  条件: (S : 子代数 F E)
   证明: rfl
 
 @[simp]
@@ -1673,8 +1673,8 @@ theorem Subalgebra.finrank_toSubmodule
   proof: rfl
 
 中文:
-定理 Subalgebra.finrank_toSubmodule
-  条件: (S : Subalgebra F E)
+定理 子代数.finrank_toSubmodule
+  条件: (S : 子代数 F E)
   证明: rfl
 -/
 theorem Subalgebra.finrank_toSubmodule (S : Subalgebra F E) :
@@ -1736,8 +1736,8 @@ theorem Subalgebra.rank_top
   exact _root_.rank_top F E
 
 中文:
-定理 Subalgebra.rank_top
-  结论: Module.rank F (⊤ : Subalgebra F E) = Module.rank F E
+定理 子代数.rank_top
+  结论: 模.rank F (⊤ : 子代数 F E) = 模.rank F E
   证明: by
   rw [subalgebra_top_rank_eq_submodule_top_rank]
   exact _root_.rank_top F E
@@ -1770,8 +1770,8 @@ theorem Subalgebra.rank_bot
 @[simp]
 
 中文:
-定理 Subalgebra.rank_bot
-  结论: Module.rank F (⊥ : Subalgebra F E) = 1
+定理 子代数.rank_bot
+  结论: 模.rank F (⊥ : 子代数 F E) = 1
   证明: (Subalgebra.toSubmoduleEquiv (⊥ : Subalgebra F E)).symm.rank_eq.trans by
     rw [Algebra.toSubmodule_bot]; rw [one_eq_span]; rw [rank_span_set]; rw [mk_singleton _]
     have := Module.nontrivial F E
@@ -1797,8 +1797,8 @@ theorem Subalgebra.finrank_bot
   proof: finrank_eq_of_rank_eq (by simp)
 
 中文:
-定理 Subalgebra.finrank_bot
-  结论: finrank F (⊥ : Subalgebra F E) = 1
+定理 子代数.finrank_bot
+  结论: finrank F (⊥ : 子代数 F E) = 1
   证明: finrank_eq_of_rank_eq (by simp)
 
 Depends on / 依赖: finrank_eq_of_rank_eq

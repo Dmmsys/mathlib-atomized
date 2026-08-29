@@ -51,8 +51,8 @@ exact hζ.prime_dvd_of_dvd_norm_sub_one hn
     Int.dvd_trans (Int.natCast_dvd_natCast.mpr 
 
 中文:
-定理 IsPrimitiveRoot.not_coprime_norm_of_mk_eq_one
-  结论: [NumberField K] (hI : absNorm I != 1) {n : 自然数}
+定理 是PrimitiveRoot.not_coprime_norm_of_mk_eq_one
+  结论: [数域 K] (hI : absNorm I != 1) {n : 自然数}
   证明: by
   intro h₁
   rw [← map_one (Ideal.Quotient.mk I)]; rw [Ideal.Quotient.eq] at h
@@ -89,7 +89,7 @@ definition Ideal.rootsOfUnityMapQuot
 @[simp]
 
 中文:
-定义 Ideal.rootsOfUnityMapQuot
+定义 理想.rootsOfUnityMapQuot
   签名: (n : 自然数)
   定义体: (Units.map (Ideal.Quotient.mk I).toMonoidHom).domRestrict _
 
@@ -110,7 +110,7 @@ theorem Ideal.rootsOfUnityMapQuot_apply
   proof: rfl
 
 中文:
-定理 Ideal.rootsOfUnityMapQuot_apply
+定理 理想.rootsOfUnityMapQuot_apply
   条件: (n : 自然数) {x : (𝓞 K)ˣ} (hx : x in rootsOfUnity n (𝓞 K))
   证明: rfl
 -/
@@ -128,8 +128,8 @@ definition Ideal.torsionMapQuot
 @[simp]
 
 中文:
-定义 Ideal.torsionMapQuot
-  签名: : (Units.torsion K) ->* ((𝓞 K) ⧸ I)ˣ
+定义 理想.torsionMapQuot
+  签名: : (单位群.torsion K) ->* ((𝓞 K) ⧸ I)ˣ
   定义体: (Units.map (Ideal.Quotient.mk I).toMonoidHom).domRestrict (torsion K)
 
 @[simp]
@@ -149,7 +149,7 @@ theorem Ideal.torsionMapQuot_apply
   proof: rfl
 
 中文:
-定理 Ideal.torsionMapQuot_apply
+定理 理想.torsionMapQuot_apply
   条件: {x : (𝓞 K)ˣ} (hx : x in torsion K)
   证明: rfl
 -/
@@ -175,7 +175,7 @@ theorem Ideal.rootsOfUnityMapQuot_injective
     (IsPrimitiveRoot.coe_units_if
 
 中文:
-定理 Ideal.rootsOfUnityMapQuot_injective
+定理 理想.rootsOfUnityMapQuot_injective
   结论: (n : 自然数) [NeZero n] (hI₁ : absNorm I != 1)
   证明: by
   refine (injective_iff_map_eq_one _).mpr fun ⟨ζ, hζ⟩ h => ?_
@@ -217,8 +217,8 @@ exact IsPrimitiveRoot.coe_units_iff.mpr
 h.map_of_injective Ideal.rootsOfUnityMapQuot_injective n hI₁ hI₂
 
 中文:
-定理 IsPrimitiveRoot.idealQuotient_mk
-  结论: {n : 自然数} [NeZero n] {ζ : (𝓞 K)} (hζ : IsPrimitiveRoot ζ n)
+定理 是PrimitiveRoot.idealQuotient_mk
+  结论: {n : 自然数} [NeZero n] {ζ : (𝓞 K)} (hζ : 是PrimitiveRoot ζ n)
   证明: by
   have h : IsPrimitiveRoot hζ.toRootsOfUnity n :=
 IsPrimitiveRoot.coe_submonoidClass_iff.mp IsPrimitiveRoot.coe_units_iff.mp hζ
@@ -248,7 +248,7 @@ theorem Ideal.torsionMapQuot_injective
   exact rootsOfUnityMapQuot_injective (torsionOrder K) hI₁ hI₂ h
 
 中文:
-定理 Ideal.torsionMapQuot_injective
+定理 理想.torsionMapQuot_injective
   结论: (hI₁ : absNorm I != 1)
   证明: by
   intro ⟨x, hx⟩ ⟨y, hy⟩ h
@@ -280,8 +280,8 @@ have hP₃ : absNorm P != 1 := absNorm_eq_one_iff.not.mpr IsPrime.ne_top hP₁
   rwa [Nat.card_units] at h
 
 中文:
-定理 NumberField.torsionOrder_dvd_absNorm_sub_one
-  结论: {P : Ideal (𝓞 K)} (hP₀ : P != ⊥)
+定理 数域.torsionOrder_dvd_absNorm_sub_one
+  结论: {P : 理想 (𝓞 K)} (hP₀ : P != ⊥)
   证明: by
   have : P.IsMaximal := Ring.DimensionLEOne.maximalOfPrime hP₀ hP₁
   let _ := Ideal.Quotient.field P
@@ -311,8 +311,8 @@ instance [NumberField
   body: I.finiteQuotientOfFreeOfNeBot (I.bot_lt_of_maximal (RingOfIntegers.not_isField K)).ne'
 
 中文:
-实例 [NumberField
-  签名: K] [I.IsMaximal] : Finite (𝓞 K ⧸ I)
+实例 [数域
+  签名: K] [I.是极大] : 有限 (𝓞 K ⧸ I)
   定义体: I.finiteQuotientOfFreeOfNeBot (I.bot_lt_of_maximal (RingOfIntegers.not_isField K)).ne'
 -/
 instance [NumberField K] [I.IsMaximal] : Finite (𝓞 K ⧸ I) :=

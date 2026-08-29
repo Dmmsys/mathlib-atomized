@@ -48,7 +48,7 @@ definition createsLimitOp
 
 中文:
 定义 createsLimitOp
-  签名: (K : J ⥤ Cᵒᵖ) (F : C ⥤ D) [CreatesColimit K.leftOp F]
+  签名: (K : J ⥤ Cᵒᵖ) (F : C ⥤ D) [创造余极限 K.leftOp F]
   定义体: reflectsLimit_op _ _
   lifts _ hc :=
     letI lc := CreatesColimit.lifts (K := K.leftOp) (F := F) _ (isColimitCoconeLeftOpOfCone _ hc)
@@ -82,7 +82,7 @@ definition createsLimitOfOp
 
 中文:
 定义 createsLimitOfOp
-  签名: (K : J ⥤ C) (F : C ⥤ D) [CreatesColimit K.op F.op]
+  签名: (K : J ⥤ C) (F : C ⥤ D) [创造余极限 K.op F.op]
   定义体: reflectsLimit_of_op _ _
   lifts _ hc :=
     letI lc := CreatesColimit.lifts (K := K.op) (F := F.op) _ hc.op
@@ -116,7 +116,7 @@ definition createsLimitLeftOp
 
 中文:
 定义 createsLimitLeftOp
-  签名: (K : J ⥤ Cᵒᵖ) (F : C ⥤ Dᵒᵖ) [CreatesColimit K.leftOp F]
+  签名: (K : J ⥤ Cᵒᵖ) (F : C ⥤ Dᵒᵖ) [创造余极限 K.leftOp F]
   定义体: reflectsLimit_leftOp _ _
   lifts c hc :=
     letI lc := CreatesColimit.lifts (K := K.leftOp) (F := F) c.op hc.op
@@ -151,7 +151,7 @@ definition createsLimitOfLeftOp
 
 中文:
 定义 createsLimitOfLeftOp
-  签名: (K : J ⥤ C) (F : C ⥤ Dᵒᵖ) [CreatesColimit K.op F.leftOp]
+  签名: (K : J ⥤ C) (F : C ⥤ Dᵒᵖ) [创造余极限 K.op F.leftOp]
   定义体: reflectsLimit_of_leftOp _ _
   lifts c hc :=
     letI lc := CreatesColimit.lifts (K := K.op) (F := F.leftOp)
@@ -188,7 +188,7 @@ definition createsLimitRightOp
 
 中文:
 定义 createsLimitRightOp
-  签名: (K : J ⥤ C) (F : Cᵒᵖ ⥤ D) [CreatesColimit K.op F]
+  签名: (K : J ⥤ C) (F : Cᵒᵖ ⥤ D) [创造余极限 K.op F]
   定义体: reflectsLimit_rightOp _ _
   lifts c hc :=
     letI lc := CreatesColimit.lifts (K := K.op) (F := F)
@@ -224,7 +224,7 @@ definition createsLimitOfRightOp
 
 中文:
 定义 createsLimitOfRightOp
-  签名: (K : J ⥤ Cᵒᵖ) (F : Cᵒᵖ ⥤ D) [CreatesColimit K.leftOp F.rightOp]
+  签名: (K : J ⥤ Cᵒᵖ) (F : Cᵒᵖ ⥤ D) [创造余极限 K.leftOp F.rightOp]
   定义体: reflectsLimit_of_rightOp _ _
   lifts c hc :=
     letI lc := CreatesColimit.lifts (K := K.leftOp) (F := F.rightOp) c.op hc.op
@@ -258,7 +258,7 @@ definition createsLimitUnop
 
 中文:
 定义 createsLimitUnop
-  签名: (K : J ⥤ C) (F : Cᵒᵖ ⥤ Dᵒᵖ) [CreatesColimit K.op F]
+  签名: (K : J ⥤ C) (F : Cᵒᵖ ⥤ Dᵒᵖ) [创造余极限 K.op F]
   定义体: reflectsLimit_unop _ _
   lifts c hc :=
     letI lc := CreatesColimit.lifts (K := K.op) (F := F) c.op hc.op
@@ -293,7 +293,7 @@ definition createsLimitOfUnop
 
 中文:
 定义 createsLimitOfUnop
-  签名: (K : J ⥤ Cᵒᵖ) (F : Cᵒᵖ ⥤ Dᵒᵖ) [CreatesColimit K.leftOp F.unop]
+  签名: (K : J ⥤ Cᵒᵖ) (F : Cᵒᵖ ⥤ Dᵒᵖ) [创造余极限 K.leftOp F.unop]
   定义体: reflectsLimit_of_unop _ _
   lifts c hc :=
     letI lc := CreatesColimit.lifts (K := K.leftOp) (F := F.unop)
@@ -330,7 +330,7 @@ definition createsColimitOp
 
 中文:
 定义 createsColimitOp
-  签名: (K : J ⥤ Cᵒᵖ) (F : C ⥤ D) [CreatesLimit K.leftOp F]
+  签名: (K : J ⥤ Cᵒᵖ) (F : C ⥤ D) [创造极限 K.leftOp F]
   定义体: reflectsColimit_op _ _
   lifts c hc :=
     letI lc := CreatesLimit.lifts (K := K.leftOp) (F := F)
@@ -366,7 +366,7 @@ definition createsColimitOfOp
 
 中文:
 定义 createsColimitOfOp
-  签名: (K : J ⥤ C) (F : C ⥤ D) [CreatesLimit K.op F.op]
+  签名: (K : J ⥤ C) (F : C ⥤ D) [创造极限 K.op F.op]
   定义体: reflectsColimit_of_op _ _
   lifts c hc :=
     letI lc := CreatesLimit.lifts (K := K.op) (F := F.op) c.op hc.op
@@ -400,7 +400,7 @@ definition createsColimitLeftOp
 
 中文:
 定义 createsColimitLeftOp
-  签名: (K : J ⥤ Cᵒᵖ) (F : C ⥤ Dᵒᵖ) [CreatesLimit K.leftOp F]
+  签名: (K : J ⥤ Cᵒᵖ) (F : C ⥤ Dᵒᵖ) [创造极限 K.leftOp F]
   定义体: reflectsColimit_leftOp _ _
   lifts c hc :=
     letI lc := CreatesLimit.lifts (K := K.leftOp) (F := F) c.op hc.op
@@ -435,7 +435,7 @@ definition createsColimitOfLeftOp
 
 中文:
 定义 createsColimitOfLeftOp
-  签名: (K : J ⥤ C) (F : C ⥤ Dᵒᵖ) [CreatesLimit K.op F.leftOp]
+  签名: (K : J ⥤ C) (F : C ⥤ Dᵒᵖ) [创造极限 K.op F.leftOp]
   定义体: reflectsColimit_of_leftOp _ _
   lifts c hc :=
     letI lc := CreatesLimit.lifts (K := K.op) (F := F.leftOp)
@@ -472,7 +472,7 @@ definition createsColimitRightOp
 
 中文:
 定义 createsColimitRightOp
-  签名: (K : J ⥤ C) (F : Cᵒᵖ ⥤ D) [CreatesLimit K.op F]
+  签名: (K : J ⥤ C) (F : Cᵒᵖ ⥤ D) [创造极限 K.op F]
   定义体: reflectsColimit_rightOp _ _
   lifts c hc :=
     letI lc := CreatesLimit.lifts (K := K.op) (F := F)
@@ -508,7 +508,7 @@ definition createsColimitOfRightOp
 
 中文:
 定义 createsColimitOfRightOp
-  签名: (K : J ⥤ Cᵒᵖ) (F : Cᵒᵖ ⥤ D) [CreatesLimit K.leftOp F.rightOp]
+  签名: (K : J ⥤ Cᵒᵖ) (F : Cᵒᵖ ⥤ D) [创造极限 K.leftOp F.rightOp]
   定义体: reflectsColimit_of_rightOp _ _
   lifts c hc :=
     letI lc := CreatesLimit.lifts (K := K.leftOp) (F := F.rightOp) c.op hc.op
@@ -542,7 +542,7 @@ definition createsColimitUnop
 
 中文:
 定义 createsColimitUnop
-  签名: (K : J ⥤ C) (F : Cᵒᵖ ⥤ Dᵒᵖ) [CreatesLimit K.op F]
+  签名: (K : J ⥤ C) (F : Cᵒᵖ ⥤ Dᵒᵖ) [创造极限 K.op F]
   定义体: reflectsColimit_unop _ _
   lifts c hc :=
     letI lc := CreatesLimit.lifts (K := K.op) (F := F) c.op hc.op
@@ -577,7 +577,7 @@ definition createsColimitOfUnop
 
 中文:
 定义 createsColimitOfUnop
-  签名: (K : J ⥤ Cᵒᵖ) (F : Cᵒᵖ ⥤ Dᵒᵖ) [CreatesLimit K.leftOp F.unop]
+  签名: (K : J ⥤ Cᵒᵖ) (F : Cᵒᵖ ⥤ Dᵒᵖ) [创造极限 K.leftOp F.unop]
   定义体: reflectsColimit_of_unop _ _
   lifts c hc :=
     letI lc := CreatesLimit.lifts (K := K.leftOp) (F := F.unop)
@@ -613,7 +613,7 @@ definition createsLimitsOfShapeOp
 
 中文:
 定义 createsLimitsOfShapeOp
-  签名: (F : C ⥤ D) [CreatesColimitsOfShape Jᵒᵖ F]
+  签名: (F : C ⥤ D) [创造形状余极限 Jᵒᵖ F]
   定义体: createsLimitOp K F
 
 Depends on / 依赖: createsLimitOp
@@ -634,7 +634,7 @@ definition createsLimitsOfShapeLeftOp
 
 中文:
 定义 createsLimitsOfShapeLeftOp
-  签名: (F : C ⥤ Dᵒᵖ) [CreatesColimitsOfShape Jᵒᵖ F]
+  签名: (F : C ⥤ Dᵒᵖ) [创造形状余极限 Jᵒᵖ F]
   定义体: createsLimitLeftOp K F
 
 Depends on / 依赖: createsLimitLeftOp
@@ -655,7 +655,7 @@ definition createsLimitsOfShapeRightOp
 
 中文:
 定义 createsLimitsOfShapeRightOp
-  签名: (F : Cᵒᵖ ⥤ D) [CreatesColimitsOfShape Jᵒᵖ F]
+  签名: (F : Cᵒᵖ ⥤ D) [创造形状余极限 Jᵒᵖ F]
   定义体: createsLimitRightOp K F
 
 Depends on / 依赖: createsLimitRightOp
@@ -676,7 +676,7 @@ definition createsLimitsOfShapeUnop
 
 中文:
 定义 createsLimitsOfShapeUnop
-  签名: (F : Cᵒᵖ ⥤ Dᵒᵖ) [CreatesColimitsOfShape Jᵒᵖ F]
+  签名: (F : Cᵒᵖ ⥤ Dᵒᵖ) [创造形状余极限 Jᵒᵖ F]
   定义体: createsLimitUnop K F
 
 Depends on / 依赖: createsLimitUnop
@@ -697,7 +697,7 @@ definition createsColimitsOfShapeOp
 
 中文:
 定义 createsColimitsOfShapeOp
-  签名: (F : C ⥤ D) [CreatesLimitsOfShape Jᵒᵖ F]
+  签名: (F : C ⥤ D) [创造形状极限 Jᵒᵖ F]
   定义体: createsColimitOp K F
 
 Depends on / 依赖: createsColimitOp
@@ -718,7 +718,7 @@ definition createsColimitsOfShapeLeftOp
 
 中文:
 定义 createsColimitsOfShapeLeftOp
-  签名: (F : C ⥤ Dᵒᵖ) [CreatesLimitsOfShape Jᵒᵖ F]
+  签名: (F : C ⥤ Dᵒᵖ) [创造形状极限 Jᵒᵖ F]
   定义体: createsColimitLeftOp K F
 
 Depends on / 依赖: createsColimitLeftOp
@@ -739,7 +739,7 @@ definition createsColimitsOfShapeRightOp
 
 中文:
 定义 createsColimitsOfShapeRightOp
-  签名: (F : Cᵒᵖ ⥤ D) [CreatesLimitsOfShape Jᵒᵖ F]
+  签名: (F : Cᵒᵖ ⥤ D) [创造形状极限 Jᵒᵖ F]
   定义体: createsColimitRightOp K F
 
 Depends on / 依赖: createsColimitRightOp
@@ -760,7 +760,7 @@ definition createsColimitsOfShapeUnop
 
 中文:
 定义 createsColimitsOfShapeUnop
-  签名: (F : Cᵒᵖ ⥤ Dᵒᵖ) [CreatesLimitsOfShape Jᵒᵖ F]
+  签名: (F : Cᵒᵖ ⥤ Dᵒᵖ) [创造形状极限 Jᵒᵖ F]
   定义体: createsColimitUnop K F
 
 Depends on / 依赖: createsColimitUnop
@@ -781,7 +781,7 @@ definition createsLimitsOfShapeOfOp
 
 中文:
 定义 createsLimitsOfShapeOfOp
-  签名: (F : C ⥤ D) [CreatesColimitsOfShape Jᵒᵖ F.op]
+  签名: (F : C ⥤ D) [创造形状余极限 Jᵒᵖ F.op]
   定义体: createsLimitOfOp K F
 
 Depends on / 依赖: createsLimitOfOp
@@ -802,7 +802,7 @@ definition createsLimitsOfShapeOfLeftOp
 
 中文:
 定义 createsLimitsOfShapeOfLeftOp
-  签名: (F : C ⥤ Dᵒᵖ) [CreatesColimitsOfShape Jᵒᵖ F.leftOp]
+  签名: (F : C ⥤ Dᵒᵖ) [创造形状余极限 Jᵒᵖ F.leftOp]
   定义体: createsLimitOfLeftOp K F
 
 Depends on / 依赖: createsLimitOfLeftOp
@@ -823,7 +823,7 @@ definition createsLimitsOfShapeOfRightOp
 
 中文:
 定义 createsLimitsOfShapeOfRightOp
-  签名: (F : Cᵒᵖ ⥤ D) [CreatesColimitsOfShape Jᵒᵖ F.rightOp]
+  签名: (F : Cᵒᵖ ⥤ D) [创造形状余极限 Jᵒᵖ F.rightOp]
   定义体: createsLimitOfRightOp K F
 
 Depends on / 依赖: createsLimitOfRightOp
@@ -844,7 +844,7 @@ definition createsLimitsOfShapeOfUnop
 
 中文:
 定义 createsLimitsOfShapeOfUnop
-  签名: (F : Cᵒᵖ ⥤ Dᵒᵖ) [CreatesColimitsOfShape Jᵒᵖ F.unop]
+  签名: (F : Cᵒᵖ ⥤ Dᵒᵖ) [创造形状余极限 Jᵒᵖ F.unop]
   定义体: createsLimitOfUnop K F
 
 Depends on / 依赖: createsLimitOfUnop
@@ -865,7 +865,7 @@ definition createsColimitsOfShapeOfOp
 
 中文:
 定义 createsColimitsOfShapeOfOp
-  签名: (F : C ⥤ D) [CreatesLimitsOfShape Jᵒᵖ F.op]
+  签名: (F : C ⥤ D) [创造形状极限 Jᵒᵖ F.op]
   定义体: createsColimitOfOp K F
 
 Depends on / 依赖: createsColimitOfOp
@@ -886,7 +886,7 @@ definition createsColimitsOfShapeOfLeftOp
 
 中文:
 定义 createsColimitsOfShapeOfLeftOp
-  签名: (F : C ⥤ Dᵒᵖ) [CreatesLimitsOfShape Jᵒᵖ F.leftOp]
+  签名: (F : C ⥤ Dᵒᵖ) [创造形状极限 Jᵒᵖ F.leftOp]
   定义体: createsColimitOfLeftOp K F
 
 Depends on / 依赖: createsColimitOfLeftOp
@@ -907,7 +907,7 @@ definition createsColimitsOfShapeOfRightOp
 
 中文:
 定义 createsColimitsOfShapeOfRightOp
-  签名: (F : Cᵒᵖ ⥤ D) [CreatesLimitsOfShape Jᵒᵖ F.rightOp]
+  签名: (F : Cᵒᵖ ⥤ D) [创造形状极限 Jᵒᵖ F.rightOp]
   定义体: createsColimitOfRightOp K F
 
 Depends on / 依赖: createsColimitOfRightOp
@@ -928,7 +928,7 @@ definition createsColimitsOfShapeOfUnop
 
 中文:
 定义 createsColimitsOfShapeOfUnop
-  签名: (F : Cᵒᵖ ⥤ Dᵒᵖ) [CreatesLimitsOfShape Jᵒᵖ F.unop]
+  签名: (F : Cᵒᵖ ⥤ Dᵒᵖ) [创造形状极限 Jᵒᵖ F.unop]
   定义体: createsColimitOfUnop K F
 
 Depends on / 依赖: createsColimitOfUnop
@@ -1575,7 +1575,7 @@ definition createsFiniteLimitsOp
 
 中文:
 定义 createsFiniteLimitsOp
-  签名: (F : C ⥤ D) [CreatesFiniteColimits F]
+  签名: (F : C ⥤ D) [创造有限余极限 F]
   定义体: createsLimitsOfShapeOp J F
 
 Depends on / 依赖: createsLimitsOfShapeOp
@@ -1597,7 +1597,7 @@ definition createsFiniteLimitsLeftOp
 
 中文:
 定义 createsFiniteLimitsLeftOp
-  签名: (F : C ⥤ Dᵒᵖ) [CreatesFiniteColimits F]
+  签名: (F : C ⥤ Dᵒᵖ) [创造有限余极限 F]
   定义体: createsLimitsOfShapeLeftOp J F
 
 Depends on / 依赖: createsLimitsOfShapeLeftOp
@@ -1619,7 +1619,7 @@ definition createsFiniteLimitsRightOp
 
 中文:
 定义 createsFiniteLimitsRightOp
-  签名: (F : Cᵒᵖ ⥤ D) [CreatesFiniteColimits F]
+  签名: (F : Cᵒᵖ ⥤ D) [创造有限余极限 F]
   定义体: createsLimitsOfShapeRightOp J F
 
 Depends on / 依赖: createsLimitsOfShapeRightOp
@@ -1641,7 +1641,7 @@ definition createsFiniteLimitsUnop
 
 中文:
 定义 createsFiniteLimitsUnop
-  签名: (F : Cᵒᵖ ⥤ Dᵒᵖ) [CreatesFiniteColimits F]
+  签名: (F : Cᵒᵖ ⥤ Dᵒᵖ) [创造有限余极限 F]
   定义体: createsLimitsOfShapeUnop J F
 
 Depends on / 依赖: createsLimitsOfShapeUnop
@@ -1663,7 +1663,7 @@ definition createsFiniteColimitsOp
 
 中文:
 定义 createsFiniteColimitsOp
-  签名: (F : C ⥤ D) [CreatesFiniteLimits F]
+  签名: (F : C ⥤ D) [创造有限极限 F]
   定义体: createsColimitsOfShapeOp J F
 
 Depends on / 依赖: createsColimitsOfShapeOp
@@ -1685,7 +1685,7 @@ definition createsFiniteColimitsLeftOp
 
 中文:
 定义 createsFiniteColimitsLeftOp
-  签名: (F : C ⥤ Dᵒᵖ) [CreatesFiniteLimits F]
+  签名: (F : C ⥤ Dᵒᵖ) [创造有限极限 F]
   定义体: createsColimitsOfShapeLeftOp J F
 
 Depends on / 依赖: createsColimitsOfShapeLeftOp
@@ -1707,7 +1707,7 @@ definition createsFiniteColimitsRightOp
 
 中文:
 定义 createsFiniteColimitsRightOp
-  签名: (F : Cᵒᵖ ⥤ D) [CreatesFiniteLimits F]
+  签名: (F : Cᵒᵖ ⥤ D) [创造有限极限 F]
   定义体: createsColimitsOfShapeRightOp J F
 
 Depends on / 依赖: createsColimitsOfShapeRightOp
@@ -1729,7 +1729,7 @@ definition createsFiniteColimitsUnop
 
 中文:
 定义 createsFiniteColimitsUnop
-  签名: (F : Cᵒᵖ ⥤ Dᵒᵖ) [CreatesFiniteLimits F]
+  签名: (F : Cᵒᵖ ⥤ Dᵒᵖ) [创造有限极限 F]
   定义体: createsColimitsOfShapeUnop J F
 
 Depends on / 依赖: createsColimitsOfShapeUnop
@@ -1750,7 +1750,7 @@ definition createsFiniteLimitsOfOp
 
 中文:
 定义 createsFiniteLimitsOfOp
-  签名: (F : C ⥤ D) [CreatesFiniteColimits F.op]
+  签名: (F : C ⥤ D) [创造有限余极限 F.op]
   定义体: createsLimitsOfShapeOfOp J F
 
 Depends on / 依赖: createsLimitsOfShapeOfOp
@@ -1772,7 +1772,7 @@ definition createsFiniteLimitsOfLeftOp
 
 中文:
 定义 createsFiniteLimitsOfLeftOp
-  签名: (F : C ⥤ Dᵒᵖ) [CreatesFiniteColimits F.leftOp]
+  签名: (F : C ⥤ Dᵒᵖ) [创造有限余极限 F.leftOp]
   定义体: createsLimitsOfShapeOfLeftOp J F
 
 Depends on / 依赖: createsLimitsOfShapeOfLeftOp
@@ -1794,7 +1794,7 @@ definition createsFiniteLimitsOfRightOp
 
 中文:
 定义 createsFiniteLimitsOfRightOp
-  签名: (F : Cᵒᵖ ⥤ D) [CreatesFiniteColimits F.rightOp]
+  签名: (F : Cᵒᵖ ⥤ D) [创造有限余极限 F.rightOp]
   定义体: createsLimitsOfShapeOfRightOp J F
 
 Depends on / 依赖: createsLimitsOfShapeOfRightOp
@@ -1815,7 +1815,7 @@ definition createsFiniteLimitsOfUnop
 
 中文:
 定义 createsFiniteLimitsOfUnop
-  签名: (F : Cᵒᵖ ⥤ Dᵒᵖ) [CreatesFiniteColimits F.unop]
+  签名: (F : Cᵒᵖ ⥤ Dᵒᵖ) [创造有限余极限 F.unop]
   定义体: createsLimitsOfShapeOfUnop J F
 
 Depends on / 依赖: createsLimitsOfShapeOfUnop
@@ -1836,7 +1836,7 @@ definition createsFiniteColimitsOfOp
 
 中文:
 定义 createsFiniteColimitsOfOp
-  签名: (F : C ⥤ D) [CreatesFiniteLimits F.op]
+  签名: (F : C ⥤ D) [创造有限极限 F.op]
   定义体: createsColimitsOfShapeOfOp J F
 
 Depends on / 依赖: createsColimitsOfShapeOfOp
@@ -1858,7 +1858,7 @@ definition createsFiniteColimitsOfLeftOp
 
 中文:
 定义 createsFiniteColimitsOfLeftOp
-  签名: (F : C ⥤ Dᵒᵖ) [CreatesFiniteLimits F.leftOp]
+  签名: (F : C ⥤ Dᵒᵖ) [创造有限极限 F.leftOp]
   定义体: createsColimitsOfShapeOfLeftOp J F
 
 Depends on / 依赖: createsColimitsOfShapeOfLeftOp
@@ -1880,7 +1880,7 @@ definition createsFiniteColimitsOfRightOp
 
 中文:
 定义 createsFiniteColimitsOfRightOp
-  签名: (F : Cᵒᵖ ⥤ D) [CreatesFiniteLimits F.rightOp]
+  签名: (F : Cᵒᵖ ⥤ D) [创造有限极限 F.rightOp]
   定义体: createsColimitsOfShapeOfRightOp J F
 
 Depends on / 依赖: createsColimitsOfShapeOfRightOp
@@ -1901,7 +1901,7 @@ definition createsFiniteColimitsOfUnop
 
 中文:
 定义 createsFiniteColimitsOfUnop
-  签名: (F : Cᵒᵖ ⥤ Dᵒᵖ) [CreatesFiniteLimits F.unop]
+  签名: (F : Cᵒᵖ ⥤ Dᵒᵖ) [创造有限极限 F.unop]
   定义体: createsColimitsOfShapeOfUnop J F
 
 Depends on / 依赖: createsColimitsOfShapeOfUnop

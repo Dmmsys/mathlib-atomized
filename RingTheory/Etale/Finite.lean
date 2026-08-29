@@ -52,7 +52,7 @@ abbreviation finite
 
 中文:
 缩写 finite
-  签名: : Object命题erty (CommAlgCat.{v} R)
+  签名: : ObjectProperty (交换Alg范畴.{v} R)
   定义体: fun S => Module.Finite R S
 
 Depends on / 依赖: Finite, Module, Module.Finite
@@ -70,7 +70,7 @@ abbreviation etale
 
 中文:
 缩写 etale
-  签名: : Object命题erty (CommAlgCat.{v} R)
+  签名: : ObjectProperty (交换Alg范畴.{v} R)
   定义体: fun S => Algebra.Etale R S
 
 Depends on / 依赖: Algebra, Algebra.Etale
@@ -88,7 +88,7 @@ abbreviation finiteEtale
 
 中文:
 缩写 finiteEtale
-  签名: : Object命题erty (CommAlgCat.{v} R)
+  签名: : ObjectProperty (交换Alg范畴.{v} R)
   定义体: finite R ⊓ etale R
 
 Depends on / 依赖: finite
@@ -106,7 +106,7 @@ abbreviation FiniteEtale
 
 中文:
 缩写 FiniteEtale
-  签名: (R : 类型u) [CommRing R]
+  签名: (R : 类型u) [交换环 R]
   定义体: (finiteEtale.{v} R).FullSubcategory
 
 Depends on / 依赖: FullSubcategory, finiteEtale
@@ -150,7 +150,7 @@ abbreviation FiniteEtale.of
 
 中文:
 缩写 FiniteEtale.of
-  签名: (S : 类型v) [CommRing S] [Algebra R S]
+  签名: (S : 类型v) [交换环 S] [代数 R S]
   定义体: .of R S
   property := ⟨‹_›, ‹_›⟩
 -/
@@ -174,7 +174,7 @@ abbreviation FiniteEtale.ofHom
 
 中文:
 缩写 FiniteEtale.ofHom
-  签名: {S T : 类型v} [CommRing S] [CommRing T]
+  签名: {S T : 类型v} [交换环 S] [交换环 T]
   定义体: CommAlgCat.ofHom f
 
 Depends on / 依赖: CommAlgCat, CommAlgCat.ofHom
@@ -226,7 +226,7 @@ definition FiniteEtale.baseChange
 
 中文:
 定义 FiniteEtale.baseChange
-  签名: : FiniteEtale.{v} R ⥤ FiniteEtale.{max w v} S where
+  签名: : FiniteEtale.{v} R ⥤ FiniteEtale.{最大值 w v} S where
   定义体: .of S (S otimes[R] A)
   map {A B} f := FiniteEtale.ofHom (Algebra.TensorProduct.map (.id _ _) f.hom.hom)
 
@@ -279,7 +279,7 @@ definition FiniteEtale.fiber
 
 中文:
 定义 FiniteEtale.fiber
-  签名: (R : 类型u) [CommRing R] (Ω : Type w) [Field Ω] [Algebra R Ω]
+  签名: (R : 类型u) [交换环 R] (Ω : 类型 w) [域 Ω] [代数 R Ω]
   定义体: .of (S.unop ->ₐ[R] Ω)
   map {S T} f := FintypeCat.homMk (·.comp f.unop.hom.hom)
 
@@ -304,7 +304,7 @@ definition FiniteEtale.finiteSpec
 
 中文:
 定义 FiniteEtale.finiteSpec
-  签名: (k : 类型u) [Field k]
+  签名: (k : 类型u) [域 k]
   定义体: .of (PrimeSpectrum R.unop.obj)
   map f := FintypeCat.homMk (PrimeSpectrum.comap f.unop.hom.hom)
 
@@ -355,7 +355,7 @@ definition FiniteEtale.fiberIsoFiniteSpec
 
 中文:
 定义 FiniteEtale.fiberIsoFiniteSpec
-  签名: [IsSepClosed Ω]
+  签名: [是SepClosed Ω]
   定义体: NatIso.ofComponents
     fun R => FintypeCat.equivEquivIso (Algebra.IsFiniteSplit.algHomEquivPrimeSpectrum _ _)
 
@@ -379,7 +379,7 @@ definition FiniteEtale.fiberIsoComp
 
 中文:
 定义 FiniteEtale.fiberIsoComp
-  签名: [IsSepClosed Ω]
+  签名: [是SepClosed Ω]
   定义体: fiberIsoBaseChangeFiber _ _ Ω ≪≫ Functor.isoWhiskerLeft _ (fiberIsoFiniteSpec _)
 
 Depends on / 依赖: Functor, Functor.isoWhiskerLeft, fiberIsoBaseChangeFiber, fiberIsoFiniteSpec, isoWhiskerLeft
@@ -410,7 +410,7 @@ definition FiniteEtale.equivOfIsSepClosed
 
 中文:
 定义 FiniteEtale.equivOfIsSepClosed
-  签名: (Ω : 类型u) [Field Ω] [IsSepClosed Ω]
+  签名: (Ω : 类型u) [域 Ω] [是SepClosed Ω]
   定义体: .symm
   { functor.obj X := .op (.of _ (X -> Ω))
     functor.map {X Y} f := .op (FiniteEtale.ofHom <| AlgHom.pi fun i => Pi.evalAlgHom _ _ (f i))

@@ -41,7 +41,7 @@ definition powerset
 
 中文:
 定义 powerset
-  签名: (s : Finset α)
+  签名: (s : 有限集 α)
   定义体: ⟨(s.1.powerset.pmap Finset.mk) fun _t h => nodup_of_le (mem_powerset.1 h) s.nodup,
     s.nodup.powerset.pmap fun _a _ha _b _hb => congr_arg Finset.val⟩
 
@@ -70,7 +70,7 @@ theorem mem_powerset
 
 中文:
 定理 mem_powerset
-  条件: {s t : Finset α}
+  条件: {s t : 有限集 α}
   结论: s in powerset t ↔ s subseteq t
   证明: by
   cases s
@@ -99,7 +99,7 @@ theorem coe_powerset
 
 中文:
 定理 coe_powerset
-  条件: (s : Finset α)
+  条件: (s : 有限集 α)
   证明: by
   ext
   simp
@@ -120,7 +120,7 @@ theorem empty_mem_powerset
 
 中文:
 定理 empty_mem_powerset
-  条件: (s : Finset α)
+  条件: (s : 有限集 α)
   结论: ∅ in powerset s
   证明: by simp
 -/
@@ -139,7 +139,7 @@ theorem mem_powerset_self
 
 中文:
 定理 mem_powerset_self
-  条件: (s : Finset α)
+  条件: (s : 有限集 α)
   结论: s in powerset s
   证明: by simp
 
@@ -161,8 +161,8 @@ theorem powerset_nonempty
 
 中文:
 定理 powerset_nonempty
-  条件: (s : Finset α)
-  结论: s.powerset.Nonempty
+  条件: (s : 有限集 α)
+  结论: s.powerset.非空
   证明: ⟨∅, empty_mem_powerset _⟩
 
 @[simp]
@@ -185,7 +185,7 @@ mem_powerset.2 Subset.trans (mem_powerset.1 h) st⟩
 
 中文:
 定理 powerset_mono
-  条件: {s t : Finset α}
+  条件: {s t : 有限集 α}
   结论: powerset s subseteq powerset t ↔ s subseteq t
   证明: ⟨fun h => mem_powerset.1 h mem_powerset_self _, fun st _u h =>
 mem_powerset.2 Subset.trans (mem_powerset.1 h) st⟩
@@ -208,7 +208,7 @@ theorem powerset_injective
 
 中文:
 定理 powerset_injective
-  结论: Injective (powerset : Finset α -> Finset (Finset α))
+  结论: 单射 (powerset : 有限集 α -> 有限集 (有限集 α))
   证明: .of_eq_imp_le (powerset_mono.1 ·.le)
 
 @[simp]
@@ -254,7 +254,7 @@ theorem powerset_empty
 
 中文:
 定理 powerset_empty
-  结论: (∅ : Finset α).powerset = {∅}
+  结论: (∅ : 有限集 α).powerset = {∅}
   证明: rfl
 
 @[simp]
@@ -295,7 +295,7 @@ theorem image_injOn_powerset_of_injOn
 
 中文:
 定理 image_injOn_powerset_of_injOn
-  条件: {β : 类型} [DecidableEq β] {f : α -> β} (H : Set.InjOn f s)
+  条件: {β : 类型} [DecidableEq β] {f : α -> β} (H : 集合.单射限制 f s)
   证明: by
   have {z a} (_ : z subseteq s) (_ : a in s) : a in z ↔ f a in z.image f := by grind [H.eq_iff]
   exact fun _ _ _ _ _ => by grind
@@ -338,7 +338,7 @@ lemma biUnion_id_subset_iff_subset_powerset
 
 中文:
 引理 biUnion_id_subset_iff_subset_powerset
-  条件: [DecidableEq α] {s : Finset (Finset α)}
+  条件: [DecidableEq α] {s : 有限集 (有限集 α)}
   证明: by
   aesop (add simp subset_iff)
 
@@ -399,7 +399,7 @@ theorem card_powerset
 
 中文:
 定理 card_powerset
-  条件: (s : Finset α)
+  条件: (s : 有限集 α)
   结论: card (powerset s) = 2 ^ card s
   证明: (card_pmap _ _ _).trans (Multiset.card_powerset s.1)
 
@@ -420,7 +420,7 @@ theorem notMem_of_mem_powerset_of_notMem
 
 中文:
 定理 notMem_of_mem_powerset_of_notMem
-  结论: {s t : Finset α} {a : α} (ht : t in s.powerset)
+  结论: {s t : 有限集 α} {a : α} (ht : t in s.powerset)
   证明: by
   apply mt _ h
   apply mem_powerset.1 ht
@@ -445,7 +445,7 @@ theorem powerset_insert
 
 中文:
 定理 powerset_insert
-  条件: [DecidableEq α] (s : Finset α) (a : α)
+  条件: [DecidableEq α] (s : 有限集 α) (a : α)
   证明: by
   ext t
   simp only [mem_powerset, mem_image, mem_union, subset_insert_iff]
@@ -505,7 +505,7 @@ instance decidableExistsOfDecidableSubsets
 
 中文:
 实例 decidableExistsOfDecidableSubsets
-  签名: {s : Finset α} {p : 对任意 t subseteq s, 命题}
+  签名: {s : 有限集 α} {p : 对任意 t subseteq s, 命题}
   定义体: decidable_of_iff (exists (t : _) (hs : t in s.powerset), p t (mem_powerset.1 hs))
     ⟨fun ⟨t, _, hp⟩ => ⟨t, _, hp⟩, fun ⟨t, hs, hp⟩ => ⟨t, mem_powerset.2 hs, hp⟩⟩
 
@@ -527,7 +527,7 @@ instance decidableForallOfDecidableSubsets
 
 中文:
 实例 decidableForallOfDecidableSubsets
-  签名: {s : Finset α} {p : 对任意 t subseteq s, 命题}
+  签名: {s : 有限集 α} {p : 对任意 t subseteq s, 命题}
   定义体: decidable_of_iff (forall (t) (h : t in s.powerset), p t (mem_powerset.1 h))
     ⟨fun h t hs => h t (mem_powerset.2 hs), fun h _ _ => h _ _⟩
 
@@ -548,7 +548,7 @@ instance decidableExistsOfDecidableSubsets'
 
 中文:
 实例 decidableExistsOfDecidableSubsets'
-  签名: {s : Finset α} {p : Finset α -> 命题}
+  签名: {s : 有限集 α} {p : 有限集 α -> 命题}
   定义体: decidable_of_iff (exists (t : _) (_h : t subseteq s), p t) by simp
 
 Depends on / 依赖: decidable_of_iff, subseteq
@@ -567,7 +567,7 @@ instance decidableForallOfDecidableSubsets'
 
 中文:
 实例 decidableForallOfDecidableSubsets'
-  签名: {s : Finset α} {p : Finset α -> 命题}
+  签名: {s : 有限集 α} {p : 有限集 α -> 命题}
   定义体: decidable_of_iff (forall (t : _) (_h : t subseteq s), p t) by simp
 
 Depends on / 依赖: decidable_of_iff, subseteq
@@ -594,7 +594,7 @@ definition ssubsets
 
 中文:
 定义 ssubsets
-  签名: (s : Finset α)
+  签名: (s : 有限集 α)
   定义体: erase (powerset s) s
 
 @[simp, grind =]
@@ -617,7 +617,7 @@ theorem mem_ssubsets
 
 中文:
 定理 mem_ssubsets
-  条件: {s t : Finset α}
+  条件: {s t : 有限集 α}
   结论: t in s.ssubsets ↔ t ⊂ s
   证明: by
   rw [ssubsets]; rw [mem_erase]; rw [mem_powerset]; rw [ssubset_iff_subset_ne]; rw [and_comm]
@@ -640,7 +640,7 @@ theorem empty_mem_ssubsets
 
 中文:
 定理 empty_mem_ssubsets
-  条件: {s : Finset α} (h : s.Nonempty)
+  条件: {s : 有限集 α} (h : s.非空)
   结论: ∅ in s.ssubsets
   证明: by
   rw [mem_ssubsets]; rw [ssubset_iff_subset_ne]
@@ -663,7 +663,7 @@ definition decidableExistsOfDecidableSSubsets
 
 中文:
 定义 decidableExistsOfDecidableSSubsets
-  签名: {s : Finset α} {p : 对任意 t ⊂ s, 命题}
+  签名: {s : 有限集 α} {p : 对任意 t ⊂ s, 命题}
   定义体: decidable_of_iff (exists (t : _) (hs : t in s.ssubsets), p t (mem_ssubsets.1 hs))
     ⟨fun ⟨t, _, hp⟩ => ⟨t, _, hp⟩, fun ⟨t, hs, hp⟩ => ⟨t, mem_ssubsets.2 hs, hp⟩⟩
 
@@ -685,7 +685,7 @@ definition decidableForallOfDecidableSSubsets
 
 中文:
 定义 decidableForallOfDecidableSSubsets
-  签名: {s : Finset α} {p : 对任意 t ⊂ s, 命题}
+  签名: {s : 有限集 α} {p : 对任意 t ⊂ s, 命题}
   定义体: decidable_of_iff (forall (t) (h : t in s.ssubsets), p t (mem_ssubsets.1 h))
     ⟨fun h t hs => h t (mem_ssubsets.2 hs), fun h _ _ => h _ _⟩
 
@@ -706,7 +706,7 @@ definition decidableExistsOfDecidableSSubsets'
 
 中文:
 定义 decidableExistsOfDecidableSSubsets'
-  签名: {s : Finset α} {p : Finset α -> 命题}
+  签名: {s : 有限集 α} {p : 有限集 α -> 命题}
   定义体: @Finset.decidableExistsOfDecidableSSubsets _ _ _ _ hu
 
 Depends on / 依赖: Finset, Finset.decidableExistsOfDecidableSSubsets, decidableExistsOfDecidableSSubsets
@@ -725,7 +725,7 @@ definition decidableForallOfDecidableSSubsets'
 
 中文:
 定义 decidableForallOfDecidableSSubsets'
-  签名: {s : Finset α} {p : Finset α -> 命题}
+  签名: {s : 有限集 α} {p : 有限集 α -> 命题}
   定义体: @Finset.decidableForallOfDecidableSSubsets _ _ _ _ hu
 
 Depends on / 依赖: Finset, Finset.decidableForallOfDecidableSSubsets, decidableForallOfDecidableSSubsets
@@ -750,7 +750,7 @@ definition powersetCard
 
 中文:
 定义 powersetCard
-  签名: (n : 自然数) (s : Finset α)
+  签名: (n : 自然数) (s : 有限集 α)
   定义体: ⟨((s.1.powersetCard n).pmap Finset.mk) fun _t h => nodup_of_le (mem_powersetCard.1 h).1 s.2,
     s.2.powersetCard.pmap fun _a _ha _b _hb => congr_arg Finset.val⟩
 
@@ -795,7 +795,7 @@ theorem powersetCard_mono
 
 中文:
 定理 powersetCard_mono
-  条件: {n} {s t : Finset α} (h : s subseteq t)
+  条件: {n} {s t : 有限集 α} (h : s subseteq t)
   结论: powersetCard n s subseteq powersetCard n t
   证明: fun _u h' => mem_powersetCard.2
     And.imp (fun h₂ => Subset.trans h₂ h) id (mem_powersetCard.1 h')
@@ -818,7 +818,7 @@ theorem card_powersetCard
 
 中文:
 定理 card_powersetCard
-  条件: (n : 自然数) (s : Finset α)
+  条件: (n : 自然数) (s : 有限集 α)
   证明: (card_pmap _ _ _).trans (Multiset.card_powersetCard n s.1)
 
 Depends on / 依赖: Multiset, Multiset.card_powersetCard, card_pmap, card_powersetCard
@@ -844,7 +844,7 @@ theorem filter_powersetCard_subset
 
 中文:
 定理 filter_powersetCard_subset
-  结论: [DecidableEq α] (s t : Finset α) (n : 自然数)
+  结论: [DecidableEq α] (s t : 有限集 α) (n : 自然数)
   证明: by
   ext x
   simp only [mem_filter, mem_powersetCard, mem_image]
@@ -886,7 +886,7 @@ lemma card_filter_powersetCard_subset
 
 中文:
 引理 card_filter_powersetCard_subset
-  结论: [DecidableEq α] (s t : Finset α) (n : 自然数)
+  结论: [DecidableEq α] (s t : 有限集 α) (n : 自然数)
   证明: by
   have hinj : Set.InjOn (· union s) ↑((t \ s).powersetCard (n - #s)) := fun a ha b hb hab =>
     (union_sdiff_cancel_right
@@ -922,7 +922,7 @@ theorem powersetCard_zero
 
 中文:
 定理 powersetCard_zero
-  条件: (s : Finset α)
+  条件: (s : 有限集 α)
   结论: s.powersetCard 0 = {∅}
   证明: by
   grind
@@ -967,7 +967,7 @@ theorem map_val_val_powersetCard
 
 中文:
 定理 map_val_val_powersetCard
-  条件: (s : Finset α) (i : 自然数)
+  条件: (s : 有限集 α) (i : 自然数)
   证明: by
   simp [Finset.powersetCard, map_pmap, pmap_eq_map, map_id']
 
@@ -989,7 +989,7 @@ theorem powersetCard_one
 
 中文:
 定理 powersetCard_one
-  条件: (s : Finset α)
+  条件: (s : 有限集 α)
   证明: eq_of_veq Multiset.map_injective val_injective by simp [Multiset.powersetCard_one]
 
 @[simp]
@@ -1037,7 +1037,7 @@ lemma powersetCard_card_add
 
 中文:
 引理 powersetCard_card_add
-  条件: (s : Finset α) (hn : 0 < n)
+  条件: (s : 有限集 α) (hn : 0 < n)
   证明: by simpa
 -/
 @[simp] lemma powersetCard_card_add (s : Finset α) (hn : 0 < n) :
@@ -1055,7 +1055,7 @@ theorem powersetCard_eq_filter
 
 中文:
 定理 powersetCard_eq_filter
-  条件: {n} {s : Finset α}
+  条件: {n} {s : 有限集 α}
   证明: by
   ext
   simp [mem_powersetCard]
@@ -1081,7 +1081,7 @@ theorem powersetCard_succ_insert
 
 中文:
 定理 powersetCard_succ_insert
-  条件: [DecidableEq α] {x : α} {s : Finset α} (h : x ∉ s) (n : 自然数)
+  条件: [DecidableEq α] {x : α} {s : 有限集 α} (h : x ∉ s) (n : 自然数)
   证明: by
   rw [powersetCard_eq_filter]; rw [powerset_insert]; rw [filter_union]; rw [← powersetCard_eq_filter]
   grind
@@ -1113,7 +1113,7 @@ alias ⟨_, powersetCard_nonempty_of_le⟩ := powersetCard_nonempty
 
 中文:
 引理 powersetCard_nonempty
-  结论: (powersetCard n s).Nonempty ↔ n <= s.card
+  结论: (powersetCard n s).非空 ↔ n <= s.card
   证明: by
   aesop (add simp [Finset.Nonempty, exists_subset_card_eq, card_le_card])
 
@@ -1148,7 +1148,7 @@ theorem powersetCard_self
 
 中文:
 定理 powersetCard_self
-  条件: (s : Finset α)
+  条件: (s : 有限集 α)
   结论: powersetCard s.card s = {s}
   证明: by
   ext
@@ -1180,7 +1180,7 @@ hij (mem_powersetCard.mp hi).2.symm.trans (mem_powersetCard.mp hj).2
 
 中文:
 定理 pairwise_disjoint_powersetCard
-  条件: (s : Finset α)
+  条件: (s : 有限集 α)
   证明: fun _i _j hij =>
   Finset.disjoint_left.mpr fun _x hi hj =>
 hij (mem_powersetCard.mp hi).2.symm.trans (mem_powersetCard.mp hj).2
@@ -1210,7 +1210,7 @@ theorem powerset_card_disjiUnion
 
 中文:
 定理 powerset_card_disjiUnion
-  条件: (s : Finset α)
+  条件: (s : 有限集 α)
   证明: by
   refine ext fun a => ⟨fun ha => ?_, fun ha => ?_⟩
   · rw [mem_disjiUnion]
@@ -1246,7 +1246,7 @@ theorem powerset_card_biUnion
 
 中文:
 定理 powerset_card_biUnion
-  条件: [DecidableEq (Finset α)] (s : Finset α)
+  条件: [DecidableEq (有限集 α)] (s : 有限集 α)
   证明: by
   simpa only [disjiUnion_eq_biUnion] using powerset_card_disjiUnion s
 
@@ -1275,7 +1275,7 @@ theorem powersetCard_sup
 
 中文:
 定理 powersetCard_sup
-  条件: [DecidableEq α] (u : Finset α) (n : 自然数) (hn : n < u.card)
+  条件: [DecidableEq α] (u : 有限集 α) (n : 自然数) (hn : n < u.card)
   证明: by
   apply le_antisymm
   · simp_rw [Finset.sup_le_iff, mem_powersetCard]
@@ -1343,7 +1343,7 @@ lemma eq_of_powersetCard_eq
 
 中文:
 引理 eq_of_powersetCard_eq
-  结论: {a b : Finset α} {r : 自然数}
+  结论: {a b : 有限集 α} {r : 自然数}
   证明: by
   classical
   simpa [powersetCard_biUnion hr₀, ← hab, hra] using congr(($h).biUnion id)
@@ -1392,7 +1392,7 @@ theorem powersetCard_map
 
 中文:
 定理 powersetCard_map
-  条件: {β : 类型} (f : α ↪ β) (n : 自然数) (s : Finset α)
+  条件: {β : 类型} (f : α ↪ β) (n : 自然数) (s : 有限集 α)
   证明: ext fun t => by
     simp only [mem_powersetCard, mem_map]
     constructor

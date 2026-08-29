@@ -193,7 +193,7 @@ theorem integral_boundary_rect_of_hasFDerivAt_real_off_countable
 
 中文:
 定理 integral_boundary_rect_of_hasFDerivAt_real_off_countable
-  结论: (f : Complex -> E) (f' : Complex -> Complex ->L[实数] E)
+  结论: (f : 复形 -> E) (f' : 复形 -> 复形 ->L[实数] E)
   证明: by
   set e : (Real × Real) ≃L[Real] Complex := equivRealProdCLM.symm
   have he : forall x y : Real, ↑x + ↑y * I = e (x, y) := fun x y => (mk_eq_add_mul_I x y).symm
@@ -253,7 +253,7 @@ theorem integral_boundary_rect_of_continuousOn_of_hasFDerivAt_real
 
 中文:
 定理 integral_boundary_rect_of_continuousOn_of_hasFDerivAt_real
-  结论: (f : Complex -> E) (f' : Complex -> Complex ->L[实数] E)
+  结论: (f : 复形 -> E) (f' : 复形 -> 复形 ->L[实数] E)
   证明: integral_boundary_rect_of_hasFDerivAt_real_off_countable f f' z w ∅ countable_empty Hc
     (fun x hx => Hd x hx.1) Hi
 
@@ -285,7 +285,7 @@ theorem integral_boundary_rect_of_differentiableOn_real
 
 中文:
 定理 integral_boundary_rect_of_differentiableOn_real
-  结论: (f : Complex -> E) (z w : Complex)
+  结论: (f : 复形 -> E) (z w : 复形)
   证明: integral_boundary_rect_of_hasFDerivAt_real_off_countable f (fderiv Real f) z w ∅ countable_empty
     Hd.continuousOn
     (fun x hx => Hd.hasFDerivAt <| by
@@ -323,7 +323,7 @@ theorem integral_boundary_rect_eq_zero_of_differentiable_on_off_countable
 
 中文:
 定理 integral_boundary_rect_eq_zero_of_differentiable_on_off_countable
-  结论: (f : Complex -> E) (z w : Complex)
+  结论: (f : 复形 -> E) (z w : 复形)
   证明: by
   refine (integral_boundary_rect_of_hasFDerivAt_real_off_countable f
     (fun z => (fderiv Complex f z).restrictScalars Real) z w s hs Hc
@@ -355,7 +355,7 @@ fun _x hx => Hd.differentiableAt (isOpen_Ioo.reProdIm isOpen_Ioo).mem_nhds hx.1
 
 中文:
 定理 integral_boundary_rect_eq_zero_of_continuousOn_of_differentiableOn
-  结论: (f : Complex -> E) (z w : Complex)
+  结论: (f : 复形 -> E) (z w : 复形)
   证明: integral_boundary_rect_eq_zero_of_differentiable_on_off_countable f z w ∅ countable_empty Hc
 fun _x hx => Hd.differentiableAt (isOpen_Ioo.reProdIm isOpen_Ioo).mem_nhds hx.1
 
@@ -383,7 +383,7 @@ H.mono
 
 中文:
 定理 integral_boundary_rect_eq_zero_of_differentiableOn
-  结论: (f : Complex -> E) (z w : Complex)
+  结论: (f : 复形 -> E) (z w : 复形)
   证明: integral_boundary_rect_eq_zero_of_continuousOn_of_differentiableOn f z w H.continuousOn
 H.mono
       inter_subset_inter (preimage_mono Ioo_subset_Icc_self) (preimage_mono Ioo_subset_Icc_self)
@@ -420,8 +420,8 @@ theorem circleIntegral_sub_center_inv_smul_eq_of_differentiable_on_annulus_off_c
   obtain ⟨b, rfl⟩ : exists b, Real.exp b = R := ⟨Real.log R, Real.e
 
 中文:
-定理 circleIntegral_sub_center_inv_smul_eq_of_differentiable_on_annulus_off_countable
-  结论: {c : Complex}
+定理 circle整数egral_sub_center_inv_smul_eq_of_differentiable_on_annulus_off_countable
+  结论: {c : 复形}
   证明: by
   /- We apply the previous lemma to `fun z ↦ f (c + exp z)` on the rectangle
     `[log r, log R] × [0, 2 * π]`. -/
@@ -475,8 +475,8 @@ theorem circleIntegral_eq_of_differentiable_on_annulus_off_countable
     
 
 中文:
-定理 circleIntegral_eq_of_differentiable_on_annulus_off_countable
-  结论: {c : Complex} {r R : 实数} (h0 : 0 < r)
+定理 circle整数egral_eq_of_differentiable_on_annulus_off_countable
+  结论: {c : 复形} {r R : 实数} (h0 : 0 < r)
   证明: calc
     (∮ z in C(c, R), f z) = ∮ z in C(c, R), (z - c)⁻¹ • (z - c) • f z :=
       (circleIntegral.integral_sub_inv_smul_sub_smul _ _ _ _).symm
@@ -522,8 +522,8 @@ theorem circleIntegral_sub_center_inv_smul_of_differentiable_on_off_countable_of
     ((nhdsWithin_hasBasis nhds_basis_closedBall _).tendsto_iff nhds_basis_ball).1 hy 
 
 中文:
-定理 circleIntegral_sub_center_inv_smul_of_differentiable_on_off_countable_of_tendsto
-  结论: {c : Complex}
+定理 circle整数egral_sub_center_inv_smul_of_differentiable_on_off_countable_of_tendsto
+  结论: {c : 复形}
   证明: by
   rw [← sub_eq_zero]; rw [← norm_le_zero_iff]
   refine le_of_forall_gt_imp_ge_of_dense fun ε ε0 => ?_
@@ -589,7 +589,7 @@ theorem circleIntegral_sub_center_inv_smul_of_differentiable_on_off_countable
 omit [CompleteSpace E] in
 
 中文:
-定理 circleIntegral_sub_center_inv_smul_of_differentiable_on_off_countable
+定理 circle整数egral_sub_center_inv_smul_of_differentiable_on_off_countable
   结论: {R : 实数} (h0 : 0 < R)
   证明: circleIntegral_sub_center_inv_smul_of_differentiable_on_off_countable_of_tendsto h0 hs
     (hc.mono sdiff_subset) (fun z hz => hd z ⟨hz.1.1, hz.2⟩)
@@ -623,8 +623,8 @@ theorem circleIntegral_eq_zero_of_differentiable_on_off_countable
       (circleIntegral.integral_sub_i
 
 中文:
-定理 circleIntegral_eq_zero_of_differentiable_on_off_countable
-  结论: {R : 实数} (h0 : 0 <= R) {f : Complex -> E}
+定理 circle整数egral_eq_zero_of_differentiable_on_off_countable
+  结论: {R : 实数} (h0 : 0 <= R) {f : 复形 -> E}
   证明: by
   wlog hE : CompleteSpace E generalizing
   · simp [circleIntegral, intervalIntegral, integral, hE]
@@ -661,8 +661,8 @@ theorem _root_.DiffContOnCl.circleIntegral_eq_zero
     hc.continuousOn_ball fun _z hz => hc.differentiableAt isOpen_ball hz.1
 
 中文:
-定理 _root_.DiffContOnCl.circleIntegral_eq_zero
-  结论: {R : 实数} (h0 : 0 <= R) {f : Complex -> E}
+定理 _root_.DiffContOnCl.circle整数egral_eq_zero
+  结论: {R : 实数} (h0 : 0 <= R) {f : 复形 -> E}
   证明: circleIntegral_eq_zero_of_differentiable_on_off_countable h0 countable_empty
     hc.continuousOn_ball fun _z hz => hc.differentiableAt isOpen_ball hz.1
 
@@ -688,8 +688,8 @@ theorem circleIntegral_sub_inv_smul_of_differentiable_on_off_countable_aux
   have hdF : forall z in ball (c : Co
 
 中文:
-定理 circleIntegral_sub_inv_smul_of_differentiable_on_off_countable_aux
-  结论: {R : 实数} {c w : Complex}
+定理 circle整数egral_sub_inv_smul_of_differentiable_on_off_countable_aux
+  结论: {R : 实数} {c w : 复形}
   证明: by
   have hR : 0 < R := dist_nonneg.trans_lt hw.1
   set F : Complex -> E := dslope f w
@@ -740,7 +740,7 @@ theorem two_pi_I_inv_smul_circleIntegral_sub_inv_smul_of_differentiable_on_off_c
         ((hc.mono sphere_
 
 中文:
-定理 two_pi_I_inv_smul_circleIntegral_sub_inv_smul_of_differentiable_on_off_countable
+定理 two_pi_I_inv_smul_circle整数egral_sub_inv_smul_of_differentiable_on_off_countable
   结论: {R : 实数}
   证明: by
   have hR : 0 < R := dist_nonneg.trans_lt hw
@@ -795,8 +795,8 @@ theorem circleIntegral_sub_inv_smul_of_differentiable_on_off_countable
   simp [Real.pi_ne_zero, I_ne_zero]
 
 中文:
-定理 circleIntegral_sub_inv_smul_of_differentiable_on_off_countable
-  结论: {R : 实数} {c w : Complex} {f : Complex -> E}
+定理 circle整数egral_sub_inv_smul_of_differentiable_on_off_countable
+  结论: {R : 实数} {c w : 复形} {f : 复形 -> E}
   证明: by
   rw [← two_pi_I_inv_smul_circleIntegral_sub_inv_smul_of_differentiable_on_off_countable
     hs hw hc hd]; rw [smul_inv_smul₀]
@@ -822,8 +822,8 @@ theorem _root_.DiffContOnCl.circleIntegral_sub_inv_smul
     h.continuousOn_ball fun _x hx => h.differentiableAt isOpen_ball hx.1
 
 中文:
-定理 _root_.DiffContOnCl.circleIntegral_sub_inv_smul
-  结论: {R : 实数} {c w : Complex} {f : Complex -> E}
+定理 _root_.DiffContOnCl.circle整数egral_sub_inv_smul
+  结论: {R : 实数} {c w : 复形} {f : 复形 -> E}
   证明: circleIntegral_sub_inv_smul_of_differentiable_on_off_countable countable_empty hw
     h.continuousOn_ball fun _x hx => h.differentiableAt isOpen_ball hx.1
 
@@ -849,8 +849,8 @@ theorem _root_.DiffContOnCl.two_pi_i_inv_smul_circleIntegral_sub_inv_smul
   · simpa only [sdiff_emp
 
 中文:
-定理 _root_.DiffContOnCl.two_pi_i_inv_smul_circleIntegral_sub_inv_smul
-  结论: {R : 实数} {c w : Complex}
+定理 _root_.DiffContOnCl.two_pi_i_inv_smul_circle整数egral_sub_inv_smul
+  结论: {R : 实数} {c w : 复形}
   证明: by
   have hR : 0 < R := not_le.mp (ball_eq_empty.not.mp (Set.nonempty_of_mem hw).ne_empty)
   refine two_pi_I_inv_smul_circleIntegral_sub_inv_smul_of_differentiable_on_off_countable
@@ -878,8 +878,8 @@ theorem _root_.DifferentiableOn.circleIntegral_sub_inv_smul
   proof: (hd.mono closure_ball_subset_closedBall).diffContOnCl.circleIntegral_sub_inv_smul hw
 
 中文:
-定理 _root_.DifferentiableOn.circleIntegral_sub_inv_smul
-  结论: {R : 实数} {c w : Complex} {f : Complex -> E}
+定理 _root_.DifferentiableOn.circle整数egral_sub_inv_smul
+  结论: {R : 实数} {c w : 复形} {f : 复形 -> E}
   证明: (hd.mono closure_ball_subset_closedBall).diffContOnCl.circleIntegral_sub_inv_smul hw
 
 Depends on / 依赖: circleIntegral_sub_inv_smul, closure_ball_subset_closedBall, diffContOnCl, diffContOnCl.circleIntegral_sub_inv_smul, hd.mono
@@ -900,8 +900,8 @@ theorem circleIntegral_div_sub_of_differentiable_on_off_countable
     circleIntegral_sub_inv_smul_of_differentiable_on_off_countable hs hw hc hd
 
 中文:
-定理 circleIntegral_div_sub_of_differentiable_on_off_countable
-  结论: {R : 实数} {c w : Complex} {s : Set Complex}
+定理 circle整数egral_div_sub_of_differentiable_on_off_countable
+  结论: {R : 实数} {c w : 复形} {s : 集合 复形}
   证明: by
   simpa only [smul_eq_mul, div_eq_inv_mul] using
     circleIntegral_sub_inv_smul_of_differentiable_on_off_countable hs hw hc hd
@@ -938,7 +938,7 @@ theorem hasFPowerSeriesOnBall_of_differentiable_off_countable
 
 中文:
 定理 hasFPowerSeriesOnBall_of_differentiable_off_countable
-  结论: {R : 实数>=0} {c : Complex} {f : Complex -> E}
+  结论: {R : 实数>=0} {c : 复形} {f : 复形 -> E}
   证明: le_radius_cauchyPowerSeries _ _ _
   r_pos := ENNReal.coe_pos.2 hR
   hasSum := fun {w} hw => by
@@ -975,7 +975,7 @@ theorem _root_.DiffContOnCl.hasFPowerSeriesOnBall
 
 中文:
 定理 _root_.DiffContOnCl.hasFPowerSeriesOnBall
-  结论: {R : 实数>=0} {c : Complex} {f : Complex -> E}
+  结论: {R : 实数>=0} {c : 复形} {f : 复形 -> E}
   证明: hasFPowerSeriesOnBall_of_differentiable_off_countable countable_empty hf.continuousOn_ball
     (fun _z hz => hf.differentiableAt isOpen_ball hz.1) hR
 
@@ -997,7 +997,7 @@ theorem _root_.DifferentiableOn.hasFPowerSeriesOnBall
 
 中文:
 定理 _root_.DifferentiableOn.hasFPowerSeriesOnBall
-  结论: {R : 实数>=0} {c : Complex} {f : Complex -> E}
+  结论: {R : 实数>=0} {c : 复形} {f : 复形 -> E}
   证明: (hd.mono closure_ball_subset_closedBall).diffContOnCl.hasFPowerSeriesOnBall hR
 -/
 protected theorem _root_.DifferentiableOn.hasFPowerSeriesOnBall {R : Real>=0} {c : Complex} {f : Complex -> E}
@@ -1018,7 +1018,7 @@ theorem _root_.DifferentiableOn.analyticAt
 
 中文:
 定理 _root_.DifferentiableOn.analyticAt
-  结论: {s : Set Complex} {f : Complex -> E} {z : Complex}
+  结论: {s : 集合 复形} {f : 复形 -> E} {z : 复形}
   证明: by
   rcases nhds_basis_closedBall.mem_iff.1 hz with ⟨R, hR0, hRs⟩
   lift R to Real>=0 using hR0.le
@@ -1040,7 +1040,7 @@ theorem _root_.DifferentiableOn.analyticOnNhd
 
 中文:
 定理 _root_.DifferentiableOn.analyticOnNhd
-  结论: {s : Set Complex} {f : Complex -> E} (hd : DifferentiableOn Complex f s)
+  结论: {s : 集合 复形} {f : 复形 -> E} (hd : DifferentiableOn 复形 f s)
   证明: fun _z hz => hd.analyticAt (hs.mem_nhds hz)
 
 Depends on / 依赖: analyticAt, hd.analyticAt, hs.mem_nhds, mem_nhds
@@ -1058,7 +1058,7 @@ theorem _root_.DifferentiableOn.analyticOn
 
 中文:
 定理 _root_.DifferentiableOn.analyticOn
-  结论: {s : Set Complex} {f : Complex -> E} (hd : DifferentiableOn Complex f s)
+  结论: {s : 集合 复形} {f : 复形 -> E} (hd : DifferentiableOn 复形 f s)
   证明: (hd.analyticOnNhd hs).analyticOn
 
 Depends on / 依赖: analyticOn, analyticOnNhd, hd.analyticOnNhd
@@ -1077,7 +1077,7 @@ theorem _root_.DifferentiableOn.contDiffOn
 
 中文:
 定理 _root_.DifferentiableOn.contDiffOn
-  结论: {s : Set Complex} {f : Complex -> E} {n : WithTop 自然数∞}
+  结论: {s : 集合 复形} {f : 复形 -> E} {n : WithTop 自然数∞}
   证明: (hd.analyticOnNhd hs).contDiffOn_of_completeSpace
 -/
 protected theorem _root_.DifferentiableOn.contDiffOn {s : Set Complex} {f : Complex -> E} {n : WithTop Nat∞}
@@ -1094,7 +1094,7 @@ theorem _root_.DifferentiableOn.deriv
 
 中文:
 定理 _root_.DifferentiableOn.deriv
-  结论: {s : Set Complex} {f : Complex -> E} (hd : DifferentiableOn Complex f s)
+  结论: {s : 集合 复形} {f : 复形 -> E} (hd : DifferentiableOn 复形 f s)
   证明: (hd.analyticOnNhd hs).deriv.differentiableOn
 
 Depends on / 依赖: analyticOnNhd, deriv.differentiableOn, differentiableOn, hd.analyticOnNhd
@@ -1112,8 +1112,8 @@ theorem _root_.Differentiable.analyticAt
   proof: hf.differentiableOn.analyticAt univ_mem
 
 中文:
-定理 _root_.Differentiable.analyticAt
-  条件: {f : Complex -> E} (hf : Differentiable Complex f) (z : Complex)
+定理 _root_.可微.analyticAt
+  条件: {f : 复形 -> E} (hf : 可微 复形 f) (z : 复形)
   证明: hf.differentiableOn.analyticAt univ_mem
 -/
 protected theorem _root_.Differentiable.analyticAt {f : Complex -> E} (hf : Differentiable Complex f) (z : Complex) :
@@ -1130,7 +1130,7 @@ theorem _root_.Differentiable.contDiff
 @[fun_prop]
 
 中文:
-定理 _root_.Differentiable.contDiff
+定理 _root_.可微.contDiff
   证明: contDiff_iff_contDiffAt.mpr fun z => (hf.analyticAt z).contDiffAt
 
 @[fun_prop]
@@ -1150,8 +1150,8 @@ theorem _root_.Differentiable.deriv
   proof: hf.contDiff.differentiable_deriv_two
 
 中文:
-定理 _root_.Differentiable.deriv
-  条件: {f : Complex -> E} (hf : Differentiable Complex f)
+定理 _root_.可微.deriv
+  条件: {f : 复形 -> E} (hf : 可微 复形 f)
   证明: hf.contDiff.differentiable_deriv_two
 
 Depends on / 依赖: contDiff, differentiable_deriv_two, hf.contDiff.differentiable_deriv_two
@@ -1170,8 +1170,8 @@ theorem _root_.Differentiable.hasFPowerSeriesOnBall
     ⟨_, h.differentiableOn.hasFPowerSeriesOnBall hr⟩
 
 中文:
-定理 _root_.Differentiable.hasFPowerSeriesOnBall
-  结论: {f : Complex -> E} (h : Differentiable Complex f)
+定理 _root_.可微.hasFPowerSeriesOnBall
+  结论: {f : 复形 -> E} (h : 可微 复形 f)
   证明: (h.differentiableOn.hasFPowerSeriesOnBall hR).r_eq_top_of_exists fun _r hr =>
     ⟨_, h.differentiableOn.hasFPowerSeriesOnBall hr⟩
 -/
@@ -1190,7 +1190,7 @@ theorem analyticOnNhd_iff_differentiableOn
 
 中文:
 定理 analyticOnNhd_iff_differentiableOn
-  条件: {f : Complex -> E} {s : Set Complex} (o : IsOpen s)
+  条件: {f : 复形 -> E} {s : 集合 复形} (o : 是开集 s)
   证明: ⟨AnalyticOnNhd.differentiableOn, fun d _ zs => d.analyticAt (o.mem_nhds zs)⟩
 
 Depends on / 依赖: AnalyticOnNhd, AnalyticOnNhd.differentiableOn, analyticAt, d.analyticAt, differentiableOn, mem_nhds, o.mem_nhds
@@ -1211,7 +1211,7 @@ theorem analyticOn_iff_differentiableOn
 
 中文:
 定理 analyticOn_iff_differentiableOn
-  条件: {f : Complex -> E} {s : Set Complex} (o : IsOpen s)
+  条件: {f : 复形 -> E} {s : 集合 复形} (o : 是开集 s)
   证明: by
   rw [o.analyticOn_iff_analyticOnNhd]
   exact analyticOnNhd_iff_differentiableOn o
@@ -1235,7 +1235,7 @@ theorem analyticOnNhd_univ_iff_differentiable
 
 中文:
 定理 analyticOnNhd_univ_iff_differentiable
-  条件: {f : Complex -> E}
+  条件: {f : 复形 -> E}
   证明: by
   simp only [← differentiableOn_univ]
   exact analyticOnNhd_iff_differentiableOn isOpen_univ
@@ -1259,7 +1259,7 @@ theorem analyticOn_univ_iff_differentiable
 
 中文:
 定理 analyticOn_univ_iff_differentiable
-  条件: {f : Complex -> E}
+  条件: {f : 复形 -> E}
   证明: by
   rw [analyticOn_univ]
   exact analyticOnNhd_univ_iff_differentiable
@@ -1291,7 +1291,7 @@ theorem analyticAt_iff_eventually_differentiableAt
 
 中文:
 定理 analyticAt_iff_eventually_differentiableAt
-  条件: {f : Complex -> E} {c : Complex}
+  条件: {f : 复形 -> E} {c : 复形}
   证明: by
   constructor
   · intro fa
@@ -1343,7 +1343,7 @@ lemma circleIntegral_one_div_sub_center_pow_smul_of_differentiable_on_off_counta
   rw [← this]; rw [cauchyPowerSeries_apply]; rw [← Nat.cast_smul_eq_nsmul Com
 
 中文:
-引理 circleIntegral_one_div_sub_center_pow_smul_of_differentiable_on_off_countable
+引理 circle整数egral_one_div_sub_center_pow_smul_of_differentiable_on_off_countable
   证明: by
   have := hasFPowerSeriesOnBall_of_differentiable_off_countable (R := .mk R h0.le) hs hc hd h0
 .factorial_smul 1 n
@@ -1373,7 +1373,7 @@ lemma differentiable_on_off_countable_deriv_eq_smul_circleIntegral
     h0 1 hs hc hd
 
 中文:
-引理 differentiable_on_off_countable_deriv_eq_smul_circleIntegral
+引理 differentiable_on_off_countable_deriv_eq_smul_circle整数egral
   证明: by
   simpa using circleIntegral_one_div_sub_center_pow_smul_of_differentiable_on_off_countable
     h0 1 hs hc hd
@@ -1396,7 +1396,7 @@ lemma _root_.DiffContOnCl.circleIntegral_one_div_sub_center_pow_smul
     Set.countable_empty hc.continuousOn_ball fun _ hx => hc.differentiableAt isOpen_ball hx.1
 
 中文:
-引理 _root_.DiffContOnCl.circleIntegral_one_div_sub_center_pow_smul
+引理 _root_.DiffContOnCl.circle整数egral_one_div_sub_center_pow_smul
   证明: c.circleIntegral_one_div_sub_center_pow_smul_of_differentiable_on_off_countable h0 n
     Set.countable_empty hc.continuousOn_ball fun _ hx => hc.differentiableAt isOpen_ball hx.1
 
@@ -1419,7 +1419,7 @@ lemma _root_.DiffContOnCl.deriv_eq_smul_circleIntegral
   simpa using DiffContOnCl.circleIntegral_one_div_sub_center_pow_smul h0 1 hc
 
 中文:
-引理 _root_.DiffContOnCl.deriv_eq_smul_circleIntegral
+引理 _root_.DiffContOnCl.deriv_eq_smul_circle整数egral
   结论: (h0 : 0 < R)
   证明: by
   simpa using DiffContOnCl.circleIntegral_one_div_sub_center_pow_smul h0 1 hc
@@ -1441,7 +1441,7 @@ lemma _root_.DifferentiableOn.circleIntegral_one_div_sub_center_pow_smul
 .circleIntegral_one_div_sub_center_pow_smul h0 n
 
 中文:
-引理 _root_.DifferentiableOn.circleIntegral_one_div_sub_center_pow_smul
+引理 _root_.DifferentiableOn.circle整数egral_one_div_sub_center_pow_smul
   结论: (h0 : 0 < R) (n : 自然数)
   证明: (hc.mono closure_ball_subset_closedBall).diffContOnCl
 .circleIntegral_one_div_sub_center_pow_smul h0 n
@@ -1465,7 +1465,7 @@ lemma _root_.DifferentiableOn.deriv_eq_smul_circleIntegral
   simpa using DifferentiableOn.circleIntegral_one_div_sub_center_pow_smul h0 1 hc
 
 中文:
-引理 _root_.DifferentiableOn.deriv_eq_smul_circleIntegral
+引理 _root_.DifferentiableOn.deriv_eq_smul_circle整数egral
   结论: (h0 : 0 < R)
   证明: by
   simpa using DifferentiableOn.circleIntegral_one_div_sub_center_pow_smul h0 1 hc

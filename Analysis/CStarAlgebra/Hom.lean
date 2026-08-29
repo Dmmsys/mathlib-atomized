@@ -34,7 +34,7 @@ lemma IsSelfAdjoint.map_spectrum_real
 
 中文:
 引理 IsSelfAdjoint.map_spectrum_real
-  结论: {F A B : 类型} [CStarAlgebra A] [CStarAlgebra B]
+  结论: {F A B : 类型} [CStar代数 A] [CStar代数 B]
   证明: by
   have h_spec := AlgHom.spectrum_apply_subset ((φ : A ->⋆ₐ[Complex] B).restrictScalars Real) a
   refine Set.eq_of_subset_of_subset h_spec fun x hx => ?_
@@ -88,7 +88,7 @@ lemma norm_map
 
 中文:
 引理 norm_map
-  条件: (φ : F) (hφ : Function.Injective φ) (a : A)
+  条件: (φ : F) (hφ : 函数.单射 φ) (a : A)
   结论: ‖φ a‖ = ‖a‖
   证明: by
   /- Since passing to the unitization is functorial, and it is an isometric embedding, we may assume
@@ -125,7 +125,7 @@ lemma nnnorm_map
 
 中文:
 引理 nnnorm_map
-  条件: (φ : F) (hφ : Function.Injective φ) (a : A)
+  条件: (φ : F) (hφ : 函数.单射 φ) (a : A)
   结论: ‖φ a‖₊ = ‖a‖₊
   证明: Subtype.ext norm_map φ hφ a
 
@@ -145,8 +145,8 @@ lemma isometry
 
 中文:
 引理 isometry
-  条件: (φ : F) (hφ : Function.Injective φ)
-  结论: Isometry φ
+  条件: (φ : F) (hφ : 函数.单射 φ)
+  结论: 等距 φ
   证明: AddMonoidHomClass.isometry_of_norm φ (norm_map φ hφ)
 
 Depends on / 依赖: AddMonoidHomClass, AddMonoidHomClass.isometry_of_norm, isometry_of_norm, norm_map

@@ -39,7 +39,7 @@ instance instSuccOrder
 
 中文:
 实例 instSuccOrder
-  签名: : SuccOrder 自然数
+  签名: : Succ序 自然数
   定义体: SuccOrder.ofSuccLeIff succ Nat.succ_le_iff
 
 Depends on / 依赖: Nat.succ_le_iff, SuccOrder, SuccOrder.ofSuccLeIff, ofSuccLeIff, succ_le_iff
@@ -57,7 +57,7 @@ instance instSuccAddOrder
 
 中文:
 实例 instSuccAddOrder
-  签名: : SuccAddOrder 自然数
+  签名: : SuccAdd序 自然数
   定义体: ⟨fun _ => rfl⟩
 -/
 instance instSuccAddOrder : SuccAddOrder Nat := ⟨fun _ => rfl⟩
@@ -81,7 +81,7 @@ instance instPredOrder
 
 中文:
 实例 instPredOrder
-  签名: : PredOrder 自然数 where
+  签名: : Pred序 自然数 where
   定义体: pred
   pred_le := pred_le
   min_of_le_pred {a} ha := by
@@ -117,7 +117,7 @@ instance instPredSubOrder
 
 中文:
 实例 instPredSubOrder
-  签名: : PredSubOrder 自然数
+  签名: : PredSub序 自然数
   定义体: ⟨fun _ => rfl⟩
 
 @[simp]
@@ -241,7 +241,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsSuccArchimedean 自然数
+  签名: 是SuccArchimedean 自然数
   定义体: ⟨fun {a} {b} h => ⟨b - a, by rw [succ_eq_succ, Nat.succ_iterate, add_tsub_cancel_of_le h]⟩⟩
 
 Depends on / 依赖: Nat.succ_iterate, add_tsub_cancel_of_le, succ_eq_succ, succ_iterate
@@ -259,7 +259,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsPredArchimedean 自然数
+  签名: 是PredArchimedean 自然数
   定义体: ⟨fun {a} {b} h => ⟨b - a, by rw [pred_eq_pred, Nat.pred_iterate, tsub_tsub_cancel_of_le h]⟩⟩
 
 Depends on / 依赖: Nat.pred_iterate, pred_eq_pred, pred_iterate, tsub_tsub_cancel_of_le
@@ -276,7 +276,7 @@ lemma forall_ne_zero_iff
   proof: SuccOrder.forall_ne_bot_iff P
 
 中文:
-引理 forall_ne_zero_iff
+引理 对任意_ne_zero_iff
   条件: (P : 自然数 -> 命题)
   证明: SuccOrder.forall_ne_bot_iff P
 
@@ -300,8 +300,8 @@ theorem Fin.covBy_iff
 @[deprecated Fin.covBy_iff "use Fin.covBy_iff.symm instead" (since := "2026-02-13")]
 
 中文:
-定理 Fin.covBy_iff
-  条件: {n : 自然数} {a b : Fin n}
+定理 有限集.covBy_iff
+  条件: {n : 自然数} {a b : 有限集 n}
   结论: a ⋖ b ↔ (a : 自然数) ⋖ b
   证明: and_congr_right' ⟨fun h c ha hb => @h ⟨c, hb.trans b.prop⟩ ha hb, fun h _c hc => h hc⟩
 
@@ -325,8 +325,8 @@ alias ⟨CovBy.coe_fin, _⟩ := Fin.covBy_iff
 @[simp]
 
 中文:
-定理 Fin.coe_covBy_iff
-  条件: {n : 自然数} {a b : Fin n}
+定理 有限集.coe_covBy_iff
+  条件: {n : 自然数} {a b : 有限集 n}
   结论: (a : 自然数) ⋖ b ↔ a ⋖ b
   证明: Fin.covBy_iff.symm
 

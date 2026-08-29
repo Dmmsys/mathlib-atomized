@@ -78,12 +78,12 @@ structure IsAdjoinRoot
     - ker_map : RingHom.ker map = Ideal.span {f}
 
 中文:
-结构 IsAdjoinRoot
-  参数: {R : 类型u} (S : 类型v) [CommSemiring R] [Semiring S] [Algebra R S]
+结构 是AdjoinRoot
+  参数: {R : 类型u} (S : 类型v) [交换半环 R] [半环 S] [代数 R S]
   公理与运算 (3 个):
     - map : R[X] ->ₐ[R] S
-    - map_surjective : Function.Surjective map
-    - ker_map : RingHom.ker map = Ideal.span {f}
+    - map_surjective : 函数.满射 map
+    - ker_map : 环态射.ker map = 理想.span {f}
 -/
 structure IsAdjoinRoot {R : Type u} (S : Type v) [CommSemiring R] [Semiring S] [Algebra R S]
     (f : R[X]) : Type max u v where
@@ -103,9 +103,9 @@ structure IsAdjoinRootMonic
     - monic : Monic f
 
 中文:
-结构 IsAdjoinRootMonic
-  参数: {R : 类型u} (S : 类型v) [CommSemiring R] [Semiring S] [Algebra R S]
-  继承: IsAdjoinRoot S f
+结构 是AdjoinRootMonic
+  参数: {R : 类型u} (S : 类型v) [交换半环 R] [半环 S] [代数 R S]
+  继承: 是AdjoinRoot S f
   公理与运算 (1 个):
     - monic : Monic f
 -/
@@ -171,7 +171,7 @@ theorem mem_ker_map
 中文:
 定理 mem_ker_map
   条件: {p}
-  结论: p in RingHom.ker h.map ↔ f ∣ p
+  结论: p in 环态射.ker h.map ↔ f ∣ p
   证明: by
   rw [h.ker_map]; rw [Ideal.mem_span_singleton]
 
@@ -289,7 +289,7 @@ theorem adjoin_root_eq_top
 
 中文:
 定理 adjoin_root_eq_top
-  结论: Algebra.adjoin R {h.root} = ⊤
+  结论: 代数.adjoin R {h.root} = ⊤
   证明: by
   rw [Algebra.adjoin_singleton_eq_range_aeval]; rw [AlgHom.range_eq_top]; rw [aeval_root_eq_map]
   exact h.map_surjective
@@ -313,7 +313,7 @@ theorem ext_map
 
 中文:
 定理 ext_map
-  条件: (h' : IsAdjoinRoot S f) (eq : 对任意 x, h.map x = h'.map x)
+  条件: (h' : 是AdjoinRoot S f) (eq : 对任意 x, h.map x = h'.map x)
   结论: h = h'
   证明: by
   cases h; cases h'; congr
@@ -339,7 +339,7 @@ theorem ext
 
 中文:
 定理 ext
-  条件: (h' : IsAdjoinRoot S f) (eq : h.root = h'.root)
+  条件: (h' : 是AdjoinRoot S f) (eq : h.root = h'.root)
   结论: h = h'
   证明: h.ext_map h' (fun x => by rw [← h.aeval_root_eq_map, ← h'.aeval_root_eq_map, eq])
 
@@ -399,7 +399,7 @@ theorem repr_zero_mem_span
 
 中文:
 定理 repr_zero_mem_span
-  结论: h.repr 0 in Ideal.span ({f} : Set R[X])
+  结论: h.repr 0 in 理想.span ({f} : 集合 R[X])
   证明: by simp [← h.ker_map]
 
 Depends on / 依赖: h.ker_map, ker_map
@@ -629,7 +629,7 @@ theorem algEquiv_map
 
 中文:
 定理 algEquiv_map
-  结论: AlgHom.comp (h.algEquiv h') h.map = h'.map
+  结论: 代数态射.comp (h.algEquiv h') h.map = h'.map
   证明: by
   ext; simp
 
@@ -671,7 +671,7 @@ theorem algEquiv_self
 
 中文:
 定理 algEquiv_self
-  结论: h.algEquiv h = AlgEquiv.refl
+  结论: h.algEquiv h = 代数等价.refl
   证明: by ext; simp [algEquiv_def]
 -/
 @[simp] theorem algEquiv_self : h.algEquiv h = AlgEquiv.refl := by ext; simp [algEquiv_def]
@@ -708,7 +708,7 @@ theorem algEquiv_algEquiv
 
 中文:
 定理 algEquiv_algEquiv
-  条件: {U : 类型} [Ring U] [Algebra R U] (h'' : IsAdjoinRoot U f) (x)
+  条件: {U : 类型} [环 U] [代数 R U] (h'' : 是AdjoinRoot U f) (x)
   证明: by simp [algEquiv_def]
 
 @[simp]
@@ -729,7 +729,7 @@ theorem algEquiv_trans
 
 中文:
 定理 algEquiv_trans
-  条件: {U : 类型} [Ring U] [Algebra R U] (h'' : IsAdjoinRoot U f)
+  条件: {U : 类型} [环 U] [代数 R U] (h'' : 是AdjoinRoot U f)
   证明: by ext; simp
 -/
 theorem algEquiv_trans {U : Type*} [Ring U] [Algebra R U] (h'' : IsAdjoinRoot U f) :
@@ -801,7 +801,7 @@ theorem algEquiv_ofAlgEquiv
 
 中文:
 定理 algEquiv_ofAlgEquiv
-  条件: {U : 类型} [Ring U] [Algebra R U] (e : T ≃ₐ[R] U)
+  条件: {U : 类型} [环 U] [代数 R U] (e : T ≃ₐ[R] U)
   证明: by
   ext a
   simp [algEquiv_def, AlgEquiv.trans_apply, adjoinRootAlgEquiv_apply_eq_map, ofAlgEquiv_map_apply]
@@ -830,7 +830,7 @@ theorem ofAlgEquiv_algEquiv
 
 中文:
 定理 ofAlgEquiv_algEquiv
-  结论: {U : 类型} [Ring U] [Algebra R U] (h'' : IsAdjoinRoot U f)
+  结论: {U : 类型} [环 U] [代数 R U] (h'' : 是AdjoinRoot U f)
   证明: by
   ext a
   simp_rw [algEquiv_def, AlgEquiv.trans_apply, EmbeddingLike.apply_eq_iff_eq,
@@ -1173,7 +1173,7 @@ theorem isAlgebraic_root
 中文:
 定理 isAlgebraic_root
   条件: (hf : f != 0)
-  结论: IsAlgebraic R h.root
+  结论: 是代数 R h.root
   证明: ⟨f, by simp [hf]⟩
 -/
 theorem isAlgebraic_root (hf : f != 0) : IsAlgebraic R h.root := ⟨f, by simp [hf]⟩
@@ -1196,7 +1196,7 @@ definition isAdjoinRoot
 
 中文:
 定义 isAdjoinRoot
-  签名: : IsAdjoinRoot (AdjoinRoot f) f where
+  签名: : 是AdjoinRoot (AdjoinRoot f) f where
   定义体: AdjoinRoot.mkₐ f
   map_surjective := Ideal.Quotient.mkₐ_surjective _ _
   ker_map := by ext; simp [Ideal.mem_span_singleton]
@@ -1297,7 +1297,7 @@ abbreviation IsAdjoinRoot.ofAdjoinRootEquiv
   body: ofAlgEquiv (AdjoinRoot.isAdjoinRoot f) e
 
 中文:
-缩写 IsAdjoinRoot.ofAdjoinRootEquiv
+缩写 是AdjoinRoot.ofAdjoinRootEquiv
   签名: (e : AdjoinRoot f ≃ₐ[R] S)
   定义体: ofAlgEquiv (AdjoinRoot.isAdjoinRoot f) e
 
@@ -1516,7 +1516,7 @@ repr.invFun g := h.map ofFinsupp .ofCoeff g.mapDomain Fin.val
 
 中文:
 定义 basis
-  签名: : Basis (Fin (natDegree f)) R S where
+  签名: : 基 (有限集 (natDegree f)) R S where
   定义体: (h.modByMonicHom x).toFinsupp.coeff.comapDomain _ Fin.val_injective.injOn
 repr.invFun g := h.map ofFinsupp .ofCoeff g.mapDomain Fin.val
   repr.left_inv x := by
@@ -1600,7 +1600,7 @@ include h in
 
 中文:
 定理 deg_pos
-  条件: [Nontrivial S]
+  条件: [非平凡 S]
   结论: 0 < natDegree f
   证明: by
   rcases h.basis.index_nonempty with ⟨⟨i, hi⟩⟩
@@ -1626,7 +1626,7 @@ theorem deg_ne_zero
 
 中文:
 定理 deg_ne_zero
-  条件: [Nontrivial S]
+  条件: [非平凡 S]
   结论: natDegree f != 0
   证明: h.deg_pos.ne'
 
@@ -1676,7 +1676,7 @@ theorem basis_repr
 
 中文:
 定理 basis_repr
-  条件: (x : S) (i : Fin (natDegree f))
+  条件: (x : S) (i : 有限集 (natDegree f))
   证明: by
   simp [IsAdjoinRootMonic.basis, toFinsupp_apply]
 
@@ -1725,7 +1725,7 @@ include h in
 
 中文:
 定理 finite
-  结论: Module.Finite R S
+  结论: 模.有限 R S
   证明: (powerBasis h).finite
 
 include h in
@@ -1747,7 +1747,7 @@ theorem finrank
 中文:
 定理 finrank
   条件: [StrongRankCondition R]
-  结论: Module.finrank R S = f.natDegree
+  结论: 模.finrank R S = f.natDegree
   证明: (powerBasis h).finrank
 
 Depends on / 依赖: finrank, powerBasis
@@ -1786,7 +1786,7 @@ definition liftPolyₗ
 
 中文:
 定义 liftPolyₗ
-  签名: {T : 类型} [AddCommGroup T] [Module R T] (g : R[X] ->ₗ[R] T)
+  签名: {T : 类型} [加法交换群 T] [模 R T] (g : R[X] ->ₗ[R] T)
   定义体: g.comp h.modByMonicHom
 
 Depends on / 依赖: g.comp, h.modByMonicHom, modByMonicHom
@@ -1851,7 +1851,7 @@ theorem coeff_apply_coe
 
 中文:
 定理 coeff_apply_coe
-  条件: (z : S) (i : Fin (natDegree f))
+  条件: (z : S) (i : 有限集 (natDegree f))
   结论: h.coeff z i = h.basis.repr z i
   证明: h.coeff_apply_lt z i i.prop
 
@@ -1941,7 +1941,7 @@ theorem coeff_root_pow
 中文:
 定理 coeff_root_pow
   条件: {n} (hn : n < natDegree f)
-  结论: h.coeff (h.root ^ n) = Pi.single n 1
+  结论: h.coeff (h.root ^ n) = 依赖函数类型.single n 1
   证明: by
   ext i
   rw [coeff_apply]
@@ -1981,8 +1981,8 @@ theorem coeff_one
 
 中文:
 定理 coeff_one
-  条件: [Nontrivial S]
-  结论: h.coeff 1 = Pi.single 0 1
+  条件: [非平凡 S]
+  结论: h.coeff 1 = 依赖函数类型.single 0 1
   证明: by
   rw [← h.coeff_root_pow h.deg_pos]; rw [pow_zero]
 
@@ -2004,7 +2004,7 @@ theorem coeff_root
 中文:
 定理 coeff_root
   条件: (hdeg : 1 < natDegree f)
-  结论: h.coeff h.root = Pi.single 1 1
+  结论: h.coeff h.root = 依赖函数类型.single 1 1
   证明: by
   rw [← h.coeff_root_pow hdeg]; rw [pow_one]
 
@@ -2028,8 +2028,8 @@ theorem coeff_algebraMap
 
 中文:
 定理 coeff_algebraMap
-  条件: [Nontrivial S] (x : R)
-  结论: h.coeff (algebraMap R S x) = Pi.single 0 x
+  条件: [非平凡 S] (x : R)
+  结论: h.coeff (algebraMap R S x) = 依赖函数类型.single 0 x
   证明: by
   ext i
   rw [Algebra.algebraMap_eq_smul_one]; rw [map_smul]; rw [coeff_one]; rw [Pi.smul_apply]; rw [smul_eq_mul]
@@ -2101,7 +2101,7 @@ theorem coeff_injective
 
 中文:
 定理 coeff_injective
-  结论: Function.Injective h.coeff
+  结论: 函数.单射 h.coeff
   证明: fun _ _ hxy =>
   h.ext_elem fun _ _ => hxy ▸ rfl
 -/
@@ -2117,8 +2117,8 @@ theorem isIntegral_root
   proof: ⟨f, h.monic, h.aeval_root_self⟩
 
 中文:
-定理 isIntegral_root
-  结论: Is整数egral R h.root
+定理 is整数egral_root
+  结论: 是整 R h.root
   证明: ⟨f, h.monic, h.aeval_root_self⟩
 
 Depends on / 依赖: aeval_root_self, h.aeval_root_self, h.monic
@@ -2173,7 +2173,7 @@ theorem lift_self
 
 中文:
 定理 lift_self
-  结论: h.lift (algebraMap R S) h.root h.aeval_root_self = RingHom.id S
+  结论: h.lift (algebraMap R S) h.root h.aeval_root_self = 环态射.id S
   证明: RingHom.ext h.lift_self_apply
 
 Depends on / 依赖: RingHom, RingHom.ext, h.lift_self_apply, lift_self_apply
@@ -2205,7 +2205,7 @@ definition mkOfAdjoinEqTop
 
 中文:
 定义 mkOfAdjoinEqTop
-  签名: : IsAdjoinRoot S (minpoly R α) where
+  签名: : 是AdjoinRoot S (minpoly R α) where
   定义体: aeval α
   map_surjective := by
     rw [← Set.range_eq_univ]; rw [← AlgHom.coe_range]; rw [← Algebra.adjoin_singleton_eq_range_aeval]; rw [hα₂]; rw [Algebra.coe_top]
@@ -2233,8 +2233,8 @@ abbreviation _root_.IsAdjoinRootMonic.mkOfAdjoinEqTop
 @[simp]
 
 中文:
-缩写 _root_.IsAdjoinRootMonic.mkOfAdjoinEqTop
-  签名: : IsAdjoinRootMonic S (minpoly R α) where
+缩写 _root_.是AdjoinRootMonic.mkOfAdjoinEqTop
+  签名: : 是AdjoinRootMonic S (minpoly R α) where
   定义体: IsAdjoinRoot.mkOfAdjoinEqTop hα hα₂
   monic := minpoly.monic hα
 
@@ -2258,7 +2258,7 @@ theorem mkOfAdjoinEqTop_root
 
 中文:
 定理 mkOfAdjoinEqTop_root
-  结论: (IsAdjoinRoot.mkOfAdjoinEqTop hα hα₂).root = α
+  结论: (是AdjoinRoot.mkOfAdjoinEqTop hα hα₂).root = α
   证明: by
   simp [IsAdjoinRoot.root]
 
@@ -2307,7 +2307,7 @@ theorem liftHom_algEquiv
 
 中文:
 定理 liftHom_algEquiv
-  条件: [Algebra R U] (x : U) (hx z)
+  条件: [代数 R U] (x : U) (hx z)
   证明: h.lift_algEquiv h' _ _ hx _
 
 Depends on / 依赖: h.lift_algEquiv, lift_algEquiv
@@ -2339,7 +2339,7 @@ associated_one_iff_isUnit.2
 
 中文:
 定理 minpoly_eq
-  结论: [IsDomain R] [IsDomain S] [IsTorsionFree R S] [Is整数egrallyClosed R]
+  结论: [是整环 R] [是整环 S] [是无挠 R S] [是整闭 R]
   证明: let ⟨q, hq⟩ := minpoly.isIntegrallyClosed_dvd h.isIntegral_root h.aeval_root_self
 symm
 eq_of_monic_of_associated h.monic (minpoly.monic h.isIntegral_root) by
@@ -2381,7 +2381,7 @@ IsAdjoinRoot.ofAdjoinRootEquiv AlgEquiv.ofBijective φ by
 
 中文:
 定义 mkOfAdjoinEqTop'
-  签名: [Module.Finite R S] [Module.Free R S] {α : S} (hα : Algebra.adjoin R {α} = ⊤)
+  签名: [模.有限 R S] [模.自由 R S] {α : S} (hα : 代数.adjoin R {α} = ⊤)
   定义体: have monic := minpoly.monic (Algebra.IsIntegral.isIntegral (R := R) α)
     haveI := monic.free_adjoinRoot
     haveI := monic.finite_adjoinRoot
@@ -2448,8 +2448,8 @@ theorem Algebra.adjoin.powerBasis'_minpoly_gen
   rw [← minpolyGen_eq]; rw [adjoin.powerBasis']; rw [minpolyGen_map]; rw [minpolyGen_eq]; rw [AdjoinRoot.powerBasi
 
 中文:
-定理 Algebra.adjoin.powerBasis'_minpoly_gen
-  结论: [IsDomain R] [IsDomain S] [IsTorsionFree R S]
+定理 代数.adjoin.powerBasis'_minpoly_gen
+  结论: [是整环 R] [是整环 S] [是无挠 R S]
   证明: by
   have := isDomain_of_prime (prime_of_isIntegrallyClosed hx')
   have :=
@@ -2491,7 +2491,7 @@ theorem primitive_element_root
 
 中文:
 定理 primitive_element_root
-  条件: (h : IsAdjoinRoot E f)
+  条件: (h : 是AdjoinRoot E f)
   结论: F⟮h.root⟯ = ⊤
   证明: IntermediateField.adjoin_eq_top_of_algebra F {h.root} (adjoin_root_eq_top h)
 
@@ -2510,7 +2510,7 @@ abbreviation mkOfPrimitiveElement
 
 中文:
 缩写 mkOfPrimitiveElement
-  签名: {α : E} (hα : Is整数egral F α) (hα₂ : F⟮α⟯ = ⊤)
+  签名: {α : E} (hα : 是整 F α) (hα₂ : F⟮α⟯ = ⊤)
   定义体: mkOfAdjoinEqTop hα (Algebra.adjoin_eq_top_of_primitive_element hα.isAlgebraic hα₂)
 
 Depends on / 依赖: Algebra, Algebra.adjoin_eq_top_of_primitive_element, adjoin_eq_top_of_primitive_element, isAlgebraic, mkOfAdjoinEqTop
@@ -2528,7 +2528,7 @@ abbreviation _root_.IsAdjoinRootMonic.mkOfPrimitiveElement
   monic := minpoly.monic hα
 
 中文:
-缩写 _root_.IsAdjoinRootMonic.mkOfPrimitiveElement
+缩写 _root_.是AdjoinRootMonic.mkOfPrimitiveElement
   定义体: IsAdjoinRoot.mkOfPrimitiveElement hα hα₂
   monic := minpoly.monic hα
 

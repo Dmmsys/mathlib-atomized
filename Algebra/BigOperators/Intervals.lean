@@ -42,7 +42,7 @@ theorem prod_Ico_add'
 
 中文:
 定理 prod_Ico_add'
-  结论: [AddCommMonoid α] [PartialOrder α] [IsOrderedCancelAddMonoid α]
+  结论: [加法交换幺半群 α] [偏序 α] [是OrderedCancelAdd幺半群 α]
   证明: by
   rw [← map_add_right_Ico]; rw [prod_map]
   rfl
@@ -72,7 +72,7 @@ theorem prod_Ico_add
 
 中文:
 定理 prod_Ico_add
-  结论: [AddCommMonoid α] [PartialOrder α] [IsOrderedCancelAddMonoid α]
+  结论: [加法交换幺半群 α] [偏序 α] [是OrderedCancelAdd幺半群 α]
   证明: by
   convert! prod_Ico_add' f a b c using 2
   rw [add_comm]
@@ -101,7 +101,7 @@ theorem prod_Ico_add_right_sub_eq
 
 中文:
 定理 prod_Ico_add_right_sub_eq
-  结论: [AddCommMonoid α] [PartialOrder α] [IsOrderedCancelAddMonoid α]
+  结论: [加法交换幺半群 α] [偏序 α] [是OrderedCancelAdd幺半群 α]
   证明: by
   simp only [← map_add_right_Ico, prod_map, addRightEmbedding_apply, add_tsub_cancel_right]
 
@@ -312,7 +312,7 @@ theorem prod_Ico_eq_mul_inv
 
 中文:
 定理 prod_Ico_eq_mul_inv
-  条件: {δ : 类型} [CommGroup δ] (f : 自然数 -> δ) {m n : 自然数} (h : m <= n)
+  条件: {δ : 类型} [交换群 δ] (f : 自然数 -> δ) {m n : 自然数} (h : m <= n)
   证明: eq_mul_inv_iff_mul_eq.2 by (rw [mul_comm]; exact prod_range_mul_prod_Ico f h)
 
 @[to_additive]
@@ -337,7 +337,7 @@ theorem prod_Ico_eq_div
 
 中文:
 定理 prod_Ico_eq_div
-  条件: {δ : 类型} [CommGroup δ] (f : 自然数 -> δ) {m n : 自然数} (h : m <= n)
+  条件: {δ : 类型} [交换群 δ] (f : 自然数 -> δ) {m n : 自然数} (h : m <= n)
   证明: by
   simpa only [div_eq_mul_inv] using prod_Ico_eq_mul_inv f h
 
@@ -365,7 +365,7 @@ theorem prod_range_div_prod_range
 
 中文:
 定理 prod_range_div_prod_range
-  条件: {G : 类型} [CommGroup G] {f : 自然数 -> G} {n m : 自然数} (hnm : n <= m)
+  条件: {G : 类型} [交换群 G] {f : 自然数 -> G} {n m : 自然数} (hnm : n <= m)
   证明: by
   rw [← prod_Ico_eq_div f hnm]
   congr
@@ -398,7 +398,7 @@ theorem sum_Ico_Ico_comm
 
 中文:
 定理 sum_Ico_Ico_comm
-  条件: {M : 类型} [AddCommMonoid M] (a b : 自然数) (f : 自然数 -> 自然数 -> M)
+  条件: {M : 类型} [加法交换幺半群 M] (a b : 自然数) (f : 自然数 -> 自然数 -> M)
   证明: by
   rw [Finset.sum_sigma']; rw [Finset.sum_sigma']
   refine sum_nbij' (fun x => ⟨x.2, x.1⟩) (fun x => ⟨x.2, x.1⟩) ?_ ?_ (fun _ _ => rfl) (fun _ _ => rfl)
@@ -434,7 +434,7 @@ theorem sum_Ico_Ico_comm'
 
 中文:
 定理 sum_Ico_Ico_comm'
-  条件: {M : 类型} [AddCommMonoid M] (a b : 自然数) (f : 自然数 -> 自然数 -> M)
+  条件: {M : 类型} [加法交换幺半群 M] (a b : 自然数) (f : 自然数 -> 自然数 -> M)
   证明: by
   rw [Finset.sum_sigma']; rw [Finset.sum_sigma']
   refine sum_nbij' (fun x => ⟨x.2, x.1⟩) (fun x => ⟨x.2, x.1⟩) ?_ ?_ (fun _ _ => rfl) (fun _ _ => rfl)
@@ -541,7 +541,7 @@ theorem sum_Ico_reflect
 
 中文:
 定理 sum_Ico_reflect
-  结论: {δ : 类型} [AddCommMonoid δ] (f : 自然数 -> δ) (k : 自然数) {m n : 自然数}
+  结论: {δ : 类型} [加法交换幺半群 δ] (f : 自然数 -> δ) (k : 自然数) {m n : 自然数}
   证明: @prod_Ico_reflect (Multiplicative δ) _ f k m n h
 
 Depends on / 依赖: Multiplicative, prod_Ico_reflect
@@ -595,7 +595,7 @@ theorem sum_range_reflect
 
 中文:
 定理 sum_range_reflect
-  条件: {δ : 类型} [AddCommMonoid δ] (f : 自然数 -> δ) (n : 自然数)
+  条件: {δ : 类型} [加法交换幺半群 δ] (f : 自然数 -> δ) (n : 自然数)
   证明: @prod_range_reflect (Multiplicative δ) _ f n
 
 @[simp]
@@ -616,7 +616,7 @@ theorem prod_Ico_id_eq_factorial
 
 中文:
 定理 prod_Ico_id_eq_factorial
-  结论: 对任意 n : 自然数, (∏ x in Ico 1 (n + 1), x) = n !
+  结论: 对任意 n : 自然数, (∏ x in 左闭右开区间 1 (n + 1), x) = n !
 -/
 theorem prod_Ico_id_eq_factorial : forall n : Nat, (∏ x in Ico 1 (n + 1), x) = n !
   | 0 => rfl
@@ -793,7 +793,7 @@ theorem prod_Ico_div_bot
 中文:
 定理 prod_Ico_div_bot
   条件: (hmn : m < n)
-  结论: (∏ i in Ico m n, f i) / f m = ∏ i in Ico (m + 1) n, f i
+  结论: (∏ i in 左闭右开区间 m n, f i) / f m = ∏ i in 左闭右开区间 (m + 1) n, f i
   证明: div_eq_iff_eq_mul'.mpr prod_eq_prod_Ico_succ_bot hmn _
 
 @[to_additive]
@@ -843,7 +843,7 @@ theorem prod_Ico_div
 中文:
 定理 prod_Ico_div
   条件: (hmn : m <= n)
-  结论: ∏ i in Ico m n, f (i + 1) / f i = f n / f m
+  结论: ∏ i in 左闭右开区间 m n, f (i + 1) / f i = f n / f m
   证明: by
   rw [prod_Ico_eq_div _ hmn]; rw [prod_range_div]; rw [prod_range_div]; rw [div_div_div_cancel_right]
 
@@ -898,8 +898,8 @@ lemma Finset.prod_fin_Icc_eq_prod_nat_Icc
   apply prod_congr_of_eq_on_inter <;> grind
 
 中文:
-引理 Finset.prod_fin_Icc_eq_prod_nat_Icc
-  条件: [CommMonoid α] {n : 自然数} (a b : Fin n) (f : Fin n -> α)
+引理 有限集.prod_fin_Icc_eq_prod_nat_Icc
+  条件: [交换幺半群 α] {n : 自然数} (a b : 有限集 n) (f : 有限集 n -> α)
   证明: by
   rw [← prod_ite_mem_eq]; rw [prod_fin_eq_prod_range]
   apply prod_congr_of_eq_on_inter <;> grind
@@ -927,8 +927,8 @@ lemma Fin.prod_Iic_div
   · grind
 
 中文:
-引理 Fin.prod_Iic_div
-  条件: [CommGroup M] {n : 自然数} (a : Fin n) (f : Fin (n + 1) -> M)
+引理 有限集.prod_Iic_div
+  条件: [交换群 M] {n : 自然数} (a : 有限集 n) (f : 有限集 (n + 1) -> M)
   证明: by
   rw [← prod_ite_mem_eq]; rw [prod_fin_eq_prod_range]
   convert! prod_range_div (fun i => if hi : i < n + 1 then f ⟨i, hi⟩ else 1) (a + 1) using 1 with k
@@ -964,8 +964,8 @@ lemma Fin.prod_Icc_div
     rfl
 
 中文:
-引理 Fin.prod_Icc_div
-  结论: [CommGroup M] {n : 自然数} {a b : Fin n} (hab : a <= b)
+引理 有限集.prod_Icc_div
+  结论: [交换群 M] {n : 自然数} {a b : 有限集 n} (hab : a <= b)
   证明: by
   rw [prod_fin_Icc_eq_prod_nat_Icc]
   convert! Finset.prod_Icc_div (Fin.le_def.1 hab) (fun i => if hi : i < n + 1 then f ⟨i, hi⟩ else 1)

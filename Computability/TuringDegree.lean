@@ -139,7 +139,7 @@ theorem partrec_iff_forall_turingReducible
   proof: .partrec_of_const⟩ ⟨fun hf _ => hf.turingReducible, fun hf => hf (fun _ => .none)
 
 中文:
-定理 partrec_iff_forall_turingReducible
+定理 partrec_iff_对任意_turingReducible
   结论: Partrec f ↔ 对任意 g, f <=ᵀ g
   证明: .partrec_of_const⟩ ⟨fun hf _ => hf.turingReducible, fun hf => hf (fun _ => .none)
 
@@ -210,7 +210,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsPreorder (自然数 ->. 自然数) TuringReducible
+  签名: 是预序 (自然数 ->. 自然数) TuringReducible
   定义体: .rfl
   trans := @TuringReducible.trans
 -/
@@ -230,7 +230,7 @@ theorem TuringEquivalent.equivalence
 
 中文:
 定理 TuringEquivalent.equivalence
-  结论: Equivalence TuringEquivalent
+  结论: 等价 TuringEquivalent
   证明: (AntisymmRel.setoid _ _).iseqv
 
 @[refl]
@@ -338,7 +338,7 @@ instance :
 
 中文:
 实例 :
-  签名: Preorder (自然数 ->. 自然数)
+  签名: 预序 (自然数 ->. 自然数)
   定义体: TuringReducible
   le_refl := .refl
   le_trans _ _ _ := TuringReducible.trans
@@ -358,7 +358,7 @@ instance TuringDegree.instPartialOrder
 
 中文:
 实例 TuringDegree.instPartialOrder
-  签名: : PartialOrder TuringDegree
+  签名: : 偏序 TuringDegree
   定义体: instPartialOrderAntisymmetrization
 
 Depends on / 依赖: instPartialOrderAntisymmetrization

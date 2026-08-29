@@ -69,7 +69,7 @@ class IdemSemiring
 中文:
 类 IdemSemiring
   参数: (α : 类型)
-  继承: Semiring α, SemilatticeSup α, OrderBot α
+  继承: 半环 α, SemilatticeSup α, 有底序 α
   公理与运算 (1 个):
     - add_eq_sup((a b : α)) : a + b = a ⊔ b  [默认: by intros; rfl]
 
@@ -90,7 +90,7 @@ class IdemCommSemiring
 中文:
 类 IdemCommSemiring
   参数: (α : 类型)
-  继承: CommSemiring α, IdemSemiring α
+  继承: 交换半环 α, IdemSemiring α
   (无附加公理)
 -/
 class IdemCommSemiring (α : Type*) extends CommSemiring α, IdemSemiring α
@@ -133,7 +133,7 @@ class KleeneAlgebra
     - kstar_mul_le_self((a b : α)) : a * b <= b -> a∗ * b <= b
 
 中文:
-类 KleeneAlgebra
+类 Kleene代数
   参数: (α : 类型)
   继承: IdemSemiring α, KStar α
   公理与运算 (5 个):
@@ -168,7 +168,7 @@ abbreviation IdemSemiring.ofSemiring
 
 中文:
 缩写 IdemSemiring.ofSemiring
-  签名: [Semiring α] (h : 对任意 a : α, a + a = a)
+  签名: [半环 α] (h : 对任意 a : α, a + a = a)
   定义体: a + b = b
   le_refl := h
   le_trans a b c hab hbc := by rw [← hbc, ← add_assoc, hab]
@@ -278,7 +278,7 @@ lemma ofNat_eq_one
   proof: natCast_eq_one Nat.ne_zero_of_lt Nat.AtLeastTwo.prop
 
 中文:
-引理 ofNat_eq_one
+引理 of自然数_eq_one
   条件: {n : 自然数} [n.AtLeastTwo]
   结论: (of自然数(n) : α) = 1
   证明: natCast_eq_one Nat.ne_zero_of_lt Nat.AtLeastTwo.prop
@@ -621,7 +621,7 @@ kstar_le_of_mul_le_left one_le_kstar kstar_mul_le (h.trans le_kstar) mul_kstar_l
 
 中文:
 定理 kstar_mono
-  结论: Monotone (KStar.kstar : α -> α)
+  结论: 递增 (KStar.kstar : α -> α)
   证明: fun _ _ h =>
 kstar_le_of_mul_le_left one_le_kstar kstar_mul_le (h.trans le_kstar) mul_kstar_le_kstar
 
@@ -937,7 +937,7 @@ instance :
 
 中文:
 实例 :
-  签名: KleeneAlgebra (α × β)
+  签名: Kleene代数 (α × β)
   定义体: (a.1∗, a.2∗)
   one_le_kstar _ := ⟨one_le_kstar, one_le_kstar⟩
   mul_kstar_le_kstar _ := ⟨mul_kstar_le_kstar, mul_kstar_le_kstar⟩
@@ -1049,7 +1049,7 @@ instance [forall
   __ := Pi.instIdemSemiring
 
 中文:
-实例 [forall
+实例 [对任意
   签名: i, IdemCommSemiring (π i)] : IdemCommSemiring (对任意 i, π i) where
   定义体: Pi.commSemiring
   __ := Pi.instIdemSemiring
@@ -1079,7 +1079,7 @@ instance :
 
 中文:
 实例 :
-  签名: KleeneAlgebra (对任意 i, π i)
+  签名: Kleene代数 (对任意 i, π i)
   定义体: (a i)∗
   one_le_kstar _ _ := one_le_kstar
   mul_kstar_le_kstar _ _ := mul_kstar_le_kstar
@@ -1157,7 +1157,7 @@ bot_le a := le.1 bot.trans_le bot_le
 
 中文:
 缩写 idemSemiring
-  签名: [IdemSemiring α] [LE β] [LT β] [Zero β] [One β]
+  签名: [IdemSemiring α] [LE β] [LT β] [零 β] [幺 β]
   定义体: hf.semiring f zero one add mul nsmul npow natCast
   __ := hf.semilatticeSup f le lt sup
 add_eq_sup a b := hf by rw [sup, add, add_eq_sup]
@@ -1188,7 +1188,7 @@ abbreviation idemCommSemiring
 
 中文:
 缩写 idemCommSemiring
-  签名: [IdemCommSemiring α] [LE β] [LT β] [Zero β] [One β]
+  签名: [IdemCommSemiring α] [LE β] [LT β] [零 β] [幺 β]
   定义体: hf.commSemiring f zero one add mul nsmul npow natCast
   __ := hf.idemSemiring f le lt zero one add mul nsmul npow natCast sup bot
 -/
@@ -1222,7 +1222,7 @@ abbreviation kleeneAlgebra
 
 中文:
 缩写 kleeneAlgebra
-  签名: [KleeneAlgebra α] [LE β] [LT β] [Zero β] [One β]
+  签名: [Kleene代数 α] [LE β] [LT β] [零 β] [幺 β]
   定义体: hf.idemSemiring f le lt zero one add mul nsmul npow natCast sup bot
   one_le_kstar a := by
     rw [← le]; rw [one]; rw [kstar]

@@ -45,11 +45,11 @@ class WeaklyEtale
     - flat_lmul'((R S)) : (Algebra.TensorProduct.lmul' R (S := S)).Flat
 
 中文:
-类 WeaklyEtale
-  参数: (R S : 类型) [CommRing R] [CommRing S] [Algebra R S]
+类 弱平展
+  参数: (R S : 类型) [交换环 R] [交换环 S] [代数 R S]
   公理与运算 (2 个):
-    - flat : Module.Flat R S  [默认: by infer_instance]
-    - flat_lmul'((R S)) : (Algebra.TensorProduct.lmul' R (S := S)).Flat
+    - flat : 模.平坦 R S  [默认: by infer_instance]
+    - flat_lmul'((R S)) : (代数.张量积.lmul' R (S := S)).平坦
 
 Depends on / 依赖: Algebra, Algebra.TensorProduct.lmul, TensorProduct, flat_lmul, infer_instance
 -/
@@ -78,7 +78,7 @@ lemma ulift_iff
 
 中文:
 引理 ulift_iff
-  结论: WeaklyEtale (ULift.{u₁} R) (ULift.{u₂} S) ↔ WeaklyEtale R S
+  结论: 弱平展 (类型层提升.{u₁} R) (类型层提升.{u₂} S) ↔ 弱平展 R S
   证明: by
   rw [weaklyEtale_iff]; rw [weaklyEtale_iff]; rw [Module.Flat.ulift_left_iff]; rw [Module.Flat.ulift_right_iff]
   congr!
@@ -136,7 +136,7 @@ lemma trans
 
 中文:
 引理 trans
-  结论: (R : 类型u₁) (S : 类型u₂) [CommRing R] [CommRing S] [Algebra R S]
+  结论: (R : 类型u₁) (S : 类型u₂) [交换环 R] [交换环 S] [代数 R S]
   证明: by
   rw [← ulift_iff.{max u₁ u₂ u₃]; rw [max u₁ u₂ u₃}] at *
   refine ⟨.trans _ (ULift.{max u₁ u₂ u₃} S) _, ?_⟩

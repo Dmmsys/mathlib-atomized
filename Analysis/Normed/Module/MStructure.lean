@@ -78,7 +78,7 @@ structure IsLprojection
     - Lnorm : forall x : X, ‖x‖ = ‖P • x‖ + ‖(1 - P) • x‖
 
 中文:
-结构 IsLprojection
+结构 是Lprojection
   参数: (P : M)
   公理与运算 (2 个):
     - proj : IsIdempotentElem P
@@ -99,11 +99,11 @@ structure IsMprojection
     - Mnorm : forall x : X, ‖x‖ = max ‖P • x‖ ‖(1 - P) • x‖
 
 中文:
-结构 IsMprojection
+结构 是Mprojection
   参数: (P : M)
   公理与运算 (2 个):
     - proj : IsIdempotentElem P
-    - Mnorm : 对任意 x : X, ‖x‖ = max ‖P • x‖ ‖(1 - P) • x‖
+    - Mnorm : 对任意 x : X, ‖x‖ = 最大值 ‖P • x‖ ‖(1 - P) • x‖
 -/
 structure IsMprojection (P : M) : Prop where
   proj : IsIdempotentElem P
@@ -127,8 +127,8 @@ theorem Lcomplement
 
 中文:
 定理 Lcomplement
-  条件: {P : M} (h : IsLprojection X P)
-  结论: IsLprojection X (1 - P)
+  条件: {P : M} (h : 是Lprojection X P)
+  结论: 是Lprojection X (1 - P)
   证明: ⟨h.proj.one_sub, fun x => by
     rw [add_comm]; rw [sub_sub_cancel]
     exact h.Lnorm x⟩
@@ -152,7 +152,7 @@ theorem Lcomplement_iff
 中文:
 定理 Lcomplement_iff
   条件: (P : M)
-  结论: IsLprojection X P ↔ IsLprojection X (1 - P)
+  结论: 是Lprojection X P ↔ 是Lprojection X (1 - P)
   证明: ⟨Lcomplement, fun h => sub_sub_cancel 1 P ▸ h.Lcomplement⟩
 
 Depends on / 依赖: Lcomplement, h.Lcomplement, sub_sub_cancel
@@ -176,7 +176,7 @@ theorem commute
 
 中文:
 定理 commute
-  条件: [FaithfulSMul M X] {P Q : M} (h₁ : IsLprojection X P) (h₂ : IsLprojection X Q)
+  条件: [忠实标量乘法 M X] {P Q : M} (h₁ : 是Lprojection X P) (h₂ : 是Lprojection X Q)
   证明: by
   have PR_eq_RPR : forall R : M, IsLprojection X R -> P * R = R * P * R := fun R h₃ => by
     refine @eq_of_smul_eq_smul _ X _ _ _ _ fun x => by
@@ -237,7 +237,7 @@ theorem mul
 
 中文:
 定理 mul
-  条件: [FaithfulSMul M X] {P Q : M} (h₁ : IsLprojection X P) (h₂ : IsLprojection X Q)
+  条件: [忠实标量乘法 M X] {P Q : M} (h₁ : 是Lprojection X P) (h₂ : 是Lprojection X Q)
   证明: by
   refine ⟨IsIdempotentElem.mul_of_commute (h₁.commute h₂) h₁.proj h₂.proj, ?_⟩
   intro x
@@ -278,7 +278,7 @@ theorem join
 
 中文:
 定理 join
-  条件: [FaithfulSMul M X] {P Q : M} (h₁ : IsLprojection X P) (h₂ : IsLprojection X Q)
+  条件: [忠实标量乘法 M X] {P Q : M} (h₁ : 是Lprojection X P) (h₂ : 是Lprojection X Q)
   证明: by
   convert! (Lcomplement_iff _).mp (h₁.Lcomplement.mul h₂.Lcomplement) using 1
   noncomm_ring
@@ -301,8 +301,8 @@ instance Subtype.instCompl
 @[simp]
 
 中文:
-实例 Subtype.instCompl
-  签名: : Compl { f : M // IsLprojection X f }
+实例 子类型.instCompl
+  签名: : 补集 { f : M // 是Lprojection X f }
   定义体: ⟨fun P => ⟨1 - P, P.prop.Lcomplement⟩⟩
 
 @[simp]
@@ -324,7 +324,7 @@ theorem coe_compl
 
 中文:
 定理 coe_compl
-  条件: (P : { P : M // IsLprojection X P })
+  条件: (P : { P : M // 是Lprojection X P })
   结论: ↑Pᶜ = (1 : M) - ↑P
   证明: rfl
 -/
@@ -342,8 +342,8 @@ instance Subtype.inf
 @[simp]
 
 中文:
-实例 Subtype.inf
-  签名: [FaithfulSMul M X]
+实例 子类型.下确界
+  签名: [忠实标量乘法 M X]
   定义体: ⟨fun P Q => ⟨P * Q, P.prop.mul Q.prop⟩⟩
 
 @[simp]
@@ -364,7 +364,7 @@ theorem coe_inf
 
 中文:
 定理 coe_inf
-  条件: [FaithfulSMul M X] (P Q : { P : M // IsLprojection X P })
+  条件: [忠实标量乘法 M X] (P Q : { P : M // 是Lprojection X P })
   证明: rfl
 -/
 theorem coe_inf [FaithfulSMul M X] (P Q : { P : M // IsLprojection X P }) :
@@ -382,8 +382,8 @@ instance Subtype.sup
 @[simp]
 
 中文:
-实例 Subtype.sup
-  签名: [FaithfulSMul M X]
+实例 子类型.上确界
+  签名: [忠实标量乘法 M X]
   定义体: ⟨fun P Q => ⟨P + Q - P * Q, P.prop.join Q.prop⟩⟩
 
 @[simp]
@@ -404,7 +404,7 @@ theorem coe_sup
 
 中文:
 定理 coe_sup
-  条件: [FaithfulSMul M X] (P Q : { P : M // IsLprojection X P })
+  条件: [忠实标量乘法 M X] (P Q : { P : M // 是Lprojection X P })
   证明: rfl
 -/
 theorem coe_sup [FaithfulSMul M X] (P Q : { P : M // IsLprojection X P }) :
@@ -422,8 +422,8 @@ instance Subtype.sdiff
 @[simp]
 
 中文:
-实例 Subtype.sdiff
-  签名: [FaithfulSMul M X]
+实例 子类型.sdiff
+  签名: [忠实标量乘法 M X]
   定义体: ⟨fun P Q => ⟨P * (1 - Q), P.prop.mul Q.prop.Lcomplement⟩⟩
 
 @[simp]
@@ -444,7 +444,7 @@ theorem coe_sdiff
 
 中文:
 定理 coe_sdiff
-  条件: [FaithfulSMul M X] (P Q : { P : M // IsLprojection X P })
+  条件: [忠实标量乘法 M X] (P Q : { P : M // 是Lprojection X P })
   证明: rfl
 -/
 theorem coe_sdiff [FaithfulSMul M X] (P Q : { P : M // IsLprojection X P }) :
@@ -465,8 +465,8 @@ instance Subtype.partialOrder
   le_antisymm P Q h₁ h₂ := Subtype.ext (by convert! (P.prop.commute Q.prop).eq)
 
 中文:
-实例 Subtype.partialOrder
-  签名: [FaithfulSMul M X]
+实例 子类型.partialOrder
+  签名: [忠实标量乘法 M X]
   定义体: (↑P : M) = ↑(P ⊓ Q)
   le_refl P := by simpa only [coe_inf, ← sq] using P.prop.proj.eq.symm
   le_trans P Q R h₁ h₂ := by
@@ -493,7 +493,7 @@ theorem le_def
 
 中文:
 定理 le_def
-  条件: [FaithfulSMul M X] (P Q : { P : M // IsLprojection X P })
+  条件: [忠实标量乘法 M X] (P Q : { P : M // 是Lprojection X P })
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -514,8 +514,8 @@ instance Subtype.zero
 @[simp]
 
 中文:
-实例 Subtype.zero
-  签名: : Zero { P : M // IsLprojection X P }
+实例 子类型.zero
+  签名: : 零 { P : M // 是Lprojection X P }
   定义体: ⟨⟨0, ⟨by rw [IsIdempotentElem, zero_mul], fun x => by
         simp only [zero_smul, norm_zero, sub_zero, one_smul, zero_add]⟩⟩⟩
 
@@ -538,7 +538,7 @@ theorem coe_zero
 
 中文:
 定理 coe_zero
-  结论: ↑(0 : { P : M // IsLprojection X P }) = (0 : M)
+  结论: ↑(0 : { P : M // 是Lprojection X P }) = (0 : M)
   证明: rfl
 -/
 theorem coe_zero : ↑(0 : { P : M // IsLprojection X P }) = (0 : M) :=
@@ -555,8 +555,8 @@ instance Subtype.one
 @[simp]
 
 中文:
-实例 Subtype.one
-  签名: : One { P : M // IsLprojection X P }
+实例 子类型.one
+  签名: : 幺 { P : M // 是Lprojection X P }
   定义体: ⟨⟨1, sub_zero (1 : M) ▸ (0 : { P : M // IsLprojection X P }).prop.Lcomplement⟩⟩
 
 @[simp]
@@ -577,7 +577,7 @@ theorem coe_one
 
 中文:
 定理 coe_one
-  结论: ↑(1 : { P : M // IsLprojection X P }) = (1 : M)
+  结论: ↑(1 : { P : M // 是Lprojection X P }) = (1 : M)
   证明: rfl
 -/
 theorem coe_one : ↑(1 : { P : M // IsLprojection X P }) = (1 : M) :=
@@ -597,8 +597,8 @@ instance Subtype.boundedOrder
 @[simp]
 
 中文:
-实例 Subtype.boundedOrder
-  签名: [FaithfulSMul M X]
+实例 子类型.boundedOrder
+  签名: [忠实标量乘法 M X]
   定义体: 1
   le_top P := (mul_one (P : M)).symm
   bot := 0
@@ -626,7 +626,7 @@ theorem coe_bot
 
 中文:
 定理 coe_bot
-  条件: [FaithfulSMul M X]
+  条件: [忠实标量乘法 M X]
   证明: rfl
 
 @[simp]
@@ -646,7 +646,7 @@ theorem coe_top
 
 中文:
 定理 coe_top
-  条件: [FaithfulSMul M X]
+  条件: [忠实标量乘法 M X]
   证明: rfl
 -/
 theorem coe_top [FaithfulSMul M X] :
@@ -665,7 +665,7 @@ theorem compl_mul
 
 中文:
 定理 compl_mul
-  条件: {P : { P : M // IsLprojection X P }} {Q : M}
+  条件: {P : { P : M // 是Lprojection X P }} {Q : M}
   结论: ↑Pᶜ * Q = Q - ↑P * Q
   证明: by
   rw [coe_compl]; rw [sub_mul]; rw [one_mul]
@@ -687,7 +687,7 @@ theorem mul_compl_self
 
 中文:
 定理 mul_compl_self
-  条件: {P : { P : M // IsLprojection X P }}
+  条件: {P : { P : M // 是Lprojection X P }}
   结论: (↑P : M) * ↑Pᶜ = 0
   证明: by
   rw [coe_compl]; rw [P.prop.proj.mul_one_sub_self]
@@ -708,7 +708,7 @@ theorem distrib_lattice_lemma
 
 中文:
 定理 distrib_lattice_lemma
-  条件: [FaithfulSMul M X] {P Q R : { P : M // IsLprojection X P }}
+  条件: [忠实标量乘法 M X] {P Q R : { P : M // 是Lprojection X P }}
   证明: by
   rw [add_mul]; rw [mul_add]; rw [mul_add]; rw [(mul_assoc _ (R : M) (↑Q * ↑R * ↑Pᶜ))]; rw [← mul_assoc (R : M) (↑Q * ↑R) _]; rw [← coe_inf Q]; rw [(Pᶜ.prop.commute R.prop).eq]; rw [((Q ⊓ R).prop.commute Pᶜ.prop).eq]; rw [(R.prop.commute (Q ⊓ R).prop).eq]; rw [coe_inf Q]; rw [mul_assoc (Q : M)]; 
 
@@ -732,8 +732,8 @@ instance [FaithfulSMul
     rw [le_def]; rw [coe_inf]; rw [coe_sup]; rw [← add_sub]; rw [mul_add]; rw
 
 中文:
-实例 [FaithfulSMul
-  签名: M X] : Lattice { P
+实例 [忠实标量乘法
+  签名: M X] : 格 { P
   定义体: max
   inf := min
   le_sup_left P Q := by
@@ -771,8 +771,8 @@ instance Subtype.distribLattice
       rw [coe_inf]; rw [coe_sup]; rw [coe_sup]; rw [← add_sub]; rw [← add_sub]; rw [← compl_mul]; rw [← compl_mul]; rw [add_mul]; rw [mul_add]; rw [(Pᶜ.prop.commute Q.prop).eq]; rw [mul_add]; rw [← mul_assoc]; rw [mul_assoc (Q : M
 
 中文:
-实例 Subtype.distribLattice
-  签名: [FaithfulSMul M X]
+实例 子类型.distribLattice
+  签名: [忠实标量乘法 M X]
   定义体: by
     have e₁ : ↑((P ⊔ Q) ⊓ (P ⊔ R)) = ↑P + ↑Q * (R : M) * ↑Pᶜ := by
       rw [coe_inf]; rw [coe_sup]; rw [coe_sup]; rw [← add_sub]; rw [← add_sub]; rw [← compl_mul]; rw [← compl_mul]; rw [add_mul]; rw [mul_add]; rw [(Pᶜ.prop.commute Q.prop).eq]; rw [mul_add]; rw [← mul_assoc]; rw [mul_assoc (Q : M
@@ -806,8 +806,8 @@ instance Subtype.BooleanAlgebra
  
 
 中文:
-实例 Subtype.BooleanAlgebra
-  签名: [FaithfulSMul M X]
+实例 子类型.布尔代数
+  签名: [忠实标量乘法 M X]
   定义体: { IsLprojection.Subtype.instCompl,
     IsLprojection.Subtype.sdiff,
     IsLprojection.Subtype.boundedOrder with

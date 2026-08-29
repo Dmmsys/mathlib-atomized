@@ -52,7 +52,7 @@ lemma isCardinalPresentable
 
 中文:
 引理 isCardinalPresentable
-  结论: {X : C} {J : Type w} [SmallCategory J]
+  结论: {X : C} {J : 类型 w} [小范畴 J]
   证明: have (k : J) : IsCardinalPresentable (p.diag.obj k) κ' := isCardinalPresentable_of_le _ h
   isCardinalPresentable_of_isColimit _ p.isColimit κ' hJ
 
@@ -85,8 +85,8 @@ lemma ColimitOfShape.isCardinalPresentable
     (fun j => hP _ (p.prop_diag_obj j)) _ h hJ
 
 中文:
-引理 ColimitOfShape.isCardinalPresentable
-  结论: {X : C} {J : Type w} [SmallCategory J]
+引理 余limitOfShape.isCardinalPresentable
+  结论: {X : C} {J : 类型 w} [小范畴 J]
   证明: p.toColimitPresentation.isCardinalPresentable κ
     (fun j => hP _ (p.prop_diag_obj j)) _ h hJ
 
@@ -115,11 +115,11 @@ structure IsCardinalFilteredGenerator
     - exists_colimitsOfShape((X : C)) : exists (J : Type w) (_ : SmallCategory J) (_ : IsCardinalFiltered J κ), P.colimitsOfShape J X
 
 中文:
-结构 IsCardinalFilteredGenerator
+结构 是CardinalFilteredGenerator
   参数: : 命题 where
   公理与运算 (2 个):
     - le_isCardinalPresentable : P <= isCardinalPresentable C κ
-    - exists_colimitsOfShape((X : C)) : 存在 (J : Type w) (_ : SmallCategory J) (_ : IsCardinalFiltered J κ), P.colimitsOfShape J X
+    - exists_colimitsOfShape((X : C)) : 存在 (J : 类型 w) (_ : 小范畴 J) (_ : 是CardinalFiltered J κ), P.colimitsOfShape J X
 -/
 structure IsCardinalFilteredGenerator : Prop where
   le_isCardinalPresentable : P <= isCardinalPresentable C κ
@@ -148,7 +148,7 @@ include h in
 
 中文:
 引理 of_le_isoClosure
-  结论: {P' : Object命题erty C} (h₁ : P <= P'.isoClosure)
+  结论: {P' : ObjectProperty C} (h₁ : P <= P'.isoClosure)
   证明: h₂
   exists_colimitsOfShape X := by
     obtain ⟨J, _, _, hX⟩ := h.exists_colimitsOfShape X
@@ -178,7 +178,7 @@ lemma isoClosure
 
 中文:
 引理 isoClosure
-  结论: P.isoClosure.IsCardinalFilteredGenerator κ
+  结论: P.isoClosure.是CardinalFilteredGenerator κ
   证明: h.of_le_isoClosure (P.le_isoClosure.trans P.isoClosure.le_isoClosure)
     (by simpa only [ObjectProperty.isoClosure_le_iff] using h.le_isCardinalPresentable)
 
@@ -355,11 +355,11 @@ class HasCardinalFilteredGenerator
     - exists_generator((C κ) [hC] [hκ]) : exists (P : ObjectProperty C) (_ : ObjectProperty.EssentiallySmall.{w} P), P.IsCardinalFilteredGenerator κ
 
 中文:
-类 HasCardinalFilteredGenerator
-  参数: (C : 类型u) [hC : Category.{v} C]
+类 有CardinalFilteredGenerator
+  参数: (C : 类型u) [hC : 范畴.{v} C]
   继承: LocallySmall.{w} C
   公理与运算 (1 个):
-    - exists_generator((C κ) [hC] [hκ]) : 存在 (P : Object命题erty C) (_ : Object命题erty.EssentiallySmall.{w} P), P.IsCardinalFilteredGenerator κ
+    - exists_generator((C κ) [hC] [hκ]) : 存在 (P : ObjectProperty C) (_ : ObjectProperty.EssentiallySmall.{w} P), P.是CardinalFilteredGenerator κ
 -/
 class HasCardinalFilteredGenerator (C : Type u) [hC : Category.{v} C]
     (κ : Cardinal.{w}) [hκ : Fact κ.IsRegular] : Prop extends LocallySmall.{w} C where
@@ -375,7 +375,7 @@ lemma ObjectProperty.IsCardinalFilteredGenerator.hasCardinalFilteredGenerator
   proof: ⟨P, inferInstance, hP⟩
 
 中文:
-引理 ObjectProperty.IsCardinalFilteredGenerator.hasCardinalFilteredGenerator
+引理 ObjectProperty.是CardinalFilteredGenerator.hasCardinalFilteredGenerator
   证明: ⟨P, inferInstance, hP⟩
 -/
 lemma ObjectProperty.IsCardinalFilteredGenerator.hasCardinalFilteredGenerator
@@ -397,8 +397,8 @@ lemma HasCardinalFilteredGenerator.exists_small_generator
   exact ⟨Q, inferInstance, hP.of_le_isoClosure h₂ (h₁.trans hP.le_isCardinalPresentable)⟩
 
 中文:
-引理 HasCardinalFilteredGenerator.exists_small_generator
-  结论: (C : 类型u) [Category.{v} C]
+引理 有CardinalFilteredGenerator.存在_small_generator
+  结论: (C : 类型u) [范畴.{v} C]
   证明: by
   obtain ⟨P, _, hP⟩ := HasCardinalFilteredGenerator.exists_generator C κ
   obtain ⟨Q, _, h₁, h₂⟩ := ObjectProperty.EssentiallySmall.exists_small_le P

@@ -31,7 +31,7 @@ lemma contDiff_aeval
 
 中文:
 引理 contDiff_aeval
-  结论: {R 𝕜 : 类型} [CommSemiring R] [NontriviallyNormedField 𝕜] [Algebra R 𝕜]
+  结论: {R 𝕜 : 类型} [交换半环 R] [NontriviallyNormedField 𝕜] [代数 R 𝕜]
   证明: by
   induction f using Polynomial.induction_on' with
   | add f g fc gc => simpa using fc.add gc

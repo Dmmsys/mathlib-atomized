@@ -45,11 +45,11 @@ structure ContinuousOrderHom
     - continuous_toFun : Continuous toFun
 
 中文:
-结构 ContinuousOrderHom
-  参数: (α β : 类型) [Preorder α] [Preorder β] [TopologicalSpace α]
-  继承: OrderHom α β
+结构 余ntinuous序态射
+  参数: (α β : 类型) [预序 α] [预序 β] [拓扑空间 α]
+  继承: 序态射 α β
   公理与运算 (1 个):
-    - continuous_toFun : Continuous toFun
+    - continuous_toFun : 连续 toFun
 -/
 structure ContinuousOrderHom (α β : Type*) [Preorder α] [Preorder β] [TopologicalSpace α]
   [TopologicalSpace β] extends OrderHom α β where
@@ -70,11 +70,11 @@ class ContinuousOrderHomClass
     - map_monotone((f : F)) : Monotone f
 
 中文:
-类 ContinuousOrderHomClass
-  参数: (F : 类型) (α β : outParam 类型) [Preorder α] [Preorder β]
-  继承: ContinuousMapClass F α β
+类 余ntinuous序态射类
+  参数: (F : 类型) (α β : outParam 类型) [预序 α] [预序 β]
+  继承: 连续映射类 F α β
   公理与运算 (1 个):
-    - map_monotone((f : F)) : Monotone f
+    - map_monotone((f : F)) : 递增 f
 -/
 class ContinuousOrderHomClass (F : Type*) (α β : outParam Type*) [Preorder α] [Preorder β]
     [TopologicalSpace α] [TopologicalSpace β] [FunLike F α β] : Prop
@@ -179,7 +179,7 @@ instance instFunLike
 
 中文:
 实例 instFunLike
-  签名: : FunLike (α ->Co β) α β where
+  签名: : 函数状 (α ->Co β) α β where
   定义体: f.toFun
   coe_injective f g h := by
     obtain ⟨⟨_, _⟩, _⟩ := f
@@ -206,7 +206,7 @@ instance :
 
 中文:
 实例 :
-  签名: ContinuousOrderHomClass (α ->Co β) α β
+  签名: 余ntinuous序态射类 (α ->Co β) α β
   定义体: f.monotone'
   map_continuous f := f.continuous_toFun
 
@@ -364,7 +364,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (α ->Co α)
+  签名: 可居 (α ->Co α)
   定义体: ⟨ContinuousOrderHom.id _⟩
 
 @[simp, norm_cast]
@@ -385,7 +385,7 @@ theorem coe_id
 
 中文:
 定理 coe_id
-  结论: ⇑(ContinuousOrderHom.id α) = id
+  结论: ⇑(余ntinuous序态射.id α) = id
   证明: rfl
 -/
 theorem coe_id : ⇑(ContinuousOrderHom.id α) = id :=
@@ -406,7 +406,7 @@ theorem id_apply
 中文:
 定理 id_apply
   条件: (a : α)
-  结论: ContinuousOrderHom.id α a = a
+  结论: 余ntinuous序态射.id α a = a
   证明: rfl
 -/
 theorem id_apply (a : α) : ContinuousOrderHom.id α a = a :=
@@ -517,7 +517,7 @@ theorem comp_id
 中文:
 定理 comp_id
   条件: (f : α ->Co β)
-  结论: f.comp (ContinuousOrderHom.id α) = f
+  结论: f.comp (余ntinuous序态射.id α) = f
   证明: ext fun _ => rfl
 
 @[simp]
@@ -540,7 +540,7 @@ theorem id_comp
 中文:
 定理 id_comp
   条件: (f : α ->Co β)
-  结论: (ContinuousOrderHom.id β).comp f = f
+  结论: (余ntinuous序态射.id β).comp f = f
   证明: ext fun _ => rfl
 
 @[simp]
@@ -561,7 +561,7 @@ theorem cancel_right
 
 中文:
 定理 cancel_right
-  条件: {g₁ g₂ : β ->Co γ} {f : α ->Co β} (hf : Surjective f)
+  条件: {g₁ g₂ : β ->Co γ} {f : α ->Co β} (hf : 满射 f)
   证明: ⟨fun h => ext hf.forall.2 DFunLike.ext_iff.1 h, fun h => congr_arg₂ _ h rfl⟩
 
 @[simp]
@@ -583,7 +583,7 @@ theorem cancel_left
 
 中文:
 定理 cancel_left
-  条件: {g : β ->Co γ} {f₁ f₂ : α ->Co β} (hg : Injective g)
+  条件: {g : β ->Co γ} {f₁ f₂ : α ->Co β} (hg : 单射 g)
   证明: ⟨fun h => ext fun a => hg by rw [← comp_apply, h, comp_apply], congr_arg _⟩
 
 Depends on / 依赖: comp_apply, congr_arg
@@ -602,7 +602,7 @@ instance :
 
 中文:
 实例 :
-  签名: Preorder (α ->Co β)
+  签名: 预序 (α ->Co β)
   定义体: Preorder.lift ((↑) : (α ->Co β) -> α -> β)
 
 Depends on / 依赖: Preorder, Preorder.lift
@@ -621,8 +621,8 @@ instance [PartialOrder
   body: PartialOrder.lift ((↑) : (α ->Co β) -> α -> β) DFunLike.coe_injective
 
 中文:
-实例 [PartialOrder
-  签名: β] : PartialOrder (α ->Co β)
+实例 [偏序
+  签名: β] : 偏序 (α ->Co β)
   定义体: PartialOrder.lift ((↑) : (α ->Co β) -> α -> β) DFunLike.coe_injective
 
 Depends on / 依赖: DFunLike, DFunLike.coe_injective, PartialOrder, PartialOrder.lift, coe_injective

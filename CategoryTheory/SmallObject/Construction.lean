@@ -745,7 +745,7 @@ lemma functorMap_id
 
 中文:
 引理 functorMap_id
-  结论: functorMap f (𝟙 (Arrow.mk πX)) = 𝟙 _
+  结论: functorMap f (𝟙 (箭头.mk πX)) = 𝟙 _
   证明: by
   ext ⟨i, t, b, w⟩
   · simp [functorMap]
@@ -877,7 +877,7 @@ definition functor
 
 中文:
 定义 functor
-  签名: : Arrow C ⥤ Arrow C where
+  签名: : 箭头 C ⥤ 箭头 C where
   定义体: Arrow.mk (πFunctorObj f π.hom)
   map {π₁ π₂} τ := Arrow.homMk (functorMap f τ) τ.right
   map_id g := by
@@ -928,7 +928,7 @@ definition ε
 
 中文:
 定义 ε
-  签名: : 𝟭 (Arrow C) ⟶ functor f where
+  签名: : 𝟭 (箭头 C) ⟶ functor f where
   定义体: Arrow.homMk (ιFunctorObj f π.hom) (𝟙 _)
 
 Depends on / 依赖: Arrow.homMk

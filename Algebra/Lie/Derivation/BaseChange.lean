@@ -49,7 +49,7 @@ definition ofDerivation
 
 中文:
 定义 ofDerivation
-  签名: : Derivation R A A ->ₗ⁅R⁆ LieDerivation R (A otimes[R] L) (A otimes[R] L) where
+  签名: : 导子 R A A ->ₗ⁅R⁆ LieDerivation R (A otimes[R] L) (A otimes[R] L) where
   定义体: { toFun := d.rTensor L
       map_add' := by simp
       map_smul' := by simp
@@ -91,7 +91,7 @@ lemma ofDerivation_apply
 
 中文:
 引理 ofDerivation_apply
-  条件: (d : Derivation R A A) (x : A otimes[R] L)
+  条件: (d : 导子 R A A) (x : A otimes[R] L)
   证明: rfl
 -/
 lemma ofDerivation_apply (d : Derivation R A A) (x : A otimes[R] L) :

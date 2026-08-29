@@ -87,7 +87,7 @@ definition LocallyContractibleSpace
 
 中文:
 定义 LocallyContractibleSpace
-  签名: (X : 类型) [TopologicalSpace X]
+  签名: (X : 类型) [拓扑空间 X]
   定义体: forall (x : X) (U : Set X), U in 𝓝 x ->
     exists (V : Set X) (hVU : V subseteq U), V in 𝓝 x ∧ Nullhomotopic (inclusion hVU)
 
@@ -111,10 +111,10 @@ class StronglyLocallyContractibleSpace
     - contractible_basis : forall x : X, (𝓝 x).HasBasis (fun s : Set X => s in 𝓝 x ∧ ContractibleSpace s) id
 
 中文:
-类 StronglyLocallyContractibleSpace
-  参数: (X : 类型) [TopologicalSpace X]
+类 StronglyLocallyContractible空间
+  参数: (X : 类型) [拓扑空间 X]
   公理与运算 (1 个):
-    - contractible_basis : 对任意 x : X, (𝓝 x).HasBasis (fun s : Set X => s in 𝓝 x ∧ ContractibleSpace s) id
+    - contractible_basis : 对任意 x : X, (𝓝 x).有基 (fun s : 集合 X => s in 𝓝 x ∧ 余ntractible空间 s) id
 -/
 class StronglyLocallyContractibleSpace (X : Type*) [TopologicalSpace X] : Prop where
   /-- Each neighborhood filter has a basis of contractible subspace neighborhoods. -/
@@ -136,8 +136,8 @@ theorem StronglyLocallyContractibleSpace.of_bases
     exact ⟨s x i, (h x).mem_of_mem hpi, h' x i hpi, hi⟩
 
 中文:
-定理 StronglyLocallyContractibleSpace.of_bases
-  结论: {p : X -> ι -> 命题} {s : X -> ι -> Set X}
+定理 StronglyLocallyContractible空间.of_bases
+  结论: {p : X -> ι -> 命题} {s : X -> ι -> 集合 X}
   证明: by
     rw [hasBasis_self]
     intro t ht
@@ -167,7 +167,7 @@ theorem contractible_subset_basis
 
 中文:
 定理 contractible_subset_basis
-  条件: {U : Set X} (h : IsOpen U) (hx : x in U)
+  条件: {U : 集合 X} (h : 是开集 U) (hx : x in U)
   证明: (contractible_basis x).hasBasis_self_subset (IsOpen.mem_nhds h hx)
 
 Depends on / 依赖: IsOpen, IsOpen.mem_nhds, contractible_basis, hasBasis_self_subset, mem_nhds
@@ -196,7 +196,7 @@ theorem Topology.IsOpenEmbedding.stronglyLocallyContractibleSpace
       (he.toIsEmbedding.homeomorphOfSubsetRange hse).contractibleSpace_iff.mpr hs
 
 中文:
-定理 Topology.IsOpenEmbedding.stronglyLocallyContractibleSpace
+定理 拓扑.是开嵌入.stronglyLocallyContractibleSpace
   结论: {e : Y -> X}
   证明: .of_bases
     (fun _ => he.basis_nhds <| contractible_subset_basis he.isOpen_range (mem_range_self _))
@@ -221,8 +221,8 @@ theorem IsOpen.stronglyLocallyContractibleSpace
   proof: h.isOpenEmbedding_subtypeVal.stronglyLocallyContractibleSpace
 
 中文:
-定理 IsOpen.stronglyLocallyContractibleSpace
-  条件: {U : Set X} (h : IsOpen U)
+定理 是开集.stronglyLocallyContractibleSpace
+  条件: {U : 集合 X} (h : 是开集 U)
   证明: h.isOpenEmbedding_subtypeVal.stronglyLocallyContractibleSpace
 
 Depends on / 依赖: h.isOpenEmbedding_subtypeVal.stronglyLocallyContractibleSpace, isOpenEmbedding_subtypeVal, stronglyLocallyContractibleSpace
@@ -252,8 +252,8 @@ instance [StronglyLocallyContractibleSpace
  
 
 中文:
-实例 [StronglyLocallyContractibleSpace
-  签名: X] [StronglyLocallyContractibleSpace Y] :
+实例 [StronglyLocallyContractible空间
+  签名: X] [StronglyLocallyContractible空间 Y] :
   定义体: by
   refine .of_bases (ι := Set X × Set Y)
     (p := fun (x, y) (Ux, Uy) =>
@@ -299,8 +299,8 @@ theorem StronglyLocallyContractibleSpace.locallyContractible
   -- The inclusion V ↪ U is homotopic to the cons
 
 中文:
-定理 StronglyLocallyContractibleSpace.locallyContractible
-  条件: [StronglyLocallyContractibleSpace X]
+定理 StronglyLocallyContractible空间.locallyContractible
+  条件: [StronglyLocallyContractible空间 X]
   证明: by
   intro x U hU
   obtain ⟨V, ⟨hVmem, hVcontractible⟩, hVU⟩ := (contractible_basis x).mem_iff.mp hU

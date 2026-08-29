@@ -72,7 +72,7 @@ lemma zero_ne_one
 
 中文:
 引理 zero_ne_one
-  条件: [One α] [NeZero (1 : α)]
+  条件: [幺 α] [NeZero (1 : α)]
   结论: (0 : α) != 1
   证明: NeZero.ne' (1 : α)
 -/
@@ -89,7 +89,7 @@ lemma one_ne_zero
 
 中文:
 引理 one_ne_zero
-  条件: [One α] [NeZero (1 : α)]
+  条件: [幺 α] [NeZero (1 : α)]
   结论: (1 : α) != 0
   证明: NeZero.ne (1 : α)
 -/
@@ -106,7 +106,7 @@ lemma ne_zero_of_eq_one
 
 中文:
 引理 ne_zero_of_eq_one
-  条件: [One α] [NeZero (1 : α)] {a : α} (h : a = 1)
+  条件: [幺 α] [NeZero (1 : α)] {a : α} (h : a = 1)
   结论: a != 0
   证明: h ▸ one_ne_zero
 
@@ -184,7 +184,7 @@ lemma zero_ne_one'
 
 中文:
 引理 zero_ne_one'
-  条件: [One α] [NeZero (1 : α)]
+  条件: [幺 α] [NeZero (1 : α)]
   结论: (0 : α) != 1
   证明: zero_ne_one
 
@@ -203,7 +203,7 @@ lemma one_ne_zero'
 
 中文:
 引理 one_ne_zero'
-  条件: [One α] [NeZero (1 : α)]
+  条件: [幺 α] [NeZero (1 : α)]
   结论: (1 : α) != 0
   证明: one_ne_zero
 
@@ -285,7 +285,7 @@ theorem of_pos
 
 中文:
 定理 of_pos
-  条件: [Preorder M] [Zero M] (h : 0 < x)
+  条件: [预序 M] [零 M] (h : 0 < x)
   结论: NeZero x
   证明: ⟨ne_of_gt h⟩
 

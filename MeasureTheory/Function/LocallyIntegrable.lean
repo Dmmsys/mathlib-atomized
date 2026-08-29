@@ -51,8 +51,8 @@ definition LocallyIntegrableOn
 @[gcongr]
 
 中文:
-定义 LocallyIntegrableOn
-  签名: (f : X -> ε) (s : Set X) (μ : Measure X := by volume_tac)
+定义 Locally整数egrableOn
+  签名: (f : X -> ε) (s : 集合 X) (μ : 测度 X := by volume_tac)
   定义体: forall x : X, x in s -> IntegrableAtFilter f (𝓝[s] x) μ
 
 @[gcongr]
@@ -73,8 +73,8 @@ theorem LocallyIntegrableOn.mono_set
   (hf x <| hst hx).filter_mono (nhdsWithin_mono x hst)
 
 中文:
-定理 LocallyIntegrableOn.mono_set
-  结论: (hf : Locally整数egrableOn f s μ) {t : Set X}
+定理 Locally整数egrableOn.mono_set
+  结论: (hf : Locally整数egrableOn f s μ) {t : 集合 X}
   证明: fun x hx =>
   (hf x <| hst hx).filter_mono (nhdsWithin_mono x hst)
 -/
@@ -93,7 +93,7 @@ theorem LocallyIntegrableOn.enorm
   ⟨U, hU_nhd, hU_int.enorm⟩
 
 中文:
-定理 LocallyIntegrableOn.enorm
+定理 Locally整数egrableOn.enorm
   条件: (hf : Locally整数egrableOn f s μ)
   证明: fun t ht =>
   let ⟨U, hU_nhd, hU_int⟩ := hf t ht
@@ -115,7 +115,7 @@ theorem LocallyIntegrableOn.norm
   ⟨U, hU_nhd, hU_int.norm⟩
 
 中文:
-定理 LocallyIntegrableOn.norm
+定理 Locally整数egrableOn.norm
   条件: {f : X -> E} (hf : Locally整数egrableOn f s μ)
   证明: fun t ht =>
   let ⟨U, hU_nhd, hU_int⟩ := hf t ht
@@ -138,7 +138,7 @@ theorem LocallyIntegrableOn.mono_enorm
   exact ⟨t, t_mem, ht.mono_enorm hg.restrict (ae_restrict_of_ae h)⟩
 
 中文:
-定理 LocallyIntegrableOn.mono_enorm
+定理 Locally整数egrableOn.mono_enorm
   结论: (hf : Locally整数egrableOn f s μ) {g : X -> ε'}
   证明: by
   intro x hx
@@ -166,7 +166,7 @@ theorem LocallyIntegrableOn.mono
   exact ⟨t, t_mem, Integrable.mono ht hg.restrict (ae_restrict_of_ae h)⟩
 
 中文:
-定理 LocallyIntegrableOn.mono
+定理 Locally整数egrableOn.mono
   结论: {f : X -> E} (hf : Locally整数egrableOn f s μ) {g : X -> F}
   证明: by
   intro x hx
@@ -198,8 +198,8 @@ lemma LocallyIntegrableOn.mono_measure'
   simp_rw [← restrict_restrict hu.measurableSet
 
 中文:
-引理 LocallyIntegrableOn.mono_measure'
-  结论: [OpensMeasurableSpace X] (hf : Locally整数egrableOn f s μ)
+引理 Locally整数egrableOn.mono_measure'
+  结论: [OpensMeasurable空间 X] (hf : Locally整数egrableOn f s μ)
   证明: by
   intro x hx
   obtain ⟨t, ht, hf⟩ := hf x hx
@@ -234,7 +234,7 @@ lemma LocallyIntegrableOn.mono_measure
 @[gcongr]
 
 中文:
-引理 LocallyIntegrableOn.mono_measure
+引理 Locally整数egrableOn.mono_measure
   条件: (hf : Locally整数egrableOn f s μ) (h : ν <= μ)
   证明: fun x hx => (hf x hx).mono_measure h
 
@@ -263,7 +263,7 @@ lemma LocallyIntegrableOn.congr
   exact inter_subset_left
 
 中文:
-引理 LocallyIntegrableOn.congr
+引理 Locally整数egrableOn.congr
   条件: (h : f =ᵐ[μ.restrict s] g) (hf : Locally整数egrableOn f s μ)
   证明: by
   intro x hx
@@ -295,7 +295,7 @@ lemma locallyIntegrableOn_congr
   proof: ⟨(·.congr h), (·.congr h.symm)⟩
 
 中文:
-引理 locallyIntegrableOn_congr
+引理 locally整数egrableOn_congr
   条件: (h : f =ᵐ[μ.restrict s] g)
   证明: ⟨(·.congr h), (·.congr h.symm)⟩
 
@@ -315,7 +315,7 @@ theorem IntegrableOn.locallyIntegrableOn
   proof: fun _ _ => ⟨s, self_mem_nhdsWithin, hf⟩
 
 中文:
-定理 IntegrableOn.locallyIntegrableOn
+定理 整数egrableOn.locally整数egrableOn
   条件: (hf : 整数egrableOn f s μ)
   结论: Locally整数egrableOn f s μ
   证明: fun _ _ => ⟨s, self_mem_nhdsWithin, hf⟩
@@ -335,8 +335,8 @@ theorem LocallyIntegrableOn.integrableOn_isCompact
     (fun _u _v hu hv => integrableOn_union.mpr ⟨hu, hv⟩) hf
 
 中文:
-定理 LocallyIntegrableOn.integrableOn_isCompact
-  结论: [PseudoMetrizableSpace ε]
+定理 Locally整数egrableOn.integrableOn_isCompact
+  结论: [PseudoMetrizable空间 ε]
   证明: IsCompact.induction_on hs integrableOn_empty (fun _u _v huv hv => hv.mono_set huv)
     (fun _u _v hu hv => integrableOn_union.mpr ⟨hu, hv⟩) hf
 
@@ -356,8 +356,8 @@ theorem LocallyIntegrableOn.integrableOn_compact_subset
   proof: (hf.mono_set hst).integrableOn_isCompact ht
 
 中文:
-定理 LocallyIntegrableOn.integrableOn_compact_subset
-  结论: [PseudoMetrizableSpace ε]
+定理 Locally整数egrableOn.integrableOn_compact_subset
+  结论: [PseudoMetrizable空间 ε]
   证明: (hf.mono_set hst).integrableOn_isCompact ht
 
 Depends on / 依赖: hf.mono_set, integrableOn_isCompact, mono_set
@@ -383,8 +383,8 @@ theorem LocallyIntegrableOn.exists_countable_integrableOn
   obt
 
 中文:
-定理 LocallyIntegrableOn.exists_countable_integrableOn
-  结论: [SecondCountableTopology X]
+定理 Locally整数egrableOn.存在_countable_integrableOn
+  结论: [第二可数拓扑 X]
   证明: by
   have : forall x : s, exists u, IsOpen u ∧ x.1 in u ∧ IntegrableOn f (u inter s) μ := by
     rintro ⟨x, hx⟩
@@ -430,8 +430,8 @@ theorem LocallyIntegrableOn.exists_nat_integrableOn
   ref
 
 中文:
-定理 LocallyIntegrableOn.exists_nat_integrableOn
-  结论: [SecondCountableTopology X]
+定理 Locally整数egrableOn.存在_nat_integrableOn
+  结论: [第二可数拓扑 X]
   证明: by
   rcases hf.exists_countable_integrableOn with ⟨T, T_count, T_open, sT, hT⟩
   let T' : Set (Set X) := insert ∅ T
@@ -481,8 +481,8 @@ theorem LocallyIntegrableOn.aestronglyMeasurable
   exact fun i : Nat => (hu i).aestronglyMeasurable
 
 中文:
-定理 LocallyIntegrableOn.aestronglyMeasurable
-  结论: [PseudoMetrizableSpace ε]
+定理 Locally整数egrableOn.aestronglyMeasurable
+  结论: [PseudoMetrizable空间 ε]
   证明: by
   rcases hf.exists_nat_integrableOn with ⟨u, -, su, hu⟩
   have : s = ⋃ n, u n inter s := by rw [← iUnion_inter]; exact (inter_eq_right.mpr su).symm
@@ -513,8 +513,8 @@ theorem locallyIntegrableOn_iff
   refine ⟨Z inter K, inter_mem_nhdsWithin _ (me
 
 中文:
-定理 locallyIntegrableOn_iff
-  结论: [PseudoMetrizableSpace ε]
+定理 locally整数egrableOn_iff
+  结论: [PseudoMetrizable空间 ε]
   证明: by
   refine ⟨fun hf k hk => hf.integrableOn_compact_subset hk, fun hf x hx => ?_⟩
   rcases hs with ⟨U, Z, hU, hZ, rfl⟩
@@ -543,7 +543,7 @@ theorem _root_.ContinuousLinearMap.locallyIntegrableOn_comp
   proof: (L.integrableAtFilter_comp <| hf · ·)
 
 中文:
-定理 _root_.ContinuousLinearMap.locallyIntegrableOn_comp
+定理 _root_.连续线性映射.locally整数egrableOn_comp
   结论: {E H 𝕜 𝕜' : 类型}
   证明: (L.integrableAtFilter_comp <| hf · ·)
 
@@ -565,8 +565,8 @@ theorem LocallyIntegrableOn.add
   proof: fun x hx => (hf x hx).add (hg x hx)
 
 中文:
-定理 LocallyIntegrableOn.add
-  结论: [ContinuousAdd ε''] {f g : X -> ε''}
+定理 Locally整数egrableOn.add
+  结论: [连续加法 ε''] {f g : X -> ε''}
   证明: fun x hx => (hf x hx).add (hg x hx)
 
 Depends on / 依赖: Ring.ne_bot_of_isMaximal_of_not_isField, RingOfIntegers, RingOfIntegers.not_isField, ne_bot_of_isMaximal_of_not_isField, not_isField
@@ -584,7 +584,7 @@ theorem LocallyIntegrableOn.sub
   proof: fun x hx => (hf x hx).sub (hg x hx)
 
 中文:
-定理 LocallyIntegrableOn.sub
+定理 Locally整数egrableOn.sub
   证明: fun x hx => (hf x hx).sub (hg x hx)
 -/
 protected theorem LocallyIntegrableOn.sub
@@ -600,7 +600,7 @@ theorem LocallyIntegrableOn.neg
   proof: fun x hx => (hf x hx).neg
 
 中文:
-定理 LocallyIntegrableOn.neg
+定理 Locally整数egrableOn.neg
   条件: {f : X -> E} (hf : Locally整数egrableOn f s μ)
   证明: fun x hx => (hf x hx).neg
 -/
@@ -618,7 +618,7 @@ theorem locallyIntegrableOn_neg_iff
   simp_rw [MeasureTheory.integrableAtFilter_neg_iff]
 
 中文:
-定理 locallyIntegrableOn_neg_iff
+定理 locally整数egrableOn_neg_iff
   条件: {f : X -> E}
   证明: by
   unfold LocallyIntegrableOn
@@ -639,8 +639,8 @@ theorem LocallyIntegrableOn.smul
   proof: fun x hx => (hf x hx).smul c
 
 中文:
-定理 LocallyIntegrableOn.smul
-  结论: {𝕜 : 类型} [NormedField 𝕜] [NormedSpace 𝕜 E]
+定理 Locally整数egrableOn.smul
+  结论: {𝕜 : 类型} [赋范域 𝕜] [赋范空间 𝕜 E]
   证明: fun x hx => (hf x hx).smul c
 -/
 protected theorem LocallyIntegrableOn.smul {𝕜 : Type*} [NormedField 𝕜] [NormedSpace 𝕜 E]
@@ -659,8 +659,8 @@ theorem locallyIntegrableOn_smul_iff
   grind [integrableAtFilter_smul_iff]
 
 中文:
-定理 locallyIntegrableOn_smul_iff
-  结论: {𝕜 : 类型} [NormedField 𝕜] [NormedSpace 𝕜 E]
+定理 locally整数egrableOn_smul_iff
+  结论: {𝕜 : 类型} [赋范域 𝕜] [赋范空间 𝕜 E]
   证明: by
   unfold LocallyIntegrableOn
   grind [integrableAtFilter_smul_iff]
@@ -682,8 +682,8 @@ definition LocallyIntegrable
   body: forall x : X, IntegrableAtFilter f (𝓝 x) μ
 
 中文:
-定义 LocallyIntegrable
-  签名: (f : X -> ε) (μ : Measure X := by volume_tac)
+定义 Locally整数egrable
+  签名: (f : X -> ε) (μ : 测度 X := by volume_tac)
   定义体: forall x : X, IntegrableAtFilter f (𝓝 x) μ
 
 Depends on / 依赖: IntegrableAtFilter, volume_tac
@@ -702,8 +702,8 @@ theorem locallyIntegrable_comap
   exact forall_congr' fun _ => (MeasurableEmbedding.subtype_coe hs).integrableAtFilter_iff_comap.symm
 
 中文:
-定理 locallyIntegrable_comap
-  条件: (hs : MeasurableSet s)
+定理 locally整数egrable_comap
+  条件: (hs : 可测集 s)
   证明: by
   simp_rw [LocallyIntegrableOn, Subtype.forall', ← map_nhds_subtype_val]
   exact forall_congr' fun _ => (MeasurableEmbedding.subtype_coe hs).integrableAtFilter_iff_comap.symm
@@ -725,7 +725,7 @@ theorem locallyIntegrableOn_univ
   simp only [LocallyIntegrableOn, nhdsWithin_univ, mem_univ, true_imp_iff]; rfl
 
 中文:
-定理 locallyIntegrableOn_univ
+定理 locally整数egrableOn_univ
   结论: Locally整数egrableOn f univ μ ↔ Locally整数egrable f μ
   证明: by
   simp only [LocallyIntegrableOn, nhdsWithin_univ, mem_univ, true_imp_iff]; rfl
@@ -744,8 +744,8 @@ theorem LocallyIntegrable.locallyIntegrableOn
   proof: fun x _ => (hf x).filter_mono nhdsWithin_le_nhds
 
 中文:
-定理 LocallyIntegrable.locallyIntegrableOn
-  条件: (hf : Locally整数egrable f μ) (s : Set X)
+定理 Locally整数egrable.locally整数egrableOn
+  条件: (hf : Locally整数egrable f μ) (s : 集合 X)
   证明: fun x _ => (hf x).filter_mono nhdsWithin_le_nhds
 
 Depends on / 依赖: filter_mono, nhdsWithin_le_nhds
@@ -764,8 +764,8 @@ theorem Integrable.locallyIntegrable
   hf.integrableAtFilter _
 
 中文:
-定理 Integrable.locallyIntegrable
-  条件: (hf : 整数egrable f μ)
+定理 可积.locally整数egrable
+  条件: (hf : 可积 f μ)
   结论: Locally整数egrable f μ
   证明: fun _ =>
   hf.integrableAtFilter _
@@ -784,7 +784,7 @@ theorem LocallyIntegrable.mono_enorm
   exact hf.mono_enorm hg h
 
 中文:
-定理 LocallyIntegrable.mono_enorm
+定理 Locally整数egrable.mono_enorm
   结论: (hf : Locally整数egrable f μ) {g : X -> ε'}
   证明: by
   rw [← locallyIntegrableOn_univ] at hf ⊢
@@ -811,7 +811,7 @@ theorem LocallyIntegrable.mono
 @[gcongr]
 
 中文:
-定理 LocallyIntegrable.mono
+定理 Locally整数egrable.mono
   结论: {f : X -> E} (hf : Locally整数egrable f μ) {g : X -> F}
   证明: by
   rw [← locallyIntegrableOn_univ] at hf ⊢
@@ -839,7 +839,7 @@ lemma LocallyIntegrable.mono_measure
 @[gcongr]
 
 中文:
-引理 LocallyIntegrable.mono_measure
+引理 Locally整数egrable.mono_measure
   条件: (hf : Locally整数egrable f μ) (h : ν <= μ)
   证明: (hf · |>.mono_measure h)
 
@@ -861,7 +861,7 @@ lemma LocallyIntegrable.congr
   proof: (hf · |>.congr h)
 
 中文:
-引理 LocallyIntegrable.congr
+引理 Locally整数egrable.congr
   条件: (hf : Locally整数egrable f μ) (h : f =ᵐ[μ] g)
   证明: (hf · |>.congr h)
 -/
@@ -878,7 +878,7 @@ lemma locallyIntegrable_congr
   proof: ⟨(·.congr h), (·.congr h.symm)⟩
 
 中文:
-引理 locallyIntegrable_congr
+引理 locally整数egrable_congr
   条件: (h : f =ᵐ[μ] g)
   证明: ⟨(·.congr h), (·.congr h.symm)⟩
 
@@ -903,8 +903,8 @@ theorem locallyIntegrableOn_of_locallyIntegrable_restrict
     ht_int.mono_set hu_sub
 
 中文:
-定理 locallyIntegrableOn_of_locallyIntegrable_restrict
-  结论: [OpensMeasurableSpace X]
+定理 locally整数egrableOn_of_locally整数egrable_restrict
+  结论: [OpensMeasurable空间 X]
   证明: by
   intro x _
   obtain ⟨t, ht_mem, ht_int⟩ := hf x
@@ -939,8 +939,8 @@ theorem locallyIntegrableOn_iff_locallyIntegrable_restrict
     rw [IntegrableOn]; rw [restrict_restrict hu_o.mea
 
 中文:
-定理 locallyIntegrableOn_iff_locallyIntegrable_restrict
-  结论: [OpensMeasurableSpace X]
+定理 locally整数egrableOn_iff_locally整数egrable_restrict
+  结论: [OpensMeasurable空间 X]
   证明: by
   refine ⟨fun hf x => ?_, locallyIntegrableOn_of_locallyIntegrable_restrict⟩
   by_cases h : x in s
@@ -974,8 +974,8 @@ theorem LocallyIntegrable.integrableOn_isCompact
   proof: (hf.locallyIntegrableOn k).integrableOn_isCompact hk
 
 中文:
-定理 LocallyIntegrable.integrableOn_isCompact
-  结论: [PseudoMetrizableSpace ε]
+定理 Locally整数egrable.integrableOn_isCompact
+  结论: [PseudoMetrizable空间 ε]
   证明: (hf.locallyIntegrableOn k).integrableOn_isCompact hk
 
 Depends on / 依赖: hf.locallyIntegrableOn, integrableOn_isCompact, locallyIntegrableOn
@@ -999,8 +999,8 @@ theorem LocallyIntegrable.integrableOn_nhds_isCompact
     exact ⟨u union v, u_open.union v_open, union_subset
 
 中文:
-定理 LocallyIntegrable.integrableOn_nhds_isCompact
-  结论: [PseudoMetrizableSpace ε]
+定理 Locally整数egrable.integrableOn_nhds_isCompact
+  结论: [PseudoMetrizable空间 ε]
   证明: by
   refine IsCompact.induction_on hk ?_ ?_ ?_ ?_
   · refine ⟨∅, isOpen_empty, Subset.rfl, integrableOn_empty⟩
@@ -1036,8 +1036,8 @@ theorem locallyIntegrable_iff
     ⟨K, h2K, hf K hK⟩⟩
 
 中文:
-定理 locallyIntegrable_iff
-  条件: [PseudoMetrizableSpace ε] [LocallyCompactSpace X]
+定理 locally整数egrable_iff
+  条件: [PseudoMetrizable空间 ε] [局部紧空间 X]
   证明: ⟨fun hf _k hk => hf.integrableOn_isCompact hk, fun hf x =>
     let ⟨K, hK, h2K⟩ := exists_compact_mem_nhds x
     ⟨K, h2K, hf K hK⟩⟩
@@ -1060,8 +1060,8 @@ theorem LocallyIntegrable.aestronglyMeasurable
   simpa only [restrict_univ] using (locallyIntegrableOn_univ.mpr hf).aestronglyMeasurable
 
 中文:
-定理 LocallyIntegrable.aestronglyMeasurable
-  结论: [PseudoMetrizableSpace ε] [SecondCountableTopology X]
+定理 Locally整数egrable.aestronglyMeasurable
+  结论: [PseudoMetrizable空间 ε] [第二可数拓扑 X]
   证明: by
   simpa only [restrict_univ] using (locallyIntegrableOn_univ.mpr hf).aestronglyMeasurable
 
@@ -1083,8 +1083,8 @@ theorem LocallyIntegrable.exists_nat_integrableOn
   simpa only [inter_univ] using hu n
 
 中文:
-定理 LocallyIntegrable.exists_nat_integrableOn
-  结论: [SecondCountableTopology X]
+定理 Locally整数egrable.存在_nat_integrableOn
+  结论: [第二可数拓扑 X]
   证明: by
   rcases (hf.locallyIntegrableOn univ).exists_nat_integrableOn with ⟨u, u_open, u_union, hu⟩
   refine ⟨u, u_open, eq_univ_of_univ_subset u_union, fun n => ?_⟩
@@ -1114,8 +1114,8 @@ theorem MemLp.locallyIntegrable
   apply (hf.restrict U).mono_exponent hp
 
 中文:
-定理 MemLp.locallyIntegrable
-  结论: [IsLocallyFiniteMeasure μ] {p : 实数>=0∞}
+定理 MemLp.locally整数egrable
+  结论: [是局部有限测度 μ] {p : 实数>=0∞}
   证明: by
   intro x
   rcases μ.finiteAt_nhds x with ⟨U, hU, h'U⟩
@@ -1144,8 +1144,8 @@ theorem locallyIntegrable_const_enorm
   proof: (memLp_top_const_enorm hc).locallyIntegrable le_top
 
 中文:
-定理 locallyIntegrable_const_enorm
-  条件: [IsLocallyFiniteMeasure μ] {c : ε} (hc : ‖c‖ₑ != ∞)
+定理 locally整数egrable_const_enorm
+  条件: [是局部有限测度 μ] {c : ε} (hc : ‖c‖ₑ != ∞)
   证明: (memLp_top_const_enorm hc).locallyIntegrable le_top
 
 Depends on / 依赖: algebraMap, charZero_of_injective_algebraMap, injective, le_top, locallyIntegrable, memLp_top_const_enorm
@@ -1163,8 +1163,8 @@ theorem locallyIntegrable_const
   proof: locallyIntegrable_const_enorm enorm_ne_top
 
 中文:
-定理 locallyIntegrable_const
-  条件: [IsLocallyFiniteMeasure μ] (c : E)
+定理 locally整数egrable_const
+  条件: [是局部有限测度 μ] (c : E)
   证明: locallyIntegrable_const_enorm enorm_ne_top
 
 Depends on / 依赖: enorm_ne_top, locallyIntegrable_const_enorm
@@ -1182,8 +1182,8 @@ theorem locallyIntegrableOn_const_enorm
   proof: (locallyIntegrable_const_enorm hc).locallyIntegrableOn s
 
 中文:
-定理 locallyIntegrableOn_const_enorm
-  条件: [IsLocallyFiniteMeasure μ] {c : ε} (hc : ‖c‖ₑ != ∞)
+定理 locally整数egrableOn_const_enorm
+  条件: [是局部有限测度 μ] {c : ε} (hc : ‖c‖ₑ != ∞)
   证明: (locallyIntegrable_const_enorm hc).locallyIntegrableOn s
 
 Depends on / 依赖: locallyIntegrableOn, locallyIntegrable_const_enorm
@@ -1201,8 +1201,8 @@ theorem locallyIntegrableOn_const
   proof: locallyIntegrableOn_const_enorm enorm_ne_top
 
 中文:
-定理 locallyIntegrableOn_const
-  条件: [IsLocallyFiniteMeasure μ] (c : E)
+定理 locally整数egrableOn_const
+  条件: [是局部有限测度 μ] (c : E)
   证明: locallyIntegrableOn_const_enorm enorm_ne_top
 
 Depends on / 依赖: enorm_ne_top, locallyIntegrableOn_const_enorm
@@ -1220,7 +1220,7 @@ theorem locallyIntegrable_zero
   proof: (integrable_zero X ε'' μ).locallyIntegrable
 
 中文:
-定理 locallyIntegrable_zero
+定理 locally整数egrable_zero
   结论: Locally整数egrable (fun _ => (0 : ε'')) μ
   证明: (integrable_zero X ε'' μ).locallyIntegrable
 
@@ -1238,7 +1238,7 @@ theorem locallyIntegrableOn_zero
   proof: locallyIntegrable_zero.locallyIntegrableOn s
 
 中文:
-定理 locallyIntegrableOn_zero
+定理 locally整数egrableOn_zero
   结论: Locally整数egrableOn (fun _ => (0 : ε'')) s μ
   证明: locallyIntegrable_zero.locallyIntegrableOn s
 
@@ -1259,8 +1259,8 @@ theorem LocallyIntegrable.indicator
   exact ⟨U, hU, h'U.indicator hs⟩
 
 中文:
-定理 LocallyIntegrable.indicator
-  结论: {f : X -> ε''} (hf : Locally整数egrable f μ) {s : Set X}
+定理 Locally整数egrable.indicator
+  结论: {f : X -> ε''} (hf : Locally整数egrable f μ) {s : 集合 X}
   证明: by
   intro x
   rcases hf x with ⟨U, hU, h'U⟩
@@ -1289,8 +1289,8 @@ theorem locallyIntegrable_map_homeomorph
     refine ⟨e.symm ⁻¹' U, e.symm.continuous.
 
 中文:
-定理 locallyIntegrable_map_homeomorph
-  结论: [BorelSpace X] [BorelSpace Y] (e : X ≃ₜ Y) {f : Y -> ε''}
+定理 locally整数egrable_map_homeomorph
+  结论: [Borel空间 X] [Borel空间 Y] (e : X ≃ₜ Y) {f : Y -> ε''}
   证明: by
   refine ⟨fun h x => ?_, fun h x => ?_⟩
   · rcases h (e x) with ⟨U, hU, h'U⟩
@@ -1324,8 +1324,8 @@ theorem LocallyIntegrable.add
   proof: fun x => (hf x).add (hg x)
 
 中文:
-定理 LocallyIntegrable.add
-  结论: [ContinuousAdd ε''] {f g : X -> ε''}
+定理 Locally整数egrable.add
+  结论: [连续加法 ε''] {f g : X -> ε''}
   证明: fun x => (hf x).add (hg x)
 -/
 protected theorem LocallyIntegrable.add [ContinuousAdd ε''] {f g : X -> ε''}
@@ -1341,7 +1341,7 @@ theorem LocallyIntegrable.sub
   proof: fun x => (hf x).sub (hg x)
 
 中文:
-定理 LocallyIntegrable.sub
+定理 Locally整数egrable.sub
   结论: {f g : X -> E}
   证明: fun x => (hf x).sub (hg x)
 -/
@@ -1358,7 +1358,7 @@ theorem LocallyIntegrable.neg
   proof: fun x => (hf x).neg
 
 中文:
-定理 LocallyIntegrable.neg
+定理 Locally整数egrable.neg
   条件: {f : X -> E} (hf : Locally整数egrable f μ)
   证明: fun x => (hf x).neg
 -/
@@ -1375,7 +1375,7 @@ theorem locallyIntegrable_neg_iff
   simp [← locallyIntegrableOn_univ]
 
 中文:
-定理 locallyIntegrable_neg_iff
+定理 locally整数egrable_neg_iff
   条件: {f : X -> E}
   证明: by
   simp [← locallyIntegrableOn_univ]
@@ -1393,8 +1393,8 @@ theorem LocallyIntegrable.smul
   proof: fun x => (hf x).smul c
 
 中文:
-定理 LocallyIntegrable.smul
-  结论: {f : X -> E} {𝕜 : 类型} [NormedAddCommGroup 𝕜]
+定理 Locally整数egrable.smul
+  结论: {f : X -> E} {𝕜 : 类型} [赋范交换加群 𝕜]
   证明: fun x => (hf x).smul c
 -/
 protected theorem LocallyIntegrable.smul {f : X -> E} {𝕜 : Type*} [NormedAddCommGroup 𝕜]
@@ -1412,8 +1412,8 @@ theorem locallyIntegrable_smul_iff
   simp [← locallyIntegrableOn_univ]
 
 中文:
-定理 locallyIntegrable_smul_iff
-  结论: {𝕜 : 类型} [NormedField 𝕜] [NormedSpace 𝕜 E]
+定理 locally整数egrable_smul_iff
+  结论: {𝕜 : 类型} [赋范域 𝕜] [赋范空间 𝕜 E]
   证明: by
   simp [← locallyIntegrableOn_univ]
 -/
@@ -1437,8 +1437,8 @@ theorem locallyIntegrable_finsetSum'
 alias locallyIntegrable_finset_sum' := locallyIntegrable_finsetSum'
 
 中文:
-定理 locallyIntegrable_finsetSum'
-  结论: {ι} (s : Finset ι) {f : ι -> X -> ε'''}
+定理 locally整数egrable_finsetSum'
+  结论: {ι} (s : 有限集 ι) {f : ι -> X -> ε'''}
   证明: Finset.sum_induction f (fun g => LocallyIntegrable g μ) (fun _ _ => LocallyIntegrable.add)
     locallyIntegrable_zero hf
 
@@ -1470,8 +1470,8 @@ theorem locallyIntegrable_finsetSum
 alias locallyIntegrable_finset_sum := locallyIntegrable_finsetSum
 
 中文:
-定理 locallyIntegrable_finsetSum
-  结论: {ι} (s : Finset ι) {f : ι -> X -> ε'''}
+定理 locally整数egrable_finsetSum
+  结论: {ι} (s : 有限集 ι) {f : ι -> X -> ε'''}
   证明: by
   simpa only [← Finset.sum_apply] using locallyIntegrable_finsetSum' s hf
 
@@ -1504,7 +1504,7 @@ theorem LocallyIntegrable.integrable_smul_left_of_hasCompactSupport
   apply Integr
 
 中文:
-定理 LocallyIntegrable.integrable_smul_left_of_hasCompactSupport
+定理 Locally整数egrable.integrable_smul_left_of_hasCompactSupport
   证明: by
   let K := tsupport g
   have hK : IsCompact K := h'g
@@ -1553,7 +1553,7 @@ theorem LocallyIntegrable.integrable_smul_right_of_hasCompactSupport
   apply I
 
 中文:
-定理 LocallyIntegrable.integrable_smul_right_of_hasCompactSupport
+定理 Locally整数egrable.integrable_smul_right_of_hasCompactSupport
   证明: by
   let K := tsupport g
   have hK : IsCompact K := h'g
@@ -1661,7 +1661,7 @@ theorem integrable_iff_integrableAtFilter_atBot
 
 中文:
 定理 integrable_iff_integrableAtFilter_atBot
-  条件: [LinearOrder X] [OrderTop X] [CompactIccSpace X]
+  条件: [线性序 X] [有顶序 X] [余mpactIcc空间 X]
   证明: by
   constructor
   · exact fun hf => ⟨hf.integrableAtFilter _, hf.locallyIntegrable⟩
@@ -1687,7 +1687,7 @@ theorem integrable_iff_integrableAtFilter_atTop
 
 中文:
 定理 integrable_iff_integrableAtFilter_atTop
-  条件: [LinearOrder X] [OrderBot X] [CompactIccSpace X]
+  条件: [线性序 X] [有底序 X] [余mpactIcc空间 X]
   证明: integrable_iff_integrableAtFilter_atBot (X := Xᵒᵈ)
 
 Depends on / 依赖: integrable_iff_integrableAtFilter_atBot
@@ -1713,7 +1713,7 @@ theorem integrableOn_Iic_iff_integrableAtFilter_atBot
 
 中文:
 定理 integrableOn_Iic_iff_integrableAtFilter_atBot
-  条件: [LinearOrder X] [CompactIccSpace X]
+  条件: [线性序 X] [余mpactIcc空间 X]
   证明: by
   refine ⟨fun h => ⟨⟨Iic a, Iic_mem_atBot a, h⟩, h.locallyIntegrableOn⟩, fun ⟨⟨s, hsl, hs⟩, h⟩ => ?_⟩
   have : Nonempty X := Nonempty.intro a
@@ -1741,7 +1741,7 @@ theorem integrableOn_Ici_iff_integrableAtFilter_atTop
 
 中文:
 定理 integrableOn_Ici_iff_integrableAtFilter_atTop
-  条件: [LinearOrder X] [CompactIccSpace X]
+  条件: [线性序 X] [余mpactIcc空间 X]
   证明: integrableOn_Iic_iff_integrableAtFilter_atBot (X := Xᵒᵈ)
 
 Depends on / 依赖: integrableOn_Iic_iff_integrableAtFilter_atBot
@@ -1825,8 +1825,8 @@ theorem Continuous.locallyIntegrable
   proof: hf.integrableAt_nhds
 
 中文:
-定理 Continuous.locallyIntegrable
-  结论: [IsLocallyFiniteMeasure μ] [SecondCountableTopologyEither X E]
+定理 连续.locally整数egrable
+  结论: [是局部有限测度 μ] [SecondCountableTopologyEither X E]
   证明: hf.integrableAt_nhds
 
 Depends on / 依赖: hf.integrableAt_nhds, integrableAt_nhds
@@ -1845,8 +1845,8 @@ theorem ContinuousOn.locallyIntegrableOn
   hf.integrableAt_nhdsWithin hK hx
 
 中文:
-定理 ContinuousOn.locallyIntegrableOn
-  结论: [IsLocallyFiniteMeasure μ]
+定理 ContinuousOn.locally整数egrableOn
+  结论: [是局部有限测度 μ]
   证明: fun _x hx =>
   hf.integrableAt_nhdsWithin hK hx
 -/
@@ -1922,7 +1922,7 @@ theorem ContinuousOn.integrableOn_compact
 
 中文:
 定理 ContinuousOn.integrableOn_compact
-  结论: [T2Space X]
+  结论: [T2空间 X]
   证明: hf.integrableOn_compact' hK hK.measurableSet
 
 Depends on / 依赖: hK.measurableSet, hf.integrableOn_compact, integrableOn_compact, measurableSet
@@ -1941,7 +1941,7 @@ theorem ContinuousOn.integrableOn_Icc
 
 中文:
 定理 ContinuousOn.integrableOn_Icc
-  结论: [Preorder X] [CompactIccSpace X] [T2Space X]
+  结论: [预序 X] [余mpactIcc空间 X] [T2空间 X]
   证明: hf.integrableOn_compact isCompact_Icc
 
 Depends on / 依赖: hf.integrableOn_compact, integrableOn_compact, isCompact_Icc
@@ -1959,8 +1959,8 @@ theorem Continuous.integrableOn_Icc
   proof: hf.continuousOn.integrableOn_Icc
 
 中文:
-定理 Continuous.integrableOn_Icc
-  结论: [Preorder X] [CompactIccSpace X] [T2Space X]
+定理 连续.integrableOn_Icc
+  结论: [预序 X] [余mpactIcc空间 X] [T2空间 X]
   证明: hf.continuousOn.integrableOn_Icc
 
 Depends on / 依赖: continuousOn, hf.continuousOn.integrableOn_Icc, integrableOn_Icc
@@ -1978,8 +1978,8 @@ theorem Continuous.integrableOn_Ioc
   proof: hf.integrableOn_Icc.mono_set Ioc_subset_Icc_self
 
 中文:
-定理 Continuous.integrableOn_Ioc
-  结论: [Preorder X] [CompactIccSpace X] [T2Space X]
+定理 连续.integrableOn_Ioc
+  结论: [预序 X] [余mpactIcc空间 X] [T2空间 X]
   证明: hf.integrableOn_Icc.mono_set Ioc_subset_Icc_self
 
 Depends on / 依赖: Ioc_subset_Icc_self, hf.integrableOn_Icc.mono_set, integrableOn_Icc, mono_set
@@ -1998,7 +1998,7 @@ theorem ContinuousOn.integrableOn_uIcc
 
 中文:
 定理 ContinuousOn.integrableOn_uIcc
-  结论: [LinearOrder X] [CompactIccSpace X] [T2Space X]
+  结论: [线性序 X] [余mpactIcc空间 X] [T2空间 X]
   证明: hf.integrableOn_Icc
 
 Depends on / 依赖: hf.integrableOn_Icc, integrableOn_Icc
@@ -2016,8 +2016,8 @@ theorem Continuous.integrableOn_uIcc
   proof: hf.integrableOn_Icc
 
 中文:
-定理 Continuous.integrableOn_uIcc
-  结论: [LinearOrder X] [CompactIccSpace X] [T2Space X]
+定理 连续.integrableOn_uIcc
+  结论: [线性序 X] [余mpactIcc空间 X] [T2空间 X]
   证明: hf.integrableOn_Icc
 
 Depends on / 依赖: hf.integrableOn_Icc, integrableOn_Icc
@@ -2036,8 +2036,8 @@ theorem Continuous.integrableOn_uIoc
   proof: hf.integrableOn_Ioc
 
 中文:
-定理 Continuous.integrableOn_uIoc
-  结论: [LinearOrder X] [CompactIccSpace X] [T2Space X]
+定理 连续.integrableOn_uIoc
+  结论: [线性序 X] [余mpactIcc空间 X] [T2空间 X]
   证明: hf.integrableOn_Ioc
 
 Depends on / 依赖: hf.integrableOn_Ioc, integrableOn_Ioc
@@ -2056,8 +2056,8 @@ theorem Continuous.integrable_of_hasCompactSupport
     hf.continuousOn.integrableOn_compact' hcf (isClosed_tsupport _).measurableSet
 
 中文:
-定理 Continuous.integrable_of_hasCompactSupport
-  条件: (hf : Continuous f) (hcf : HasCompactSupport f)
+定理 连续.integrable_of_hasCompactSupport
+  条件: (hf : 连续 f) (hcf : HasCompactSupport f)
   证明: (integrableOn_iff_integrable_of_support_subset (subset_tsupport f)).mp
     hf.continuousOn.integrableOn_compact' hcf (isClosed_tsupport _).measurableSet
 
@@ -2154,7 +2154,7 @@ theorem MonotoneOn.memLp_isCompact
 
 中文:
 定理 MonotoneOn.memLp_isCompact
-  结论: [IsFiniteMeasureOnCompacts μ] (hs : IsCompact s)
+  结论: [紧集上有限测度 μ] (hs : 是紧集 s)
   证明: by
   obtain rfl | h := s.eq_empty_or_nonempty
   · simp
@@ -2223,7 +2223,7 @@ theorem AntitoneOn.memLp_isCompact
 
 中文:
 定理 AntitoneOn.memLp_isCompact
-  结论: [IsFiniteMeasureOnCompacts μ] (hs : IsCompact s)
+  结论: [紧集上有限测度 μ] (hs : 是紧集 s)
   证明: MonotoneOn.memLp_isCompact (E := Eᵒᵈ) hs hanti
 
 Depends on / 依赖: MonotoneOn, MonotoneOn.memLp_isCompact, memLp_isCompact
@@ -2262,7 +2262,7 @@ theorem MonotoneOn.integrableOn_isCompact
 
 中文:
 定理 MonotoneOn.integrableOn_isCompact
-  结论: [IsFiniteMeasureOnCompacts μ] (hs : IsCompact s)
+  结论: [紧集上有限测度 μ] (hs : 是紧集 s)
   证明: memLp_one_iff_integrable.1 (hmono.memLp_isCompact hs)
 
 Depends on / 依赖: hmono.memLp_isCompact, memLp_isCompact, memLp_one_iff_integrable
@@ -2301,7 +2301,7 @@ theorem AntitoneOn.integrableOn_isCompact
 
 中文:
 定理 AntitoneOn.integrableOn_isCompact
-  结论: [IsFiniteMeasureOnCompacts μ] (hs : IsCompact s)
+  结论: [紧集上有限测度 μ] (hs : 是紧集 s)
   证明: memLp_one_iff_integrable.1 (hanti.memLp_isCompact hs)
 
 Depends on / 依赖: hanti.memLp_isCompact, memLp_isCompact, memLp_one_iff_integrable
@@ -2327,8 +2327,8 @@ theorem Monotone.locallyIntegrable
     (hmono.monotoneOn 
 
 中文:
-定理 Monotone.locallyIntegrable
-  条件: [IsLocallyFiniteMeasure μ] (hmono : Monotone f)
+定理 递增.locally整数egrable
+  条件: [是局部有限测度 μ] (hmono : 递增 f)
   证明: by
   intro x
   rcases μ.finiteAt_nhds x with ⟨U, hU, h'U⟩
@@ -2363,8 +2363,8 @@ theorem Antitone.locallyIntegrable
   proof: hanti.dual_right.locallyIntegrable
 
 中文:
-定理 Antitone.locallyIntegrable
-  条件: [IsLocallyFiniteMeasure μ] (hanti : Antitone f)
+定理 递减.locally整数egrable
+  条件: [是局部有限测度 μ] (hanti : 递减 f)
   证明: hanti.dual_right.locallyIntegrable
 
 Depends on / 依赖: dual_right, hanti.dual_right.locallyIntegrable, locallyIntegrable
@@ -2395,7 +2395,7 @@ theorem IntegrableOn.mul_continuousOn_of_subset
     (ae_restrict_of_forall_mem hA fun x hx => hC x (hAK hx))
 
 中文:
-定理 IntegrableOn.mul_continuousOn_of_subset
+定理 整数egrableOn.mul_continuousOn_of_subset
   结论: (hg : 整数egrableOn g A μ) (hg' : ContinuousOn g' K)
   证明: by
   rcases IsCompact.exists_bound_of_continuousOn hK hg' with ⟨C, hC⟩
@@ -2420,8 +2420,8 @@ theorem IntegrableOn.mul_continuousOn
   proof: hg.mul_continuousOn_of_subset hg' hK.measurableSet hK (Subset.refl _)
 
 中文:
-定理 IntegrableOn.mul_continuousOn
-  结论: [T2Space X] (hg : 整数egrableOn g K μ)
+定理 整数egrableOn.mul_continuousOn
+  结论: [T2空间 X] (hg : 整数egrableOn g K μ)
   证明: hg.mul_continuousOn_of_subset hg' hK.measurableSet hK (Subset.refl _)
 
 Depends on / 依赖: Subset, Subset.refl, hK.measurableSet, hg.mul_continuousOn_of_subset, measurableSet, mul_continuousOn_of_subset
@@ -2442,7 +2442,7 @@ theorem IntegrableOn.continuousOn_mul_of_subset
     (ae_restrict_of_forall_mem hA fun x hx => hC x (hAK hx))
 
 中文:
-定理 IntegrableOn.continuousOn_mul_of_subset
+定理 整数egrableOn.continuousOn_mul_of_subset
   结论: (hg : ContinuousOn g K) (hg' : 整数egrableOn g' A μ)
   证明: by
   rcases IsCompact.exists_bound_of_continuousOn hK hg with ⟨C, hC⟩
@@ -2467,8 +2467,8 @@ theorem IntegrableOn.continuousOn_mul
   proof: hg'.continuousOn_mul_of_subset hg hK hK.measurableSet Subset.rfl
 
 中文:
-定理 IntegrableOn.continuousOn_mul
-  结论: [T2Space X] (hg : ContinuousOn g K)
+定理 整数egrableOn.continuousOn_mul
+  结论: [T2空间 X] (hg : ContinuousOn g K)
   证明: hg'.continuousOn_mul_of_subset hg hK hK.measurableSet Subset.rfl
 
 Depends on / 依赖: Subset, Subset.rfl, continuousOn_mul_of_subset, hK.measurableSet, measurableSet
@@ -2495,7 +2495,7 @@ theorem IntegrableOn.continuousOn_smul_of_subset
     (ae_restrict_of_forall_mem hA fun x hx => hC x (hAK hx))
 
 中文:
-定理 IntegrableOn.continuousOn_smul_of_subset
+定理 整数egrableOn.continuousOn_smul_of_subset
   结论: [SecondCountableTopologyEither X 𝕜] {f : X -> 𝕜}
   证明: by
   rcases IsCompact.exists_bound_of_continuousOn hK hf with ⟨C, hC⟩
@@ -2521,8 +2521,8 @@ theorem IntegrableOn.continuousOn_smul
   proof: hg.continuousOn_smul_of_subset hf hK hK.measurableSet Subset.rfl
 
 中文:
-定理 IntegrableOn.continuousOn_smul
-  结论: [T2Space X] [SecondCountableTopologyEither X 𝕜] {g : X -> E}
+定理 整数egrableOn.continuousOn_smul
+  结论: [T2空间 X] [SecondCountableTopologyEither X 𝕜] {g : X -> E}
   证明: hg.continuousOn_smul_of_subset hf hK hK.measurableSet Subset.rfl
 
 Depends on / 依赖: Subset, Subset.rfl, continuousOn_smul_of_subset, hK.measurableSet, hg.continuousOn_smul_of_subset, measurableSet
@@ -2544,7 +2544,7 @@ theorem IntegrableOn.smul_continuousOn_of_subset
     (ae_restrict_of_forall_mem hA fun x hx => hC x (hAK hx))
 
 中文:
-定理 IntegrableOn.smul_continuousOn_of_subset
+定理 整数egrableOn.smul_continuousOn_of_subset
   结论: [SecondCountableTopologyEither X E] {f : X -> 𝕜}
   证明: by
   rcases IsCompact.exists_bound_of_continuousOn hK hg with ⟨C, hC⟩
@@ -2570,8 +2570,8 @@ theorem IntegrableOn.smul_continuousOn
   proof: hf.smul_continuousOn_of_subset hg hK.measurableSet hK (Subset.refl _)
 
 中文:
-定理 IntegrableOn.smul_continuousOn
-  结论: [T2Space X] [SecondCountableTopologyEither X E] {f : X -> 𝕜}
+定理 整数egrableOn.smul_continuousOn
+  结论: [T2空间 X] [SecondCountableTopologyEither X E] {f : X -> 𝕜}
   证明: hf.smul_continuousOn_of_subset hg hK.measurableSet hK (Subset.refl _)
 
 Depends on / 依赖: Subset, Subset.refl, hK.measurableSet, hf.smul_continuousOn_of_subset, measurableSet, smul_continuousOn_of_subset
@@ -2597,7 +2597,7 @@ theorem continuousOn_mul
 
 中文:
 定理 continuousOn_mul
-  结论: [LocallyCompactSpace X] [T2Space X] [NormedRing R]
+  结论: [局部紧空间 X] [T2空间 X] [赋范环 R]
   证明: by
   rw [MeasureTheory.locallyIntegrableOn_iff hs] at hf ⊢
   exact fun k hk_sub hk_c => (hf k hk_sub hk_c).continuousOn_mul (hg.mono hk_sub) hk_c
@@ -2623,7 +2623,7 @@ theorem mul_continuousOn
 
 中文:
 定理 mul_continuousOn
-  结论: [LocallyCompactSpace X] [T2Space X] [NormedRing R]
+  结论: [局部紧空间 X] [T2空间 X] [赋范环 R]
   证明: by
   rw [MeasureTheory.locallyIntegrableOn_iff hs] at hf ⊢
   exact fun k hk_sub hk_c => (hf k hk_sub hk_c).mul_continuousOn (hg.mono hk_sub) hk_c
@@ -2649,7 +2649,7 @@ theorem continuousOn_smul
 
 中文:
 定理 continuousOn_smul
-  结论: [LocallyCompactSpace X] [T2Space X] {𝕜 : 类型} [NormedRing 𝕜]
+  结论: [局部紧空间 X] [T2空间 X] {𝕜 : 类型} [赋范环 𝕜]
   证明: by
   rw [MeasureTheory.locallyIntegrableOn_iff hs] at hf ⊢
   exact fun k hk_sub hk_c => (hf k hk_sub hk_c).continuousOn_smul (hg.mono hk_sub) hk_c
@@ -2675,7 +2675,7 @@ theorem smul_continuousOn
 
 中文:
 定理 smul_continuousOn
-  结论: [LocallyCompactSpace X] [T2Space X] {𝕜 : 类型} [NormedRing 𝕜]
+  结论: [局部紧空间 X] [T2空间 X] {𝕜 : 类型} [赋范环 𝕜]
   证明: by
   rw [MeasureTheory.locallyIntegrableOn_iff hs] at hf ⊢
   exact fun k hk_sub hk_c => (hf k hk_sub hk_c).smul_continuousOn (hg.mono hk_sub) hk_c
@@ -2707,7 +2707,7 @@ theorem continuous_mul
 
 中文:
 定理 continuous_mul
-  结论: {f g : X -> R} (hg : Continuous g)
+  结论: {f g : X -> R} (hg : 连续 g)
   证明: locallyIntegrableOn_univ.1 ((hf.locallyIntegrableOn univ).continuousOn_mul
     hg.continuousOn isOpen_univ.isLocallyClosed)
 
@@ -2729,7 +2729,7 @@ theorem mul_continuous
 
 中文:
 定理 mul_continuous
-  结论: {f g : X -> R} (hg : Continuous g)
+  结论: {f g : X -> R} (hg : 连续 g)
   证明: locallyIntegrableOn_univ.1 ((hf.locallyIntegrableOn univ).mul_continuousOn
     hg.continuousOn isOpen_univ.isLocallyClosed)
 

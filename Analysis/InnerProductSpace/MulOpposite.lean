@@ -31,8 +31,8 @@ instance [Inner
   body: inner 𝕜 x.unop y.unop
 
 中文:
-实例 [Inner
-  签名: 𝕜 H] : Inner 𝕜 Hᵐᵒᵖ where inner x y
+实例 [内积
+  签名: 𝕜 H] : 内积 𝕜 Hᵐᵒᵖ where inner x y
   定义体: inner 𝕜 x.unop y.unop
 
 Depends on / 依赖: x.unop, y.unop
@@ -50,7 +50,7 @@ theorem inner_unop
 
 中文:
 定理 inner_unop
-  条件: [Inner 𝕜 H] (x y : Hᵐᵒᵖ)
+  条件: [内积 𝕜 H] (x y : Hᵐᵒᵖ)
   结论: inner 𝕜 x.unop y.unop = inner 𝕜 x y
   证明: rfl
 -/
@@ -67,7 +67,7 @@ theorem inner_op
 
 中文:
 定理 inner_op
-  条件: [Inner 𝕜 H] (x y : H)
+  条件: [内积 𝕜 H] (x y : H)
   结论: inner 𝕜 (op x) (op y) = inner 𝕜 x y
   证明: rfl
 -/
@@ -89,7 +89,7 @@ instance :
 
 中文:
 实例 :
-  签名: InnerProductSpace 𝕜 Hᵐᵒᵖ
+  签名: 内积空间 𝕜 Hᵐᵒᵖ
   定义体: (inner_self_eq_norm_sq x.unop).symm
   conj_inner_symm x y := InnerProductSpace.conj_inner_symm x.unop y.unop
   add_left x y z := InnerProductSpace.add_left x.unop y.unop z.unop
@@ -114,8 +114,8 @@ theorem _root_.Module.Basis.mulOpposite_is_orthonormal_iff
   proof: Iff.rfl
 
 中文:
-定理 _root_.Module.Basis.mulOpposite_is_orthonormal_iff
-  条件: {ι : 类型} (b : Module.Basis ι 𝕜 H)
+定理 _root_.模.基.mulOpposite_is_orthonormal_iff
+  条件: {ι : 类型} (b : 模.基 ι 𝕜 H)
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -134,8 +134,8 @@ definition _root_.OrthonormalBasis.mulOpposite
   body: b.toBasis.mulOpposite.toOrthonormalBasis b.orthonormal
 
 中文:
-定义 _root_.OrthonormalBasis.mulOpposite
-  签名: (b : OrthonormalBasis ι 𝕜 H)
+定义 _root_.正交标准基.mulOpposite
+  签名: (b : 正交标准基 ι 𝕜 H)
   定义体: b.toBasis.mulOpposite.toOrthonormalBasis b.orthonormal
 
 Depends on / 依赖: b.orthonormal, b.toBasis.mulOpposite.toOrthonormalBasis, mulOpposite, orthonormal, toBasis, toOrthonormalBasis
@@ -152,8 +152,8 @@ lemma _root_.OrthonormalBasis.toBasis_mulOpposite
   proof: rfl
 
 中文:
-引理 _root_.OrthonormalBasis.toBasis_mulOpposite
-  条件: (b : OrthonormalBasis ι 𝕜 H)
+引理 _root_.正交标准基.toBasis_mulOpposite
+  条件: (b : 正交标准基 ι 𝕜 H)
   证明: rfl
 -/
 @[simp] lemma _root_.OrthonormalBasis.toBasis_mulOpposite (b : OrthonormalBasis ι 𝕜 H) :

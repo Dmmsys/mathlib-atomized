@@ -76,7 +76,7 @@ definition asLimitConeAux
 
 中文:
 定义 asLimitConeAux
-  签名: : Cone S.diagram
+  签名: : 锥 S.diagram
   定义体: let c : Cone (S.diagram ⋙ lightToProfinite) := S.toLightDiagram.cone
   let hc : IsLimit c := S.toLightDiagram.isLimit
   liftLimit hc
@@ -124,7 +124,7 @@ definition asLimitAux
 
 中文:
 定义 asLimitAux
-  签名: : IsLimit S.asLimitConeAux
+  签名: : 是极限 S.asLimitConeAux
   定义体: let hc : IsLimit (lightToProfinite.mapCone S.asLimitConeAux) :=
     S.toLightDiagram.isLimit.ofIsoLimit S.isoMapCone.symm
   isLimitOfReflects lightToProfinite hc
@@ -150,7 +150,7 @@ definition asLimitCone
 
 中文:
 定义 asLimitCone
-  签名: : Cone S.diagram where
+  签名: : 锥 S.diagram where
   定义体: S
   π := {
     app := fun n => (lightToProfiniteFullyFaithful.preimageIso <|
@@ -177,7 +177,7 @@ definition asLimit
 
 中文:
 定义 asLimit
-  签名: : IsLimit S.asLimitCone
+  签名: : 是极限 S.asLimitCone
   定义体: S.asLimitAux.ofIsoLimit
   Cone.ext (lightToProfiniteFullyFaithful.preimageIso <|
     (Cone.forget _).mapIso S.isoMapCone) (fun _ => by rw [← @Iso.inv_comp_eq]; rfl)
@@ -198,7 +198,7 @@ definition lim
 
 中文:
 定义 lim
-  签名: : Limits.LimitCone S.diagram
+  签名: : Limits.极限锥 S.diagram
   定义体: ⟨S.asLimitCone, S.asLimit⟩
 
 Depends on / 依赖: S.asLimit, S.asLimitCone, asLimit, asLimitCone
@@ -269,7 +269,7 @@ lemma proj_surjective
 中文:
 引理 proj_surjective
   条件: (n : 自然数)
-  结论: Function.Surjective (S.proj n)
+  结论: 函数.满射 (S.proj n)
   证明: by
   change Function.Surjective (lightToProfinite.map (S.proj n))
   rw [lightToProfinite_map_proj_eq]
@@ -436,7 +436,7 @@ lemma surjective_transitionMap
 中文:
 引理 surjective_transitionMap
   条件: (n : 自然数)
-  结论: Function.Surjective (S.transitionMap n)
+  结论: 函数.满射 (S.transitionMap n)
   证明: by
   apply Function.Surjective.of_comp (g := S.proj (n + 1))
   simpa only [proj_comp_transitionMap'] using S.proj_surjective n

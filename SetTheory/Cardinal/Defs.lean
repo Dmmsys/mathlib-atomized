@@ -77,8 +77,8 @@ instance Cardinal.isEquivalent
     fun ⟨e₁⟩ ⟨e₂⟩ => ⟨e₁.trans e₂⟩⟩
 
 中文:
-实例 Cardinal.isEquivalent
-  签名: : Setoid (类型u) where
+实例 基数.isEquivalent
+  签名: : 集合等价关系 (类型u) where
   定义体: Nonempty (α ≃ β)
   iseqv := ⟨
     fun α => ⟨Equiv.refl α⟩,
@@ -107,8 +107,8 @@ definition Cardinal
   body: Quotient Cardinal.isEquivalent
 
 中文:
-定义 Cardinal
-  签名: : Type (u + 1)
+定义 基数
+  签名: : 类型 (u + 1)
   定义体: Quotient Cardinal.isEquivalent
 
 Depends on / 依赖: Cardinal, Cardinal.isEquivalent, Quotient, isEquivalent
@@ -131,7 +131,7 @@ scoped prefix:max "#" => Cardinal.mk
 
 中文:
 定义 mk
-  签名: : 类型u -> Cardinal
+  签名: : 类型u -> 基数
   定义体: Quotient.mk'
 
 @[inherit_doc]
@@ -157,7 +157,7 @@ instance canLiftCardinalType
 
 中文:
 实例 canLiftCardinalType
-  签名: : CanLift Cardinal.{u} (类型u) mk fun _ => True
+  签名: : CanLift 基数.{u} (类型u) mk fun _ => 真
   定义体: ⟨fun c _ => Quot.inductionOn c fun α => ⟨α, rfl⟩⟩
 
 @[elab_as_elim]
@@ -181,7 +181,7 @@ theorem inductionOn
 
 中文:
 定理 inductionOn
-  条件: {motive : Cardinal -> 命题} (c : Cardinal) (mk : 对任意 α, motive #α)
+  条件: {motive : 基数 -> 命题} (c : 基数) (mk : 对任意 α, motive #α)
   结论: motive c
   证明: Quotient.inductionOn c mk
 
@@ -205,7 +205,7 @@ theorem inductionOn₂
 
 中文:
 定理 inductionOn₂
-  结论: {motive : Cardinal -> Cardinal -> 命题} (c₁ c₂ : Cardinal)
+  结论: {motive : 基数 -> 基数 -> 命题} (c₁ c₂ : 基数)
   证明: Quotient.inductionOn₂ c₁ c₂ mk
 
 @[elab_as_elim]
@@ -227,7 +227,7 @@ theorem inductionOn₃
 
 中文:
 定理 inductionOn₃
-  结论: {motive : Cardinal -> Cardinal -> Cardinal -> 命题} (c₁ c₂ c₃ : Cardinal)
+  结论: {motive : 基数 -> 基数 -> 基数 -> 命题} (c₁ c₂ c₃ : 基数)
   证明: Quotient.inductionOn₃ c₁ c₂ c₃ mk
 
 Depends on / 依赖: Quotient, Quotient.inductionOn
@@ -246,7 +246,7 @@ theorem induction_on_pi
 
 中文:
 定理 induction_on_pi
-  结论: {ι : 类型} {motive : (ι -> Cardinal) -> 命题}
+  结论: {ι : 类型} {motive : (ι -> 基数) -> 命题}
   证明: Quotient.induction_on_pi f mk
 
 Depends on / 依赖: Quotient, Quotient.induction_on_pi, induction_on_pi
@@ -267,7 +267,7 @@ theorem eq
 
 中文:
 定理 eq
-  结论: #α = #β ↔ Nonempty (α ≃ β)
+  结论: #α = #β ↔ 非空 (α ≃ β)
   证明: Quotient.eq'
 
 @[simp]
@@ -287,7 +287,7 @@ theorem mk_out
 
 中文:
 定理 mk_out
-  条件: (c : Cardinal)
+  条件: (c : 基数)
   结论: #c.out = c
   证明: Quotient.out_eq _
 
@@ -390,7 +390,7 @@ definition map₂
 
 中文:
 定义 map₂
-  签名: (f : 类型u -> 类型v -> Type w) (hf : 对任意 α β γ δ, α ≃ β -> γ ≃ δ -> f α γ ≃ f β δ)
+  签名: (f : 类型u -> 类型v -> 类型 w) (hf : 对任意 α β γ δ, α ≃ β -> γ ≃ δ -> f α γ ≃ f β δ)
   定义体: Quotient.map₂ f fun α β ⟨e₁⟩ γ δ ⟨e₂⟩ => ⟨hf α β γ δ e₁ e₂⟩
 
 Depends on / 依赖: Quotient, Quotient.map
@@ -416,7 +416,7 @@ definition lift
 
 中文:
 定义 lift
-  签名: (c : Cardinal.{v})
+  签名: (c : 基数.{v})
   定义体: map ULift.{u, v} (fun _ _ e => Equiv.ulift.trans <| e.trans Equiv.ulift.symm) c
 
 @[simp]
@@ -439,7 +439,7 @@ theorem mk_uLift
 中文:
 定理 mk_uLift
   条件: (α)
-  结论: #(ULift.{v, u} α) = lift.{v} #α
+  结论: #(类型层提升.{v, u} α) = lift.{v} #α
   证明: rfl
 -/
 theorem mk_uLift (α) : #(ULift.{v, u} α) = lift.{v} #α :=
@@ -455,7 +455,7 @@ theorem lift_umax
 
 中文:
 定理 lift_umax
-  结论: lift.{max u v, u} = lift.{v, u}
+  结论: lift.{最大值 u v, u} = lift.{v, u}
   证明: funext fun a => inductionOn a fun _ => (Equiv.ulift.trans Equiv.ulift.symm).cardinal_eq
 
 Depends on / 依赖: Equiv.ulift.symm, Equiv.ulift.trans, cardinal_eq, inductionOn
@@ -474,7 +474,7 @@ theorem lift_id'
 
 中文:
 定理 lift_id'
-  条件: (a : Cardinal.{max u v})
+  条件: (a : 基数.{最大值 u v})
   结论: lift.{u} a = a
   证明: inductionOn a fun _ => mk_congr Equiv.ulift
 
@@ -496,7 +496,7 @@ theorem lift_id
 
 中文:
 定理 lift_id
-  条件: (a : Cardinal)
+  条件: (a : 基数)
   结论: lift.{u, u} a = a
   证明: lift_id'.{u, u} a
 
@@ -520,7 +520,7 @@ theorem lift_uzero
 
 中文:
 定理 lift_uzero
-  条件: (a : Cardinal.{u})
+  条件: (a : 基数.{u})
   结论: lift.{0} a = a
   证明: lift_id'.{0, u} a
 
@@ -543,8 +543,8 @@ theorem lift_lift.{u_1}
 
 中文:
 定理 lift_lift.{u_1}
-  条件: (a : Cardinal.{u_1})
-  结论: lift.{w} (lift.{v} a) = lift.{max v w} a
+  条件: (a : 基数.{u_1})
+  结论: lift.{w} (lift.{v} a) = lift.{最大值 v w} a
   证明: inductionOn a fun _ => (Equiv.ulift.trans <| Equiv.ulift.trans Equiv.ulift.symm).cardinal_eq
 
 Depends on / 依赖: Equiv.ulift.symm, Equiv.ulift.trans, cardinal_eq, inductionOn
@@ -565,8 +565,8 @@ theorem out_lift_equiv
 
 中文:
 定理 out_lift_equiv
-  条件: (a : Cardinal.{u})
-  结论: Nonempty ((lift.{v} a).out ≃ a.out)
+  条件: (a : 基数.{u})
+  结论: 非空 ((lift.{v} a).out ≃ a.out)
   证明: by
   rw [← mk_out a]; rw [← mk_uLift]; rw [mk_out]
   exact ⟨outMkEquiv.trans Equiv.ulift⟩
@@ -614,7 +614,7 @@ theorem lift_mk_eq'
 中文:
 定理 lift_mk_eq'
   条件: {α : 类型u} {β : 类型v}
-  结论: lift.{v} #α = lift.{u} #β ↔ Nonempty (α ≃ β)
+  结论: lift.{v} #α = lift.{u} #β ↔ 非空 (α ≃ β)
   证明: lift_mk_eq.{u, v, 0}
 
 Depends on / 依赖: lift_mk_eq
@@ -660,7 +660,7 @@ instance :
 
 中文:
 实例 :
-  签名: Zero Cardinal.{u}
+  签名: 零 基数.{u}
   定义体: -- `PEmpty` might be more canonical, but this is convenient for defeq with natCast
   ⟨lift #(Fin 0)⟩
 -/
@@ -680,7 +680,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited Cardinal.{u}
+  签名: 可居 基数.{u}
   定义体: ⟨0⟩
 
 @[simp]
@@ -702,7 +702,7 @@ theorem mk_eq_zero
 
 中文:
 定理 mk_eq_zero
-  条件: (α : 类型u) [IsEmpty α]
+  条件: (α : 类型u) [是空 α]
   结论: #α = 0
   证明: (Equiv.equivOfIsEmpty α (ULift (Fin 0))).cardinal_eq
 
@@ -746,7 +746,7 @@ theorem mk_eq_zero_iff
 中文:
 定理 mk_eq_zero_iff
   条件: {α : 类型u}
-  结论: #α = 0 ↔ IsEmpty α
+  结论: #α = 0 ↔ 是空 α
   证明: ⟨fun e =>
     let ⟨h⟩ := Quotient.exact e
     h.isEmpty,
@@ -774,7 +774,7 @@ theorem mk_ne_zero_iff
 中文:
 定理 mk_ne_zero_iff
   条件: {α : 类型u}
-  结论: #α != 0 ↔ Nonempty α
+  结论: #α != 0 ↔ 非空 α
   证明: (not_iff_not.2 mk_eq_zero_iff).trans not_isEmpty_iff
 
 @[simp]
@@ -796,7 +796,7 @@ theorem mk_ne_zero
 
 中文:
 定理 mk_ne_zero
-  条件: (α : 类型u) [Nonempty α]
+  条件: (α : 类型u) [非空 α]
   结论: #α != 0
   证明: mk_ne_zero_iff.2 ‹_›
 
@@ -817,8 +817,8 @@ theorem nonempty_out
 
 中文:
 定理 nonempty_out
-  条件: {x : Cardinal} (h : x != 0)
-  结论: Nonempty x.out
+  条件: {x : 基数} (h : x != 0)
+  结论: 非空 x.out
   证明: by
   rwa [← mk_ne_zero_iff, mk_out]
 
@@ -838,7 +838,7 @@ instance :
 
 中文:
 实例 :
-  签名: One Cardinal.{u}
+  签名: 幺 基数.{u}
   定义体: -- `PUnit` might be more canonical, but this is convenient for defeq with natCast
   ⟨lift #(Fin 1)⟩
 -/
@@ -856,7 +856,7 @@ instance :
 
 中文:
 实例 :
-  签名: Nontrivial Cardinal.{u}
+  签名: 非平凡 基数.{u}
   定义体: ⟨⟨1, 0, mk_ne_zero _⟩⟩
 
 Depends on / 依赖: mk_ne_zero
@@ -875,7 +875,7 @@ theorem mk_eq_one
 
 中文:
 定理 mk_eq_one
-  条件: (α : 类型u) [Subsingleton α] [Nonempty α]
+  条件: (α : 类型u) [子单例 α] [非空 α]
   结论: #α = 1
   证明: let ⟨_⟩ := nonempty_unique α; (Equiv.ofUnique α (ULift (Fin 1))).cardinal_eq
 
@@ -894,7 +894,7 @@ instance :
 
 中文:
 实例 :
-  签名: Add Cardinal.{u}
+  签名: 加法 基数.{u}
   定义体: ⟨map₂ Sum fun _ _ _ _ => Equiv.sumCongr⟩
 
 Depends on / 依赖: Equiv.sumCongr, sumCongr
@@ -932,7 +932,7 @@ instance :
 
 中文:
 实例 :
-  签名: 自然数Cast Cardinal.{u}
+  签名: 自然数嵌入 基数.{u}
   定义体: ⟨fun n => lift #(Fin n)⟩
 
 @[simp]
@@ -981,7 +981,7 @@ theorem mk_option
 中文:
 定理 mk_option
   条件: {α : 类型u}
-  结论: #(Option α) = #α + 1
+  结论: #(选项类型 α) = #α + 1
   证明: by
   rw [(Equiv.optionEquivSumPUnit.{u]; rw [u} α).cardinal_eq]; rw [mk_sum]; rw [mk_eq_one PUnit]; rw [lift_id]; rw [lift_id]
 
@@ -1023,7 +1023,7 @@ instance :
 
 中文:
 实例 :
-  签名: Mul Cardinal.{u}
+  签名: 乘法 基数.{u}
   定义体: ⟨map₂ Prod fun _ _ _ _ => Equiv.prodCongr⟩
 
 Depends on / 依赖: Equiv.prodCongr, prodCongr
@@ -1084,7 +1084,7 @@ instance instPowCardinal
 
 中文:
 实例 instPowCardinal
-  签名: : Pow Cardinal.{u} Cardinal.{u}
+  签名: : 幂 基数.{u} 基数.{u}
   定义体: ⟨map₂ (fun α β => β -> α) fun _ _ _ _ e₁ e₂ => e₂.arrowCongr e₁⟩
 
 Depends on / 依赖: arrowCongr
@@ -1149,7 +1149,7 @@ mk_congr Equiv.ulift.trans (Equiv.ulift.arrowCongr Equiv.ulift).symm
 
 中文:
 定理 lift_power
-  条件: (a b : Cardinal.{u})
+  条件: (a b : 基数.{u})
   结论: lift.{v} (a ^ b) = lift.{v} a ^ lift.{v} b
   证明: inductionOn₂ a b fun _ _ =>
 mk_congr Equiv.ulift.trans (Equiv.ulift.arrowCongr Equiv.ulift).symm
@@ -1176,8 +1176,8 @@ theorem power_zero
 
 中文:
 定理 power_zero
-  条件: (a : Cardinal)
-  结论: a ^ (0 : Cardinal) = 1
+  条件: (a : 基数)
+  结论: a ^ (0 : 基数) = 1
   证明: inductionOn a fun _ => mk_eq_one _
 
 @[simp]
@@ -1199,8 +1199,8 @@ theorem power_one
 
 中文:
 定理 power_one
-  条件: (a : Cardinal.{u})
-  结论: a ^ (1 : Cardinal) = a
+  条件: (a : 基数.{u})
+  结论: a ^ (1 : 基数) = a
   证明: inductionOn a fun α => mk_congr (Equiv.funUnique (ULift.{u} (Fin 1)) α)
 
 Depends on / 依赖: Equiv.funUnique, funUnique, inductionOn, mk_congr
@@ -1221,7 +1221,7 @@ theorem power_add
 
 中文:
 定理 power_add
-  条件: (a b c : Cardinal)
+  条件: (a b c : 基数)
   结论: a ^ (b + c) = a ^ b * a ^ c
   证明: inductionOn₃ a b c fun α β γ => mk_congr Equiv.sumArrowEquivProdArrow β γ α
 
@@ -1246,8 +1246,8 @@ theorem one_power
 
 中文:
 定理 one_power
-  条件: {a : Cardinal}
-  结论: (1 : Cardinal) ^ a = 1
+  条件: {a : 基数}
+  结论: (1 : 基数) ^ a = 1
   证明: inductionOn a fun _ => mk_eq_one _
 
 @[simp]
@@ -1273,8 +1273,8 @@ isEmpty_pi.2
 
 中文:
 定理 zero_power
-  条件: {a : Cardinal}
-  结论: a != 0 -> (0 : Cardinal) ^ a = 0
+  条件: {a : 基数}
+  结论: a != 0 -> (0 : 基数) ^ a = 0
   证明: inductionOn a fun _ heq =>
 mk_eq_zero_iff.2
 isEmpty_pi.2
@@ -1303,7 +1303,7 @@ theorem power_ne_zero
 
 中文:
 定理 power_ne_zero
-  条件: {a : Cardinal} (b : Cardinal)
+  条件: {a : 基数} (b : 基数)
   结论: a != 0 -> a ^ b != 0
   证明: inductionOn₂ a b fun _ _ h =>
     let ⟨a⟩ := mk_ne_zero_iff.1 h
@@ -1329,7 +1329,7 @@ theorem mul_power
 
 中文:
 定理 mul_power
-  条件: {a b c : Cardinal}
+  条件: {a b c : 基数}
   结论: (a * b) ^ c = a ^ c * b ^ c
   证明: inductionOn₃ a b c fun _ _ γ => mk_congr Equiv.arrowProdEquivProdArrow γ _ _
 
@@ -1375,7 +1375,7 @@ mk_congr Equiv.ulift.trans (Equiv.sumCongr Equiv.ulift Equiv.ulift).symm
 
 中文:
 定理 lift_add
-  条件: (a b : Cardinal.{u})
+  条件: (a b : 基数.{u})
   结论: lift.{v} (a + b) = lift.{v} a + lift.{v} b
   证明: inductionOn₂ a b fun _ _ =>
 mk_congr Equiv.ulift.trans (Equiv.sumCongr Equiv.ulift Equiv.ulift).symm
@@ -1399,8 +1399,8 @@ definition sum
 @[simp]
 
 中文:
-定义 sum
-  签名: {ι} (f : ι -> Cardinal)
+定义 求和
+  签名: {ι} (f : ι -> 基数)
   定义体: mk (Σ i, (f i).out)
 
 @[simp]
@@ -1421,7 +1421,7 @@ theorem mk_sigma
 中文:
 定理 mk_sigma
   条件: {ι} (f : ι -> 类型)
-  结论: #(Σ i, f i) = sum fun i => #(f i)
+  结论: #(Σ i, f i) = 求和 fun i => #(f i)
   证明: mk_congr Equiv.sigmaCongrRight fun _ => outMkEquiv.symm
 
 Depends on / 依赖: Equiv.sigmaCongrRight, mk_congr, outMkEquiv, outMkEquiv.symm, sigmaCongrRight
@@ -1439,7 +1439,7 @@ theorem mk_sigma_congr_lift
 
 中文:
 定理 mk_sigma_congr_lift
-  结论: {ι : 类型v} {ι' : 类型v'} {f : ι -> Type w} {g : ι' -> Type w'}
+  结论: {ι : 类型v} {ι' : 类型v'} {f : ι -> 类型 w} {g : ι' -> 类型 w'}
   证明: Cardinal.lift_mk_eq'.2 ⟨.sigmaCongr e fun i => Classical.choice Cardinal.lift_mk_eq'.1 (h i)⟩
 
 Depends on / 依赖: Cardinal, Cardinal.lift_mk_eq, Classical, Classical.choice, choice, lift_mk_eq, sigmaCongr
@@ -1478,7 +1478,7 @@ theorem mk_sigma_congr'
 
 中文:
 定理 mk_sigma_congr'
-  结论: {ι : 类型u} {ι' : 类型v} {f : ι -> Type max w (max u v)}
+  结论: {ι : 类型u} {ι' : 类型v} {f : ι -> 类型 最大值 w (最大值 u v)}
   证明: mk_congr Equiv.sigmaCongr e fun i => Classical.choice Cardinal.eq.mp (h i)
 
 Depends on / 依赖: Cardinal, Cardinal.eq.mp, Classical, Classical.choice, Equiv.sigmaCongr, choice, mk_congr, sigmaCongr
@@ -1582,7 +1582,7 @@ mk_congr
 
 中文:
 定理 sum_const
-  条件: (ι : 类型u) (a : Cardinal.{v})
+  条件: (ι : 类型u) (a : 基数.{v})
   证明: inductionOn a fun α =>
 mk_congr
       calc
@@ -1612,8 +1612,8 @@ theorem sum_const'
 
 中文:
 定理 sum_const'
-  条件: (ι : 类型u) (a : Cardinal.{u})
-  结论: (sum fun _ : ι => a) = #ι * a
+  条件: (ι : 类型u) (a : 基数.{u})
+  结论: (求和 fun _ : ι => a) = #ι * a
   证明: by simp
 
 @[simp]
@@ -1635,7 +1635,7 @@ Nonempty.some by rw [← lift_mk_eq.{_, _, v}, mk_out, mk_out, lift_lift]
 
 中文:
 定理 lift_sum
-  条件: {ι : 类型u} (f : ι -> Cardinal.{v})
+  条件: {ι : 类型u} (f : ι -> 基数.{v})
   证明: Equiv.cardinal_eq
 Equiv.ulift.trans
       Equiv.sigmaCongrRight fun a =>
@@ -1664,7 +1664,7 @@ theorem sum_nat_eq_add_sum_succ
 
 中文:
 定理 sum_nat_eq_add_sum_succ
-  条件: (f : 自然数 -> Cardinal.{u})
+  条件: (f : 自然数 -> 基数.{u})
   证明: by
   refine (Equiv.sigmaNatSucc fun i => Quotient.out (f i)).cardinal_eq.trans ?_
   simp only [mk_sum, mk_out, lift_id, mk_sigma]
@@ -1689,8 +1689,8 @@ definition prod
 @[simp]
 
 中文:
-定义 prod
-  签名: {ι : 类型u} (f : ι -> Cardinal)
+定义 乘积
+  签名: {ι : 类型u} (f : ι -> 基数)
   定义体: #(Π i, (f i).out)
 
 @[simp]
@@ -1711,7 +1711,7 @@ theorem mk_pi
 中文:
 定理 mk_pi
   条件: {ι : 类型u} (α : ι -> 类型v)
-  结论: #(Π i, α i) = prod fun i => #(α i)
+  结论: #(Π i, α i) = 乘积 fun i => #(α i)
   证明: mk_congr Equiv.piCongrRight fun _ => outMkEquiv.symm
 
 Depends on / 依赖: Equiv.piCongrRight, mk_congr, outMkEquiv, outMkEquiv.symm, piCongrRight
@@ -1729,7 +1729,7 @@ theorem mk_pi_congr_lift
 
 中文:
 定理 mk_pi_congr_lift
-  结论: {ι : 类型v} {ι' : 类型v'} {f : ι -> Type w} {g : ι' -> Type w'}
+  结论: {ι : 类型v} {ι' : 类型v'} {f : ι -> 类型 w} {g : ι' -> 类型 w'}
   证明: Cardinal.lift_mk_eq'.2 ⟨.piCongr e fun i => Classical.choice Cardinal.lift_mk_eq'.1 (h i)⟩
 
 Depends on / 依赖: Cardinal, Cardinal.lift_mk_eq, Classical, Classical.choice, choice, lift_mk_eq, piCongr
@@ -1787,7 +1787,7 @@ theorem mk_pi_congr'
 
 中文:
 定理 mk_pi_congr'
-  结论: {ι : 类型u} {ι' : 类型v} {f : ι -> Type max w (max u v)}
+  结论: {ι : 类型u} {ι' : 类型v} {f : ι -> 类型 最大值 w (最大值 u v)}
   证明: mk_congr Equiv.piCongr e fun i => Classical.choice Cardinal.eq.mp (h i)
 
 Depends on / 依赖: Cardinal, Cardinal.eq.mp, Classical, Classical.choice, Equiv.piCongr, choice, mk_congr, piCongr
@@ -1851,7 +1851,7 @@ mk_congr Equiv.piCongr Equiv.ulift.symm fun _ => outMkEquiv.trans Equiv.ulift.sy
 
 中文:
 定理 prod_const
-  条件: (ι : 类型u) (a : Cardinal.{v})
+  条件: (ι : 类型u) (a : 基数.{v})
   证明: inductionOn a fun _ =>
 mk_congr Equiv.piCongr Equiv.ulift.symm fun _ => outMkEquiv.trans Equiv.ulift.symm
 
@@ -1875,8 +1875,8 @@ theorem prod_const'
 
 中文:
 定理 prod_const'
-  条件: (ι : 类型u) (a : Cardinal.{u})
-  结论: (prod fun _ : ι => a) = a ^ #ι
+  条件: (ι : 类型u) (a : 基数.{u})
+  结论: (乘积 fun _ : ι => a) = a ^ #ι
   证明: inductionOn a fun _ => (mk_pi _).symm
 
 @[simp]
@@ -1900,8 +1900,8 @@ theorem prod_eq_zero
 
 中文:
 定理 prod_eq_zero
-  条件: {ι} (f : ι -> Cardinal.{u})
-  结论: prod f = 0 ↔ 存在 i, f i = 0
+  条件: {ι} (f : ι -> 基数.{u})
+  结论: 乘积 f = 0 ↔ 存在 i, f i = 0
   证明: by
   lift f to ι -> Type u using fun _ => trivial
   simp only [mk_eq_zero_iff, ← mk_pi, isEmpty_pi]
@@ -1923,8 +1923,8 @@ theorem prod_ne_zero
 
 中文:
 定理 prod_ne_zero
-  条件: {ι} (f : ι -> Cardinal)
-  结论: prod f != 0 ↔ 对任意 i, f i != 0
+  条件: {ι} (f : ι -> 基数)
+  结论: 乘积 f != 0 ↔ 对任意 i, f i != 0
   证明: by simp [prod_eq_zero]
 
 Depends on / 依赖: prod_eq_zero
@@ -1948,7 +1948,7 @@ theorem lift_power_sum
 
 中文:
 定理 lift_power_sum
-  条件: {ι : 类型u} (a : Cardinal.{v}) (f : ι -> Cardinal.{v})
+  条件: {ι : 类型u} (a : 基数.{v}) (f : ι -> 基数.{v})
   证明: by
   induction a using Cardinal.inductionOn with | _ α =>
   induction f using induction_on_pi with | _ f =>
@@ -1984,7 +1984,7 @@ theorem power_sum
 
 中文:
 定理 power_sum
-  条件: {ι : 类型u} (a : Cardinal.{max u v}) (f : ι -> Cardinal.{max u v})
+  条件: {ι : 类型u} (a : 基数.{最大值 u v}) (f : ι -> 基数.{最大值 u v})
   证明: by
   simpa [← lift_umax] using lift_power_sum a f
 
@@ -2010,7 +2010,7 @@ theorem lift_prod
 
 中文:
 定理 lift_prod
-  条件: {ι : 类型u} (c : ι -> Cardinal.{v})
+  条件: {ι : 类型u} (c : ι -> 基数.{v})
   证明: by
   lift c to ι -> Type v using fun _ => trivial
   simp only [← mk_pi, ← mk_uLift]
@@ -2039,7 +2039,7 @@ recommended_spelling "aleph0" for "ℵ₀" in [aleph0, «termℵ₀»]
 
 中文:
 定义 aleph0
-  签名: : Cardinal.{u}
+  签名: : 基数.{u}
   定义体: lift #Nat
 
 @[inherit_doc] scoped notation "ℵ₀" => Cardinal.aleph0
@@ -2122,7 +2122,7 @@ theorem lift_mk_fin
 中文:
 定理 lift_mk_fin
   条件: (n : 自然数)
-  结论: lift #(Fin n) = n
+  结论: lift #(有限集 n) = n
   证明: rfl
 -/
 theorem lift_mk_fin (n : Nat) : lift #(Fin n) = n := rfl
@@ -2138,7 +2138,7 @@ theorem mk_empty
 
 中文:
 定理 mk_empty
-  结论: #Empty = 0
+  结论: #空 = 0
   证明: mk_eq_zero _
 
 Depends on / 依赖: mk_eq_zero
@@ -2156,7 +2156,7 @@ theorem mk_pempty
 
 中文:
 定理 mk_pempty
-  结论: #PEmpty = 0
+  结论: #命题空 = 0
   证明: mk_eq_zero _
 
 Depends on / 依赖: mk_eq_zero
@@ -2174,7 +2174,7 @@ theorem mk_punit
 
 中文:
 定理 mk_punit
-  结论: #PUnit = 1
+  结论: #命题单元 = 1
   证明: mk_eq_one PUnit
 
 Depends on / 依赖: mk_eq_one
@@ -2192,7 +2192,7 @@ theorem mk_unit
 
 中文:
 定理 mk_unit
-  结论: #Unit = 1
+  结论: #单元 = 1
   证明: mk_punit
 
 Depends on / 依赖: mk_punit
@@ -2210,7 +2210,7 @@ theorem mk_plift_true
 
 中文:
 定理 mk_plift_true
-  结论: #(PLift True) = 1
+  结论: #(命题层提升 真) = 1
   证明: mk_eq_one _
 
 Depends on / 依赖: mk_eq_one
@@ -2228,7 +2228,7 @@ theorem mk_plift_false
 
 中文:
 定理 mk_plift_false
-  结论: #(PLift False) = 0
+  结论: #(命题层提升 假) = 0
   证明: mk_eq_zero _
 
 Depends on / 依赖: mk_eq_zero

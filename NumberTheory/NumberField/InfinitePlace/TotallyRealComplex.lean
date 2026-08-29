@@ -52,8 +52,8 @@ class IsTotallyReal
     - isReal : forall v : InfinitePlace K, v.IsReal
 
 中文:
-类 IsTotallyReal
-  参数: (K : 类型) [Field K]
+类 是Totally实数
+  参数: (K : 类型) [域 K]
   公理与运算 (1 个):
     - isReal : 对任意 v : InfinitePlace K, v.Is实数
 -/
@@ -73,7 +73,7 @@ theorem nrComplexPlaces_eq_zero_iff
 
 中文:
 定理 nrComplexPlaces_eq_zero_iff
-  条件: [NumberField K]
+  条件: [数域 K]
   证明: by
   simp [Fintype.card_eq_zero_iff, isEmpty_subtype, isTotallyReal_iff]
 
@@ -94,8 +94,8 @@ theorem IsTotallyReal.complexEmbedding_isReal
 @[simp]
 
 中文:
-定理 IsTotallyReal.complexEmbedding_isReal
-  条件: [IsTotally实数 K] (φ : K ->+* Complex)
+定理 是Totally实数.complexEmbedding_is实数
+  条件: [是Totally实数 K] (φ : K ->+* 复形)
   证明: isReal_mk_iff.mp isReal (InfinitePlace.mk φ)
 
 @[simp]
@@ -117,8 +117,8 @@ theorem IsTotallyReal.mult_eq
   proof: mult_isReal ⟨w, isReal w⟩
 
 中文:
-定理 IsTotallyReal.mult_eq
-  条件: [IsTotally实数 K] (w : InfinitePlace K)
+定理 是Totally实数.mult_eq
+  条件: [是Totally实数 K] (w : InfinitePlace K)
   结论: mult w = 1
   证明: mult_isReal ⟨w, isReal w⟩
 
@@ -137,9 +137,9 @@ theorem IsTotallyReal.ofRingEquiv
   proof: (isReal_comap_iff f).mp IsTotallyReal.isReal _
 
 中文:
-定理 IsTotallyReal.ofRingEquiv
-  条件: [IsTotally实数 F] (f : F ≃+* K)
-  结论: IsTotally实数 K where
+定理 是Totally实数.ofRingEquiv
+  条件: [是Totally实数 F] (f : F ≃+* K)
+  结论: 是Totally实数 K where
   证明: (isReal_comap_iff f).mp IsTotallyReal.isReal _
 
 Depends on / 依赖: IsTotallyReal, IsTotallyReal.isReal, isReal, isReal_comap_iff
@@ -159,8 +159,8 @@ theorem IsTotallyReal.of_algebra
     exact IsReal.comap _ (IsTotallyReal.isReal W)
 
 中文:
-定理 IsTotallyReal.of_algebra
-  条件: [IsTotally实数 K] [Algebra F K] [Algebra.IsAlgebraic F K]
+定理 是Totally实数.of_algebra
+  条件: [是Totally实数 K] [代数 F K] [代数.是代数 F K]
   证明: by
     obtain ⟨W, rfl⟩ : exists W : InfinitePlace K, W.comap (algebraMap F K) = w := comap_surjective w
     exact IsReal.comap _ (IsTotallyReal.isReal W)
@@ -185,9 +185,9 @@ theorem isTotallyReal_iff_ofRingEquiv
 @[simp]
 
 中文:
-定理 isTotallyReal_iff_ofRingEquiv
+定理 isTotally实数_iff_ofRingEquiv
   条件: (f : F ≃+* K)
-  结论: IsTotally实数 F ↔ IsTotally实数 K
+  结论: 是Totally实数 F ↔ 是Totally实数 K
   证明: ⟨fun _ => .ofRingEquiv f, fun _ => .ofRingEquiv f.symm⟩
 
 @[simp]
@@ -207,8 +207,8 @@ theorem isTotallyReal_top_iff
   proof: isTotallyReal_iff_ofRingEquiv Subfield.topEquiv
 
 中文:
-定理 isTotallyReal_top_iff
-  结论: IsTotally实数 (⊤ : Subfield K) ↔ IsTotally实数 K
+定理 isTotally实数_top_iff
+  结论: 是Totally实数 (⊤ : 子域 K) ↔ 是Totally实数 K
   证明: isTotallyReal_iff_ofRingEquiv Subfield.topEquiv
 
 Depends on / 依赖: Subfield, Subfield.topEquiv, isTotallyReal_iff_ofRingEquiv, topEquiv
@@ -225,8 +225,8 @@ instance [IsTotallyReal
   body: IsTotallyReal.of_algebra F K
 
 中文:
-实例 [IsTotallyReal
-  签名: K] [CharZero K] (F
+实例 [是Totally实数
+  签名: K] [特征零 K] (F
   定义体: IsTotallyReal.of_algebra F K
 
 Depends on / 依赖: IsTotallyReal, IsTotallyReal.of_algebra, of_algebra
@@ -244,7 +244,7 @@ instance [IsTotallyReal
   body: IsTotallyReal.of_algebra F K
 
 中文:
-实例 [IsTotallyReal
+实例 [是Totally实数
   签名: K] (F
   定义体: IsTotallyReal.of_algebra F K
 
@@ -265,8 +265,8 @@ theorem IsTotallyReal.nrComplexPlaces_eq_zero
   proof: nrComplexPlaces_eq_zero_iff.mpr h
 
 中文:
-定理 IsTotallyReal.nrComplexPlaces_eq_zero
-  条件: [NumberField K] [h : IsTotally实数 K]
+定理 是Totally实数.nrComplexPlaces_eq_zero
+  条件: [数域 K] [h : 是Totally实数 K]
   证明: nrComplexPlaces_eq_zero_iff.mpr h
 
 Depends on / 依赖: nrComplexPlaces_eq_zero_iff, nrComplexPlaces_eq_zero_iff.mpr
@@ -285,8 +285,8 @@ theorem IsTotallyReal.finrank
   rw [← card_add_two_mul_card_eq_rank]; rw [nrComplexPlaces_eq_zero_iff.mpr h]; rw [mul_zero]; rw [add_zero]
 
 中文:
-定理 IsTotallyReal.finrank
-  条件: [NumberField K] [h : IsTotally实数 K]
+定理 是Totally实数.finrank
+  条件: [数域 K] [h : 是Totally实数 K]
   证明: by
   rw [← card_add_two_mul_card_eq_rank]; rw [nrComplexPlaces_eq_zero_iff.mpr h]; rw [mul_zero]; rw [add_zero]
 -/
@@ -306,7 +306,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsTotally实数 Rat
+  签名: 是Totally实数 有理数
   定义体: by
     rw [Subsingleton.elim v Rat.infinitePlace]
     exact Rat.isReal_infinitePlace
@@ -327,7 +327,7 @@ instance [IsTotallyReal
   body: isTotallyReal_top_iff.mpr ‹_›
 
 中文:
-实例 [IsTotallyReal
+实例 [是Totally实数
   签名: K] :
   定义体: isTotallyReal_top_iff.mpr ‹_›
 
@@ -345,8 +345,8 @@ instance _root_.IntermediateField.isTotallyReal_bot
   body: IsTotallyReal.ofRingEquiv (IntermediateField.botEquiv Rat K).symm.toRingEquiv
 
 中文:
-实例 _root_.IntermediateField.isTotallyReal_bot
-  签名: [CharZero K]
+实例 _root_.中间域.isTotally实数_bot
+  签名: [特征零 K]
   定义体: IsTotallyReal.ofRingEquiv (IntermediateField.botEquiv Rat K).symm.toRingEquiv
 
 Depends on / 依赖: IntermediateField, IntermediateField.botEquiv, IsTotallyReal, IsTotallyReal.ofRingEquiv, botEquiv, ofRingEquiv, symm.toRingEquiv, toRingEquiv
@@ -366,8 +366,8 @@ instance _root_.Subfield.isTotallyReal_bot
   exact IsTotallyReal.ofRingEquiv (algebraMap Rat K).rangeRestrictFieldEquiv
 
 中文:
-实例 _root_.Subfield.isTotallyReal_bot
-  签名: [CharZero K]
+实例 _root_.子域.isTotally实数_bot
+  签名: [特征零 K]
   定义体: by
   rw [Subfield.bot_eq_of_charZero]
   exact IsTotallyReal.ofRingEquiv (algebraMap Rat K).rangeRestrictFieldEquiv
@@ -398,8 +398,8 @@ definition maximalRealSubfield
   inv_mem' := by simp
 
 中文:
-定义 maximalRealSubfield
-  签名: : Subfield K where
+定义 maximal实数Subfield
+  签名: : 子域 K where
   定义体: {x | forall φ : K ->+* Complex, star (φ x) = φ x}
   mul_mem' hx hy _ := by rw [map_mul, star_mul, hx, hy, mul_comm]
   one_mem' := by simp
@@ -428,7 +428,7 @@ theorem mem_maximalRealSubfield_iff
   proof: .rfl
 
 中文:
-定理 mem_maximalRealSubfield_iff
+定理 mem_maximal实数Subfield_iff
   条件: (x : K)
   证明: .rfl
 -/
@@ -450,8 +450,8 @@ exact ComplexEmbedding.isReal_iff.mp isReal_mk_iff.mp isReal _
 @[simp]
 
 中文:
-定理 IsTotallyReal.le_maximalRealSubfield
-  条件: (E : Subfield K) [IsTotally实数 E]
+定理 是Totally实数.le_maximal实数Subfield
+  条件: (E : 子域 K) [是Totally实数 E]
   证明: by
   intro x hx φ
   rw [show φ x = (φ.comp E.subtype) ⟨x]; rw [hx⟩ by simp]; rw [RCLike.star_def]; rw [← conjugate_coe_eq]
@@ -479,8 +479,8 @@ theorem IsTotallyReal.maximalRealSubfield_eq_top
   proof: top_unique NumberField.IsTotallyReal.le_maximalRealSubfield _
 
 中文:
-定理 IsTotallyReal.maximalRealSubfield_eq_top
-  条件: [IsTotally实数 K]
+定理 是Totally实数.maximal实数Subfield_eq_top
+  条件: [是Totally实数 K]
   证明: top_unique NumberField.IsTotallyReal.le_maximalRealSubfield _
 
 Depends on / 依赖: IsTotallyReal, NumberField, NumberField.IsTotallyReal.le_maximalRealSubfield, le_maximalRealSubfield, top_unique
@@ -507,7 +507,7 @@ instance isTotallyReal_maximalRealSubfield
     exact x.prop _
 
 中文:
-实例 isTotallyReal_maximalRealSubfield
+实例 isTotally实数_maximal实数Subfield
   签名: :
   定义体: by
     rw [InfinitePlace.isReal_iff]; rw [ComplexEmbedding.isReal_iff]
@@ -539,8 +539,8 @@ let _ : Algebra E (maximalRealSubfield K) := RingHom.toAlgebra Subfield.inclusio
       A
 
 中文:
-定理 isTotallyReal_iff_le_maximalRealSubfield
-  条件: {E : Subfield K}
+定理 isTotally实数_iff_le_maximal实数Subfield
+  条件: {E : 子域 K}
   证明: by
   refine ⟨fun h => h.le_maximalRealSubfield, fun h => ?_⟩
 let _ : Algebra E (maximalRealSubfield K) := RingHom.toAlgebra Subfield.inclusion h
@@ -570,8 +570,8 @@ instance isTotallyReal_sup
   exact ⟨hE, hF⟩
 
 中文:
-实例 isTotallyReal_sup
-  签名: {E F : Subfield K} [hE : IsTotally实数 E] [hF : IsTotally实数 F]
+实例 isTotally实数_sup
+  签名: {E F : 子域 K} [hE : 是Totally实数 E] [hF : 是Totally实数 F]
   定义体: by
   rw [isTotallyReal_iff_le_maximalRealSubfield]; rw [sup_le_iff]; rw [← isTotallyReal_iff_le_maximalRealSubfield]; rw [← isTotallyReal_iff_le_maximalRealSubfield]
   exact ⟨hE, hF⟩
@@ -597,8 +597,8 @@ instance isTotallyReal_iSup
     exact fun i => IsTotallyReal.le_maximalRealSubfield (k i)
 
 中文:
-实例 isTotallyReal_iSup
-  签名: {ι : 类型} {k : ι -> Subfield K} [对任意 i, IsTotally实数 (k i)]
+实例 isTotally实数_iSup
+  签名: {ι : 类型} {k : ι -> 子域 K} [对任意 i, 是Totally实数 (k i)]
   定义体: by
   obtain hι | ⟨⟨i⟩⟩ := isEmpty_or_nonempty ι
   · rw [iSup_of_empty]
@@ -627,7 +627,7 @@ theorem maximalRealSubfield_eq_top_iff_isTotallyReal
   mpr _ := IsTotallyReal.maximalRealSubfield_eq_top
 
 中文:
-定理 maximalRealSubfield_eq_top_iff_isTotallyReal
+定理 maximal实数Subfield_eq_top_iff_isTotally实数
   证明: by
     have : Algebra.IsIntegral (⊤ : Subfield K) K := Algebra.IsIntegral.tower_top Rat
     rw [← isTotallyReal_top_iff]; rw [isTotallyReal_iff_le_maximalRealSubfield]; rw [h]
@@ -664,10 +664,10 @@ class IsTotallyComplex
     - isComplex : forall v : InfinitePlace K, v.IsComplex
 
 中文:
-类 IsTotallyComplex
-  参数: (K : 类型) [Field K]
+类 是TotallyComplex
+  参数: (K : 类型) [域 K]
   公理与运算 (1 个):
-    - isComplex : 对任意 v : InfinitePlace K, v.IsComplex
+    - isComplex : 对任意 v : InfinitePlace K, v.是复形
 -/
 @[mk_iff] class IsTotallyComplex (K : Type*) [Field K] where
   isComplex : forall v : InfinitePlace K, v.IsComplex
@@ -684,8 +684,8 @@ theorem nrRealPlaces_eq_zero_iff
   simp [Fintype.card_eq_zero_iff, isEmpty_subtype, isTotallyComplex_iff]
 
 中文:
-定理 nrRealPlaces_eq_zero_iff
-  条件: [NumberField K]
+定理 nr实数Places_eq_zero_iff
+  条件: [数域 K]
   证明: by
   simp [Fintype.card_eq_zero_iff, isEmpty_subtype, isTotallyComplex_iff]
 
@@ -706,8 +706,8 @@ theorem IsTotallyComplex.complexEmbedding_not_isReal
 @[simp]
 
 中文:
-定理 IsTotallyComplex.complexEmbedding_not_isReal
-  条件: [IsTotallyComplex K] (φ : K ->+* Complex)
+定理 是TotallyComplex.complexEmbedding_not_is实数
+  条件: [是TotallyComplex K] (φ : K ->+* 复形)
   证明: isReal_mk_iff.not.mp not_isReal_iff_isComplex.mpr isComplex (InfinitePlace.mk φ)
 
 @[simp]
@@ -729,8 +729,8 @@ theorem IsTotallyComplex.mult_eq
   proof: mult_isComplex ⟨w, isComplex w⟩
 
 中文:
-定理 IsTotallyComplex.mult_eq
-  条件: [IsTotallyComplex K] (w : InfinitePlace K)
+定理 是TotallyComplex.mult_eq
+  条件: [是TotallyComplex K] (w : InfinitePlace K)
   结论: mult w = 2
   证明: mult_isComplex ⟨w, isComplex w⟩
 
@@ -753,7 +753,7 @@ theorem isTotallyComplex_of_algebra
 
 中文:
 定理 isTotallyComplex_of_algebra
-  条件: [IsTotallyComplex F]
+  条件: [是TotallyComplex F]
   证明: IsComplex.of_comap (algebraMap F K) IsTotallyComplex.isComplex _
 
 @[simp]
@@ -774,8 +774,8 @@ theorem IsTotallyComplex.nrRealPlaces_eq_zero
   proof: nrRealPlaces_eq_zero_iff.mpr h
 
 中文:
-定理 IsTotallyComplex.nrRealPlaces_eq_zero
-  条件: [NumberField K] [h : IsTotallyComplex K]
+定理 是TotallyComplex.nr实数Places_eq_zero
+  条件: [数域 K] [h : 是TotallyComplex K]
   证明: nrRealPlaces_eq_zero_iff.mpr h
 
 Depends on / 依赖: nrRealPlaces_eq_zero_iff, nrRealPlaces_eq_zero_iff.mpr
@@ -794,8 +794,8 @@ theorem IsTotallyComplex.finrank
   rw [← card_add_two_mul_card_eq_rank]; rw [nrRealPlaces_eq_zero_iff.mpr h]; rw [zero_add]
 
 中文:
-定理 IsTotallyComplex.finrank
-  条件: [NumberField K] [h : IsTotallyComplex K]
+定理 是TotallyComplex.finrank
+  条件: [数域 K] [h : 是TotallyComplex K]
   证明: by
   rw [← card_add_two_mul_card_eq_rank]; rw [nrRealPlaces_eq_zero_iff.mpr h]; rw [zero_add]
 -/

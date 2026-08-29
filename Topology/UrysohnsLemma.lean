@@ -110,15 +110,15 @@ structure CU
 
 中文:
 结构 CU
-  参数: {X : 类型} [TopologicalSpace X] (P : Set X -> Set X -> 命题)
+  参数: {X : 类型} [拓扑空间 X] (P : 集合 X -> 集合 X -> 命题)
   公理与运算 (7 个):
-    - C : Set X
-    - U : Set X
+    - C : 集合 X
+    - U : 集合 X
     - P_C_U : P C U
-    - closed_C : IsClosed C
-    - open_U : IsOpen U
+    - closed_C : 是闭集 C
+    - open_U : 是开集 U
     - subset : C subseteq U
-    - hP : 对任意 {c u : Set X}, IsClosed c -> P c u -> IsOpen u -> c subseteq u -> 存在 (v : Set X), IsOpen v ∧ c subseteq v ∧ closure v subseteq u ∧ P c v ∧ P (closure v) u
+    - hP : 对任意 {c u : 集合 X}, 是闭集 c -> P c u -> 是开集 u -> c subseteq u -> 存在 (v : 集合 X), 是开集 v ∧ c subseteq v ∧ closure v subseteq u ∧ P c v ∧ P (closure v) u
 -/
 structure CU {X : Type*} [TopologicalSpace X] (P : Set X -> Set X -> Prop) where
   /-- The inner set in the inductive construction towards Urysohn's lemma -/
@@ -599,7 +599,7 @@ theorem approx_mono
 中文:
 定理 approx_mono
   条件: (c : CU P) (x : X)
-  结论: Monotone fun n => c.approx n x
+  结论: 递增 fun n => c.approx n x
   证明: monotone_nat_of_le_succ fun n => c.approx_le_succ n x
 
 Depends on / 依赖: approx_le_succ, c.approx_le_succ, monotone_nat_of_le_succ
@@ -676,7 +676,7 @@ theorem disjoint_C_support_lim
 中文:
 定理 disjoint_C_support_lim
   条件: (c : CU P)
-  结论: Disjoint c.C (Function.support c.lim)
+  结论: Disjoint c.C (函数.support c.lim)
   证明: Function.disjoint_support_iff.mpr (fun x hx => lim_of_mem_C c x hx)
 
 Depends on / 依赖: Function, Function.disjoint_support_iff.mpr, disjoint_support_iff, lim_of_mem_C
@@ -805,7 +805,7 @@ theorem lim_mem_Icc
 中文:
 定理 lim_mem_Icc
   条件: (c : CU P) (x : X)
-  结论: c.lim x in Icc (0 : 实数) 1
+  结论: c.lim x in 闭区间 (0 : 实数) 1
   证明: ⟨c.lim_nonneg x, c.lim_le_one x⟩
 
 Depends on / 依赖: c.lim_le_one, c.lim_nonneg, lim_le_one, lim_nonneg
@@ -831,7 +831,7 @@ theorem continuous_lim
 中文:
 定理 continuous_lim
   条件: (c : CU P)
-  结论: Continuous c.lim
+  结论: 连续 c.lim
   证明: by
   obtain ⟨h0, h1234, h1⟩ : 0 < (2⁻¹ : Real) ∧ (2⁻¹ : Real) < 3 / 4 ∧ (3 / 4 : Real) < 1 := by norm_num
   refine
@@ -905,8 +905,8 @@ theorem exists_continuous_zero_one_of_isClosed
     subset := disjoint_left.1 hd
 
 中文:
-定理 exists_continuous_zero_one_of_isClosed
-  结论: [NormalSpace X]
+定理 存在_continuous_zero_one_of_isClosed
+  结论: [正规空间 X]
   证明: by
   -- The actual proof is in the code above. Here we just repack it into the expected format.
   let P : Set X -> Set X -> Prop := fun _ _ => True
@@ -952,8 +952,8 @@ theorem exists_continuous_zero_one_of_isCompact
   
 
 中文:
-定理 exists_continuous_zero_one_of_isCompact
-  结论: [RegularSpace X] [LocallyCompactSpace X]
+定理 存在_continuous_zero_one_of_isCompact
+  结论: [正则空间 X] [局部紧空间 X]
   证明: by
   obtain ⟨k, k_comp, k_closed, sk, kt⟩ : exists k, IsCompact k ∧ IsClosed k ∧ s subseteq interior k ∧ k subseteq tᶜ :=
     exists_compact_closed_between hs ht.isOpen_compl hd.symm.subset_compl_left
@@ -1004,8 +1004,8 @@ theorem exists_continuous_zero_one_of_isCompact'
   · int
 
 中文:
-定理 exists_continuous_zero_one_of_isCompact'
-  结论: [RegularSpace X] [LocallyCompactSpace X]
+定理 存在_continuous_zero_one_of_isCompact'
+  结论: [正则空间 X] [局部紧空间 X]
   证明: by
   obtain ⟨g, hgs, hgt, (hicc : forall x, 0 <= g x ∧ g x <= 1)⟩ := exists_continuous_zero_one_of_isCompact
     hs ht hd
@@ -1047,8 +1047,8 @@ theorem exists_continuous_one_zero_of_isCompact
     (disjoint_co
 
 中文:
-定理 exists_continuous_one_zero_of_isCompact
-  结论: [RegularSpace X] [LocallyCompactSpace X]
+定理 存在_continuous_one_zero_of_isCompact
+  结论: [正则空间 X] [局部紧空间 X]
   证明: by
   obtain ⟨k, k_comp, k_closed, sk, kt⟩ : exists k, IsCompact k ∧ IsClosed k ∧ s subseteq interior k ∧ k subseteq tᶜ :=
     exists_compact_closed_between hs ht.isOpen_compl hd.symm.subset_compl_left
@@ -1089,8 +1089,8 @@ theorem exists_continuous_one_zero_of_isCompact_of_isGδ
   have A n : exists f : C(X, Real), EqOn f 1 s ∧ EqOn f 0 
 
 中文:
-定理 exists_continuous_one_zero_of_isCompact_of_isGδ
-  结论: [RegularSpace X] [LocallyCompactSpace X]
+定理 存在_continuous_one_zero_of_isCompact_of_isGδ
+  结论: [正则空间 X] [局部紧空间 X]
   证明: by
   rcases h's.eq_iInter_nat with ⟨U, U_open, hU⟩
   obtain ⟨m, m_comp, -, sm, mt⟩ : exists m, IsCompact m ∧ IsClosed m ∧ s subseteq interior m ∧ m subseteq tᶜ :=
@@ -1153,8 +1153,8 @@ lemma exists_tsupport_one_of_isOpen_isClosed
   proof: by
 
 中文:
-引理 exists_tsupport_one_of_isOpen_isClosed
-  结论: [R1Space X] {s t : Set X}
+引理 存在_tsupport_one_of_isOpen_isClosed
+  结论: [R1空间 X] {s t : 集合 X}
   证明: by
 -/
 lemma exists_tsupport_one_of_isOpen_isClosed [R1Space X] {s t : Set X}
@@ -1216,8 +1216,8 @@ lemma exists_continuousMap_one_of_isCompact_subset_isOpen
  
 
 中文:
-引理 exists_continuousMap_one_of_isCompact_subset_isOpen
-  结论: [R1Space X] [LocallyCompactSpace X]
+引理 存在_continuousMap_one_of_isCompact_subset_isOpen
+  结论: [R1空间 X] [局部紧空间 X]
   证明: by
   obtain ⟨U, hU1, hU2, hU3, hU4⟩ := exists_open_between_and_isCompact_closure hK hV hKV
   obtain ⟨f, hf1, hf2, hf3⟩ := exists_tsupport_one_of_isOpen_isClosed hU1 hU4
@@ -1254,8 +1254,8 @@ theorem exists_continuous_nonneg_pos
   simp [
 
 中文:
-定理 exists_continuous_nonneg_pos
-  条件: [RegularSpace X] [LocallyCompactSpace X] (x : X)
+定理 存在_continuous_nonneg_pos
+  条件: [正则空间 X] [局部紧空间 X] (x : X)
   证明: by
   rcases exists_compact_mem_nhds x with ⟨k, hk, k_mem⟩
   rcases exists_continuous_one_zero_of_isCompact hk isClosed_empty (disjoint_empty k)

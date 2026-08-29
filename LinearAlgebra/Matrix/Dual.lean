@@ -44,7 +44,7 @@ theorem LinearMap.toMatrix_transpose
 @[simp]
 
 中文:
-定理 LinearMap.toMatrix_transpose
+定理 线性映射.toMatrix_transpose
   条件: (u : V₁ ->ₗ[K] V₂)
   证明: by
   ext i j
@@ -73,9 +73,9 @@ theorem Matrix.toLin_transpose
   rw [LinearMap.toMatrix_toLin]; rw [LinearMap.toMatrix_transpose]; rw [LinearMap.toMatrix_toLin]
 
 中文:
-定理 Matrix.toLin_transpose
-  条件: (M : Matrix ι₁ ι₂ K)
-  结论: Matrix.toLin B₁.dualBasis B₂.dualBasis Mᵀ =
+定理 矩阵.toLin_transpose
+  条件: (M : 矩阵 ι₁ ι₂ K)
+  结论: 矩阵.toLin B₁.dualBasis B₂.dualBasis Mᵀ =
   证明: by
   apply (LinearMap.toMatrix B₁.dualBasis B₂.dualBasis).injective
   rw [LinearMap.toMatrix_toLin]; rw [LinearMap.toMatrix_transpose]; rw [LinearMap.toMatrix_toLin]
@@ -105,7 +105,7 @@ definition dotProductEquiv
 
 中文:
 定义 dotProductEquiv
-  签名: (R n : 类型) [CommSemiring R] [Fintype n] [DecidableEq n]
+  签名: (R n : 类型) [交换半环 R] [有限类型 n] [DecidableEq n]
   定义体: ⟨⟨dotProduct v, dotProduct_add v⟩, fun t => dotProduct_smul t v⟩
   map_add' v w := by ext; simp
   map_smul' t v := by ext; simp

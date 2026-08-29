@@ -42,7 +42,7 @@ instance instTopologicalSpace
 
 中文:
 实例 instTopologicalSpace
-  签名: : TopologicalSpace (E [⋀^ι]->L[𝕜] F)
+  签名: : 拓扑空间 (E [⋀^ι]->L[𝕜] F)
   定义体: .induced toContinuousMultilinearMap inferInstance
 
 Depends on / 依赖: induced, toContinuousMultilinearMap
@@ -63,7 +63,7 @@ lemma isClosed_range_toContinuousMultilinearMap
 
 中文:
 引理 isClosed_range_toContinuousMultilinearMap
-  条件: [ContinuousSMul 𝕜 E] [T2Space F]
+  条件: [连续标量乘法 𝕜 E] [T2空间 F]
   证明: by
   simp only [range_toContinuousMultilinearMap, ofPred_forall]
   repeat refine isClosed_iInter fun _ => ?_
@@ -94,7 +94,7 @@ instance instUniformSpace
 
 中文:
 实例 instUniformSpace
-  签名: : UniformSpace (E [⋀^ι]->L[𝕜] F)
+  签名: : 一致空间 (E [⋀^ι]->L[𝕜] F)
   定义体: .comap toContinuousMultilinearMap inferInstance
 
 Depends on / 依赖: toContinuousMultilinearMap
@@ -150,7 +150,7 @@ theorem uniformContinuous_coe_fun
 
 中文:
 定理 uniformContinuous_coe_fun
-  条件: [ContinuousSMul 𝕜 E]
+  条件: [连续标量乘法 𝕜 E]
   证明: ContinuousMultilinearMap.uniformContinuous_coe_fun.comp
     uniformContinuous_toContinuousMultilinearMap
 
@@ -171,7 +171,7 @@ theorem uniformContinuous_eval_const
 
 中文:
 定理 uniformContinuous_eval_const
-  条件: [ContinuousSMul 𝕜 E] (x : ι -> E)
+  条件: [连续标量乘法 𝕜 E] (x : ι -> E)
   证明: uniformContinuous_pi.1 uniformContinuous_coe_fun x
 
 Depends on / 依赖: uniformContinuous_coe_fun, uniformContinuous_pi
@@ -191,7 +191,7 @@ instance instIsUniformAddGroup
 
 中文:
 实例 instIsUniformAddGroup
-  签名: : IsUniformAddGroup (E [⋀^ι]->L[𝕜] F)
+  签名: : 是UniformAdd群 (E [⋀^ι]->L[𝕜] F)
   定义体: isUniformEmbedding_toContinuousMultilinearMap.isUniformAddGroup
     (toContinuousMultilinearMapLinear (R := Nat))
 
@@ -234,7 +234,7 @@ theorem isUniformInducing_postcomp
 
 中文:
 定理 isUniformInducing_postcomp
-  结论: {G : 类型} [AddCommGroup G] [UniformSpace G]
+  结论: {G : 类型} [加法交换群 G] [一致空间 G]
   证明: by
   rw [← isUniformEmbedding_toContinuousMultilinearMap.1.of_comp_iff]
   exact (ContinuousMultilinearMap.isUniformInducing_postcomp g hg).comp
@@ -271,7 +271,7 @@ theorem completeSpace
 
 中文:
 定理 completeSpace
-  条件: (h : IsCoherentWith {s : Set (ι -> E) | IsVonNBounded 𝕜 s})
+  条件: (h : 是余herentWith {s : 集合 (ι -> E) | IsVonNBounded 𝕜 s})
   证明: by
   wlog hF : T2Space F generalizing F
   · rw [(isUniformInducing_postcomp (SeparationQuotient.mkCLM _ _)
@@ -308,7 +308,7 @@ instance instCompleteSpace
 
 中文:
 实例 instCompleteSpace
-  签名: [IsTopologicalAddGroup E] [SequentialSpace (ι -> E)]
+  签名: [是拓扑加群 E] [Sequential空间 (ι -> E)]
   定义体: completeSpace .of_seq fun _u x hux => (hux.isVonNBounded_range 𝕜).insert x
 
 Depends on / 依赖: completeSpace, hux.isVonNBounded_range, insert, isVonNBounded_range, of_seq
@@ -408,7 +408,7 @@ instance instIsTopologicalAddGroup
 
 中文:
 实例 instIsTopologicalAddGroup
-  签名: : IsTopologicalAddGroup (E [⋀^ι]->L[𝕜] F)
+  签名: : 是拓扑加群 (E [⋀^ι]->L[𝕜] F)
   定义体: isEmbedding_toContinuousMultilinearMap.topologicalAddGroup
     (toContinuousMultilinearMapLinear (R := Nat))
 
@@ -466,7 +466,7 @@ instance instContinuousSMul
 
 中文:
 实例 instContinuousSMul
-  签名: [ContinuousSMul 𝕜 F]
+  签名: [连续标量乘法 𝕜 F]
   定义体: isEmbedding_toContinuousMultilinearMap.continuousSMul continuous_id rfl
 
 Depends on / 依赖: continuousSMul, continuous_id, isEmbedding_toContinuousMultilinearMap, isEmbedding_toContinuousMultilinearMap.continuousSMul
@@ -486,7 +486,7 @@ theorem hasBasis_nhds_zero_of_basis
 
 中文:
 定理 hasBasis_nhds_zero_of_basis
-  结论: {ι' : 类型} {p : ι' -> 命题} {b : ι' -> Set F}
+  结论: {ι' : 类型} {p : ι' -> 命题} {b : ι' -> 集合 F}
   证明: by
   rw [nhds_induced]
   exact (ContinuousMultilinearMap.hasBasis_nhds_zero_of_basis h).comap _
@@ -555,7 +555,7 @@ lemma isClosedEmbedding_toContinuousMultilinearMap
 
 中文:
 引理 isClosedEmbedding_toContinuousMultilinearMap
-  条件: [T2Space F]
+  条件: [T2空间 F]
   证明: ⟨isEmbedding_toContinuousMultilinearMap, isClosed_range_toContinuousMultilinearMap⟩
 
 Depends on / 依赖: isClosed_range_toContinuousMultilinearMap, isEmbedding_toContinuousMultilinearMap
@@ -575,7 +575,7 @@ instance instContinuousEvalConst
 
 中文:
 实例 instContinuousEvalConst
-  签名: : ContinuousEvalConst (E [⋀^ι]->L[𝕜] F) (ι -> E) F
+  签名: : 余ntinuousEvalConst (E [⋀^ι]->L[𝕜] F) (ι -> E) F
   定义体: .of_continuous_forget continuous_toContinuousMultilinearMap
 
 Depends on / 依赖: continuous_toContinuousMultilinearMap, of_continuous_forget
@@ -593,7 +593,7 @@ instance instT2Space
 
 中文:
 实例 instT2Space
-  签名: [T2Space F]
+  签名: [T2空间 F]
   定义体: .of_injective_continuous DFunLike.coe_injective continuous_coeFun
 
 Depends on / 依赖: DFunLike, DFunLike.coe_injective, coe_injective, continuous_coeFun, of_injective_continuous
@@ -611,7 +611,7 @@ instance instT3Space
 
 中文:
 实例 instT3Space
-  签名: [T2Space F]
+  签名: [T2空间 F]
   定义体: inferInstance
 -/
 instance instT3Space [T2Space F] : T3Space (E [⋀^ι]->L[𝕜] F) :=
@@ -682,7 +682,7 @@ definition restrictScalarsCLM
 
 中文:
 定义 restrictScalarsCLM
-  签名: [ContinuousConstSMul 𝕜' F]
+  签名: [连续常数标量乘法 𝕜' F]
   定义体: restrictScalars 𝕜'
   map_add' _ _ := rfl
   map_smul' _ _ := rfl
@@ -718,7 +718,7 @@ definition liftCLM
 
 中文:
 定义 liftCLM
-  签名: (f : G ->L[𝕜] ContinuousMultilinearMap 𝕜 (fun _ : ι => E) F)
+  签名: (f : G ->L[𝕜] 连续多重线性映射 𝕜 (fun _ : ι => E) F)
   定义体: ⟨f x, hf x⟩
   map_add' _ _ := by ext; simp
   map_smul' _ _ := by ext; simp
@@ -744,7 +744,7 @@ lemma liftCLM_apply
 
 中文:
 引理 liftCLM_apply
-  结论: (f : G ->L[𝕜] ContinuousMultilinearMap 𝕜 (fun _ : ι => E) F)
+  结论: (f : G ->L[𝕜] 连续多重线性映射 𝕜 (fun _ : ι => E) F)
   证明: rfl
 -/
 lemma liftCLM_apply (f : G ->L[𝕜] ContinuousMultilinearMap 𝕜 (fun _ : ι => E) F)
@@ -871,7 +871,7 @@ theorem tsum_eval
 
 中文:
 定理 tsum_eval
-  条件: [T2Space F] (hp : Summable p) (m : ι -> E)
+  条件: [T2空间 F] (hp : Summable p) (m : ι -> E)
   结论: (∑' a, p a) m = ∑' a, p a m
   证明: (hasSum_eval hp.hasSum m).tsum_eq.symm
 
@@ -1005,7 +1005,7 @@ theorem _root_.ContinuousLinearEquiv.continuousAlternatingMapCongrRight_symm
   proof: rfl
 
 中文:
-定理 _root_.ContinuousLinearEquiv.continuousAlternatingMapCongrRight_symm
+定理 _root_.连续线性等价.continuousAlternatingMapCongrRight_symm
   条件: (g : F ≃L[𝕜] G)
   证明: rfl
 -/

@@ -47,7 +47,7 @@ instance :
 
 中文:
 实例 :
-  签名: Abelian (Ind C)
+  签名: 交换 (Ind C)
   定义体: .ofCoimageImageComparisonIsIso
 
 Depends on / 依赖: ofCoimageImageComparisonIsIso

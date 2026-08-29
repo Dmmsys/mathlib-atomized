@@ -43,8 +43,8 @@ definition Subsingleton
   body: forall ⦃x⦄ (_ : x in s) ⦃y⦄ (_ : y in s), x = y
 
 中文:
-定义 Subsingleton
-  签名: (s : Set α)
+定义 子单例
+  签名: (s : 集合 α)
   定义体: forall ⦃x⦄ (_ : x in s) ⦃y⦄ (_ : y in s), x = y
 -/
 protected def Subsingleton (s : Set α) : Prop :=
@@ -61,9 +61,9 @@ theorem Subsingleton.anti
   ht (hst hx) (hst hy)
 
 中文:
-定理 Subsingleton.anti
-  条件: (ht : t.Subsingleton) (hst : s subseteq t)
-  结论: s.Subsingleton
+定理 子单例.anti
+  条件: (ht : t.子单例) (hst : s subseteq t)
+  结论: s.子单例
   证明: fun _ hx _ hy =>
   ht (hst hx) (hst hy)
 -/
@@ -82,8 +82,8 @@ theorem Subsingleton.eq_singleton_of_mem
 @[simp]
 
 中文:
-定理 Subsingleton.eq_singleton_of_mem
-  条件: (hs : s.Subsingleton) {x : α} (hx : x in s)
+定理 子单例.eq_singleton_of_mem
+  条件: (hs : s.子单例) {x : α} (hx : x in s)
   结论: s = {x}
   证明: ext fun _ => ⟨fun hy => hs hx hy ▸ mem_singleton _, fun hy => (eq_of_mem_singleton hy).symm ▸ hx⟩
 
@@ -107,7 +107,7 @@ theorem subsingleton_empty
 
 中文:
 定理 subsingleton_empty
-  结论: (∅ : Set α).Subsingleton
+  结论: (∅ : 集合 α).子单例
   证明: fun _ => False.elim
 
 @[simp]
@@ -130,7 +130,7 @@ theorem subsingleton_singleton
 中文:
 定理 subsingleton_singleton
   条件: {a}
-  结论: ({a} : Set α).Subsingleton
+  结论: ({a} : 集合 α).子单例
   证明: fun _ hx _ hy =>
   (eq_of_mem_singleton hx).symm ▸ (eq_of_mem_singleton hy).symm ▸ rfl
 -/
@@ -149,7 +149,7 @@ theorem subsingleton_of_subset_singleton
 中文:
 定理 subsingleton_of_subset_singleton
   条件: (h : s subseteq {a})
-  结论: s.Subsingleton
+  结论: s.子单例
   证明: subsingleton_singleton.anti h
 
 Depends on / 依赖: subsingleton_singleton, subsingleton_singleton.anti
@@ -168,9 +168,9 @@ theorem subsingleton_of_forall_eq
   (h _ hb).trans (h _ hc).symm
 
 中文:
-定理 subsingleton_of_forall_eq
+定理 subsingleton_of_对任意_eq
   条件: (a : α) (h : 对任意 b in s, b = a)
-  结论: s.Subsingleton
+  结论: s.子单例
   证明: fun _ hb _ hc =>
   (h _ hb).trans (h _ hc).symm
 -/
@@ -189,7 +189,7 @@ theorem subsingleton_iff_singleton
 中文:
 定理 subsingleton_iff_singleton
   条件: {x} (hx : x in s)
-  结论: s.Subsingleton ↔ s = {x}
+  结论: s.子单例 ↔ s = {x}
   证明: ⟨fun h => h.eq_singleton_of_mem hx, fun h => h.symm ▸ subsingleton_singleton⟩
 
 Depends on / 依赖: eq_singleton_of_mem, h.eq_singleton_of_mem, h.symm, subsingleton_singleton
@@ -207,8 +207,8 @@ theorem Subsingleton.eq_empty_or_singleton
   proof: s.eq_empty_or_nonempty.elim Or.inl fun ⟨x, hx⟩ => Or.inr ⟨x, hs.eq_singleton_of_mem hx⟩
 
 中文:
-定理 Subsingleton.eq_empty_or_singleton
-  条件: (hs : s.Subsingleton)
+定理 子单例.eq_empty_or_singleton
+  条件: (hs : s.子单例)
   结论: s = ∅ ∨ 存在 x, s = {x}
   证明: s.eq_empty_or_nonempty.elim Or.inl fun ⟨x, hx⟩ => Or.inr ⟨x, hs.eq_singleton_of_mem hx⟩
 
@@ -227,7 +227,7 @@ theorem subsingleton_iff_eq_empty_or_singleton
 
 中文:
 定理 subsingleton_iff_eq_empty_or_singleton
-  结论: s.Subsingleton ↔ s = ∅ ∨ 存在 x, s = {x}
+  结论: s.子单例 ↔ s = ∅ ∨ 存在 x, s = {x}
   证明: ⟨Subsingleton.eq_empty_or_singleton, by rintro (_ | ⟨_, rfl⟩) <;> simp_all⟩
 
 Depends on / 依赖: Subsingleton, Subsingleton.eq_empty_or_singleton, eq_empty_or_singleton
@@ -246,8 +246,8 @@ theorem Subsingleton.induction_on
   exacts [he, h₁ _]
 
 中文:
-定理 Subsingleton.induction_on
-  结论: {p : Set α -> 命题} (hs : s.Subsingleton) (he : p ∅)
+定理 子单例.induction_on
+  结论: {p : 集合 α -> 命题} (hs : s.子单例) (he : p ∅)
   证明: by
   rcases hs.eq_empty_or_singleton with (rfl | ⟨x, rfl⟩)
   exacts [he, h₁ _]
@@ -271,8 +271,8 @@ theorem subsingleton_univ
 
 中文:
 定理 subsingleton_univ
-  条件: [Subsingleton α]
-  结论: (univ : Set α).Subsingleton
+  条件: [子单例 α]
+  结论: (univ : 集合 α).子单例
   证明: fun x _ y _ =>
   Subsingleton.elim x y
 -/
@@ -292,8 +292,8 @@ theorem subsingleton_of_univ_subsingleton
 
 中文:
 定理 subsingleton_of_univ_subsingleton
-  条件: (h : (univ : Set α).Subsingleton)
-  结论: Subsingleton α
+  条件: (h : (univ : 集合 α).子单例)
+  结论: 子单例 α
   证明: ⟨fun a b => h (mem_univ a) (mem_univ b)⟩
 
 @[simp]
@@ -314,7 +314,7 @@ theorem subsingleton_univ_iff
 
 中文:
 定理 subsingleton_univ_iff
-  结论: (univ : Set α).Subsingleton ↔ Subsingleton α
+  结论: (univ : 集合 α).子单例 ↔ 子单例 α
   证明: ⟨subsingleton_of_univ_subsingleton, fun h => @subsingleton_univ _ h⟩
 
 Depends on / 依赖: subsingleton_of_univ_subsingleton, subsingleton_univ
@@ -331,8 +331,8 @@ lemma Subsingleton.inter_singleton
   proof: Set.subsingleton_of_subset_singleton Set.inter_subset_right
 
 中文:
-引理 Subsingleton.inter_singleton
-  结论: (s inter {a}).Subsingleton
+引理 子单例.inter_singleton
+  结论: (s inter {a}).子单例
   证明: Set.subsingleton_of_subset_singleton Set.inter_subset_right
 
 Depends on / 依赖: Set.inter_subset_right, Set.subsingleton_of_subset_singleton, inter_subset_right, subsingleton_of_subset_singleton
@@ -349,8 +349,8 @@ lemma Subsingleton.singleton_inter
   proof: Set.subsingleton_of_subset_singleton Set.inter_subset_left
 
 中文:
-引理 Subsingleton.singleton_inter
-  结论: ({a} inter s).Subsingleton
+引理 子单例.singleton_inter
+  结论: ({a} inter s).子单例
   证明: Set.subsingleton_of_subset_singleton Set.inter_subset_left
 
 Depends on / 依赖: Set.inter_subset_left, Set.subsingleton_of_subset_singleton, inter_subset_left, subsingleton_of_subset_singleton
@@ -368,7 +368,7 @@ lemma subsingleton_of_subsingleton_inter_left
 
 中文:
 引理 subsingleton_of_subsingleton_inter_left
-  条件: (h : (s union t).Subsingleton)
+  条件: (h : (s union t).子单例)
   证明: fun _ h₁ _ h₂ => h (.inl h₁) (.inl h₂)
 -/
 lemma subsingleton_of_subsingleton_inter_left (h : (s union t).Subsingleton) :
@@ -385,7 +385,7 @@ lemma subsingleton_of_subsingleton_inter_right
 
 中文:
 引理 subsingleton_of_subsingleton_inter_right
-  条件: (h : (s union t).Subsingleton)
+  条件: (h : (s union t).子单例)
   证明: fun _ h₁ _ h₂ => h (.inr h₁) (.inr h₂)
 -/
 lemma subsingleton_of_subsingleton_inter_right (h : (s union t).Subsingleton) :
@@ -405,8 +405,8 @@ theorem subsingleton_of_subsingleton
 
 中文:
 定理 subsingleton_of_subsingleton
-  条件: [Subsingleton α] {s : Set α}
-  结论: s.Subsingleton
+  条件: [子单例 α] {s : 集合 α}
+  结论: s.子单例
   证明: subsingleton_univ.anti (subset_univ s)
 
 @[to_dual]
@@ -428,8 +428,8 @@ theorem subsingleton_isTop
 
 中文:
 定理 subsingleton_isTop
-  条件: (α : 类型) [PartialOrder α]
-  结论: { x : α | IsTop x }.Subsingleton
+  条件: (α : 类型) [偏序 α]
+  结论: { x : α | IsTop x }.子单例
   证明: fun x hx _ hy => hx.isMax.eq_of_le (hy x)
 
 Depends on / 依赖: eq_of_le, hx.isMax.eq_of_le
@@ -449,7 +449,7 @@ theorem exists_eq_singleton_iff_nonempty_subsingleton
   · exact h.2.eq_empty_or_singleton.resolve_left h.1.ne_empty
 
 中文:
-定理 exists_eq_singleton_iff_nonempty_subsingleton
+定理 存在_eq_singleton_iff_nonempty_subsingleton
   证明: by
   refine ⟨?_, fun h => ?_⟩
   · rintro ⟨a, rfl⟩
@@ -475,7 +475,7 @@ theorem eq_empty_or_singleton_of_subsingleton
 
 中文:
 定理 eq_empty_or_singleton_of_subsingleton
-  条件: [Subsingleton α] (s : Set α)
+  条件: [子单例 α] (s : 集合 α)
   证明: subsingleton_of_subsingleton.eq_empty_or_singleton
 
 Depends on / 依赖: eq_empty_or_singleton, subsingleton_of_subsingleton, subsingleton_of_subsingleton.eq_empty_or_singleton
@@ -494,7 +494,7 @@ theorem eq_empty_or_singleton_of_unique
 
 中文:
 定理 eq_empty_or_singleton_of_unique
-  条件: [Unique α] (s : Set α)
+  条件: [唯一 α] (s : 集合 α)
   证明: s.eq_empty_or_singleton_of_subsingleton.imp_right fun ⟨a, ha⟩ => Unique.eq_default a ▸ ha
 
 Depends on / 依赖: Unique, Unique.eq_default, eq_default, eq_empty_or_singleton_of_subsingleton, imp_right, s.eq_empty_or_singleton_of_subsingleton.imp_right
@@ -520,8 +520,8 @@ theorem subsingleton_coe
 
 中文:
 定理 subsingleton_coe
-  条件: (s : Set α)
-  结论: Subsingleton s ↔ s.Subsingleton
+  条件: (s : 集合 α)
+  结论: 子单例 s ↔ s.子单例
   证明: by
   constructor
   · intro h a ha b hb
@@ -546,9 +546,9 @@ theorem Subsingleton.coe_sort
   proof: s.subsingleton_coe.2
 
 中文:
-定理 Subsingleton.coe_sort
-  条件: {s : Set α}
-  结论: s.Subsingleton -> Subsingleton s
+定理 子单例.coe_sort
+  条件: {s : 集合 α}
+  结论: s.子单例 -> 子单例 s
   证明: s.subsingleton_coe.2
 
 Depends on / 依赖: s.subsingleton_coe, subsingleton_coe
@@ -568,7 +568,7 @@ instance subsingleton_coe_of_subsingleton
 
 中文:
 实例 subsingleton_coe_of_subsingleton
-  签名: [Subsingleton α] {s : Set α}
+  签名: [子单例 α] {s : 集合 α}
   定义体: by
   rw [s.subsingleton_coe]
   exact subsingleton_of_subsingleton
@@ -589,8 +589,8 @@ lemma Subsingleton.denselyOrdered
   ⟨fun _ _ h => ⟨_, h.trans_eq (Subsingleton.elim _ _), h⟩⟩
 
 中文:
-引理 Subsingleton.denselyOrdered
-  条件: {s : Set α} [LT α] (hs : s.Subsingleton)
+引理 子单例.denselyOrdered
+  条件: {s : 集合 α} [LT α] (hs : s.子单例)
   证明: have := (subsingleton_coe _).mpr hs
   ⟨fun _ _ h => ⟨_, h.trans_eq (Subsingleton.elim _ _), h⟩⟩
 
@@ -637,8 +637,8 @@ definition Nontrivial
   body: exists x in s, exists y in s, x != y
 
 中文:
-定义 Nontrivial
-  签名: (s : Set α)
+定义 非平凡
+  签名: (s : 集合 α)
   定义体: exists x in s, exists y in s, x != y
 -/
 protected def Nontrivial (s : Set α) : Prop :=
@@ -656,7 +656,7 @@ theorem nontrivial_of_mem_mem_ne
 中文:
 定理 nontrivial_of_mem_mem_ne
   条件: {x y} (hx : x in s) (hy : y in s) (hxy : x != y)
-  结论: s.Nontrivial
+  结论: s.非平凡
   证明: ⟨x, hx, y, hy, hxy⟩
 -/
 theorem nontrivial_of_mem_mem_ne {x y} (hx : x in s) (hy : y in s) (hxy : x != y) : s.Nontrivial :=
@@ -672,7 +672,7 @@ definition noncomputable
 
 中文:
 定义 noncomputable
-  签名: def Nontrivial.choose (hs : s.Nontrivial)
+  签名: def 非平凡.choose (hs : s.非平凡)
   定义体: (Exists.choose hs, hs.choose_spec.right.choose)
 -/
 protected noncomputable def Nontrivial.choose (hs : s.Nontrivial) : α × α :=
@@ -688,8 +688,8 @@ theorem Nontrivial.choose_fst_mem
   proof: hs.choose_spec.left
 
 中文:
-定理 Nontrivial.choose_fst_mem
-  条件: (hs : s.Nontrivial)
+定理 非平凡.choose_fst_mem
+  条件: (hs : s.非平凡)
   结论: hs.choose.fst in s
   证明: hs.choose_spec.left
 -/
@@ -706,8 +706,8 @@ theorem Nontrivial.choose_snd_mem
   proof: hs.choose_spec.right.choose_spec.left
 
 中文:
-定理 Nontrivial.choose_snd_mem
-  条件: (hs : s.Nontrivial)
+定理 非平凡.choose_snd_mem
+  条件: (hs : s.非平凡)
   结论: hs.choose.snd in s
   证明: hs.choose_spec.right.choose_spec.left
 -/
@@ -723,8 +723,8 @@ theorem Nontrivial.choose_fst_ne_choose_snd
   proof: hs.choose_spec.right.choose_spec.right
 
 中文:
-定理 Nontrivial.choose_fst_ne_choose_snd
-  条件: (hs : s.Nontrivial)
+定理 非平凡.choose_fst_ne_choose_snd
+  条件: (hs : s.非平凡)
   证明: hs.choose_spec.right.choose_spec.right
 -/
 protected theorem Nontrivial.choose_fst_ne_choose_snd (hs : s.Nontrivial) :
@@ -742,9 +742,9 @@ theorem Nontrivial.mono
   ⟨x, hst hx, y, hst hy, hxy⟩
 
 中文:
-定理 Nontrivial.mono
-  条件: (hs : s.Nontrivial) (hst : s subseteq t)
-  结论: t.Nontrivial
+定理 非平凡.mono
+  条件: (hs : s.非平凡) (hst : s subseteq t)
+  结论: t.非平凡
   证明: let ⟨x, hx, y, hy, hxy⟩ := hs
   ⟨x, hst hx, y, hst hy, hxy⟩
 -/
@@ -764,7 +764,7 @@ theorem nontrivial_pair
 中文:
 定理 nontrivial_pair
   条件: {x y} (hxy : x != y)
-  结论: ({x, y} : Set α).Nontrivial
+  结论: ({x, y} : 集合 α).非平凡
   证明: ⟨x, mem_insert _ _, y, mem_insert_of_mem _ (mem_singleton _), hxy⟩
 
 Depends on / 依赖: mem_insert, mem_insert_of_mem, mem_singleton
@@ -784,7 +784,7 @@ theorem nontrivial_of_pair_subset
 中文:
 定理 nontrivial_of_pair_subset
   条件: {x y} (hxy : x != y) (h : {x, y} subseteq s)
-  结论: s.Nontrivial
+  结论: s.非平凡
   证明: (nontrivial_pair hxy).mono h
 
 Depends on / 依赖: nontrivial_pair
@@ -803,8 +803,8 @@ theorem Nontrivial.pair_subset
 ⟨x, y, hxy, insert_subset hx singleton_subset_iff.2 hy⟩
 
 中文:
-定理 Nontrivial.pair_subset
-  条件: (hs : s.Nontrivial)
+定理 非平凡.pair_subset
+  条件: (hs : s.非平凡)
   结论: 存在 x y, x != y ∧ {x, y} subseteq s
   证明: let ⟨x, hx, y, hy, hxy⟩ := hs
 ⟨x, y, hxy, insert_subset hx singleton_subset_iff.2 hy⟩
@@ -827,7 +827,7 @@ theorem nontrivial_iff_pair_subset
 
 中文:
 定理 nontrivial_iff_pair_subset
-  结论: s.Nontrivial ↔ 存在 x y, x != y ∧ {x, y} subseteq s
+  结论: s.非平凡 ↔ 存在 x y, x != y ∧ {x, y} subseteq s
   证明: ⟨Nontrivial.pair_subset, fun H =>
     let ⟨_, _, hxy, h⟩ := H
     nontrivial_of_pair_subset hxy h⟩
@@ -850,9 +850,9 @@ theorem nontrivial_of_exists_ne
   ⟨y, hy, x, hx, hyx⟩
 
 中文:
-定理 nontrivial_of_exists_ne
+定理 nontrivial_of_存在_ne
   条件: {x} (hx : x in s) (h : 存在 y in s, y != x)
-  结论: s.Nontrivial
+  结论: s.非平凡
   证明: let ⟨y, hy, hyx⟩ := h
   ⟨y, hy, x, hx, hyx⟩
 -/
@@ -874,8 +874,8 @@ theorem Nontrivial.exists_ne
   exact hxy rfl
 
 中文:
-定理 Nontrivial.exists_ne
-  条件: (hs : s.Nontrivial) (z)
+定理 非平凡.存在_ne
+  条件: (hs : s.非平凡) (z)
   结论: 存在 x in s, x != z
   证明: by
   by_contra! H
@@ -899,9 +899,9 @@ theorem nontrivial_iff_exists_ne
   proof: ⟨fun H => H.exists_ne _, nontrivial_of_exists_ne hx⟩
 
 中文:
-定理 nontrivial_iff_exists_ne
+定理 nontrivial_iff_存在_ne
   条件: {x} (hx : x in s)
-  结论: s.Nontrivial ↔ 存在 y in s, y != x
+  结论: s.非平凡 ↔ 存在 y in s, y != x
   证明: ⟨fun H => H.exists_ne _, nontrivial_of_exists_ne hx⟩
 
 Depends on / 依赖: H.exists_ne, exists_ne, nontrivial_of_exists_ne
@@ -919,7 +919,7 @@ theorem nontrivial_of_lt
 
 中文:
 定理 nontrivial_of_lt
-  条件: [Preorder α] {x y} (hx : x in s) (hy : y in s) (hxy : x < y)
+  条件: [预序 α] {x y} (hx : x in s) (hy : y in s) (hxy : x < y)
   证明: ⟨x, hx, y, hy, ne_of_lt hxy⟩
 
 Depends on / 依赖: ne_of_lt
@@ -938,8 +938,8 @@ theorem nontrivial_of_exists_lt
   nontrivial_of_lt hx hy hxy
 
 中文:
-定理 nontrivial_of_exists_lt
-  结论: [Preorder α]
+定理 nontrivial_of_存在_lt
+  结论: [预序 α]
   证明: let ⟨_, hx, _, hy, hxy⟩ := H
   nontrivial_of_lt hx hy hxy
 
@@ -961,8 +961,8 @@ theorem Nontrivial.exists_lt
   Or.elim (lt_or_gt_of_ne hxy) (fun H => ⟨x, hx, y, hy, H⟩) fun H => ⟨y, hy, x, hx, H⟩
 
 中文:
-定理 Nontrivial.exists_lt
-  条件: [LinearOrder α] (hs : s.Nontrivial)
+定理 非平凡.存在_lt
+  条件: [线性序 α] (hs : s.非平凡)
   结论: 存在ᵉ (x in s) (y in s), x < y
   证明: let ⟨x, hx, y, hy, hxy⟩ := hs
   Or.elim (lt_or_gt_of_ne hxy) (fun H => ⟨x, hx, y, hy, H⟩) fun H => ⟨y, hy, x, hx, H⟩
@@ -982,8 +982,8 @@ theorem nontrivial_iff_exists_lt
   proof: ⟨Nontrivial.exists_lt, nontrivial_of_exists_lt⟩
 
 中文:
-定理 nontrivial_iff_exists_lt
-  条件: [LinearOrder α]
+定理 nontrivial_iff_存在_lt
+  条件: [线性序 α]
   证明: ⟨Nontrivial.exists_lt, nontrivial_of_exists_lt⟩
 
 Depends on / 依赖: Nontrivial, Nontrivial.exists_lt, exists_lt, nontrivial_of_exists_lt
@@ -1003,9 +1003,9 @@ theorem Nontrivial.nonempty
   ⟨x, hx⟩
 
 中文:
-定理 Nontrivial.nonempty
-  条件: (hs : s.Nontrivial)
-  结论: s.Nonempty
+定理 非平凡.nonempty
+  条件: (hs : s.非平凡)
+  结论: s.非空
   证明: let ⟨x, hx, _⟩ := hs
   ⟨x, hx⟩
 -/
@@ -1023,8 +1023,8 @@ theorem Nontrivial.ne_empty
   proof: hs.nonempty.ne_empty
 
 中文:
-定理 Nontrivial.ne_empty
-  条件: (hs : s.Nontrivial)
+定理 非平凡.ne_empty
+  条件: (hs : s.非平凡)
   结论: s != ∅
   证明: hs.nonempty.ne_empty
 -/
@@ -1043,8 +1043,8 @@ theorem Nontrivial.not_subset_empty
 @[simp]
 
 中文:
-定理 Nontrivial.not_subset_empty
-  条件: (hs : s.Nontrivial)
+定理 非平凡.not_subset_empty
+  条件: (hs : s.非平凡)
   结论: ¬s subseteq ∅
   证明: hs.nonempty.not_subset_empty
 
@@ -1068,7 +1068,7 @@ theorem not_nontrivial_empty
 
 中文:
 定理 not_nontrivial_empty
-  结论: ¬(∅ : Set α).Nontrivial
+  结论: ¬(∅ : 集合 α).非平凡
   证明: fun h => h.ne_empty rfl
 
 @[simp]
@@ -1093,7 +1093,7 @@ theorem not_nontrivial_singleton
 中文:
 定理 not_nontrivial_singleton
   条件: {x}
-  结论: ¬({x} : Set α).Nontrivial
+  结论: ¬({x} : 集合 α).非平凡
   证明: fun H => by
   rw [nontrivial_iff_exists_ne (mem_singleton x)] at H
   let ⟨y, hy, hya⟩ := H
@@ -1118,8 +1118,8 @@ theorem Nontrivial.ne_singleton
   exact not_nontrivial_singleton hs
 
 中文:
-定理 Nontrivial.ne_singleton
-  条件: {x} (hs : s.Nontrivial)
+定理 非平凡.ne_singleton
+  条件: {x} (hs : s.非平凡)
   结论: s != {x}
   证明: fun H => by
   rw [H] at hs
@@ -1139,8 +1139,8 @@ theorem Nontrivial.not_subset_singleton
   proof: (not_congr subset_singleton_iff_eq).2 (not_or_intro hs.ne_empty hs.ne_singleton)
 
 中文:
-定理 Nontrivial.not_subset_singleton
-  条件: {x} (hs : s.Nontrivial)
+定理 非平凡.not_subset_singleton
+  条件: {x} (hs : s.非平凡)
   结论: ¬s subseteq {x}
   证明: (not_congr subset_singleton_iff_eq).2 (not_or_intro hs.ne_empty hs.ne_singleton)
 
@@ -1161,8 +1161,8 @@ theorem nontrivial_univ
 
 中文:
 定理 nontrivial_univ
-  条件: [Nontrivial α]
-  结论: (univ : Set α).Nontrivial
+  条件: [非平凡 α]
+  结论: (univ : 集合 α).非平凡
   证明: let ⟨x, y, hxy⟩ := exists_pair_ne α
   ⟨x, mem_univ _, y, mem_univ _, hxy⟩
 
@@ -1186,8 +1186,8 @@ theorem nontrivial_of_univ_nontrivial
 
 中文:
 定理 nontrivial_of_univ_nontrivial
-  条件: (h : (univ : Set α).Nontrivial)
-  结论: Nontrivial α
+  条件: (h : (univ : 集合 α).非平凡)
+  结论: 非平凡 α
   证明: let ⟨x, _, y, _, hxy⟩ := h
   ⟨⟨x, y, hxy⟩⟩
 
@@ -1210,7 +1210,7 @@ theorem nontrivial_univ_iff
 
 中文:
 定理 nontrivial_univ_iff
-  结论: (univ : Set α).Nontrivial ↔ Nontrivial α
+  结论: (univ : 集合 α).非平凡 ↔ 非平凡 α
   证明: ⟨nontrivial_of_univ_nontrivial, fun h => @nontrivial_univ _ h⟩
 
 @[simp]
@@ -1234,7 +1234,7 @@ theorem singleton_ne_univ
 
 中文:
 定理 singleton_ne_univ
-  条件: [Nontrivial α] (a : α)
+  条件: [非平凡 α] (a : α)
   结论: {a} != univ
   证明: fun h => nontrivial_univ.not_subset_singleton h.superset
 
@@ -1257,7 +1257,7 @@ theorem singleton_ssubset_univ
 
 中文:
 定理 singleton_ssubset_univ
-  条件: [Nontrivial α] (a : α)
+  条件: [非平凡 α] (a : α)
   结论: {a} ⊂ univ
   证明: ssubset_univ_iff.mpr singleton_ne_univ a
 
@@ -1278,8 +1278,8 @@ theorem nontrivial_of_nontrivial
 
 中文:
 定理 nontrivial_of_nontrivial
-  条件: (hs : s.Nontrivial)
-  结论: Nontrivial α
+  条件: (hs : s.非平凡)
+  结论: 非平凡 α
   证明: let ⟨x, _, y, _, hxy⟩ := hs
   ⟨⟨x, y, hxy⟩⟩
 -/
@@ -1303,8 +1303,8 @@ alias ⟨_, Nontrivial.coe_sort⟩ := nontrivial_coe_sort
 
 中文:
 定理 nontrivial_coe_sort
-  条件: {s : Set α}
-  结论: Nontrivial s ↔ s.Nontrivial
+  条件: {s : 集合 α}
+  结论: 非平凡 s ↔ s.非平凡
   证明: by
   simp [← nontrivial_univ_iff, Set.Nontrivial]
 
@@ -1328,8 +1328,8 @@ theorem nontrivial_of_nontrivial_coe
 
 中文:
 定理 nontrivial_of_nontrivial_coe
-  条件: (hs : Nontrivial s)
-  结论: Nontrivial α
+  条件: (hs : 非平凡 s)
+  结论: 非平凡 α
   证明: nontrivial_of_nontrivial nontrivial_coe_sort.1 hs
 
 Depends on / 依赖: nontrivial_coe_sort, nontrivial_of_nontrivial
@@ -1349,7 +1349,7 @@ theorem nontrivial_mono
 
 中文:
 定理 nontrivial_mono
-  条件: {α : 类型} {s t : Set α} (hst : s subseteq t) (hs : Nontrivial s)
+  条件: {α : 类型} {s t : 集合 α} (hst : s subseteq t) (hs : 非平凡 s)
   证明: Nontrivial.coe_sort (nontrivial_coe_sort.1 hs).mono hst
 
 @[simp, push]
@@ -1374,7 +1374,7 @@ theorem not_subsingleton_iff
 
 中文:
 定理 not_subsingleton_iff
-  结论: ¬s.Subsingleton ↔ s.Nontrivial
+  结论: ¬s.子单例 ↔ s.非平凡
   证明: by
   simp_rw [Set.Subsingleton, Set.Nontrivial, not_forall, exists_prop]
 
@@ -1400,7 +1400,7 @@ alias ⟨_, Nontrivial.not_subsingleton⟩ := not_subsingleton_iff
 
 中文:
 定理 not_nontrivial_iff
-  结论: ¬s.Nontrivial ↔ s.Subsingleton
+  结论: ¬s.非平凡 ↔ s.子单例
   证明: Iff.not_left not_subsingleton_iff.symm
 
 alias ⟨_, Subsingleton.not_nontrivial⟩ := not_nontrivial_iff
@@ -1428,8 +1428,8 @@ lemma subsingleton_or_nontrivial
 
 中文:
 引理 subsingleton_or_nontrivial
-  条件: (s : Set α)
-  结论: s.Subsingleton ∨ s.Nontrivial
+  条件: (s : 集合 α)
+  结论: s.子单例 ∨ s.非平凡
   证明: by
   simp [or_iff_not_imp_right]
 -/
@@ -1449,7 +1449,7 @@ lemma eq_singleton_or_nontrivial
 中文:
 引理 eq_singleton_or_nontrivial
   条件: (ha : a in s)
-  结论: s = {a} ∨ s.Nontrivial
+  结论: s = {a} ∨ s.非平凡
   证明: by
   rw [← subsingleton_iff_singleton ha]; exact s.subsingleton_or_nontrivial
 
@@ -1470,7 +1470,7 @@ lemma nontrivial_iff_ne_singleton
 中文:
 引理 nontrivial_iff_ne_singleton
   条件: (ha : a in s)
-  结论: s.Nontrivial ↔ s != {a}
+  结论: s.非平凡 ↔ s != {a}
   证明: ⟨Nontrivial.ne_singleton, (eq_singleton_or_nontrivial ha).resolve_left⟩
 
 Depends on / 依赖: Nontrivial, Nontrivial.ne_singleton, eq_singleton_or_nontrivial, ne_singleton, resolve_left
@@ -1487,8 +1487,8 @@ lemma Nonempty.exists_eq_singleton_or_nontrivial
   proof: fun ⟨a, ha⟩ => (eq_singleton_or_nontrivial ha).imp_left Exists.intro a
 
 中文:
-引理 Nonempty.exists_eq_singleton_or_nontrivial
-  结论: s.Nonempty -> (存在 a, s = {a}) ∨ s.Nontrivial
+引理 非空.存在_eq_singleton_or_nontrivial
+  结论: s.非空 -> (存在 a, s = {a}) ∨ s.非平凡
   证明: fun ⟨a, ha⟩ => (eq_singleton_or_nontrivial ha).imp_left Exists.intro a
 -/
 lemma Nonempty.exists_eq_singleton_or_nontrivial : s.Nonempty -> (exists a, s = {a}) ∨ s.Nontrivial :=
@@ -1508,7 +1508,7 @@ theorem univ_eq_true_false
 
 中文:
 定理 univ_eq_true_false
-  结论: univ = ({True, False} : Set 命题)
+  结论: univ = ({真, 假} : 集合 命题)
   证明: Eq.symm eq_univ_of_forall fun x => by
     rw [mem_insert_iff]; rw [mem_singleton_iff]
     exact Classical.propComplete x
@@ -1536,8 +1536,8 @@ theorem univ_set_of_isEmpty
 
 中文:
 定理 univ_set_of_isEmpty
-  条件: [IsEmpty α]
-  结论: @univ (Set α) = {∅}
+  条件: [是空 α]
+  结论: @univ (集合 α) = {∅}
   证明: subset_antisymm (fun S hS => by simp [Set.eq_empty_of_isEmpty S]) (by simp)
 
 @[simp]
@@ -1561,7 +1561,7 @@ theorem univ_set_eq_singleton_empty_iff
 
 中文:
 定理 univ_set_eq_singleton_empty_iff
-  结论: @Set.univ (Set α) = {∅} ↔ IsEmpty α
+  结论: @集合.univ (集合 α) = {∅} ↔ 是空 α
   证明: by
   refine ⟨fun h => ?_, fun _ => by simp⟩
   suffices @univ α in univ by aesop
@@ -1589,8 +1589,8 @@ theorem Subsingleton.monotoneOn
   proof: fun _ ha _ hb _ => (congr_arg _ (h ha hb)).le
 
 中文:
-定理 Subsingleton.monotoneOn
-  条件: (h : s.Subsingleton)
+定理 子单例.monotoneOn
+  条件: (h : s.子单例)
   结论: MonotoneOn f s
   证明: fun _ ha _ hb _ => (congr_arg _ (h ha hb)).le
 -/
@@ -1607,8 +1607,8 @@ theorem Subsingleton.antitoneOn
   proof: fun _ ha _ hb _ => (congr_arg _ (h hb ha)).le
 
 中文:
-定理 Subsingleton.antitoneOn
-  条件: (h : s.Subsingleton)
+定理 子单例.antitoneOn
+  条件: (h : s.子单例)
   结论: AntitoneOn f s
   证明: fun _ ha _ hb _ => (congr_arg _ (h hb ha)).le
 -/
@@ -1625,8 +1625,8 @@ theorem Subsingleton.strictMonoOn
   proof: fun _ ha _ hb hlt => (hlt.ne (h ha hb)).elim
 
 中文:
-定理 Subsingleton.strictMonoOn
-  条件: (h : s.Subsingleton)
+定理 子单例.strictMonoOn
+  条件: (h : s.子单例)
   结论: StrictMonoOn f s
   证明: fun _ ha _ hb hlt => (hlt.ne (h ha hb)).elim
 -/
@@ -1645,8 +1645,8 @@ theorem Subsingleton.strictAntiOn
 @[simp]
 
 中文:
-定理 Subsingleton.strictAntiOn
-  条件: (h : s.Subsingleton)
+定理 子单例.strictAntiOn
+  条件: (h : s.子单例)
   结论: StrictAntiOn f s
   证明: fun _ ha _ hb hlt => (hlt.ne (h ha hb)).elim
 

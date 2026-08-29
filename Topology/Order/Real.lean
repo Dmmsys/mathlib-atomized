@@ -37,7 +37,7 @@ instance :
 
 中文:
 实例 :
-  签名: TopologicalSpace E实数
+  签名: 拓扑空间 E实数
   定义体: Preorder.topology EReal
 
 Depends on / 依赖: Preorder, Preorder.topology, topology
@@ -53,7 +53,7 @@ instance :
 
 中文:
 实例 :
-  签名: OrderTopology E实数
+  签名: Order拓扑 E实数
   定义体: ⟨rfl⟩
 -/
 instance : OrderTopology EReal := ⟨rfl⟩
@@ -68,7 +68,7 @@ instance :
 
 中文:
 实例 :
-  签名: T5Space E实数
+  签名: T5空间 E实数
   定义体: inferInstance
 -/
 instance : T5Space EReal := inferInstance
@@ -82,7 +82,7 @@ instance :
 
 中文:
 实例 :
-  签名: T2Space E实数
+  签名: T2空间 E实数
   定义体: inferInstance
 -/
 instance : T2Space EReal := inferInstance
@@ -97,7 +97,7 @@ lemma denseRange_ratCast
 
 中文:
 引理 denseRange_ratCast
-  结论: DenseRange (fun r : Rat => ((r : 实数) : E实数))
+  结论: DenseRange (fun r : 有理数 => ((r : 实数) : E实数))
   证明: dense_of_exists_between fun _ _ h => exists_range_iff.2 exists_rat_btwn_of_lt h
 
 Depends on / 依赖: dense_of_exists_between, exists_range_iff, exists_rat_btwn_of_lt
@@ -119,7 +119,7 @@ instance :
 
 中文:
 实例 :
-  签名: TopologicalSpace 实数>=0∞
+  签名: 拓扑空间 实数>=0∞
   定义体: Preorder.topology Real>=0∞
 
 Depends on / 依赖: Preorder, Preorder.topology, topology
@@ -136,7 +136,7 @@ instance :
 
 中文:
 实例 :
-  签名: OrderTopology 实数>=0∞
+  签名: Order拓扑 实数>=0∞
   定义体: ⟨rfl⟩
 -/
 instance : OrderTopology Real>=0∞ := ⟨rfl⟩
@@ -152,7 +152,7 @@ instance :
 
 中文:
 实例 :
-  签名: T2Space 实数>=0∞
+  签名: T2空间 实数>=0∞
   定义体: inferInstance
 -/
 instance : T2Space Real>=0∞ := inferInstance
@@ -166,7 +166,7 @@ instance :
 
 中文:
 实例 :
-  签名: T5Space 实数>=0∞
+  签名: T5空间 实数>=0∞
   定义体: inferInstance
 -/
 instance : T5Space Real>=0∞ := inferInstance
@@ -180,7 +180,7 @@ instance :
 
 中文:
 实例 :
-  签名: T4Space 实数>=0∞
+  签名: T4空间 实数>=0∞
   定义体: inferInstance
 -/
 instance : T4Space Real>=0∞ := inferInstance

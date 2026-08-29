@@ -52,7 +52,7 @@ theorem Finset.pairwiseDisjoint_range_singleton
   exact disjoint_singleton.2 (ne_of_apply_ne _ h)
 
 中文:
-定理 Finset.pairwiseDisjoint_range_singleton
+定理 有限集.pairwiseDisjoint_range_singleton
   证明: by
   rintro _ ⟨a, rfl⟩ _ ⟨b, rfl⟩ h
   exact disjoint_singleton.2 (ne_of_apply_ne _ h)
@@ -76,7 +76,7 @@ theorem PairwiseDisjoint.elim_finset
 
 中文:
 定理 PairwiseDisjoint.elim_finset
-  结论: {s : Set ι} {f : ι -> Finset α} (hs : s.PairwiseDisjoint f)
+  结论: {s : 集合 ι} {f : ι -> 有限集 α} (hs : s.PairwiseDisjoint f)
   证明: hs.elim hi hj (Finset.not_disjoint_iff.2 ⟨a, hai, haj⟩)
 
 Depends on / 依赖: Finset, Finset.not_disjoint_iff, hs.elim, not_disjoint_iff
@@ -101,7 +101,7 @@ theorem PairwiseDisjoint.image_finset_of_le
 
 中文:
 定理 PairwiseDisjoint.image_finset_of_le
-  结论: [DecidableEq ι] {s : Finset ι} {f : ι -> α}
+  结论: [DecidableEq ι] {s : 有限集 ι} {f : ι -> α}
   证明: by
   rw [coe_image]
   exact hs.image_of_le hf
@@ -125,7 +125,7 @@ hs i.2 j.2 mt Subtype.ext hij
 
 中文:
 定理 PairwiseDisjoint.attach
-  条件: (hs : (s : Set ι).PairwiseDisjoint f)
+  条件: (hs : (s : 集合 ι).PairwiseDisjoint f)
   证明: fun i _ j _ hij =>
 hs i.2 j.2 mt Subtype.ext hij
 -/
@@ -154,7 +154,7 @@ theorem PairwiseDisjoint.biUnion_finset
 
 中文:
 定理 PairwiseDisjoint.biUnion_finset
-  结论: {s : Set ι'} {g : ι' -> Finset ι} {f : ι -> α}
+  结论: {s : 集合 ι'} {g : ι' -> 有限集 ι} {f : ι -> α}
   证明: by
   rintro a ha b hb hab
   simp_rw [Set.mem_iUnion] at ha hb
@@ -195,7 +195,7 @@ theorem pairwise_of_coe_toFinset_pairwise
 
 中文:
 定理 pairwise_of_coe_toFinset_pairwise
-  条件: (hl : (l.toFinset : Set α).Pairwise r) (hn : l.Nodup)
+  条件: (hl : (l.toFinset : 集合 α).两两 r) (hn : l.Nodup)
   证明: by
   rw [coe_toFinset] at hl
   exact hn.pairwise_of_set_pairwise hl
@@ -240,7 +240,7 @@ theorem pairwise_disjoint_of_coe_toFinset_pairwiseDisjoint
 
 中文:
 定理 pairwise_disjoint_of_coe_toFinset_pairwiseDisjoint
-  结论: {α ι} [PartialOrder α] [OrderBot α]
+  结论: {α ι} [偏序 α] [有底序 α]
   证明: pairwise_of_coe_toFinset_pairwise hl hn
 
 Depends on / 依赖: MulAction, MulAction.compHom, compHom, fast_instance, pairwise_of_coe_toFinset_pairwise, toMonoidHom, toRealHom, toRealHom.toMonoidHom
@@ -260,7 +260,7 @@ theorem pairwiseDisjoint_iff_coe_toFinset_pairwise_disjoint
 
 中文:
 定理 pairwiseDisjoint_iff_coe_toFinset_pairwise_disjoint
-  结论: {α ι} [PartialOrder α] [OrderBot α]
+  结论: {α ι} [偏序 α] [有底序 α]
   证明: pairwise_iff_coe_toFinset_pairwise hn
 
 Depends on / 依赖: pairwise_iff_coe_toFinset_pairwise

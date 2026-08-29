@@ -65,11 +65,11 @@ class IsGalois
     - [to_normal : Normal F E]
 
 中文:
-类 IsGalois
+类 是Galois
   参数: : 命题 where
   公理与运算 (2 个):
-    - [to_isSeparable : Algebra.IsSeparable F E]
-    - [to_normal : Normal F E]
+    - [to_isSeparable : 代数.是可分 F E]
+    - [to_normal : 正规 F E]
 -/
 class IsGalois : Prop where
   [to_isSeparable : Algebra.IsSeparable F E]
@@ -89,7 +89,7 @@ theorem isGalois_iff
 
 中文:
 定理 isGalois_iff
-  结论: IsGalois F E ↔ Algebra.IsSeparable F E ∧ Normal F E
+  结论: 是Galois F E ↔ 代数.是可分 F E ∧ 正规 F E
   证明: ⟨fun h => ⟨h.1, h.2⟩, fun h =>
     { to_isSeparable := h.1
       to_normal := h.2 }⟩
@@ -118,7 +118,7 @@ instance self
 
 中文:
 实例 self
-  签名: : IsGalois F F
+  签名: : 是Galois F F
   定义体: ⟨⟩
 -/
 instance self : IsGalois F F :=
@@ -137,8 +137,8 @@ theorem integral
 
 中文:
 定理 integral
-  条件: [IsGalois F E] (x : E)
-  结论: Is整数egral F x
+  条件: [是Galois F E] (x : E)
+  结论: 是整 F x
   证明: to_normal.isIntegral x
 
 Depends on / 依赖: isIntegral, to_normal, to_normal.isIntegral
@@ -157,8 +157,8 @@ theorem separable
 
 中文:
 定理 separable
-  条件: [IsGalois F E] (x : E)
-  结论: IsSeparable F x
+  条件: [是Galois F E] (x : E)
+  结论: 是可分 F x
   证明: Algebra.IsSeparable.isSeparable F x
 
 Depends on / 依赖: Algebra, Algebra.IsSeparable.isSeparable, IsSeparable, isSeparable
@@ -177,7 +177,7 @@ theorem splits
 
 中文:
 定理 splits
-  条件: [IsGalois F E] (x : E)
+  条件: [是Galois F E] (x : E)
   结论: ((minpoly F x).map (algebraMap F E)).Splits
   证明: Normal.splits' x
 
@@ -201,7 +201,7 @@ instance of_fixed_field
 
 中文:
 实例 of_fixed_field
-  签名: (G : 类型) [Group G] [Finite G] [MulSemiringAction G E]
+  签名: (G : 类型) [群 G] [有限 G] [MulSemiring作用 G E]
   定义体: ⟨⟩
 -/
 instance of_fixed_field (G : Type*) [Group G] [Finite G] [MulSemiringAction G E] :
@@ -220,8 +220,8 @@ theorem IntermediateField.AdjoinSimple.card_aut_eq_finrank
   exact Nat.card_congr (algEquivEquivAlgHom F F⟮α⟯)
 
 中文:
-定理 IntermediateField.AdjoinSimple.card_aut_eq_finrank
-  结论: [FiniteDimensional F E] {α : E}
+定理 中间域.AdjoinSimple.card_aut_eq_finrank
+  结论: [有限维 F E] {α : E}
   证明: by
   rw [IntermediateField.adjoin.finrank hα]
   rw [← IntermediateField.card_algHom_adjoin_integral F hα h_sep h_splits]
@@ -258,7 +258,7 @@ theorem card_aut_eq_finrank
 
 中文:
 定理 card_aut_eq_finrank
-  条件: [FiniteDimensional F E] [IsGalois F E]
+  条件: [有限维 F E] [是Galois F E]
   证明: by
   obtain ⟨α, hα⟩ := Field.exists_primitive_element F E
   let iso : F⟮α⟯ ≃ₐ[F] E :=
@@ -308,8 +308,8 @@ lemma finiteDimensional_of_finite
 
 中文:
 引理 finiteDimensional_of_finite
-  条件: [IsGalois F E] [Finite Gal(E/F)]
-  结论: FiniteDimensional F E
+  条件: [是Galois F E] [有限 Gal(E/F)]
+  结论: 有限维 F E
   证明: by
   by_contra H
   obtain ⟨K, h₁, h₂⟩ := exists_lt_finrank_of_infinite_dimensional H (Nat.card Gal(E/F))
@@ -354,9 +354,9 @@ theorem IsGalois.tower_top_of_isGalois
     to_normal := Normal.tower_top_of_normal F K E }
 
 中文:
-定理 IsGalois.tower_top_of_isGalois
-  条件: [IsGalois F E]
-  结论: IsGalois K E
+定理 是Galois.tower_top_of_isGalois
+  条件: [是Galois F E]
+  结论: 是Galois K E
   证明: { to_isSeparable := Algebra.isSeparable_tower_top_of_isSeparable F K E
     to_normal := Normal.tower_top_of_normal F K E }
 
@@ -387,7 +387,7 @@ theorem isGalois_iff_isGalois_bot
 
 中文:
 定理 isGalois_iff_isGalois_bot
-  结论: IsGalois (⊥ : 整数ermediateField F E) E ↔ IsGalois F E
+  结论: 是Galois (⊥ : 中间域 F E) E ↔ 是Galois F E
   证明: by
   constructor
   · intro h
@@ -413,9 +413,9 @@ theorem IsGalois.of_algEquiv
     to_normal := Normal.of_algEquiv f }
 
 中文:
-定理 IsGalois.of_algEquiv
-  条件: [IsGalois F E] (f : E ≃ₐ[F] E')
-  结论: IsGalois F E'
+定理 是Galois.of_algEquiv
+  条件: [是Galois F E] (f : E ≃ₐ[F] E')
+  结论: 是Galois F E'
   证明: { to_isSeparable := Algebra.IsSeparable.of_algHom F E f.symm
     to_normal := Normal.of_algEquiv f }
 
@@ -435,9 +435,9 @@ theorem AlgEquiv.transfer_galois
   proof: ⟨fun _ => IsGalois.of_algEquiv f, fun _ => IsGalois.of_algEquiv f.symm⟩
 
 中文:
-定理 AlgEquiv.transfer_galois
+定理 代数等价.transfer_galois
   条件: (f : E ≃ₐ[F] E')
-  结论: IsGalois F E ↔ IsGalois F E'
+  结论: 是Galois F E ↔ 是Galois F E'
   证明: ⟨fun _ => IsGalois.of_algEquiv f, fun _ => IsGalois.of_algEquiv f.symm⟩
 
 Depends on / 依赖: IsGalois, IsGalois.of_algEquiv, f.symm, of_algEquiv
@@ -455,7 +455,7 @@ theorem isGalois_iff_isGalois_top
 
 中文:
 定理 isGalois_iff_isGalois_top
-  结论: IsGalois F (⊤ : 整数ermediateField F E) ↔ IsGalois F E
+  结论: 是Galois F (⊤ : 中间域 F E) ↔ 是Galois F E
   证明: (IntermediateField.topEquiv : (⊤ : IntermediateField F E) ≃ₐ[F] E).transfer_galois
 
 Depends on / 依赖: IntermediateField, IntermediateField.topEquiv, topEquiv, transfer_galois
@@ -473,7 +473,7 @@ instance isGalois_bot
 
 中文:
 实例 isGalois_bot
-  签名: : IsGalois F (⊥ : 整数ermediateField F E)
+  签名: : 是Galois F (⊥ : 中间域 F E)
   定义体: (IntermediateField.botEquiv F E).transfer_galois.mpr (IsGalois.self F)
 
 Depends on / 依赖: IntermediateField, IntermediateField.botEquiv, IsGalois, IsGalois.self, botEquiv, transfer_galois, transfer_galois.mpr
@@ -490,8 +490,8 @@ theorem IsGalois.of_equiv_equiv
   proof: isGalois_iff.mpr ⟨Algebra.IsSeparable.of_equiv_equiv f g hcomp, Normal.of_equiv_equiv hcomp⟩
 
 中文:
-定理 IsGalois.of_equiv_equiv
-  结论: {M N : 类型} [Field N] [Field M] [Algebra M N]
+定理 是Galois.of_equiv_equiv
+  结论: {M N : 类型} [域 N] [域 M] [代数 M N]
   证明: isGalois_iff.mpr ⟨Algebra.IsSeparable.of_equiv_equiv f g hcomp, Normal.of_equiv_equiv hcomp⟩
 
 Depends on / 依赖: Algebra, Algebra.IsSeparable.of_equiv_equiv, IsSeparable, Normal, Normal.of_equiv_equiv, isGalois_iff, isGalois_iff.mpr, of_equiv_equiv
@@ -521,7 +521,7 @@ definition FixedPoints.intermediateField
 
 中文:
 定义 FixedPoints.intermediateField
-  签名: (M : 类型) [Monoid M] [MulSemiringAction M E]
+  签名: (M : 类型) [幺半群 M] [MulSemiring作用 M E]
   定义体: { FixedPoints.subfield M E with
     carrier := MulAction.fixedPoints M E
     algebraMap_mem' := fun a g => smul_algebraMap g a }
@@ -561,7 +561,7 @@ definition fixedField
 
 中文:
 定义 fixedField
-  签名: : 整数ermediateField F E
+  签名: : 中间域 F E
   定义体: FixedPoints.intermediateField H
 
 Depends on / 依赖: FixedPoints, FixedPoints.intermediateField, intermediateField
@@ -603,7 +603,7 @@ lemma fixedField_bot
 
 中文:
 引理 fixedField_bot
-  结论: fixedField (⊥ : Subgroup Gal(E/F)) = ⊤
+  结论: fixedField (⊥ : 子群 Gal(E/F)) = ⊤
   证明: by
   ext
   simp
@@ -625,7 +625,7 @@ theorem finrank_fixedField_eq_card
 
 中文:
 定理 finrank_fixedField_eq_card
-  条件: [FiniteDimensional F E]
+  条件: [有限维 F E]
   证明: by
   have := Fintype.ofFinite H
   rw [Nat.card_eq_fintype_card]
@@ -671,7 +671,7 @@ theorem fixingSubgroup_le
 
 中文:
 定理 fixingSubgroup_le
-  条件: {K1 K2 : 整数ermediateField F E} (h12 : K1 <= K2)
+  条件: {K1 K2 : 中间域 F E} (h12 : K1 <= K2)
   证明: fun _ hσ ⟨x, hx⟩ => hσ ⟨x, h12 hx⟩
 -/
 theorem fixingSubgroup_le {K1 K2 : IntermediateField F E} (h12 : K1 <= K2) :
@@ -688,7 +688,7 @@ theorem fixedField_le
 
 中文:
 定理 fixedField_le
-  条件: {H1 H2 : Subgroup Gal(E/F)} (h12 : H1 <= H2)
+  条件: {H1 H2 : 子群 Gal(E/F)} (h12 : H1 <= H2)
   证明: fun _ hσ ⟨x, hx⟩ => hσ ⟨x, h12 hx⟩
 -/
 theorem fixedField_le {H1 H2 : Subgroup Gal(E/F)} (h12 : H1 <= H2) :
@@ -705,7 +705,7 @@ lemma fixingSubgroup_antitone
 
 中文:
 引理 fixingSubgroup_antitone
-  结论: Antitone (@fixingSubgroup F _ E _ _)
+  结论: 递减 (@fixingSubgroup F _ E _ _)
   证明: fun _ _ => fixingSubgroup_le
 
 Depends on / 依赖: fixingSubgroup_le
@@ -723,7 +723,7 @@ lemma fixedField_antitone
 
 中文:
 引理 fixedField_antitone
-  结论: Antitone (@fixedField F _ E _ _)
+  结论: 递减 (@fixedField F _ E _ _)
   证明: fun _ _ => fixedField_le
 
 Depends on / 依赖: fixedField_le
@@ -761,7 +761,7 @@ lemma fixingSubgroup_top
 
 中文:
 引理 fixingSubgroup_top
-  结论: fixingSubgroup (⊤ : 整数ermediateField F E) = ⊥
+  结论: fixingSubgroup (⊤ : 中间域 F E) = ⊥
   证明: by
   ext
   simp [DFunLike.ext_iff]
@@ -782,7 +782,7 @@ lemma fixingSubgroup_bot
 
 中文:
 引理 fixingSubgroup_bot
-  结论: fixingSubgroup (⊥ : 整数ermediateField F E) = ⊤
+  结论: fixingSubgroup (⊥ : 中间域 F E) = ⊤
   证明: by
   ext
   simp [mem_bot]
@@ -804,7 +804,7 @@ theorem fixingSubgroup_sup
 
 中文:
 定理 fixingSubgroup_sup
-  条件: {K L : 整数ermediateField F E}
+  条件: {K L : 中间域 F E}
   证明: by
   ext φ
   exact ⟨fun h => ⟨fixingSubgroup_antitone le_sup_left h, fixingSubgroup_antitone le_sup_right h⟩,
@@ -858,7 +858,7 @@ theorem fixingSubgroup_fixedField
 
 中文:
 定理 fixingSubgroup_fixedField
-  条件: [FiniteDimensional F E]
+  条件: [有限维 F E]
   结论: fixingSubgroup (fixedField H) = H
   证明: by
   have H_le : H <= fixingSubgroup (fixedField H) := (le_iff_le _ _).mp le_rfl
@@ -890,7 +890,7 @@ definition subgroupEquivAlgEquiv
 
 中文:
 定义 subgroupEquivAlgEquiv
-  签名: [FiniteDimensional F E] (H : Subgroup Gal(E/F))
+  签名: [有限维 F E] (H : 子群 Gal(E/F))
   定义体: (MulEquiv.subgroupCongr (fixingSubgroup_fixedField H).symm).trans (fixingSubgroupEquiv _)
 
 Depends on / 依赖: MulEquiv, MulEquiv.subgroupCongr, fixingSubgroupEquiv, fixingSubgroup_fixedField, subgroupCongr
@@ -910,7 +910,7 @@ instance fixedField.smul
 
 中文:
 实例 fixedField.smul
-  签名: : SMul K (fixedField (fixingSubgroup K)) where
+  签名: : 标量乘法 K (fixedField (fixingSubgroup K)) where
   定义体: ⟨x * y, fun ϕ => by
     rw [smul_mul']; rw [show ϕ • (x : E) = ↑x from ϕ.2 x]; rw [show ϕ • (y : E) = ↑y from y.2 ϕ]⟩
 
@@ -936,7 +936,7 @@ instance fixedField.algebra
 
 中文:
 实例 fixedField.algebra
-  签名: : Algebra K (fixedField (fixingSubgroup K)) where
+  签名: : 代数 K (fixedField (fixingSubgroup K)) where
   定义体: { toFun x := ⟨x, fun ϕ => Subtype.mem ϕ x⟩
     map_zero' := rfl
     map_add' _ _ := rfl
@@ -967,7 +967,7 @@ instance fixedField.isScalarTower
 
 中文:
 实例 fixedField.isScalarTower
-  签名: : IsScalarTower K (fixedField (fixingSubgroup K)) E
+  签名: : 标量塔 K (fixedField (fixingSubgroup K)) E
   定义体: ⟨fun _ _ _ => mul_assoc _ _ _⟩
 
 Depends on / 依赖: mul_assoc
@@ -994,7 +994,7 @@ theorem fixedField_fixingSubgroup
 
 中文:
 定理 fixedField_fixingSubgroup
-  条件: [FiniteDimensional F E] [h : IsGalois F E]
+  条件: [有限维 F E] [h : 是Galois F E]
   证明: by
   have K_le : K <= IntermediateField.fixedField (IntermediateField.fixingSubgroup K) :=
     (IntermediateField.le_iff_le _ _).mpr le_rfl
@@ -1025,7 +1025,7 @@ lemma fixedField_top
 
 中文:
 引理 fixedField_top
-  条件: [IsGalois F E] [FiniteDimensional F E]
+  条件: [是Galois F E] [有限维 F E]
   证明: by
   rw [← fixingSubgroup_bot]; rw [fixedField_fixingSubgroup]
 -/
@@ -1045,7 +1045,7 @@ theorem mem_bot_iff_fixed
 
 中文:
 定理 mem_bot_iff_fixed
-  条件: [IsGalois F E] [FiniteDimensional F E] (x : E)
+  条件: [是Galois F E] [有限维 F E] (x : E)
   证明: by
   rw [← fixedField_top]; rw [mem_fixedField_iff]
   simp only [Subgroup.mem_top, forall_const]
@@ -1067,7 +1067,7 @@ theorem mem_range_algebraMap_iff_fixed
 
 中文:
 定理 mem_range_algebraMap_iff_fixed
-  条件: [IsGalois F E] [FiniteDimensional F E] (x : E)
+  条件: [是Galois F E] [有限维 F E] (x : E)
   证明: mem_bot_iff_fixed x
 
 Depends on / 依赖: mem_bot_iff_fixed
@@ -1087,7 +1087,7 @@ theorem card_fixingSubgroup_eq_finrank
 
 中文:
 定理 card_fixingSubgroup_eq_finrank
-  条件: [FiniteDimensional F E] [IsGalois F E]
+  条件: [有限维 F E] [是Galois F E]
   证明: by
   conv_rhs => rw [← fixedField_fixingSubgroup K, IntermediateField.finrank_fixedField_eq_card]
 
@@ -1114,7 +1114,7 @@ definition intermediateFieldEquivSubgroup
 
 中文:
 定义 intermediateFieldEquivSubgroup
-  签名: [FiniteDimensional F E] [IsGalois F E]
+  签名: [有限维 F E] [是Galois F E]
   定义体: OrderDual.toDual ∘ IntermediateField.fixingSubgroup
   invFun := IntermediateField.fixedField ∘ OrderDual.ofDual
   left_inv K := fixedField_fixingSubgroup K
@@ -1147,7 +1147,7 @@ lemma ofDual_intermediateFieldEquivSubgroup_apply
 
 中文:
 引理 ofDual_intermediateFieldEquivSubgroup_apply
-  条件: (K : 整数ermediateField F E)
+  条件: (K : 中间域 F E)
   证明: rfl
 -/
 lemma ofDual_intermediateFieldEquivSubgroup_apply (K : IntermediateField F E) :
@@ -1163,7 +1163,7 @@ lemma intermediateFieldEquivSubgroup_symm_apply
 
 中文:
 引理 intermediateFieldEquivSubgroup_symm_apply
-  条件: (H : (Subgroup Gal(E/F))ᵒᵈ)
+  条件: (H : (子群 Gal(E/F))ᵒᵈ)
   证明: rfl
 -/
 @[simp] lemma intermediateFieldEquivSubgroup_symm_apply (H : (Subgroup Gal(E/F))ᵒᵈ) :
@@ -1179,7 +1179,7 @@ lemma intermediateFieldEquivSubgroup_symm_apply_toDual
 
 中文:
 引理 intermediateFieldEquivSubgroup_symm_apply_toDual
-  条件: (H : Subgroup Gal(E/F))
+  条件: (H : 子群 Gal(E/F))
   证明: rfl
 -/
 lemma intermediateFieldEquivSubgroup_symm_apply_toDual (H : Subgroup Gal(E/F)) :
@@ -1197,7 +1197,7 @@ theorem fixedField_eq_iff_fixingSubgroup_eq
 
 中文:
 定理 fixedField_eq_iff_fixingSubgroup_eq
-  条件: {K : 整数ermediateField F E} {H : Subgroup Gal(E/F)}
+  条件: {K : 中间域 F E} {H : 子群 Gal(E/F)}
   证明: by
   simp [← OrderIso.apply_eq_iff_eq intermediateFieldEquivSubgroup, fixingSubgroup_fixedField,
     eq_comm]
@@ -1223,8 +1223,8 @@ definition galoisInsertionIntermediateFieldSubgroup
   choice_eq _ _ := rfl
 
 中文:
-定义 galoisInsertionIntermediateFieldSubgroup
-  签名: [FiniteDimensional F E]
+定义 galoisInsertion整数ermediateFieldSubgroup
+  签名: [有限维 F E]
   定义体: IntermediateField.fixingSubgroup K
   gc K H := (IntermediateField.le_iff_le H K).symm
   le_l_u H := le_of_eq (IntermediateField.fixingSubgroup_fixedField H).symm
@@ -1251,8 +1251,8 @@ definition galoisCoinsertionIntermediateFieldSubgroup
   body: OrderIso.toGaloisCoinsertion intermediateFieldEquivSubgroup
 
 中文:
-定义 galoisCoinsertionIntermediateFieldSubgroup
-  签名: [FiniteDimensional F E] [IsGalois F E]
+定义 galoisCoinsertion整数ermediateFieldSubgroup
+  签名: [有限维 F E] [是Galois F E]
   定义体: OrderIso.toGaloisCoinsertion intermediateFieldEquivSubgroup
 
 Depends on / 依赖: OrderIso, OrderIso.toGaloisCoinsertion, intermediateFieldEquivSubgroup, toGaloisCoinsertion
@@ -1288,8 +1288,8 @@ lemma IntermediateField.restrictNormalHom_ker
     restrictNormalHom_apply, Subtype.forall, mem_fixingSubgroup_iff, implies_true]
 
 中文:
-引理 IntermediateField.restrictNormalHom_ker
-  条件: (E : 整数ermediateField K L) [Normal K E]
+引理 中间域.restrictNormalHom_ker
+  条件: (E : 中间域 K L) [正规 K E]
   证明: by
   simp only [Subgroup.ext_iff, MonoidHom.mem_ker, AlgEquiv.ext_iff, one_apply, Subtype.ext_iff,
     restrictNormalHom_apply, Subtype.forall, mem_fixingSubgroup_iff, implies_true]
@@ -1319,7 +1319,7 @@ instance of_fixedField_normal_subgroup
 
 中文:
 实例 of_fixedField_normal_subgroup
-  签名: [IsGalois K L]
+  签名: [是Galois K L]
   定义体: Algebra.isSeparable_tower_bot_of_isSeparable K (fixedField H) L
   to_normal := by
     apply normal_iff_forall_map_le'.mpr
@@ -1347,7 +1347,7 @@ definition normalAutEquivQuotient
 
 中文:
 定义 normalAutEquivQuotient
-  签名: [FiniteDimensional K L] [IsGalois K L]
+  签名: [有限维 K L] [是Galois K L]
   定义体: QuotientGroup.liftEquiv _ (restrictNormalHom_surjective L)
     (fixingSubgroup_fixedField H).symm.trans (fixedField H).restrictNormalHom_ker.symm
 
@@ -1369,7 +1369,7 @@ lemma normalAutEquivQuotient_apply
 
 中文:
 引理 normalAutEquivQuotient_apply
-  结论: [FiniteDimensional K L] [IsGalois K L]
+  结论: [有限维 K L] [是Galois K L]
   证明: rfl
 -/
 lemma normalAutEquivQuotient_apply [FiniteDimensional K L] [IsGalois K L]
@@ -1427,7 +1427,7 @@ instance fixingSubgroup_normal_of_isGalois
 
 中文:
 实例 fixingSubgroup_normal_of_isGalois
-  签名: [IsGalois K L] [IsGalois K E]
+  签名: [是Galois K L] [是Galois K E]
   定义体: by
   apply Subgroup.Normal.of_conjugate_fixed (fun σ => ?_)
   rw [← map_fixingSubgroup]; rw [normal_iff_forall_map_eq'.mp inferInstance σ]
@@ -1466,7 +1466,7 @@ theorem is_separable_splitting_field
 
 中文:
 定理 is_separable_splitting_field
-  条件: [FiniteDimensional F E] [IsGalois F E]
+  条件: [有限维 F E] [是Galois F E]
   证明: by
   obtain ⟨α, h1⟩ := Field.exists_primitive_element F E
   use minpoly F α, separable F α, IsGalois.splits F α
@@ -1498,7 +1498,7 @@ theorem of_fixedField_eq_bot
 
 中文:
 定理 of_fixedField_eq_bot
-  结论: [FiniteDimensional F E]
+  结论: [有限维 F E]
   证明: by
   rw [← isGalois_iff_isGalois_bot]; rw [← h]
   exact IsGalois.of_fixed_field E (⊤ : Subgroup Gal(E/F))
@@ -1526,7 +1526,7 @@ theorem of_card_aut_eq_finrank
 
 中文:
 定理 of_card_aut_eq_finrank
-  结论: [FiniteDimensional F E]
+  结论: [有限维 F E]
   证明: by
   apply of_fixedField_eq_bot
   have p : 0 < finrank (IntermediateField.fixedField (⊤ : Subgroup Gal(E/F))) E := finrank_pos
@@ -1564,7 +1564,7 @@ theorem of_separable_splitting_field_aux
 
 中文:
 定理 of_separable_splitting_field_aux
-  结论: [hFE : FiniteDimensional F E] [sp : p.IsSplittingField F E]
+  结论: [hFE : 有限维 F E] [sp : p.是分裂域 F E]
   证明: by
   have h : IsIntegral K x := (isIntegral_of_noetherian (IsNoetherian.iff_fg.2 hFE) x).tower_top
   have h1 : p != 0 := fun hp => by
@@ -1616,7 +1616,7 @@ theorem of_separable_splitting_field
 
 中文:
 定理 of_separable_splitting_field
-  条件: [p.IsSplittingField F E] (hp : p.Separable)
+  条件: [p.是分裂域 F E] (hp : p.可分)
   证明: { to_isSeparable := Algebra.isSeparable_of_separable_splitting_field F E hp,
     to_normal := Normal.of_isSplittingField p }
 
@@ -1643,8 +1643,8 @@ theorem tfae
 
 中文:
 定理 tfae
-  条件: [FiniteDimensional F E]
-  结论: List.TFAE [
+  条件: [有限维 F E]
+  结论: 列表.TFAE [
   证明: by
   tfae_have 1 -> 2 := fun h => OrderIso.map_bot (@intermediateFieldEquivSubgroup F _ E _ _ _ h).symm
   tfae_have 1 -> 3 := fun _ => card_aut_eq_finrank F E
@@ -1683,7 +1683,7 @@ theorem sup_right
 
 中文:
 定理 sup_right
-  结论: (K L : 整数ermediateField F E) [IsGalois F K] [FiniteDimensional F K]
+  结论: (K L : 中间域 F E) [是Galois F K] [有限维 F K]
   证明: by
   obtain ⟨T, hT₁, hT₂⟩ := IsGalois.is_separable_splitting_field F K
   let T' := T.map (algebraMap F L)
@@ -1728,8 +1728,8 @@ instance IsGalois.normalClosure
   body: Algebra.isSeparable_tower_bot_of_isSeparable k _ F
 
 中文:
-实例 IsGalois.normalClosure
-  签名: : IsGalois k (normalClosure k K F) where
+实例 是Galois.normalClosure
+  签名: : 是Galois k (normalClosure k K F) where
   定义体: Algebra.isSeparable_tower_bot_of_isSeparable k _ F
 
 Depends on / 依赖: Algebra, Algebra.isSeparable_tower_bot_of_isSeparable, isSeparable_tower_bot_of_isSeparable
@@ -1761,7 +1761,7 @@ definition restrictRestrictAlgEquivMapHom
 
 中文:
 定义 restrictRestrictAlgEquivMapHom
-  签名: (F K L E : 类型) [Field F] [Field K] [Field L]
+  签名: (F K L E : 类型) [域 F] [域 K] [域 L]
   定义体: (AlgEquiv.restrictNormalHom K).comp (MulSemiringAction.toAlgAut Gal(E/L) F E)
 
 Depends on / 依赖: AlgEquiv, AlgEquiv.restrictNormalHom, MulSemiringAction, MulSemiringAction.toAlgAut, restrictNormalHom, toAlgAut
@@ -1844,7 +1844,7 @@ MonoidHom.range_eq_top.mp
 
 中文:
 定理 restrictRestrictAlgEquivMapHom_surjective
-  结论: [FiniteDimensional F K] [FiniteDimensional L E]
+  结论: [有限维 F K] [有限维 L E]
   证明: by
   suffices fixedField (restrictRestrictAlgEquivMapHom F K L E).range = ⊥ from
 MonoidHom.range_eq_top.mp
@@ -1891,7 +1891,7 @@ theorem map_fixingSubgroup
 
 中文:
 定理 map_fixingSubgroup
-  条件: [Normal F E]
+  条件: [正规 F E]
   证明: by
   ext f
   simp only [Subgroup.mem_comap, mem_fixingSubgroup_iff]
@@ -1933,7 +1933,7 @@ theorem map_fixingSubgroup_index
 
 中文:
 定理 map_fixingSubgroup_index
-  条件: [Normal F E] [Normal F E']
+  条件: [正规 F E] [正规 F E']
   证明: by
   rw [L.map_fixingSubgroup E']; rw [L.fixingSubgroup.index_comap_of_surjective
     (AlgEquiv.restrictNormalHom_surjective _)]
@@ -1963,7 +1963,7 @@ theorem finrank_eq_fixingSubgroup_index
 
 中文:
 定理 finrank_eq_fixingSubgroup_index
-  条件: (L : 整数ermediateField F E') [IsGalois F E']
+  条件: (L : 中间域 F E') [是Galois F E']
   证明: by
   wlog hnfd : FiniteDimensional F L generalizing L
   · rw [Module.finrank_of_infinite_dimensional hnfd]
@@ -2015,8 +2015,8 @@ instance IsQuadraticExtension.isGalois
   signature: [Algebra.IsSeparable F K]
 
 中文:
-实例 IsQuadraticExtension.isGalois
-  签名: [Algebra.IsSeparable F K]
+实例 是QuadraticExtension.isGalois
+  签名: [代数.是可分 F K]
 -/
 instance IsQuadraticExtension.isGalois [Algebra.IsSeparable F K] : IsGalois F K where
 
@@ -2037,8 +2037,8 @@ instance IsQuadraticExtension.isCyclic
 @[deprecated inferInstance (since
 
 中文:
-实例 IsQuadraticExtension.isCyclic
-  签名: : IsCyclic Gal(K/F)
+实例 是QuadraticExtension.isCyclic
+  签名: : 是循环 Gal(K/F)
   定义体: by
   have := finrank_eq_two F K ▸ AlgEquiv.card_le
   rw [← Nat.card_eq_fintype_card] at this
@@ -2069,8 +2069,8 @@ theorem IsQuadraticExtension.isMulCommutative_galoisGroup
   proof: inferInstance
 
 中文:
-定理 IsQuadraticExtension.isMulCommutative_galoisGroup
-  结论: IsMulCommutative Gal(K/F)
+定理 是QuadraticExtension.isMulCommutative_galoisGroup
+  结论: 是MulCommutative Gal(K/F)
   证明: inferInstance
 -/
 theorem IsQuadraticExtension.isMulCommutative_galoisGroup : IsMulCommutative Gal(K/F) :=

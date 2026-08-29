@@ -34,7 +34,7 @@ lemma coe_sum
 
 中文:
 引理 coe_sum
-  条件: (s : Finset ι) (f : ι -> M)
+  条件: (s : 有限集 ι) (f : ι -> M)
   证明: map_sum addHom f s
 -/
 @[simp, norm_cast] lemma coe_sum (s : Finset ι) (f : ι -> M) :
@@ -274,7 +274,7 @@ lemma coe_sum
 
 中文:
 引理 coe_sum
-  条件: (s : Finset ι) (f : ι -> M)
+  条件: (s : 有限集 ι) (f : ι -> M)
   证明: map_sum addHom f s
 -/
 @[simp, norm_cast] lemma coe_sum (s : Finset ι) (f : ι -> M) :

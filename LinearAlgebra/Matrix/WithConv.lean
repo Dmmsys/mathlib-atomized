@@ -31,8 +31,8 @@ instance [Mul
   body: toConv (a.ofConv ⊙ b.ofConv)
 
 中文:
-实例 [Mul
-  签名: α] : Mul (WithConv (Matrix m n α)) where mul a b
+实例 [乘法
+  签名: α] : 乘法 (WithConv (矩阵 m n α)) where mul a b
   定义体: toConv (a.ofConv ⊙ b.ofConv)
 
 Depends on / 依赖: a.ofConv, b.ofConv, ofConv, toConv
@@ -49,7 +49,7 @@ lemma convMul_def
 
 中文:
 引理 convMul_def
-  条件: [Mul α] (x y : WithConv (Matrix m n α))
+  条件: [乘法 α] (x y : WithConv (矩阵 m n α))
   证明: rfl
 -/
 lemma convMul_def [Mul α] (x y : WithConv (Matrix m n α)) :
@@ -66,8 +66,8 @@ instance [Semigroup
   body: by simp [convMul_def, hadamard_assoc]
 
 中文:
-实例 [Semigroup
-  签名: α] : Semigroup (WithConv (Matrix m n α)) where
+实例 [半群
+  签名: α] : 半群 (WithConv (矩阵 m n α)) where
   定义体: by simp [convMul_def, hadamard_assoc]
 
 Depends on / 依赖: convMul_def, hadamard_assoc
@@ -87,8 +87,8 @@ instance [NonUnitalNonAssocSemiring
   mul_zero := by simp
 
 中文:
-实例 [NonUnitalNonAssocSemiring
-  签名: α] : NonUnitalNonAssocSemiring (WithConv (Matrix m n α)) where
+实例 [非幺非结合半环
+  签名: α] : 非幺非结合半环 (WithConv (矩阵 m n α)) where
   定义体: by simp [hadamard_add]
   right_distrib _ _ _ := by simp [add_hadamard]
   zero_mul := by simp
@@ -111,8 +111,8 @@ instance [CommMagma
   body: by simp [hadamard_comm]
 
 中文:
-实例 [CommMagma
-  签名: α] : CommMagma (WithConv (Matrix m n α)) where
+实例 [交换原群
+  签名: α] : 交换原群 (WithConv (矩阵 m n α)) where
   定义体: by simp [hadamard_comm]
 
 Depends on / 依赖: hadamard_comm
@@ -129,8 +129,8 @@ instance [One
   body: toConv (of 1)
 
 中文:
-实例 [One
-  签名: α] : One (WithConv (Matrix m n α)) where one
+实例 [幺
+  签名: α] : 幺 (WithConv (矩阵 m n α)) where one
   定义体: toConv (of 1)
 
 Depends on / 依赖: toConv
@@ -148,8 +148,8 @@ lemma convOne_def
 
 中文:
 引理 convOne_def
-  条件: [One α]
-  结论: (1 : WithConv (Matrix m n α)) = toConv (of 1)
+  条件: [幺 α]
+  结论: (1 : WithConv (矩阵 m n α)) = toConv (of 1)
   证明: rfl
 -/
 lemma convOne_def [One α] : (1 : WithConv (Matrix m n α)) = toConv (of 1) := rfl
@@ -166,8 +166,8 @@ instance [MulOneClass
   mul_one := by simp
 
 中文:
-实例 [MulOneClass
-  签名: α] : MulOneClass (WithConv (Matrix m n α)) where
+实例 [MulOne类
+  签名: α] : MulOne类 (WithConv (矩阵 m n α)) where
   定义体: by simp
   mul_one := by simp
 
@@ -185,8 +185,8 @@ instance [Monoid
   signature: α] : Monoid (WithConv (Matrix m n α)) where
 
 中文:
-实例 [Monoid
-  签名: α] : Monoid (WithConv (Matrix m n α)) where
+实例 [幺半群
+  签名: α] : 幺半群 (WithConv (矩阵 m n α)) where
 -/
 instance [Monoid α] : Monoid (WithConv (Matrix m n α)) where
 /--
@@ -197,8 +197,8 @@ instance [CommMonoid
   signature: α] : CommMonoid (WithConv (Matrix m n α)) where
 
 中文:
-实例 [CommMonoid
-  签名: α] : CommMonoid (WithConv (Matrix m n α)) where
+实例 [交换幺半群
+  签名: α] : 交换幺半群 (WithConv (矩阵 m n α)) where
 -/
 instance [CommMonoid α] : CommMonoid (WithConv (Matrix m n α)) where
 /--
@@ -209,8 +209,8 @@ instance [NonAssocSemiring
   signature: α] : NonAssocSemiring (WithConv (Matrix m n α)) where
 
 中文:
-实例 [NonAssocSemiring
-  签名: α] : NonAssocSemiring (WithConv (Matrix m n α)) where
+实例 [非结合半环
+  签名: α] : 非结合半环 (WithConv (矩阵 m n α)) where
 -/
 instance [NonAssocSemiring α] : NonAssocSemiring (WithConv (Matrix m n α)) where
 /--
@@ -221,8 +221,8 @@ instance [NonUnitalSemiring
   signature: α] : NonUnitalSemiring (WithConv (Matrix m n α)) where
 
 中文:
-实例 [NonUnitalSemiring
-  签名: α] : NonUnitalSemiring (WithConv (Matrix m n α)) where
+实例 [非幺半环
+  签名: α] : 非幺半环 (WithConv (矩阵 m n α)) where
 -/
 instance [NonUnitalSemiring α] : NonUnitalSemiring (WithConv (Matrix m n α)) where
 /--
@@ -233,7 +233,7 @@ instance [NonUnitalNonAssocCommSemiring
   signature: α] :
 
 中文:
-实例 [NonUnitalNonAssocCommSemiring
+实例 [非幺非结合交换半环
   签名: α] :
 -/
 instance [NonUnitalNonAssocCommSemiring α] :
@@ -246,8 +246,8 @@ instance [NonUnitalCommSemiring
   signature: α] : NonUnitalCommSemiring (WithConv (Matrix m n α)) where
 
 中文:
-实例 [NonUnitalCommSemiring
-  签名: α] : NonUnitalCommSemiring (WithConv (Matrix m n α)) where
+实例 [非幺交换半环
+  签名: α] : 非幺交换半环 (WithConv (矩阵 m n α)) where
 -/
 instance [NonUnitalCommSemiring α] : NonUnitalCommSemiring (WithConv (Matrix m n α)) where
 /--
@@ -258,8 +258,8 @@ instance [NonAssocCommSemiring
   signature: α] : NonAssocCommSemiring (WithConv (Matrix m n α)) where
 
 中文:
-实例 [NonAssocCommSemiring
-  签名: α] : NonAssocCommSemiring (WithConv (Matrix m n α)) where
+实例 [非结合交换半环
+  签名: α] : 非结合交换半环 (WithConv (矩阵 m n α)) where
 -/
 instance [NonAssocCommSemiring α] : NonAssocCommSemiring (WithConv (Matrix m n α)) where
 /--
@@ -270,8 +270,8 @@ instance [Semiring
   signature: α] : Semiring (WithConv (Matrix m n α)) where
 
 中文:
-实例 [Semiring
-  签名: α] : Semiring (WithConv (Matrix m n α)) where
+实例 [半环
+  签名: α] : 半环 (WithConv (矩阵 m n α)) where
 -/
 instance [Semiring α] : Semiring (WithConv (Matrix m n α)) where
 /--
@@ -282,8 +282,8 @@ instance [CommSemiring
   signature: α] : CommSemiring (WithConv (Matrix m n α)) where
 
 中文:
-实例 [CommSemiring
-  签名: α] : CommSemiring (WithConv (Matrix m n α)) where
+实例 [交换半环
+  签名: α] : 交换半环 (WithConv (矩阵 m n α)) where
 -/
 instance [CommSemiring α] : CommSemiring (WithConv (Matrix m n α)) where
 /--
@@ -294,8 +294,8 @@ instance [NonUnitalNonAssocRing
   signature: α] : NonUnitalNonAssocRing (WithConv (Matrix m n α)) where
 
 中文:
-实例 [NonUnitalNonAssocRing
-  签名: α] : NonUnitalNonAssocRing (WithConv (Matrix m n α)) where
+实例 [非幺非结合环
+  签名: α] : 非幺非结合环 (WithConv (矩阵 m n α)) where
 -/
 instance [NonUnitalNonAssocRing α] : NonUnitalNonAssocRing (WithConv (Matrix m n α)) where
 /--
@@ -306,8 +306,8 @@ instance [NonUnitalNonAssocCommRing
   signature: α] : NonUnitalNonAssocCommRing (WithConv (Matrix m n α)) where
 
 中文:
-实例 [NonUnitalNonAssocCommRing
-  签名: α] : NonUnitalNonAssocCommRing (WithConv (Matrix m n α)) where
+实例 [非幺非结合交换环
+  签名: α] : 非幺非结合交换环 (WithConv (矩阵 m n α)) where
 -/
 instance [NonUnitalNonAssocCommRing α] : NonUnitalNonAssocCommRing (WithConv (Matrix m n α)) where
 /--
@@ -318,8 +318,8 @@ instance [NonUnitalRing
   signature: α] : NonUnitalRing (WithConv (Matrix m n α)) where
 
 中文:
-实例 [NonUnitalRing
-  签名: α] : NonUnitalRing (WithConv (Matrix m n α)) where
+实例 [非幺环
+  签名: α] : 非幺环 (WithConv (矩阵 m n α)) where
 -/
 instance [NonUnitalRing α] : NonUnitalRing (WithConv (Matrix m n α)) where
 /--
@@ -330,8 +330,8 @@ instance [NonUnitalCommRing
   signature: α] : NonUnitalCommRing (WithConv (Matrix m n α)) where
 
 中文:
-实例 [NonUnitalCommRing
-  签名: α] : NonUnitalCommRing (WithConv (Matrix m n α)) where
+实例 [非幺交换环
+  签名: α] : 非幺交换环 (WithConv (矩阵 m n α)) where
 -/
 instance [NonUnitalCommRing α] : NonUnitalCommRing (WithConv (Matrix m n α)) where
 /--
@@ -342,8 +342,8 @@ instance [NonAssocRing
   signature: α] : NonAssocRing (WithConv (Matrix m n α)) where
 
 中文:
-实例 [NonAssocRing
-  签名: α] : NonAssocRing (WithConv (Matrix m n α)) where
+实例 [非结合环
+  签名: α] : 非结合环 (WithConv (矩阵 m n α)) where
 -/
 instance [NonAssocRing α] : NonAssocRing (WithConv (Matrix m n α)) where
 /--
@@ -354,8 +354,8 @@ instance [NonAssocCommRing
   signature: α] : NonAssocCommRing (WithConv (Matrix m n α)) where
 
 中文:
-实例 [NonAssocCommRing
-  签名: α] : NonAssocCommRing (WithConv (Matrix m n α)) where
+实例 [非结合交换环
+  签名: α] : 非结合交换环 (WithConv (矩阵 m n α)) where
 -/
 instance [NonAssocCommRing α] : NonAssocCommRing (WithConv (Matrix m n α)) where
 /--
@@ -366,8 +366,8 @@ instance [Ring
   signature: α] : Ring (WithConv (Matrix m n α)) where
 
 中文:
-实例 [Ring
-  签名: α] : Ring (WithConv (Matrix m n α)) where
+实例 [环
+  签名: α] : 环 (WithConv (矩阵 m n α)) where
 -/
 instance [Ring α] : Ring (WithConv (Matrix m n α)) where
 /--
@@ -378,8 +378,8 @@ instance [CommRing
   signature: α] : CommRing (WithConv (Matrix m n α)) where
 
 中文:
-实例 [CommRing
-  签名: α] : CommRing (WithConv (Matrix m n α)) where
+实例 [交换环
+  签名: α] : 交换环 (WithConv (矩阵 m n α)) where
 -/
 instance [CommRing α] : CommRing (WithConv (Matrix m n α)) where
 
@@ -392,8 +392,8 @@ instance [Star
   body: toConv (x.ofConv.map star)
 
 中文:
-实例 [Star
-  签名: α] : Star (WithConv (Matrix m n α)) where star x
+实例 [对合
+  签名: α] : 对合 (WithConv (矩阵 m n α)) where star x
   定义体: toConv (x.ofConv.map star)
 
 Depends on / 依赖: ofConv, toConv, x.ofConv.map
@@ -410,7 +410,7 @@ lemma intrinsicStar_def
 
 中文:
 引理 intrinsicStar_def
-  条件: [Star α] (x : WithConv (Matrix m n α))
+  条件: [对合 α] (x : WithConv (矩阵 m n α))
   证明: rfl
 -/
 lemma intrinsicStar_def [Star α] (x : WithConv (Matrix m n α)) :
@@ -428,7 +428,7 @@ instance [InvolutiveStar
 
 中文:
 实例 [InvolutiveStar
-  签名: α] : InvolutiveStar (WithConv (Matrix m n α)) where
+  签名: α] : InvolutiveStar (WithConv (矩阵 m n α)) where
   定义体: by ext; simp
 -/
 instance [InvolutiveStar α] : InvolutiveStar (WithConv (Matrix m n α)) where
@@ -443,8 +443,8 @@ instance [AddMonoid
   body: by simp [Matrix.map_add]
 
 中文:
-实例 [AddMonoid
-  签名: α] [StarAddMonoid α] : StarAddMonoid (WithConv (Matrix m n α)) where
+实例 [加法幺半群
+  签名: α] [StarAdd幺半群 α] : StarAdd幺半群 (WithConv (矩阵 m n α)) where
   定义体: by simp [Matrix.map_add]
 
 Depends on / 依赖: Matrix, Matrix.map_add, map_add
@@ -461,8 +461,8 @@ instance [Mul
   body: by ext; simp
 
 中文:
-实例 [Mul
-  签名: α] [StarMul α] : StarMul (WithConv (Matrix m n α)) where
+实例 [乘法
+  签名: α] [StarMul α] : StarMul (WithConv (矩阵 m n α)) where
   定义体: by ext; simp
 -/
 instance [Mul α] [StarMul α] : StarMul (WithConv (Matrix m n α)) where
@@ -477,8 +477,8 @@ instance [NonUnitalNonAssocSemiring
   body: by simp
 
 中文:
-实例 [NonUnitalNonAssocSemiring
-  签名: α] [StarRing α] : StarRing (WithConv (Matrix m n α)) where
+实例 [非幺非结合半环
+  签名: α] [对合环 α] : 对合环 (WithConv (矩阵 m n α)) where
   定义体: by simp
 -/
 instance [NonUnitalNonAssocSemiring α] [StarRing α] : StarRing (WithConv (Matrix m n α)) where
@@ -493,8 +493,8 @@ instance [Monoid
   body: by simp
 
 中文:
-实例 [Monoid
-  签名: β] [MulAction β α] [Mul α] [SMulCommClass β α α] :
+实例 [幺半群
+  签名: β] [乘法作用 β α] [乘法 α] [标量交换类 β α α] :
   定义体: by simp
 -/
 instance [Monoid β] [MulAction β α] [Mul α] [SMulCommClass β α α] :
@@ -509,8 +509,8 @@ instance [Monoid
   body: by simp
 
 中文:
-实例 [Monoid
-  签名: β] [MulAction β α] [Mul α] [IsScalarTower β α α] :
+实例 [幺半群
+  签名: β] [乘法作用 β α] [乘法 α] [标量塔 β α α] :
   定义体: by simp
 -/
 instance [Monoid β] [MulAction β α] [Mul α] [IsScalarTower β α α] :
@@ -525,8 +525,8 @@ instance [CommSemiring
   body: .ofModule smul_mul_assoc mul_smul_comm
 
 中文:
-实例 [CommSemiring
-  签名: β] [Semiring α] [Algebra β α] : Algebra β (WithConv (Matrix m n α))
+实例 [交换半环
+  签名: β] [半环 α] [代数 β α] : 代数 β (WithConv (矩阵 m n α))
   定义体: .ofModule smul_mul_assoc mul_smul_comm
 
 Depends on / 依赖: mul_smul_comm, ofModule, smul_mul_assoc
@@ -548,8 +548,8 @@ theorem Matrix.WithConv.IsIdempotentElem.isSelfAdjoint
   obtain (h | h) := hf i j <;> simp_all
 
 中文:
-定理 Matrix.WithConv.IsIdempotentElem.isSelfAdjoint
-  结论: [Semiring α] [IsLeftCancelMulZero α]
+定理 矩阵.WithConv.IsIdempotentElem.isSelfAdjoint
+  结论: [半环 α] [是左消去MulZero α]
   证明: by
   simp_rw [IsIdempotentElem, WithConv.ext_iff, ← Matrix.ext_iff, convMul_def, hadamard_apply,
     ← isIdempotentElem_iff, IsIdempotentElem.iff_eq_zero_or_one] at hf
@@ -584,7 +584,7 @@ definition matrixToLin'StarAlgEquiv
 .symm map_star' _ := by exact Matrix.intrinsicStar_toLin' _
 
 中文:
-定义 matrixToLin'StarAlgEquiv
+定义 matrixToLin'StarAlg等价
   签名: :
   定义体: congrLinearEquiv toLin'
   map_mul' _ _ := by ext; simp
@@ -608,7 +608,7 @@ lemma matrixToLin'StarAlgEquiv_apply
 
 中文:
 引理 matrixToLin'StarAlgEquiv_apply
-  条件: (x : WithConv (Matrix m n α))
+  条件: (x : WithConv (矩阵 m n α))
   证明: rfl
 -/
 @[simp] lemma matrixToLin'StarAlgEquiv_apply (x : WithConv (Matrix m n α)) :
@@ -641,8 +641,8 @@ lemma Matrix.toLin'_hadamard
   proof: by ext; simp
 
 中文:
-引理 Matrix.toLin'_hadamard
-  条件: (x y : Matrix m n α)
+引理 矩阵.toLin'_hadamard
+  条件: (x y : 矩阵 m n α)
   证明: by ext; simp
 -/
 lemma Matrix.toLin'_hadamard (x y : Matrix m n α) :
@@ -658,8 +658,8 @@ theorem Matrix.isSymm_iff_intrinsicStar_toLin'
   rw [intrinsicStar_toLin']; rw [toConv_injective.eq_iff]; rw [toLin'.injective.eq_iff]; rw [← transpose_conjTranspose]; rw [star_eq_conjTranspose]; rw [conjTranspose_inj]; rw [IsSymm]
 
 中文:
-定理 Matrix.isSymm_iff_intrinsicStar_toLin'
-  条件: {A : Matrix n n α}
+定理 矩阵.isSymm_iff_intrinsicStar_toLin'
+  条件: {A : 矩阵 n n α}
   证明: by
   rw [intrinsicStar_toLin']; rw [toConv_injective.eq_iff]; rw [toLin'.injective.eq_iff]; rw [← transpose_conjTranspose]; rw [star_eq_conjTranspose]; rw [conjTranspose_inj]; rw [IsSymm]
 

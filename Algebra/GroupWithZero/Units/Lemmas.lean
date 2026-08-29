@@ -43,8 +43,8 @@ lemma isLocalHom_of_exists_map_ne_one
     · exact ⟨⟨a, a⁻¹, mul_inv_cancel₀ h, inv_mul_cancel₀ h⟩, rfl⟩
 
 中文:
-引理 isLocalHom_of_exists_map_ne_one
-  结论: [FunLike F G₀ M] [MonoidHomClass F G₀ M] {f : F}
+引理 isLocalHom_of_存在_map_ne_one
+  结论: [函数状 F G₀ M] [幺半群态射类 F G₀ M] {f : F}
   证明: by
     rcases eq_or_ne a 0 with (rfl | h)
     · obtain ⟨t, ht⟩ := hf
@@ -76,8 +76,8 @@ instance [FunLike
   body: isLocalHom_of_exists_map_ne_one ⟨0, by simp⟩
 
 中文:
-实例 [FunLike
-  签名: F G₀ M₀] [MonoidWithZeroHomClass F G₀ M₀] [Nontrivial M₀]
+实例 [函数状
+  签名: F G₀ M₀] [带零幺半群态射类 F G₀ M₀] [非平凡 M₀]
   定义体: isLocalHom_of_exists_map_ne_one ⟨0, by simp⟩
 
 Depends on / 依赖: isLocalHom_of_exists_map_ne_one
@@ -229,7 +229,7 @@ theorem eq_on_inv₀
 
 中文:
 定理 eq_on_inv₀
-  条件: [MonoidWithZeroHomClass F' G₀ M₀'] (f g : F') (h : f a = g a)
+  条件: [带零幺半群态射类 F' G₀ M₀'] (f g : F') (h : f a = g a)
   证明: by
   rcases eq_or_ne a 0 with (rfl | ha)
   · rw [inv_zero, map_zero, map_zero]
@@ -320,8 +320,8 @@ definition MonoidWithZero.inverse
 @[simp]
 
 中文:
-定义 MonoidWithZero.inverse
-  签名: {M : 类型} [CommMonoidWithZero M]
+定义 带零幺半群.inverse
+  签名: {M : 类型} [带零交换幺半群 M]
   定义体: Ring.inverse
   map_zero' := Ring.inverse_zero _
   map_one' := Ring.inverse_one _
@@ -350,8 +350,8 @@ theorem MonoidWithZero.coe_inverse
 @[simp]
 
 中文:
-定理 MonoidWithZero.coe_inverse
-  条件: {M : 类型} [CommMonoidWithZero M]
+定理 带零幺半群.coe_inverse
+  条件: {M : 类型} [带零交换幺半群 M]
   证明: rfl
 
 @[simp]
@@ -370,8 +370,8 @@ theorem MonoidWithZero.inverse_apply
   proof: rfl
 
 中文:
-定理 MonoidWithZero.inverse_apply
-  条件: {M : 类型} [CommMonoidWithZero M] (a : M)
+定理 带零幺半群.inverse_apply
+  条件: {M : 类型} [带零交换幺半群 M] (a : M)
   证明: rfl
 -/
 theorem MonoidWithZero.inverse_apply {M : Type*} [CommMonoidWithZero M] (a : M) :
@@ -388,7 +388,7 @@ definition invMonoidWithZeroHom
 
 中文:
 定义 invMonoidWithZeroHom
-  签名: {G₀ : 类型} [CommGroupWithZero G₀]
+  签名: {G₀ : 类型} [带零交换群 G₀]
   定义体: { invMonoidHom with map_zero' := inv_zero }
 
 Depends on / 依赖: invMonoidHom, inv_zero, map_zero
@@ -409,7 +409,7 @@ theorem map_zpow₀
 
 中文:
 定理 map_zpow₀
-  结论: {F G₀ G₀' : 类型} [GroupWithZero G₀] [GroupWithZero G₀'] [FunLike F G₀ G₀']
+  结论: {F G₀ G₀' : 类型} [带零群 G₀] [带零群 G₀'] [函数状 F G₀ G₀']
   证明: map_zpow' f (map_inv₀ f) x n
 
 Depends on / 依赖: map_zpow

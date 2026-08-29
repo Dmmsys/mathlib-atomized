@@ -30,7 +30,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsSimpleOrder (Ideal R)
+  签名: 是单序 (理想 R)
   定义体: TwoSidedIdeal.orderIsoIdeal.symm.isSimpleOrder
 
 Depends on / 依赖: TwoSidedIdeal, TwoSidedIdeal.orderIsoIdeal.symm.isSimpleOrder, isSimpleOrder, orderIsoIdeal
@@ -46,7 +46,7 @@ instance IsPrincipalIdealRing.of_isSimpleRing
   body: ((isSimpleRing_iff_isField _).mp ‹_›).isPrincipalIdealRing
 
 中文:
-实例 IsPrincipalIdealRing.of_isSimpleRing
+实例 是主理想环.of_isSimpleRing
   签名: :
   定义体: ((isSimpleRing_iff_isField _).mp ‹_›).isPrincipalIdealRing
 
@@ -65,7 +65,7 @@ instance IsDomain.of_isSimpleRing
   body: ((isSimpleRing_iff_isField _).mp ‹_›).isDomain
 
 中文:
-实例 IsDomain.of_isSimpleRing
+实例 是整环.of_isSimpleRing
   签名: :
   定义体: ((isSimpleRing_iff_isField _).mp ‹_›).isDomain
 

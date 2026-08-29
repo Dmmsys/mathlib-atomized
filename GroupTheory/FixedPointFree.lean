@@ -35,7 +35,7 @@ definition FixedPointFree
 
 中文:
 定义 FixedPointFree
-  签名: [One G]
+  签名: [幺 G]
   定义体: forall g, φ g = g -> g = 1
 -/
 def FixedPointFree [One G] := forall g, φ g = g -> g = 1
@@ -50,7 +50,7 @@ definition commutatorMap
 
 中文:
 定义 commutatorMap
-  签名: [Div G] (g : G)
+  签名: [除法 G] (g : G)
   定义体: g / φ g
 -/
 def commutatorMap [Div G] (g : G) := g / φ g
@@ -66,7 +66,7 @@ theorem commutatorMap_apply
 
 中文:
 定理 commutatorMap_apply
-  条件: [Div G] (g : G)
+  条件: [除法 G] (g : G)
   结论: commutatorMap φ g = g / φ g
   证明: rfl
 -/
@@ -91,7 +91,7 @@ refine fun x y h => inv_mul_eq_one.mp hφ _ ?_
 中文:
 定理 commutatorMap_injective
   条件: (hφ : FixedPointFree φ)
-  结论: Function.Injective (commutatorMap φ)
+  结论: 函数.单射 (commutatorMap φ)
   证明: by
 refine fun x y h => inv_mul_eq_one.mp hφ _ ?_
   rwa [map_mul, map_inv, eq_inv_mul_iff_mul_eq, ← mul_assoc, ← eq_div_iff_mul_eq', ← division_def]
@@ -116,7 +116,7 @@ theorem commutatorMap_surjective
 中文:
 定理 commutatorMap_surjective
   条件: (hφ : FixedPointFree φ)
-  结论: Function.Surjective (commutatorMap φ)
+  结论: 函数.满射 (commutatorMap φ)
   证明: Finite.surjective_of_injective hφ.commutatorMap_injective
 
 Depends on / 依赖: Finite, Finite.surjective_of_injective, commutatorMap_injective, surjective_of_injective
@@ -191,7 +191,7 @@ theorem coe_eq_inv_of_involutive
 
 中文:
 定理 coe_eq_inv_of_involutive
-  条件: (hφ : FixedPointFree φ) (h2 : Function.Involutive φ)
+  条件: (hφ : FixedPointFree φ) (h2 : 函数.对合 φ)
   证明: coe_eq_inv_of_sq_eq_one hφ (funext h2)
 
 Depends on / 依赖: coe_eq_inv_of_sq_eq_one
@@ -212,7 +212,7 @@ theorem commute_all_of_involutive
 
 中文:
 定理 commute_all_of_involutive
-  条件: (hφ : FixedPointFree φ) (h2 : Function.Involutive φ) (g h : G)
+  条件: (hφ : FixedPointFree φ) (h2 : 函数.对合 φ) (g h : G)
   证明: by
   have key := map_mul φ g h
   rwa [hφ.coe_eq_inv_of_involutive h2, inv_eq_iff_eq_inv, mul_inv_rev, inv_inv, inv_inv] at key
@@ -236,7 +236,7 @@ definition commGroupOfInvolutive
 
 中文:
 定义 commGroupOfInvolutive
-  签名: (hφ : FixedPointFree φ) (h2 : Function.Involutive φ)
+  签名: (hφ : FixedPointFree φ) (h2 : 函数.对合 φ)
   定义体: .mk (hφ.commute_all_of_involutive h2)
 
 Depends on / 依赖: commute_all_of_involutive
@@ -259,7 +259,7 @@ theorem orderOf_ne_two_of_involutive
 
 中文:
 定理 orderOf_ne_two_of_involutive
-  条件: (hφ : FixedPointFree φ) (h2 : Function.Involutive φ) (g : G)
+  条件: (hφ : FixedPointFree φ) (h2 : 函数.对合 φ) (g : G)
   证明: by
   intro hg
   have key : φ g = g := by
@@ -292,7 +292,7 @@ theorem odd_card_of_involutive
 
 中文:
 定理 odd_card_of_involutive
-  条件: (hφ : FixedPointFree φ) (h2 : Function.Involutive φ)
+  条件: (hφ : FixedPointFree φ) (h2 : 函数.对合 φ)
   证明: by
   have := Fintype.ofFinite G
   by_contra h
@@ -320,7 +320,7 @@ theorem odd_orderOf_of_involutive
 
 中文:
 定理 odd_orderOf_of_involutive
-  条件: (hφ : FixedPointFree φ) (h2 : Function.Involutive φ) (g : G)
+  条件: (hφ : FixedPointFree φ) (h2 : 函数.对合 φ) (g : G)
   证明: Odd.of_dvd_nat (hφ.odd_card_of_involutive h2) (orderOf_dvd_natCard g)
 
 Depends on / 依赖: Odd.of_dvd_nat, odd_card_of_involutive, of_dvd_nat, orderOf_dvd_natCard

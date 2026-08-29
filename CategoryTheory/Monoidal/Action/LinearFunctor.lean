@@ -54,7 +54,7 @@ class LaxLeftLinear
     - μₗ_unitality((F) (d : D)) : (funₗ (F.obj d)).hom = μₗ (𝟙_ C) d ≫ F.map (funₗ d).hom  [default: by cat_disch]
 
 中文:
-类 LaxLeftLinear
+类 松弛左线性
   公理与运算 (5 个):
     - μₗ((F) (c : C) (d : D)) : c ⊙ₗ F.obj d ⟶ F.obj (c ⊙ₗ d)
     - μₗ_naturality_left((F) {c c' : C} (f : c ⟶ c') (d : D)) : f ⊵ₗ F.obj d ≫ μₗ c' d = μₗ c d ≫ F.map (f ⊵ₗ d)  [默认: by cat_disch]
@@ -176,7 +176,7 @@ class OplaxLeftLinear
     - δₗ_unitality_inv((F) (d : D)) : (funₗ (F.obj d)).inv = F.map (funₗ d).inv ≫ δₗ (𝟙_ C) d  [default: by cat_disch]
 
 中文:
-类 OplaxLeftLinear
+类 反松弛左线性
   公理与运算 (5 个):
     - δₗ((F) (c : C) (d : D)) : F.obj (c ⊙ₗ d) ⟶ c ⊙ₗ F.obj d
     - δₗ_naturality_left((F) {c c' : C} (f : c ⟶ c') (d : D)) : F.map (f ⊵ₗ d) ≫ δₗ c' d = δₗ c d ≫ f ⊵ₗ F.obj d  [默认: by cat_disch]
@@ -299,10 +299,10 @@ class LeftLinear
     - δₗ_comp_μₗ((F) (c : C) (d : D)) : OplaxLeftLinear.δₗ F c d ≫ LaxLeftLinear.μₗ F c d = 𝟙 _
 
 中文:
-类 LeftLinear
+类 左线性
   公理与运算 (2 个):
-    - μₗ_comp_δₗ((F) (c : C) (d : D)) : LaxLeftLinear.μₗ F c d ≫ OplaxLeftLinear.δₗ F c d = 𝟙 _
-    - δₗ_comp_μₗ((F) (c : C) (d : D)) : OplaxLeftLinear.δₗ F c d ≫ LaxLeftLinear.μₗ F c d = 𝟙 _
+    - μₗ_comp_δₗ((F) (c : C) (d : D)) : 松弛左线性.μₗ F c d ≫ 反松弛左线性.δₗ F c d = 𝟙 _
+    - δₗ_comp_μₗ((F) (c : C) (d : D)) : 反松弛左线性.δₗ F c d ≫ 松弛左线性.μₗ F c d = 𝟙 _
 -/
 class LeftLinear
     (F : D ⥤ D') (C : Type*) [Category* C] [MonoidalCategory C]
@@ -358,7 +358,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsIso (μₗ F c d)
+  签名: 是同构 (μₗ F c d)
   定义体: Iso.isIso_hom (μₗIso F c d)
 
 Depends on / 依赖: Iso.isIso_hom, isIso_hom
@@ -377,7 +377,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsIso (δₗ F c d)
+  签名: 是同构 (δₗ F c d)
   定义体: Iso.isIso_inv (μₗIso F c d)
 
 @[simp]
@@ -447,7 +447,7 @@ class LaxRightLinear
     - μᵣ_unitality((F) (d : D)) : (ρᵣ (F.obj d)).hom = μᵣ d (𝟙_ C) ≫ F.map (ρᵣ d).hom  [default: by cat_disch]
 
 中文:
-类 LaxRightLinear
+类 松弛右线性
   公理与运算 (5 个):
     - μᵣ((F) (d : D) (c : C)) : F.obj d ⊙ᵣ c ⟶ F.obj (d ⊙ᵣ c)
     - μᵣ_naturality_right((F) (d : D) {c c' : C} (f : c ⟶ c')) : F.obj d ⊴ᵣ f ≫ μᵣ d c' = μᵣ d c ≫ F.map (d ⊴ᵣ f)  [默认: by cat_disch]
@@ -569,7 +569,7 @@ class OplaxRightLinear
     - δᵣ_unitality_inv((F) (d : D)) : (ρᵣ (F.obj d)).inv = F.map (ρᵣ d).inv ≫ δᵣ d (𝟙_ C)  [default: by cat_disch]
 
 中文:
-类 OplaxRightLinear
+类 反松弛右线性
   公理与运算 (5 个):
     - δᵣ((F) (d : D) (c : C)) : F.obj (d ⊙ᵣ c) ⟶ (F.obj d) ⊙ᵣ c
     - δᵣ_naturality_right((F) (d : D) {c c' : C} (f : c ⟶ c')) : F.map (d ⊴ᵣ f) ≫ δᵣ d c' = δᵣ d c ≫ F.obj d ⊴ᵣ f  [默认: by cat_disch]
@@ -692,10 +692,10 @@ class RightLinear
     - δᵣ_comp_μᵣ((F) (d : D) (c : C)) : OplaxRightLinear.δᵣ F d c ≫ LaxRightLinear.μᵣ F d c = 𝟙 _
 
 中文:
-类 RightLinear
+类 右线性
   公理与运算 (2 个):
-    - μᵣ_comp_δᵣ((F) (d : D) (c : C)) : LaxRightLinear.μᵣ F d c ≫ OplaxRightLinear.δᵣ F d c = 𝟙 _
-    - δᵣ_comp_μᵣ((F) (d : D) (c : C)) : OplaxRightLinear.δᵣ F d c ≫ LaxRightLinear.μᵣ F d c = 𝟙 _
+    - μᵣ_comp_δᵣ((F) (d : D) (c : C)) : 松弛右线性.μᵣ F d c ≫ 反松弛右线性.δᵣ F d c = 𝟙 _
+    - δᵣ_comp_μᵣ((F) (d : D) (c : C)) : 反松弛右线性.δᵣ F d c ≫ 松弛右线性.μᵣ F d c = 𝟙 _
 -/
 class RightLinear
     (F : D ⥤ D') (C : Type*) [Category* C] [MonoidalCategory C]
@@ -751,7 +751,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsIso (μᵣ F d c)
+  签名: 是同构 (μᵣ F d c)
   定义体: Iso.isIso_hom (μᵣIso F d c)
 
 Depends on / 依赖: Iso.isIso_hom, isIso_hom
@@ -770,7 +770,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsIso (δᵣ F d c)
+  签名: 是同构 (δᵣ F d c)
   定义体: Iso.isIso_inv (μᵣIso F d c)
 
 @[simp]

@@ -37,7 +37,7 @@ definition piecewise
 
 中文:
 定义 piecewise
-  签名: [对任意 j, Decidable (j in s)]
+  签名: [对任意 j, 可判定 (j in s)]
   定义体: fun i => if i in s then f i else g i
 -/
 def piecewise [forall j, Decidable (j in s)] : forall i, π i := fun i => if i in s then f i else g i
@@ -54,7 +54,7 @@ lemma piecewise_insert_self
 
 中文:
 引理 piecewise_insert_self
-  条件: [DecidableEq ι] {j : ι} [对任意 i, Decidable (i in insert j s)]
+  条件: [DecidableEq ι] {j : ι} [对任意 i, 可判定 (i in insert j s)]
   证明: by simp [piecewise]
 
 @[simp]
@@ -78,7 +78,7 @@ lemma piecewise_empty
 
 中文:
 引理 piecewise_empty
-  条件: [对任意 i : ι, Decidable (i in (∅ : Finset ι))]
+  条件: [对任意 i : ι, 可判定 (i in (∅ : 有限集 ι))]
   结论: piecewise ∅ f g = g
   证明: by
   ext i
@@ -108,7 +108,7 @@ lemma piecewise_coe
 
 中文:
 引理 piecewise_coe
-  结论: (s : Set ι).piecewise f g = s.piecewise f g
+  结论: (s : 集合 ι).piecewise f g = s.piecewise f g
   证明: by
   ext
   congr
@@ -203,7 +203,7 @@ lemma piecewise_insert_of_ne
 
 中文:
 引理 piecewise_insert_of_ne
-  结论: [DecidableEq ι] {i j : ι} [对任意 i, Decidable (i in insert j s)]
+  结论: [DecidableEq ι] {i j : ι} [对任意 i, 可判定 (i in insert j s)]
   证明: by simp [piecewise, h]
 
 Depends on / 依赖: piecewise
@@ -225,7 +225,7 @@ lemma piecewise_insert
 
 中文:
 引理 piecewise_insert
-  条件: [DecidableEq ι] (j : ι) [对任意 i, Decidable (i in insert j s)]
+  条件: [DecidableEq ι] (j : ι) [对任意 i, 可判定 (i in insert j s)]
   证明: by
   simp only [← piecewise_coe, ← Set.piecewise_insert]
   ext
@@ -294,7 +294,7 @@ lemma piecewise_piecewise_of_subset_left
 
 中文:
 引理 piecewise_piecewise_of_subset_left
-  结论: {s t : Finset ι} [对任意 i, Decidable (i in s)]
+  结论: {s t : 有限集 ι} [对任意 i, 可判定 (i in s)]
   证明: s.piecewise_congr (fun _i hi => piecewise_eq_of_mem _ _ _ (h hi)) fun _ _ => rfl
 
 @[simp]
@@ -338,7 +338,7 @@ lemma piecewise_piecewise_of_subset_right
 
 中文:
 引理 piecewise_piecewise_of_subset_right
-  结论: {s t : Finset ι} [对任意 i, Decidable (i in s)]
+  结论: {s t : 有限集 ι} [对任意 i, 可判定 (i in s)]
   证明: s.piecewise_congr (fun _ _ => rfl) fun _i hi => t.piecewise_eq_of_notMem _ _ (mt (@h _) hi)
 
 @[simp]
@@ -502,7 +502,7 @@ lemma piecewise_univ
 
 中文:
 引理 piecewise_univ
-  条件: [对任意 i, Decidable (i in (univ : Finset ι))] (f g : 对任意 i, π i)
+  条件: [对任意 i, 可判定 (i in (univ : 有限集 ι))] (f g : 对任意 i, π i)
   证明: by
   ext i
   simp [piecewise]
@@ -528,7 +528,7 @@ lemma piecewise_compl
 
 中文:
 引理 piecewise_compl
-  结论: [DecidableEq ι] (s : Finset ι) [对任意 i, Decidable (i in s)]
+  结论: [DecidableEq ι] (s : 有限集 ι) [对任意 i, 可判定 (i in s)]
   证明: by
   ext i
   simp [piecewise]
@@ -580,7 +580,7 @@ lemma piecewise_mem_set_pi
 
 中文:
 引理 piecewise_mem_set_pi
-  条件: (hf : f in Set.pi t t') (hg : g in Set.pi t t')
+  条件: (hf : f in 集合.pi t t') (hg : g in 集合.pi t t')
   证明: by
   rw [← piecewise_coe]; exact Set.piecewise_mem_pi (↑s) hf hg
 
@@ -678,7 +678,7 @@ lemma piecewise_mem_Icc_of_mem_of_mem
 
 中文:
 引理 piecewise_mem_Icc_of_mem_of_mem
-  条件: (hf : f in Set.Icc f' g') (hg : g in Set.Icc f' g')
+  条件: (hf : f in 集合.闭区间 f' g') (hg : g in 集合.闭区间 f' g')
   证明: ⟨le_piecewise_of_le_of_le _ hf.1 hg.1, piecewise_le_of_le_of_le _ hf.2 hg.2⟩
 
 Depends on / 依赖: le_piecewise_of_le_of_le, piecewise_le_of_le_of_le
@@ -699,7 +699,7 @@ lemma piecewise_mem_Icc
 中文:
 引理 piecewise_mem_Icc
   条件: (h : f <= g)
-  结论: s.piecewise f g in Set.Icc f g
+  结论: s.piecewise f g in 集合.闭区间 f g
   证明: piecewise_mem_Icc_of_mem_of_mem _ (Set.left_mem_Icc.2 h) (Set.right_mem_Icc.2 h)
 
 Depends on / 依赖: Set.left_mem_Icc, Set.right_mem_Icc, left_mem_Icc, piecewise_mem_Icc_of_mem_of_mem, right_mem_Icc
@@ -719,7 +719,7 @@ lemma piecewise_mem_Icc'
 中文:
 引理 piecewise_mem_Icc'
   条件: (h : g <= f)
-  结论: s.piecewise f g in Set.Icc g f
+  结论: s.piecewise f g in 集合.闭区间 g f
   证明: piecewise_mem_Icc_of_mem_of_mem _ (Set.right_mem_Icc.2 h) (Set.left_mem_Icc.2 h)
 
 Depends on / 依赖: Set.left_mem_Icc, Set.right_mem_Icc, left_mem_Icc, piecewise_mem_Icc_of_mem_of_mem, right_mem_Icc

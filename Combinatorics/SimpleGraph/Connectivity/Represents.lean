@@ -36,7 +36,7 @@ definition Represents
 
 中文:
 定义 Represents
-  签名: (s : Set V) (C : Set G.ConnectedComponent)
+  签名: (s : 集合 V) (C : 集合 G.ConnectedComponent)
   定义体: Set.BijOn G.connectedComponentMk s C
 
 Depends on / 依赖: G.connectedComponentMk, Set.BijOn, connectedComponentMk
@@ -62,7 +62,7 @@ lemma image_out
 
 中文:
 引理 image_out
-  条件: (C : Set G.ConnectedComponent)
+  条件: (C : 集合 G.ConnectedComponent)
   证明: Set.BijOn.mk (by rintro c ⟨x, ⟨hx, rfl⟩⟩; simp_all [connectedComponentMk]) (by
     rintro x ⟨c, ⟨hc, rfl⟩⟩ y ⟨d, ⟨hd, rfl⟩⟩ hxy
     simp only [connectedComponentMk] at hxy
@@ -91,7 +91,7 @@ lemma existsUnique_rep
   exact fun y hy hyx => hrep.2.1 hy hx hyx
 
 中文:
-引理 existsUnique_rep
+引理 存在Unique_rep
   条件: (hrep : Represents s C) (h : c in C)
   结论: 存在! x, x in s inter c.supp
   证明: by
@@ -120,7 +120,7 @@ lemma exists_inter_eq_singleton
   aesop
 
 中文:
-引理 exists_inter_eq_singleton
+引理 存在_inter_eq_singleton
   条件: (hrep : Represents s C) (h : c in C)
   结论: 存在 x, s inter c.supp = {x}
   证明: by
@@ -277,7 +277,7 @@ lemma ConnectedComponent.even_ncard_supp_sdiff_rep
 
 中文:
 引理 ConnectedComponent.even_ncard_supp_sdiff_rep
-  结论: {s : Set V} (K : G.ConnectedComponent)
+  结论: {s : 集合 V} (K : G.ConnectedComponent)
   证明: by
   by_cases h : Even K.supp.ncard
   · simpa [hrep.ncard_sdiff_of_notMem

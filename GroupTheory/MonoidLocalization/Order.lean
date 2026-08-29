@@ -161,7 +161,7 @@ instance partialOrder
 
 中文:
 实例 partialOrder
-  签名: : PartialOrder (Localization s) where
+  签名: : 偏序 (Localization s) where
   定义体: Localization.induction_on a fun _ => le_rfl
   le_trans a b c :=
     Localization.induction_on₃ a b c fun a b c hab hbc => by
@@ -208,7 +208,7 @@ instance isOrderedCancelMonoid
 
 中文:
 实例 isOrderedCancelMonoid
-  签名: : IsOrderedCancelMonoid (Localization s) where
+  签名: : 是OrderedCancel幺半群 (Localization s) where
   定义体: fun a b =>
     Localization.induction_on₂ a b fun a b hab c =>
       Localization.induction_on c fun c => by
@@ -313,8 +313,8 @@ instance [CommMonoid
     toDecidableEq := Localization.decidableEq }
 
 中文:
-实例 [CommMonoid
-  签名: α] [LinearOrder α] [IsOrderedCancelMonoid α] {s
+实例 [交换幺半群
+  签名: α] [线性序 α] [是OrderedCancel幺半群 α] {s
   定义体: { le_total := fun a b =>
       Localization.induction_on₂ a b fun _ _ => by
         simp_rw [mk_le_mk]

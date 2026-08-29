@@ -54,7 +54,7 @@ theorem IsBigO.integrableAtFilter
 
 中文:
 定理 IsBigO.integrableAtFilter
-  结论: [IsMeasurablyGenerated l]
+  结论: [是MeasurablyGenerated l]
   证明: by
   obtain ⟨C, hC⟩ := hf.bound
   obtain ⟨s, hsl, hsm, hfg, hf, hg⟩ :=
@@ -119,7 +119,7 @@ theorem IsBigO.eventually_integrableOn
 
 中文:
 定理 IsBigO.eventually_integrableOn
-  结论: [Norm F]
+  结论: [范数 F]
   证明: by
   obtain ⟨C, hC⟩ := hf.bound
   obtain ⟨t, htl, ht⟩ := hC.exists_mem
@@ -165,7 +165,7 @@ norm_setIntegral_le_of_norm_le_const hμ fun
 
 中文:
 定理 IsBigO.set_integral_isBigO
-  条件: (hf : f =O[𝓟 s ×ˢ l] (g ∘ Prod.snd)) (hμ : μ s < ⊤)
+  条件: (hf : f =O[𝓟 s ×ˢ l] (g ∘ 积类型.snd)) (hμ : μ s < ⊤)
   证明: by
   obtain ⟨C, hC⟩ := hf.bound
   obtain ⟨t, htl, ht⟩ := hC.exists_mem
@@ -206,8 +206,8 @@ theorem LocallyIntegrable.integrable_of_isBigO_cocompact
   exact hf.aestronglyMeasurable.stronglyMeasurableAtFilter
 
 中文:
-定理 LocallyIntegrable.integrable_of_isBigO_cocompact
-  结论: [IsMeasurablyGenerated (cocompact α)]
+定理 Locally整数egrable.integrable_of_isBigO_cocompact
+  结论: [是MeasurablyGenerated (cocompact α)]
   证明: by
   refine integrable_iff_integrableAtFilter_cocompact.mpr ⟨ho.integrableAtFilter ?_ hg, hf⟩
   exact hf.aestronglyMeasurable.stronglyMeasurableAtFilter
@@ -235,7 +235,7 @@ theorem LocallyIntegrable.integrable_of_isBigO_atBot_atTop
   all_goals exact hf.aestronglyMeasurable.stronglyMeasurableAtFilter
 
 中文:
-定理 LocallyIntegrable.integrable_of_isBigO_atBot_atTop
+定理 Locally整数egrable.integrable_of_isBigO_atBot_atTop
   证明: by
   refine integrable_iff_integrableAtFilter_atBot_atTop.mpr
     ⟨⟨ho.integrableAtFilter ?_ hg, ho'.integrableAtFilter ?_ hg'⟩, hf⟩
@@ -263,8 +263,8 @@ theorem LocallyIntegrableOn.integrableOn_of_isBigO_atBot
   exact ⟨Iic a, Iic_mem_atBot a, hf.aestronglyMeasurable⟩
 
 中文:
-定理 LocallyIntegrableOn.integrableOn_of_isBigO_atBot
-  结论: [IsMeasurablyGenerated (atBot (α := α))]
+定理 Locally整数egrableOn.integrableOn_of_isBigO_atBot
+  结论: [是MeasurablyGenerated (atBot (α := α))]
   证明: by
   refine integrableOn_Iic_iff_integrableAtFilter_atBot.mpr ⟨ho.integrableAtFilter ?_ hg, hf⟩
   exact ⟨Iic a, Iic_mem_atBot a, hf.aestronglyMeasurable⟩
@@ -286,8 +286,8 @@ theorem LocallyIntegrableOn.integrableOn_of_isBigO_atTop
   exact ⟨Ici a, Ici_mem_atTop a, hf.aestronglyMeasurable⟩
 
 中文:
-定理 LocallyIntegrableOn.integrableOn_of_isBigO_atTop
-  结论: [IsMeasurablyGenerated (atTop (α := α))]
+定理 Locally整数egrableOn.integrableOn_of_isBigO_atTop
+  结论: [是MeasurablyGenerated (atTop (α := α))]
   证明: by
   refine integrableOn_Ici_iff_integrableAtFilter_atTop.mpr ⟨ho.integrableAtFilter ?_ hg, hf⟩
   exact ⟨Ici a, Ici_mem_atTop a, hf.aestronglyMeasurable⟩
@@ -309,8 +309,8 @@ theorem LocallyIntegrable.integrable_of_isBigO_atBot
   exact hf.aestronglyMeasurable.stronglyMeasurableAtFilter
 
 中文:
-定理 LocallyIntegrable.integrable_of_isBigO_atBot
-  结论: [IsMeasurablyGenerated (atBot (α := α))]
+定理 Locally整数egrable.integrable_of_isBigO_atBot
+  结论: [是MeasurablyGenerated (atBot (α := α))]
   证明: by
   refine integrable_iff_integrableAtFilter_atBot.mpr ⟨ho.integrableAtFilter ?_ hg, hf⟩
   exact hf.aestronglyMeasurable.stronglyMeasurableAtFilter
@@ -332,8 +332,8 @@ theorem LocallyIntegrable.integrable_of_isBigO_atTop
   exact hf.aestronglyMeasurable.stronglyMeasurableAtFilter
 
 中文:
-定理 LocallyIntegrable.integrable_of_isBigO_atTop
-  结论: [IsMeasurablyGenerated (atTop (α := α))]
+定理 Locally整数egrable.integrable_of_isBigO_atTop
+  结论: [是MeasurablyGenerated (atTop (α := α))]
   证明: by
   refine integrable_iff_integrableAtFilter_atTop.mpr ⟨ho.integrableAtFilter ?_ hg, hf⟩
   exact hf.aestronglyMeasurable.stronglyMeasurableAtFilter
@@ -363,7 +363,7 @@ theorem LocallyIntegrable.integrable_of_isBigO_atTop_of_norm_isNegInvariant
     conv => rhs; rw [← Mea
 
 中文:
-定理 LocallyIntegrable.integrable_of_isBigO_atTop_of_norm_isNegInvariant
+定理 Locally整数egrable.integrable_of_isBigO_atTop_of_norm_isNegInvariant
   证明: by
   have h_int := (hf.locallyIntegrableOn (Ici 0)).integrableOn_of_isBigO_atTop ho hg
   rw [← integrableOn_univ]; rw [← Iic_union_Ici_of_le le_rfl]; rw [integrableOn_union]

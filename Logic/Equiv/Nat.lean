@@ -40,8 +40,8 @@ definition boolProdNatEquivNat
   right_inv n := by simp
 
 中文:
-定义 boolProdNatEquivNat
-  签名: : 布尔 × 自然数 ≃ 自然数 where
+定义 boolProd自然数Equiv自然数
+  签名: : 布尔值 × 自然数 ≃ 自然数 where
   定义体: uncurry bit
   invFun n := ⟨n.bodd, n.div2⟩
   left_inv := fun ⟨b, n⟩ => by simp
@@ -70,7 +70,7 @@ definition natSumNatEquivNat
 @[simp]
 
 中文:
-定义 natSumNatEquivNat
+定义 natSum自然数Equiv自然数
   签名: : 自然数 oplus 自然数 ≃ 自然数
   定义体: (boolProdEquivSum Nat).symm.trans boolProdNatEquivNat
 
@@ -92,8 +92,8 @@ theorem natSumNatEquivNat_apply
   ext (x | x) <;> rfl
 
 中文:
-定理 natSumNatEquivNat_apply
-  结论: ⇑natSum自然数Equiv自然数 = Sum.elim (2 * ·) (2 * · + 1)
+定理 natSum自然数Equiv自然数_apply
+  结论: ⇑natSum自然数Equiv自然数 = 和.elim (2 * ·) (2 * · + 1)
   证明: by
   ext (x | x) <;> rfl
 -/
@@ -109,7 +109,7 @@ definition intEquivNat
   body: intEquivNatSumNat.trans natSumNatEquivNat
 
 中文:
-定义 intEquivNat
+定义 intEquiv自然数
   签名: : 整数 ≃ 自然数
   定义体: intEquivNatSumNat.trans natSumNatEquivNat
 
@@ -130,7 +130,7 @@ definition prodEquivOfEquivNat
     _ ≃ α := e.symm
 
 中文:
-定义 prodEquivOfEquivNat
+定义 prodEquivOfEquiv自然数
   签名: (e : α ≃ 自然数)
   定义体: calc
     α × α ≃ Nat × Nat := prodCongr e e

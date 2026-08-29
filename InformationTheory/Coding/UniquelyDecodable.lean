@@ -43,7 +43,7 @@ definition UniquelyDecodable
 
 中文:
 定义 UniquelyDecodable
-  签名: (S : Set (List α))
+  签名: (S : 集合 (列表 α))
   定义体: forall (L₁ L₂ : List (List α)),
     (forall w in L₁, w in S) -> (forall w in L₂, w in S) ->
     L₁.flatten = L₂.flatten -> L₁ = L₂

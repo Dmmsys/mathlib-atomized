@@ -35,8 +35,8 @@ definition toNat
   body: ENat.toNatHom.comp (.ofClass toENat)
 
 中文:
-定义 toNat
-  签名: : Cardinal ->*₀ 自然数
+定义 to自然数
+  签名: : 基数 ->*₀ 自然数
   定义体: ENat.toNatHom.comp (.ofClass toENat)
 
 Depends on / 依赖: ENat.toNatHom.comp, ofClass, toENat, toNatHom
@@ -56,8 +56,8 @@ lemma toNat_toENat
 @[simp]
 
 中文:
-引理 toNat_toENat
-  条件: (a : Cardinal)
+引理 to自然数_toE自然数
+  条件: (a : 基数)
   结论: E自然数.to自然数 (toE自然数 a) = to自然数 a
   证明: rfl
 
@@ -76,7 +76,7 @@ theorem toNat_ofENat
   proof: congr_arg ENat.toNat toENat_ofENat n
 
 中文:
-定理 toNat_ofENat
+定理 to自然数_ofE自然数
   条件: (n : 自然数∞)
   结论: to自然数 n = E自然数.to自然数 n
   证明: congr_arg ENat.toNat toENat_ofENat n
@@ -98,7 +98,7 @@ theorem toNat_natCast
 @[simp]
 
 中文:
-定理 toNat_natCast
+定理 to自然数_natCast
   条件: (n : 自然数)
   结论: to自然数 n = n
   证明: toNat_ofENat n
@@ -118,7 +118,7 @@ lemma toNat_eq_zero
   rw [← toNat_toENat]; rw [ENat.toNat_eq_zero]; rw [toENat_eq_zero]; rw [toENat_eq_top]
 
 中文:
-引理 toNat_eq_zero
+引理 to自然数_eq_zero
   结论: to自然数 c = 0 ↔ c = 0 ∨ ℵ₀ <= c
   证明: by
   rw [← toNat_toENat]; rw [ENat.toNat_eq_zero]; rw [toENat_eq_zero]; rw [toENat_eq_top]
@@ -137,7 +137,7 @@ lemma toNat_ne_zero
   proof: by simp [not_or]
 
 中文:
-引理 toNat_ne_zero
+引理 to自然数_ne_zero
   结论: to自然数 c != 0 ↔ c != 0 ∧ c < ℵ₀
   证明: by simp [not_or]
 
@@ -153,7 +153,7 @@ lemma toNat_pos
   proof: pos_iff_ne_zero.trans toNat_ne_zero
 
 中文:
-引理 toNat_pos
+引理 to自然数_pos
   结论: 0 < to自然数 c ↔ c != 0 ∧ c < ℵ₀
   证明: pos_iff_ne_zero.trans toNat_ne_zero
 -/
@@ -171,8 +171,8 @@ theorem cast_toNat_of_lt_aleph0
   rw [toNat_natCast]
 
 中文:
-定理 cast_toNat_of_lt_aleph0
-  条件: {c : Cardinal} (h : c < ℵ₀)
+定理 cast_to自然数_of_lt_aleph0
+  条件: {c : 基数} (h : c < ℵ₀)
   结论: ↑(to自然数 c) = c
   证明: by
   lift c to Nat using h
@@ -194,8 +194,8 @@ theorem toNat_apply_of_lt_aleph0
     rw [cast_toNat_of_lt_aleph0 h]; rw [← Classical.choose_spec (lt_aleph0.1 h)]
 
 中文:
-定理 toNat_apply_of_lt_aleph0
-  条件: {c : Cardinal.{u}} (h : c < ℵ₀)
+定理 to自然数_apply_of_lt_aleph0
+  条件: {c : 基数.{u}} (h : c < ℵ₀)
   证明: Nat.cast_injective (R := Cardinal.{u}) by
     rw [cast_toNat_of_lt_aleph0 h]; rw [← Classical.choose_spec (lt_aleph0.1 h)]
 
@@ -216,8 +216,8 @@ theorem toNat_apply_of_aleph0_le
   proof: by simp [h]
 
 中文:
-定理 toNat_apply_of_aleph0_le
-  条件: {c : Cardinal} (h : ℵ₀ <= c)
+定理 to自然数_apply_of_aleph0_le
+  条件: {c : 基数} (h : ℵ₀ <= c)
   结论: to自然数 c = 0
   证明: by simp [h]
 -/
@@ -234,9 +234,9 @@ theorem cast_toNat_of_aleph0_le
   rw [toNat_apply_of_aleph0_le h]; rw [Nat.cast_zero]
 
 中文:
-定理 cast_toNat_of_aleph0_le
-  条件: {c : Cardinal} (h : ℵ₀ <= c)
-  结论: ↑(to自然数 c) = (0 : Cardinal)
+定理 cast_to自然数_of_aleph0_le
+  条件: {c : 基数} (h : ℵ₀ <= c)
+  结论: ↑(to自然数 c) = (0 : 基数)
   证明: by
   rw [toNat_apply_of_aleph0_le h]; rw [Nat.cast_zero]
 
@@ -256,8 +256,8 @@ theorem cast_toNat_eq_iff_lt_aleph0
   mpr := cast_toNat_of_lt_aleph0
 
 中文:
-定理 cast_toNat_eq_iff_lt_aleph0
-  条件: {c : Cardinal}
+定理 cast_to自然数_eq_iff_lt_aleph0
+  条件: {c : 基数}
   结论: to自然数 c = c ↔ c < ℵ₀ where
   证明: by rw [← h]; simp
   mpr := cast_toNat_of_lt_aleph0
@@ -279,8 +279,8 @@ theorem toNat_strictMonoOn
   exact fun _ _ => id
 
 中文:
-定理 toNat_strictMonoOn
-  结论: StrictMonoOn to自然数 (Iio ℵ₀)
+定理 to自然数_strictMonoOn
+  结论: StrictMonoOn to自然数 (左无界右开区间 ℵ₀)
   证明: by
   simp only [← range_natCast, StrictMonoOn, forall_mem_range, toNat_natCast, Nat.cast_lt]
   exact fun _ _ => id
@@ -300,8 +300,8 @@ theorem toNat_monotoneOn
   proof: toNat_strictMonoOn.monotoneOn
 
 中文:
-定理 toNat_monotoneOn
-  结论: MonotoneOn to自然数 (Iio ℵ₀)
+定理 to自然数_monotoneOn
+  结论: MonotoneOn to自然数 (左无界右开区间 ℵ₀)
   证明: toNat_strictMonoOn.monotoneOn
 
 Depends on / 依赖: monotoneOn, toNat_strictMonoOn, toNat_strictMonoOn.monotoneOn
@@ -317,8 +317,8 @@ theorem toNat_injOn
   proof: toNat_strictMonoOn.injOn
 
 中文:
-定理 toNat_injOn
-  结论: InjOn to自然数 (Iio ℵ₀)
+定理 to自然数_injOn
+  结论: 单射限制 to自然数 (左无界右开区间 ℵ₀)
   证明: toNat_strictMonoOn.injOn
 
 Depends on / 依赖: toNat_strictMonoOn, toNat_strictMonoOn.injOn
@@ -334,7 +334,7 @@ theorem toNat_inj_of_lt_aleph0
   proof: toNat_injOn.eq_iff hc hd
 
 中文:
-定理 toNat_inj_of_lt_aleph0
+定理 to自然数_inj_of_lt_aleph0
   条件: (hc : c < ℵ₀) (hd : d < ℵ₀)
   证明: toNat_injOn.eq_iff hc hd
 
@@ -353,7 +353,7 @@ theorem toNat_le_iff_le_of_lt_aleph0
   proof: toNat_strictMonoOn.le_iff_le hc hd
 
 中文:
-定理 toNat_le_iff_le_of_lt_aleph0
+定理 to自然数_le_iff_le_of_lt_aleph0
   条件: (hc : c < ℵ₀) (hd : d < ℵ₀)
   证明: toNat_strictMonoOn.le_iff_le hc hd
 
@@ -374,7 +374,7 @@ theorem toNat_lt_iff_lt_of_lt_aleph0
 @[gcongr]
 
 中文:
-定理 toNat_lt_iff_lt_of_lt_aleph0
+定理 to自然数_lt_iff_lt_of_lt_aleph0
   条件: (hc : c < ℵ₀) (hd : d < ℵ₀)
   证明: toNat_strictMonoOn.lt_iff_lt hc hd
 
@@ -397,7 +397,7 @@ theorem toNat_le_toNat
   proof: toNat_monotoneOn (hcd.trans_lt hd) hd hcd
 
 中文:
-定理 toNat_le_toNat
+定理 to自然数_le_to自然数
   条件: (hcd : c <= d) (hd : d < ℵ₀)
   结论: to自然数 c <= to自然数 d
   证明: toNat_monotoneOn (hcd.trans_lt hd) hd hcd
@@ -419,7 +419,7 @@ theorem toNat_lt_toNat
 @[simp]
 
 中文:
-定理 toNat_lt_toNat
+定理 to自然数_lt_to自然数
   条件: (hcd : c < d) (hd : d < ℵ₀)
   结论: to自然数 c < to自然数 d
   证明: toNat_strictMonoOn (hcd.trans hd) hd hcd
@@ -441,7 +441,7 @@ theorem toNat_ofNat
   proof: toNat_natCast n
 
 中文:
-定理 toNat_ofNat
+定理 to自然数_of自然数
   条件: (n : 自然数) [n.AtLeastTwo]
   证明: toNat_natCast n
 
@@ -460,8 +460,8 @@ theorem toNat_rightInverse
   proof: toNat_natCast
 
 中文:
-定理 toNat_rightInverse
-  结论: Function.RightInverse ((↑) : 自然数 -> Cardinal) to自然数
+定理 to自然数_rightInverse
+  结论: 函数.右逆 ((↑) : 自然数 -> 基数) to自然数
   证明: toNat_natCast
 
 Depends on / 依赖: toNat_natCast
@@ -480,8 +480,8 @@ theorem toNat_surjective
 @[simp]
 
 中文:
-定理 toNat_surjective
-  结论: Surjective to自然数
+定理 to自然数_surjective
+  结论: 满射 to自然数
   证明: toNat_rightInverse.surjective
 
 @[simp]
@@ -504,8 +504,8 @@ theorem mk_toNat_of_infinite
 @[simp]
 
 中文:
-定理 mk_toNat_of_infinite
-  条件: [h : Infinite α]
+定理 mk_to自然数_of_infinite
+  条件: [h : 无限 α]
   结论: to自然数 #α = 0
   证明: by simp
 
@@ -523,7 +523,7 @@ theorem aleph0_toNat
   proof: toNat_apply_of_aleph0_le le_rfl
 
 中文:
-定理 aleph0_toNat
+定理 aleph0_to自然数
   结论: to自然数 ℵ₀ = 0
   证明: toNat_apply_of_aleph0_le le_rfl
 
@@ -544,9 +544,9 @@ theorem mk_toNat_eq_card
 @[simp]
 
 中文:
-定理 mk_toNat_eq_card
-  条件: [Fintype α]
-  结论: to自然数 #α = Fintype.card α
+定理 mk_to自然数_eq_card
+  条件: [有限类型 α]
+  结论: to自然数 #α = 有限类型.card α
   证明: by simp
 
 @[simp]
@@ -563,7 +563,7 @@ theorem zero_toNat
   proof: map_zero _
 
 中文:
-定理 zero_toNat
+定理 zero_to自然数
   结论: to自然数 0 = 0
   证明: map_zero _
 
@@ -580,7 +580,7 @@ theorem one_toNat
   proof: map_one _
 
 中文:
-定理 one_toNat
+定理 one_to自然数
   结论: to自然数 1 = 1
   证明: map_one _
 
@@ -599,7 +599,7 @@ theorem toNat_eq_iff
   rw [← toNat_toENat]; rw [ENat.toNat_eq_iff hn]; rw [toENat_eq_natCast]
 
 中文:
-定理 toNat_eq_iff
+定理 to自然数_eq_iff
   条件: {n : 自然数} (hn : n != 0)
   结论: to自然数 c = n ↔ c = n
   证明: by
@@ -621,7 +621,7 @@ theorem toNat_eq_ofNat
 @[simp]
 
 中文:
-定理 toNat_eq_ofNat
+定理 to自然数_eq_of自然数
   条件: {n : 自然数} [自然数.AtLeastTwo n]
   证明: toNat_eq_iff OfNat.ofNat_ne_zero n
 
@@ -644,7 +644,7 @@ theorem toNat_eq_one
   rw [toNat_eq_iff one_ne_zero]; rw [Nat.cast_one]
 
 中文:
-定理 toNat_eq_one
+定理 to自然数_eq_one
   结论: to自然数 c = 1 ↔ c = 1
   证明: by
   rw [toNat_eq_iff one_ne_zero]; rw [Nat.cast_one]
@@ -665,8 +665,8 @@ theorem toNat_eq_one_iff_unique
 @[simp]
 
 中文:
-定理 toNat_eq_one_iff_unique
-  结论: to自然数 #α = 1 ↔ Subsingleton α ∧ Nonempty α
+定理 to自然数_eq_one_iff_unique
+  结论: to自然数 #α = 1 ↔ 子单例 α ∧ 非空 α
   证明: toNat_eq_one.trans eq_one_iff_unique
 
 @[simp]
@@ -688,8 +688,8 @@ theorem toNat_lift
   simp only [← toNat_toENat, toENat_lift]
 
 中文:
-定理 toNat_lift
-  条件: (c : Cardinal.{v})
+定理 to自然数_lift
+  条件: (c : 基数.{v})
   结论: to自然数 (lift.{u, v} c) = to自然数 c
   证明: by
   simp only [← toNat_toENat, toENat_lift]
@@ -711,7 +711,7 @@ theorem toNat_congr
   rw [← toNat_lift]; rw [(lift_mk_eq.{_]; rw [_]; rw [v}).mpr ⟨e⟩]; rw [toNat_lift]
 
 中文:
-定理 toNat_congr
+定理 to自然数_congr
   条件: {β : 类型v} (e : α ≃ β)
   结论: to自然数 #α = to自然数 #β
   证明: by
@@ -734,8 +734,8 @@ theorem toNat_mul
 @[simp]
 
 中文:
-定理 toNat_mul
-  条件: (x y : Cardinal)
+定理 to自然数_mul
+  条件: (x y : 基数)
   结论: to自然数 (x * y) = to自然数 x * to自然数 y
   证明: map_mul toNat x y
 
@@ -759,7 +759,7 @@ theorem toNat_add
   norm_cast
 
 中文:
-定理 toNat_add
+定理 to自然数_add
   条件: (hc : c < ℵ₀) (hd : d < ℵ₀)
   结论: to自然数 (c + d) = to自然数 c + to自然数 d
   证明: by
@@ -784,8 +784,8 @@ theorem toNat_lift_add_lift
 @[simp]
 
 中文:
-定理 toNat_lift_add_lift
-  条件: {a : Cardinal.{u}} {b : Cardinal.{v}} (ha : a < ℵ₀) (hb : b < ℵ₀)
+定理 to自然数_lift_add_lift
+  条件: {a : 基数.{u}} {b : 基数.{v}} (ha : a < ℵ₀) (hb : b < ℵ₀)
   证明: by
   simp [*]
 
@@ -809,9 +809,9 @@ lemma natCast_toNat_le
   · simp [Cardinal.toNat_apply_of_aleph0_le h]
 
 中文:
-引理 natCast_toNat_le
-  条件: (a : Cardinal)
-  结论: (to自然数 a : Cardinal) <= a
+引理 natCast_to自然数_le
+  条件: (a : 基数)
+  结论: (to自然数 a : 基数) <= a
   证明: by
   obtain h | h := lt_or_ge a ℵ₀
   · simp [cast_toNat_of_lt_aleph0 h]
@@ -835,8 +835,8 @@ lemma toNat_le_iff_of_lt_aleph0
     Cardinal.toNat_le_iff_le_of_lt_aleph0 lt (Cardinal.natCast_lt_aleph0)]
 
 中文:
-引理 toNat_le_iff_of_lt_aleph0
-  条件: {a : Cardinal.{u}} (n : 自然数) (lt : a < Cardinal.aleph0)
+引理 to自然数_le_iff_of_lt_aleph0
+  条件: {a : 基数.{u}} (n : 自然数) (lt : a < 基数.aleph0)
   证明: by
   nth_rw 1 [← Cardinal.toNat_natCast.{u} n,
     Cardinal.toNat_le_iff_le_of_lt_aleph0 lt (Cardinal.natCast_lt_aleph0)]
@@ -859,8 +859,8 @@ lemma toNat_eq_iff_of_lt_aleph0
   exact Nat.cast_inj.symm
 
 中文:
-引理 toNat_eq_iff_of_lt_aleph0
-  条件: {a : Cardinal.{u}} (n : 自然数) (lt : a < Cardinal.aleph0)
+引理 to自然数_eq_iff_of_lt_aleph0
+  条件: {a : 基数.{u}} (n : 自然数) (lt : a < 基数.aleph0)
   证明: by
   nth_rw 2 [← Cardinal.cast_toNat_of_lt_aleph0 lt]
   exact Nat.cast_inj.symm
@@ -887,8 +887,8 @@ theorem toNat_eq_of_forall_le_iff
     rw [← cast_toNat_of_lt_aleph0 (not_le.mp hc)]; rw [← 
 
 中文:
-定理 toNat_eq_of_forall_le_iff
-  结论: {c : Cardinal.{u}} {d : Cardinal.{v}}
+定理 to自然数_eq_of_对任意_le_iff
+  结论: {c : 基数.{u}} {d : 基数.{v}}
   证明: by
   have h' := forall_congr' h
   rw [← Cardinal.aleph0_le]; rw [← Cardinal.aleph0_le] at h'

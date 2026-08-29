@@ -34,7 +34,7 @@ instance instAddSemigroup
 
 中文:
 实例 instAddSemigroup
-  签名: [AddSemigroup α]
+  签名: [加法半群 α]
   定义体: unop_injective.addSemigroup _ fun _ _ => rfl
 
 Depends on / 依赖: addSemigroup, unop_injective, unop_injective.addSemigroup
@@ -52,7 +52,7 @@ instance instAddLeftCancelSemigroup
 
 中文:
 实例 instAddLeftCancelSemigroup
-  签名: [AddLeftCancelSemigroup α]
+  签名: [加法左消去半群 α]
   定义体: unop_injective.addLeftCancelSemigroup _ fun _ _ => rfl
 
 Depends on / 依赖: addLeftCancelSemigroup, unop_injective, unop_injective.addLeftCancelSemigroup
@@ -70,7 +70,7 @@ instance instAddRightCancelSemigroup
 
 中文:
 实例 instAddRightCancelSemigroup
-  签名: [AddRightCancelSemigroup α]
+  签名: [加法右消去半群 α]
   定义体: unop_injective.addRightCancelSemigroup _ fun _ _ => rfl
 
 Depends on / 依赖: addRightCancelSemigroup, unop_injective, unop_injective.addRightCancelSemigroup
@@ -88,7 +88,7 @@ instance instAddCommMagma
 
 中文:
 实例 instAddCommMagma
-  签名: [AddCommMagma α]
+  签名: [加法交换原群 α]
   定义体: unop_injective.addCommMagma _ fun _ _ => rfl
 
 Depends on / 依赖: addCommMagma, unop_injective, unop_injective.addCommMagma
@@ -106,7 +106,7 @@ instance instAddCommSemigroup
 
 中文:
 实例 instAddCommSemigroup
-  签名: [AddCommSemigroup α]
+  签名: [加法交换半群 α]
   定义体: unop_injective.addCommSemigroup _ fun _ _ => rfl
 
 Depends on / 依赖: addCommSemigroup, unop_injective, unop_injective.addCommSemigroup
@@ -124,7 +124,7 @@ instance instAddZeroClass
 
 中文:
 实例 instAddZeroClass
-  签名: [AddZeroClass α]
+  签名: [加法零类 α]
   定义体: unop_injective.addZeroClass _ (by exact rfl) fun _ _ => rfl
 
 Depends on / 依赖: addZeroClass, unop_injective, unop_injective.addZeroClass
@@ -142,7 +142,7 @@ instance instAddMonoid
 
 中文:
 实例 instAddMonoid
-  签名: [AddMonoid α]
+  签名: [加法幺半群 α]
   定义体: unop_injective.addMonoid _ (by exact rfl) (fun _ _ => rfl) fun _ _ => rfl
 
 Depends on / 依赖: addMonoid, unop_injective, unop_injective.addMonoid
@@ -160,7 +160,7 @@ instance instAddCommMonoid
 
 中文:
 实例 instAddCommMonoid
-  签名: [AddCommMonoid α]
+  签名: [加法交换幺半群 α]
   定义体: unop_injective.addCommMonoid _ rfl (fun _ _ => rfl) fun _ _ => rfl
 
 Depends on / 依赖: addCommMonoid, unop_injective, unop_injective.addCommMonoid
@@ -179,7 +179,7 @@ instance instSubNegMonoid
 
 中文:
 实例 instSubNegMonoid
-  签名: [SubNegMonoid α]
+  签名: [SubNeg幺半群 α]
   定义体: unop_injective.subNegMonoid _ (by exact rfl) (fun _ _ => rfl) (fun _ => rfl) (fun _ _ => rfl)
     (fun _ _ => rfl) fun _ _ => rfl
 
@@ -200,7 +200,7 @@ instance instAddGroup
 
 中文:
 实例 instAddGroup
-  签名: [AddGroup α]
+  签名: [加法群 α]
   定义体: unop_injective.addGroup _ (by exact rfl) (fun _ _ => rfl) (fun _ => rfl) (fun _ _ => rfl)
   (fun _ _ => rfl) fun _ _ => rfl
 
@@ -221,7 +221,7 @@ instance instAddCommGroup
 
 中文:
 实例 instAddCommGroup
-  签名: [AddCommGroup α]
+  签名: [加法交换群 α]
   定义体: unop_injective.addCommGroup _ rfl (fun _ _ => rfl) (fun _ => rfl) (fun _ _ => rfl)
     (fun _ _ => rfl) fun _ _ => rfl
 
@@ -250,7 +250,7 @@ instance instIsRightCancelMul
 
 中文:
 实例 instIsRightCancelMul
-  签名: [Mul α] [IsLeftCancelMul α]
+  签名: [乘法 α] [左乘消去 α]
   定义体: unop_injective mul_left_cancel op_injective h
 
 @[to_additive]
@@ -271,7 +271,7 @@ instance instIsLeftCancelMul
 
 中文:
 实例 instIsLeftCancelMul
-  签名: [Mul α] [IsRightCancelMul α]
+  签名: [乘法 α] [右乘消去 α]
   定义体: unop_injective mul_right_cancel op_injective h
 
 Depends on / 依赖: mul_right_cancel, op_injective, unop_injective
@@ -288,7 +288,7 @@ instance instIsCancelMul
 
 中文:
 实例 instIsCancelMul
-  签名: [Mul α] [IsCancelMul α]
+  签名: [乘法 α] [是消去乘法 α]
 -/
 @[to_additive] instance instIsCancelMul [Mul α] [IsCancelMul α] : IsCancelMul αᵐᵒᵖ where
 
@@ -305,7 +305,7 @@ instance instSemigroup
 
 中文:
 实例 instSemigroup
-  签名: [Semigroup α]
+  签名: [半群 α]
   定义体: unop_injective Eq.symm mul_assoc (unop z) (unop y) (unop x)
 
 @[to_additive]
@@ -328,7 +328,7 @@ instance instLeftCancelSemigroup
 
 中文:
 实例 instLeftCancelSemigroup
-  签名: [RightCancelSemigroup α]
+  签名: [右消去半群 α]
   定义体: mul_left_cancel
 
 @[to_additive]
@@ -351,7 +351,7 @@ instance instRightCancelSemigroup
 
 中文:
 实例 instRightCancelSemigroup
-  签名: [LeftCancelSemigroup α]
+  签名: [左消去半群 α]
   定义体: mul_right_cancel
 
 @[to_additive]
@@ -372,7 +372,7 @@ instance instCommSemigroup
 
 中文:
 实例 instCommSemigroup
-  签名: [CommSemigroup α]
+  签名: [交换半群 α]
   定义体: unop_injective mul_comm (unop y) (unop x)
 
 Depends on / 依赖: mul_comm, unop_injective
@@ -407,7 +407,7 @@ mul_one _ := unop_injective one_mul _
 
 中文:
 实例 instMulOneClass
-  签名: [MulOneClass α]
+  签名: [MulOne类 α]
   定义体: unop_injective mul_one _
 mul_one _ := unop_injective one_mul _
 
@@ -436,7 +436,7 @@ npow_succ _ _ := unop_injective pow_succ' _ _
 
 中文:
 实例 instMonoid
-  签名: [Monoid α]
+  签名: [幺半群 α]
   定义体: instSemigroup
   __ := instMulOneClass
 npow n a := op a.unop ^ n
@@ -468,7 +468,7 @@ instance instLeftCancelMonoid
 
 中文:
 实例 instLeftCancelMonoid
-  签名: [RightCancelMonoid α]
+  签名: [右消去幺半群 α]
   定义体: instMonoid
   __ := instLeftCancelSemigroup
 
@@ -494,7 +494,7 @@ instance instRightCancelMonoid
 
 中文:
 实例 instRightCancelMonoid
-  签名: [LeftCancelMonoid α]
+  签名: [左消去幺半群 α]
   定义体: instMonoid
   __ := instRightCancelSemigroup
 
@@ -520,7 +520,7 @@ instance instCancelMonoid
 
 中文:
 实例 instCancelMonoid
-  签名: [CancelMonoid α]
+  签名: [消去幺半群 α]
   定义体: instLeftCancelMonoid
   __ := instRightCancelMonoid
 
@@ -546,7 +546,7 @@ instance instCommMonoid
 
 中文:
 实例 instCommMonoid
-  签名: [CommMonoid α]
+  签名: [交换幺半群 α]
   定义体: instMonoid
   __ := instCommSemigroup
 
@@ -572,7 +572,7 @@ instance instCancelCommMonoid
 
 中文:
 实例 instCancelCommMonoid
-  签名: [CancelCommMonoid α]
+  签名: [消去交换幺半群 α]
   定义体: instCommMonoid
   __ := instLeftCancelMonoid
 
@@ -602,7 +602,7 @@ zpow_neg' _ _ := unop_injective
 
 中文:
 实例 instDivInvMonoid
-  签名: [DivInvMonoid α]
+  签名: [除逆幺半群 α]
   定义体: instMonoid
   toInv := instInv
 zpow n a := op a.unop ^ n
@@ -640,7 +640,7 @@ inv_eq_of_mul _ _ h := unop_injective inv_eq_of_mul_eq_one_left congr_arg unop h
 
 中文:
 实例 instDivisionMonoid
-  签名: [DivisionMonoid α]
+  签名: [Division幺半群 α]
   定义体: instDivInvMonoid
   __ := instInvolutiveInv
 mul_inv_rev _ _ := unop_injective mul_inv_rev _ _
@@ -670,7 +670,7 @@ instance instDivisionCommMonoid
 
 中文:
 实例 instDivisionCommMonoid
-  签名: [DivisionCommMonoid α]
+  签名: [DivisionComm幺半群 α]
   定义体: instDivisionMonoid
   __ := instCommSemigroup
 
@@ -696,7 +696,7 @@ inv_mul_cancel _ := unop_injective mul_inv_cancel _
 
 中文:
 实例 instGroup
-  签名: [Group α]
+  签名: [群 α]
   定义体: instDivInvMonoid
 inv_mul_cancel _ := unop_injective mul_inv_cancel _
 
@@ -720,7 +720,7 @@ instance instCommGroup
 
 中文:
 实例 instCommGroup
-  签名: [CommGroup α]
+  签名: [交换群 α]
   定义体: instGroup
   __ := instCommSemigroup
 
@@ -828,7 +828,7 @@ theorem unop_div
 
 中文:
 定理 unop_div
-  条件: [DivInvMonoid α] (x y : αᵐᵒᵖ)
+  条件: [除逆幺半群 α] (x y : αᵐᵒᵖ)
   结论: unop (x / y) = (unop y)⁻¹ * unop x
   证明: rfl
 
@@ -851,7 +851,7 @@ theorem op_div
 
 中文:
 定理 op_div
-  条件: [DivInvMonoid α] (x y : α)
+  条件: [除逆幺半群 α] (x y : α)
   结论: op (x / y) = (op y)⁻¹ * op x
   证明: by simp [div_eq_mul_inv]
 
@@ -876,7 +876,7 @@ theorem semiconjBy_op
 
 中文:
 定理 semiconjBy_op
-  条件: [Mul α] {a x y : α}
+  条件: [乘法 α] {a x y : α}
   结论: SemiconjBy (op a) (op y) (op x) ↔ SemiconjBy a x y
   证明: by
   simp only [SemiconjBy, ← op_mul, op_inj, eq_comm]
@@ -900,7 +900,7 @@ theorem semiconjBy_unop
 
 中文:
 定理 semiconjBy_unop
-  条件: [Mul α] {a x y : αᵐᵒᵖ}
+  条件: [乘法 α] {a x y : αᵐᵒᵖ}
   证明: by
   conv_rhs => rw [← op_unop a, ← op_unop x, ← op_unop y, semiconjBy_op]
 
@@ -925,7 +925,7 @@ theorem _root_.SemiconjBy.op
 
 中文:
 定理 _root_.SemiconjBy.op
-  条件: [Mul α] {a x y : α} (h : SemiconjBy a x y)
+  条件: [乘法 α] {a x y : α} (h : SemiconjBy a x y)
   证明: semiconjBy_op.2 h
 
 @[to_additive]
@@ -949,7 +949,7 @@ theorem _root_.SemiconjBy.unop
 
 中文:
 定理 _root_.SemiconjBy.unop
-  条件: [Mul α] {a x y : αᵐᵒᵖ} (h : SemiconjBy a x y)
+  条件: [乘法 α] {a x y : αᵐᵒᵖ} (h : SemiconjBy a x y)
   证明: semiconjBy_unop.2 h
 
 @[to_additive]
@@ -979,7 +979,7 @@ nonrec theorem _root_.Commute.unop [Mul α] {x y : αᵐᵒᵖ} (h : Commute x y
 
 中文:
 定理 _root_.Commute.op
-  条件: [Mul α] {x y : α} (h : Commute x y)
+  条件: [乘法 α] {x y : α} (h : Commute x y)
   结论: Commute (op x) (op y)
   证明: SemiconjBy.op h
 
@@ -1014,7 +1014,7 @@ theorem commute_op
 
 中文:
 定理 commute_op
-  条件: [Mul α] {x y : α}
+  条件: [乘法 α] {x y : α}
   结论: Commute (op x) (op y) ↔ Commute x y
   证明: semiconjBy_op
 
@@ -1037,7 +1037,7 @@ theorem commute_unop
 
 中文:
 定理 commute_unop
-  条件: [Mul α] {x y : αᵐᵒᵖ}
+  条件: [乘法 α] {x y : αᵐᵒᵖ}
   结论: Commute (unop x) (unop y) ↔ Commute x y
   证明: semiconjBy_unop
 
@@ -1080,7 +1080,7 @@ instance [MulOne
 
 中文:
 实例 [MulOne
-  签名: α] [IsDedekindFiniteMonoid α] : IsDedekindFiniteMonoid αᵐᵒᵖ
+  签名: α] [是DedekindFinite幺半群 α] : 是DedekindFinite幺半群 αᵐᵒᵖ
   定义体: MulOpposite.isDedekindFiniteMonoid_iff.mpr ‹_›
 -/
 @[to_additive] instance [MulOne α] [IsDedekindFiniteMonoid α] : IsDedekindFiniteMonoid αᵐᵒᵖ :=
@@ -1105,7 +1105,7 @@ instance instSemigroup
 
 中文:
 实例 instSemigroup
-  签名: [Semigroup α]
+  签名: [半群 α]
   定义体: unop_injective.semigroup _ fun _ _ => rfl
 
 Depends on / 依赖: semigroup, unop_injective, unop_injective.semigroup
@@ -1122,7 +1122,7 @@ instance instLeftCancelSemigroup
 
 中文:
 实例 instLeftCancelSemigroup
-  签名: [LeftCancelSemigroup α]
+  签名: [左消去半群 α]
   定义体: unop_injective.leftCancelSemigroup _ fun _ _ => rfl
 
 Depends on / 依赖: leftCancelSemigroup, unop_injective, unop_injective.leftCancelSemigroup
@@ -1140,7 +1140,7 @@ instance instRightCancelSemigroup
 
 中文:
 实例 instRightCancelSemigroup
-  签名: [RightCancelSemigroup α]
+  签名: [右消去半群 α]
   定义体: unop_injective.rightCancelSemigroup _ fun _ _ => rfl
 
 Depends on / 依赖: rightCancelSemigroup, unop_injective, unop_injective.rightCancelSemigroup
@@ -1158,7 +1158,7 @@ instance instCommSemigroup
 
 中文:
 实例 instCommSemigroup
-  签名: [CommSemigroup α]
+  签名: [交换半群 α]
   定义体: unop_injective.commSemigroup _ fun _ _ => rfl
 
 Depends on / 依赖: commSemigroup, unop_injective, unop_injective.commSemigroup
@@ -1176,7 +1176,7 @@ instance instMulOneClass
 
 中文:
 实例 instMulOneClass
-  签名: [MulOneClass α]
+  签名: [MulOne类 α]
   定义体: unop_injective.mulOneClass _ (by exact rfl) fun _ _ => rfl
 
 Depends on / 依赖: mulOneClass, unop_injective, unop_injective.mulOneClass
@@ -1196,7 +1196,7 @@ instance pow
 
 中文:
 实例 pow
-  签名: {β} [Pow α β]
+  签名: {β} [幂 α β]
   定义体: op (unop a ^ b)
 
 @[simp]
@@ -1217,7 +1217,7 @@ theorem op_pow
 
 中文:
 定理 op_pow
-  条件: {β} [Pow α β] (a : α) (b : β)
+  条件: {β} [幂 α β] (a : α) (b : β)
   结论: op (a ^ b) = op a ^ b
   证明: rfl
 
@@ -1238,7 +1238,7 @@ theorem unop_pow
 
 中文:
 定理 unop_pow
-  条件: {β} [Pow α β] (a : αᵃᵒᵖ) (b : β)
+  条件: {β} [幂 α β] (a : αᵃᵒᵖ) (b : β)
   结论: unop (a ^ b) = unop a ^ b
   证明: rfl
 -/
@@ -1255,7 +1255,7 @@ instance instMonoid
 
 中文:
 实例 instMonoid
-  签名: [Monoid α]
+  签名: [幺半群 α]
   定义体: unop_injective.monoid _ (by exact rfl) (fun _ _ => rfl) fun _ _ => rfl
 
 Depends on / 依赖: monoid, unop_injective, unop_injective.monoid
@@ -1273,7 +1273,7 @@ instance instCommMonoid
 
 中文:
 实例 instCommMonoid
-  签名: [CommMonoid α]
+  签名: [交换幺半群 α]
   定义体: unop_injective.commMonoid _ (by exact rfl) (fun _ _ => rfl) fun _ _ => rfl
 
 Depends on / 依赖: commMonoid, unop_injective, unop_injective.commMonoid
@@ -1292,7 +1292,7 @@ instance instDivInvMonoid
 
 中文:
 实例 instDivInvMonoid
-  签名: [DivInvMonoid α]
+  签名: [除逆幺半群 α]
   定义体: unop_injective.divInvMonoid _ (by exact rfl) (fun _ _ => rfl) (fun _ => rfl) (fun _ _ => rfl)
     (fun _ _ => rfl) fun _ _ => rfl
 
@@ -1313,7 +1313,7 @@ instance instGroup
 
 中文:
 实例 instGroup
-  签名: [Group α]
+  签名: [群 α]
   定义体: unop_injective.group _ (by exact rfl) (fun _ _ => rfl) (fun _ => rfl) (fun _ _ => rfl)
     (fun _ _ => rfl) fun _ _ => rfl
 
@@ -1336,7 +1336,7 @@ instance instCommGroup
 
 中文:
 实例 instCommGroup
-  签名: [CommGroup α]
+  签名: [交换群 α]
   定义体: unop_injective.commGroup _ (by exact rfl) (fun _ _ => rfl) (fun _ => rfl) (fun _ _ => rfl)
     (fun _ _ => rfl) fun _ _ => rfl
 
@@ -1359,7 +1359,7 @@ instance instMulTorsionFree
 
 中文:
 实例 instMulTorsionFree
-  签名: [Monoid α] [IsMulTorsionFree α]
+  签名: [幺半群 α] [是MulTorsionFree α]
   定义体: ⟨fun _ h => op_injective.comp (pow_left_injective h).comp unop_injective⟩
 
 Depends on / 依赖: op_injective, op_injective.comp, pow_left_injective, unop_injective

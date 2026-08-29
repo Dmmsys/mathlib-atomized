@@ -83,13 +83,13 @@ class TopologicalSpace
     - isOpen_sUnion : forall s, (forall t in s, IsOpen t) -> IsOpen (⋃₀ s)
 
 中文:
-类 TopologicalSpace
+类 拓扑空间
   参数: (X : 类型u)
   公理与运算 (4 个):
-    - IsOpen : Set X -> 命题
-    - isOpen_univ : IsOpen univ
-    - isOpen_inter : 对任意 s t, IsOpen s -> IsOpen t -> IsOpen (s inter t)
-    - isOpen_sUnion : 对任意 s, (对任意 t in s, IsOpen t) -> IsOpen (⋃₀ s)
+    - IsOpen : 集合 X -> 命题
+    - isOpen_univ : 是开集 univ
+    - isOpen_inter : 对任意 s t, 是开集 s -> 是开集 t -> 是开集 (s inter t)
+    - isOpen_sUnion : 对任意 s, (对任意 t in s, 是开集 t) -> 是开集 (⋃₀ s)
 -/
 class TopologicalSpace (X : Type u) where
   /-- A predicate saying that a set is an open set. Use `IsOpen` in the root namespace instead. -/
@@ -122,8 +122,8 @@ definition IsOpen
   body: TopologicalSpace.IsOpen
 
 中文:
-定义 IsOpen
-  签名: : Set X -> 命题
+定义 是开集
+  签名: : 集合 X -> 命题
   定义体: TopologicalSpace.IsOpen
 
 Depends on / 依赖: IsOpen, TopologicalSpace, TopologicalSpace.IsOpen
@@ -140,7 +140,7 @@ theorem isOpen_univ
 
 中文:
 定理 isOpen_univ
-  结论: IsOpen (univ : Set X)
+  结论: 是开集 (univ : 集合 X)
   证明: TopologicalSpace.isOpen_univ
 -/
 @[simp] theorem isOpen_univ : IsOpen (univ : Set X) := TopologicalSpace.isOpen_univ
@@ -155,9 +155,9 @@ theorem IsOpen.inter
   proof: TopologicalSpace.isOpen_inter s t hs ht
 
 中文:
-定理 IsOpen.inter
-  条件: (hs : IsOpen s) (ht : IsOpen t)
-  结论: IsOpen (s inter t)
+定理 是开集.inter
+  条件: (hs : 是开集 s) (ht : 是开集 t)
+  结论: 是开集 (s inter t)
   证明: TopologicalSpace.isOpen_inter s t hs ht
 -/
 theorem IsOpen.inter (hs : IsOpen s) (ht : IsOpen t) : IsOpen (s inter t) :=
@@ -174,8 +174,8 @@ theorem isOpen_sUnion
 
 中文:
 定理 isOpen_sUnion
-  条件: {s : Set (Set X)} (h : 对任意 t in s, IsOpen t)
-  结论: IsOpen (⋃₀ s)
+  条件: {s : 集合 (集合 X)} (h : 对任意 t in s, 是开集 t)
+  结论: 是开集 (⋃₀ s)
   证明: TopologicalSpace.isOpen_sUnion s h
 
 Depends on / 依赖: TopologicalSpace, TopologicalSpace.isOpen_sUnion, isOpen_sUnion
@@ -195,10 +195,10 @@ class IsClosed
     - isOpen_compl : IsOpen sᶜ
 
 中文:
-类 IsClosed
-  参数: (s : Set X)
+类 是闭集
+  参数: (s : 集合 X)
   公理与运算 (1 个):
-    - isOpen_compl : IsOpen sᶜ
+    - isOpen_compl : 是开集 sᶜ
 -/
 class IsClosed (s : Set X) : Prop where
   /-- The complement of a closed set is an open set. -/
@@ -214,7 +214,7 @@ definition IsClopen
 
 中文:
 定义 IsClopen
-  签名: (s : Set X)
+  签名: (s : 集合 X)
   定义体: IsClosed s ∧ IsOpen s
 
 Depends on / 依赖: IsClosed, IsOpen
@@ -232,7 +232,7 @@ definition IsLocallyClosed
 
 中文:
 定义 IsLocallyClosed
-  签名: (s : Set X)
+  签名: (s : 集合 X)
   定义体: exists (U Z : Set X), IsOpen U ∧ IsClosed Z ∧ s = U inter Z
 
 Depends on / 依赖: IsClosed, IsOpen
@@ -249,7 +249,7 @@ definition interior
 
 中文:
 定义 interior
-  签名: (s : Set X)
+  签名: (s : 集合 X)
   定义体: ⋃₀ { t | IsOpen t ∧ t subseteq s }
 
 Depends on / 依赖: IsOpen, subseteq
@@ -267,7 +267,7 @@ definition closure
 
 中文:
 定义 closure
-  签名: (s : Set X)
+  签名: (s : 集合 X)
   定义体: ⋂₀ { t | IsClosed t ∧ s subseteq t }
 
 Depends on / 依赖: IsClosed, subseteq
@@ -285,7 +285,7 @@ definition frontier
 
 中文:
 定义 frontier
-  签名: (s : Set X)
+  签名: (s : 集合 X)
   定义体: closure s \ interior s
 
 Depends on / 依赖: closure, interior
@@ -303,7 +303,7 @@ definition coborder
 
 中文:
 定义 coborder
-  签名: (s : Set X)
+  签名: (s : 集合 X)
   定义体: (closure s \ s)ᶜ
 
 Depends on / 依赖: closure
@@ -320,8 +320,8 @@ definition Dense
   body: forall x, x in closure s
 
 中文:
-定义 Dense
-  签名: (s : Set X)
+定义 稠密
+  签名: (s : 集合 X)
   定义体: forall x, x in closure s
 
 Depends on / 依赖: closure
@@ -357,10 +357,10 @@ structure Continuous
     - isOpen_preimage : forall s, IsOpen s -> IsOpen (f ⁻¹' s)
 
 中文:
-结构 Continuous
+结构 连续
   参数: (f : X -> Y)
   公理与运算 (1 个):
-    - isOpen_preimage : 对任意 s, IsOpen s -> IsOpen (f ⁻¹' s)
+    - isOpen_preimage : 对任意 s, 是开集 s -> 是开集 (f ⁻¹' s)
 -/
 structure Continuous (f : X -> Y) : Prop where
   /-- The preimage of an open set under a continuous function is an open set. Use `IsOpen.preimage`
@@ -376,7 +376,7 @@ definition IsOpenMap
   body: forall U : Set X, IsOpen U -> IsOpen (f '' U)
 
 中文:
-定义 IsOpenMap
+定义 是开映射
   签名: (f : X -> Y)
   定义体: forall U : Set X, IsOpen U -> IsOpen (f '' U)
 
@@ -393,7 +393,7 @@ definition IsClosedMap
   body: forall U : Set X, IsClosed U -> IsClosed (f '' U)
 
 中文:
-定义 IsClosedMap
+定义 是闭映射
   签名: (f : X -> Y)
   定义体: forall U : Set X, IsClosed U -> IsClosed (f '' U)
 
@@ -427,12 +427,12 @@ structure IsOpenQuotientMap
     - isOpenMap : IsOpenMap f
 
 中文:
-结构 IsOpenQuotientMap
+结构 是OpenQuotient映射
   参数: (f : X -> Y)
   公理与运算 (3 个):
-    - surjective : Function.Surjective f
-    - continuous : Continuous f
-    - isOpenMap : IsOpenMap f
+    - surjective : 函数.满射 f
+    - continuous : 连续 f
+    - isOpenMap : 是开映射 f
 -/
 structure IsOpenQuotientMap (f : X -> Y) : Prop where
   /-- An open quotient map is surjective. -/
@@ -490,10 +490,10 @@ class BaireSpace
     - baire_property : forall f : Nat -> Set X, (forall n, IsOpen (f n)) -> (forall n, Dense (f n)) -> Dense (⋂ n, f n)
 
 中文:
-类 BaireSpace
-  参数: (X : 类型) [TopologicalSpace X]
+类 Baire空间
+  参数: (X : 类型) [拓扑空间 X]
   公理与运算 (1 个):
-    - baire_property : 对任意 f : 自然数 -> Set X, (对任意 n, IsOpen (f n)) -> (对任意 n, Dense (f n)) -> Dense (⋂ n, f n)
+    - baire_property : 对任意 f : 自然数 -> 集合 X, (对任意 n, 是开集 (f n)) -> (对任意 n, 稠密 (f n)) -> 稠密 (⋂ n, f n)
 -/
 class BaireSpace (X : Type*) [TopologicalSpace X] : Prop where
   baire_property : forall f : Nat -> Set X, (forall n, IsOpen (f n)) -> (forall n, Dense (f n)) -> Dense (⋂ n, f n)
@@ -511,8 +511,8 @@ structure WithTopology
     - ofTopology : X
 
 中文:
-结构 WithTopology
-  参数: (X : 类型) (t : TopologicalSpace X)
+结构 With拓扑
+  参数: (X : 类型) (t : 拓扑空间 X)
   公理与运算 (2 个):
     - toTopology((t)) : :
     - ofTopology : X

@@ -158,7 +158,7 @@ lemma map_mono
 
 中文:
 引理 map_mono
-  结论: Monotone (map f)
+  结论: 递增 (map f)
   证明: (gc_map_comap f).monotone_l
 -/
 @[mono, aesop safe apply] lemma map_mono : Monotone (map f) := (gc_map_comap f).monotone_l
@@ -173,7 +173,7 @@ lemma comap_mono
 
 中文:
 引理 comap_mono
-  结论: Monotone (comap f)
+  结论: 递增 (comap f)
   证明: (gc_map_comap f).monotone_u
 -/
 @[gcongr, mono] lemma comap_mono : Monotone (comap f) := (gc_map_comap f).monotone_u
@@ -233,7 +233,7 @@ instance isPrime_comap
 
 中文:
 实例 isPrime_comap
-  签名: [J.toIdeal.IsPrime]
+  签名: [J.toIdeal.是素]
   定义体: inferInstanceAs (J.toIdeal.comap f).IsPrime -- this shows that the simpNF already has the instance
 
 Depends on / 依赖: IsPrime, J.toIdeal.comap, already, instance, simpNF, toIdeal
@@ -251,7 +251,7 @@ lemma map_id
 
 中文:
 引理 map_id
-  结论: I.map (GradedRingHom.id 𝒜) = I
+  结论: I.map (分次环态射.id 𝒜) = I
   证明: ext Ideal.map_id _
 -/
 @[simp] lemma map_id : I.map (GradedRingHom.id 𝒜) = I := ext Ideal.map_id _
@@ -300,7 +300,7 @@ lemma comap_id
 
 中文:
 引理 comap_id
-  结论: I.comap (GradedRingHom.id 𝒜) = I
+  结论: I.comap (分次环态射.id 𝒜) = I
   证明: rfl
 -/
 @[simp] lemma comap_id : I.comap (GradedRingHom.id 𝒜) = I := rfl

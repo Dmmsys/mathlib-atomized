@@ -101,9 +101,9 @@ class MvQPF
 中文:
 类 MvQPF
   参数: {n : 自然数} (F : TypeVec.{u} n -> 类型)
-  继承: MvFunctor F
+  继承: Mv函子 F
   公理与运算 (4 个):
-    - P : MvPFunctor.{u} n
+    - P : MvP函子.{u} n
     - abs : 对任意 {α}, P α -> F α
     - repr : 对任意 {α}, F α -> P α
     - abs_repr : 对任意 {α} (x : F α), abs (repr x) = x
@@ -420,7 +420,7 @@ definition IsUniform
     abs ⟨a, f⟩ = abs ⟨a', f'⟩ -> forall i, f i '' univ = f' i '' univ
 
 中文:
-定义 IsUniform
+定义 是一致
   签名: : 命题
   定义体: forall ⦃α : TypeVec n⦄ (a a' : q.P.A) (f : q.P.B a ⟹ α) (f' : q.P.B a' ⟹ α),
     abs ⟨a, f⟩ = abs ⟨a', f'⟩ -> forall i, f i '' univ = f' i '' univ
@@ -480,7 +480,7 @@ theorem supp_eq_of_isUniform
 
 中文:
 定理 supp_eq_of_isUniform
-  条件: (h : q.IsUniform) {α : TypeVec n} (a : q.P.A) (f : q.P.B a ⟹ α)
+  条件: (h : q.是一致) {α : TypeVec n} (a : q.P.A) (f : q.P.B a ⟹ α)
   证明: by
   intro; ext u; rw [mem_supp]; constructor
   · intro h'
@@ -519,7 +519,7 @@ theorem liftP_iff_of_isUniform
 
 中文:
 定理 liftP_iff_of_isUniform
-  条件: (h : q.IsUniform) {α : TypeVec n} (x : F α) (p : 对任意 i, α i -> 命题)
+  条件: (h : q.是一致) {α : TypeVec n} (x : F α) (p : 对任意 i, α i -> 命题)
   证明: by
   rw [liftP_iff]; rw [← abs_repr x]
   obtain ⟨a, f⟩ := repr x; constructor
@@ -563,7 +563,7 @@ theorem supp_map
 
 中文:
 定理 supp_map
-  条件: (h : q.IsUniform) {α β : TypeVec n} (g : α ⟹ β) (x : F α) (i)
+  条件: (h : q.是一致) {α β : TypeVec n} (g : α ⟹ β) (x : F α) (i)
   证明: by
   rw [← abs_repr x]; obtain ⟨a, f⟩ := repr x; rw [← abs_map, MvPFunctor.map_eq]
   rw [supp_eq_of_isUniform h]; rw [supp_eq_of_isUniform h]; rw [← image_comp]
@@ -594,7 +594,7 @@ theorem suppPreservation_iff_isUniform
 
 中文:
 定理 suppPreservation_iff_isUniform
-  结论: q.SuppPreservation ↔ q.IsUniform
+  结论: q.SuppPreservation ↔ q.是一致
   证明: by
   constructor
   · intro h α a a' f f' h' i
@@ -670,7 +670,7 @@ theorem liftpPreservation_iff_uniform
 
 中文:
 定理 liftpPreservation_iff_uniform
-  结论: q.LiftPPreservation ↔ q.IsUniform
+  结论: q.LiftPPreservation ↔ q.是一致
   证明: by
   rw [← suppPreservation_iff_liftpPreservation]; rw [suppPreservation_iff_isUniform]
 
@@ -697,7 +697,7 @@ repr α := q.repr eqv _ α
 
 中文:
 定义 ofEquiv
-  签名: {F F' : TypeVec.{u} n -> 类型} [q : MvQPF F'] [MvFunctor F]
+  签名: {F F' : TypeVec.{u} n -> 类型} [q : MvQPF F'] [Mv函子 F]
   定义体: q.P
 abs α := (eqv _).symm q.abs α
 repr α := q.repr eqv _ α
@@ -732,8 +732,8 @@ instance MvPFunctor.instMvQPFObj
   abs_map := by intros; rfl
 
 中文:
-实例 MvPFunctor.instMvQPFObj
-  签名: {n} (P : MvPFunctor n)
+实例 MvP函子.instMvQPFObj
+  签名: {n} (P : MvP函子 n)
   定义体: P
   abs := id
   repr := id

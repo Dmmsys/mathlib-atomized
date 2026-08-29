@@ -126,7 +126,7 @@ theorem _root_.HasCompactSupport.hasFDerivAt_convolution_left
 
 中文:
 定理 _root_.HasCompactSupport.hasFDerivAt_convolution_left
-  结论: [IsNegInvariant μ]
+  结论: [是NegInvariant μ]
   证明: by
   simp +singlePass only [← convolution_flip]
   exact hcf.hasFDerivAt_convolution_right L.flip hg hf x₀
@@ -195,7 +195,7 @@ theorem _root_.HasCompactSupport.hasDerivAt_convolution_left
 
 中文:
 定理 _root_.HasCompactSupport.hasDerivAt_convolution_left
-  结论: [IsNegInvariant μ]
+  结论: [是NegInvariant μ]
   证明: by
   simp +singlePass only [← convolution_flip]
   exact hcf.hasDerivAt_convolution_right L.flip hg hf x₀
@@ -232,7 +232,7 @@ theorem hasFDerivAt_convolution_right_with_param
 
 中文:
 定理 hasFDerivAt_convolution_right_with_param
-  结论: {g : P -> G -> E'} {s : Set P} {k : Set G}
+  结论: {g : P -> G -> E'} {s : 集合 P} {k : 集合 G}
   证明: by
   let g' := fderiv 𝕜 ↿g
   have A : forall p in s, Continuous (g p) := fun p hp => by
@@ -540,7 +540,7 @@ theorem contDiffOn_convolution_right_with_param_comp
 
 中文:
 定理 contDiffOn_convolution_right_with_param_comp
-  结论: {n : 自然数∞} (L : E ->L[𝕜] E' ->L[𝕜] F) {s : Set P}
+  结论: {n : 自然数∞} (L : E ->L[𝕜] E' ->L[𝕜] F) {s : 集合 P}
   证明: by
   apply (contDiffOn_convolution_right_with_param L hs hk hgs hf hg).comp (contDiffOn_id.prodMk hv)
   intro x hx
@@ -567,7 +567,7 @@ theorem contDiffOn_convolution_left_with_param
 
 中文:
 定理 contDiffOn_convolution_left_with_param
-  结论: [μ.IsAddLeftInvariant] [μ.IsNegInvariant]
+  结论: [μ.是加法左不变] [μ.是NegInvariant]
   证明: by
   simpa only [convolution_flip] using contDiffOn_convolution_right_with_param L.flip hs hk hgs hf hg
 
@@ -593,7 +593,7 @@ theorem contDiffOn_convolution_left_with_param_comp
 
 中文:
 定理 contDiffOn_convolution_left_with_param_comp
-  结论: [μ.IsAddLeftInvariant] [μ.IsNegInvariant]
+  结论: [μ.是加法左不变] [μ.是NegInvariant]
   证明: by
   apply (contDiffOn_convolution_left_with_param L hs hk hgs hf hg).comp (contDiffOn_id.prodMk hv)
   intro x hx
@@ -652,7 +652,7 @@ theorem _root_.HasCompactSupport.contDiff_convolution_left
 
 中文:
 定理 _root_.HasCompactSupport.contDiff_convolution_left
-  结论: [μ.IsAddLeftInvariant] [μ.IsNegInvariant]
+  结论: [μ.是加法左不变] [μ.是NegInvariant]
   证明: by
   rw [← convolution_flip]
   exact hcf.contDiff_convolution_right L.flip hg hf

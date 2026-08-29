@@ -587,7 +587,7 @@ instance associatorIsEquivalence
 
 中文:
 实例 associatorIsEquivalence
-  签名: : (associator C D E).IsEquivalence
+  签名: : (associator C D E).是等价
   定义体: (by infer_instance : (associativity C D E).functor.IsEquivalence)
 
 Depends on / 依赖: IsEquivalence, associativity, functor, functor.IsEquivalence, infer_instance
@@ -605,7 +605,7 @@ instance inverseAssociatorIsEquivalence
 
 中文:
 实例 inverseAssociatorIsEquivalence
-  签名: : (inverseAssociator C D E).IsEquivalence
+  签名: : (inverseAssociator C D E).是等价
   定义体: (by infer_instance : (associativity C D E).inverse.IsEquivalence)
 
 Depends on / 依赖: IsEquivalence, associativity, infer_instance, inverse, inverse.IsEquivalence

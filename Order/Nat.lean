@@ -36,7 +36,7 @@ instance instOrderBot
 
 中文:
 实例 instOrderBot
-  签名: : OrderBot 自然数 where
+  签名: : 有底序 自然数 where
   定义体: 0
   bot_le := zero_le
 -/
@@ -54,7 +54,7 @@ instance instNoMaxOrder
 
 中文:
 实例 instNoMaxOrder
-  签名: : NoMaxOrder 自然数 where
+  签名: : NoMax序 自然数 where
   定义体: ⟨n + 1, n.lt_succ_self⟩
 
 Depends on / 依赖: lt_succ_self, n.lt_succ_self
@@ -108,8 +108,8 @@ lemma Set.Nonempty.isLeast_natFind
   proof: Nat.isLeast_find hs
 
 中文:
-引理 Set.Nonempty.isLeast_natFind
-  条件: {s : Set 自然数} [DecidablePred (· in s)] (hs : s.Nonempty)
+引理 集合.非空.isLeast_natFind
+  条件: {s : 集合 自然数} [DecidablePred (· in s)] (hs : s.非空)
   证明: Nat.isLeast_find hs
 
 Depends on / 依赖: Nat.isLeast_find, isLeast_find

@@ -35,7 +35,7 @@ lemma pairwise_iUnion₂
 
 中文:
 引理 pairwise_iUnion₂
-  结论: (⋃ s in c, s).Pairwise r ↔ 对任意 s in c, s.Pairwise r
+  结论: (⋃ s in c, s).两两 r ↔ 对任意 s in c, s.两两 r
   证明: pairwise_iUnion₂_iff hc.directedOn
 
 Depends on / 依赖: directedOn, hc.directedOn
@@ -53,7 +53,7 @@ lemma pairwiseDisjoint_iUnion₂
 
 中文:
 引理 pairwiseDisjoint_iUnion₂
-  条件: [PartialOrder β] [OrderBot β] (f : α -> β)
+  条件: [偏序 β] [有底序 β] (f : α -> β)
   证明: hc.pairwise_iUnion₂
 
 Depends on / 依赖: hc.pairwise_iUnion
@@ -72,7 +72,7 @@ lemma pairwise_sUnion
 
 中文:
 引理 pairwise_sUnion
-  结论: (⋃₀ c).Pairwise r ↔ 对任意 s in c, s.Pairwise r
+  结论: (⋃₀ c).两两 r ↔ 对任意 s in c, s.两两 r
   证明: Set.pairwise_sUnion hc.directedOn
 
 Depends on / 依赖: Set.pairwise_sUnion, directedOn, hc.directedOn, pairwise_sUnion
@@ -90,7 +90,7 @@ lemma pairwiseDisjoint_sUnion
 
 中文:
 引理 pairwiseDisjoint_sUnion
-  条件: [PartialOrder β] [OrderBot β] (f : α -> β)
+  条件: [偏序 β] [有底序 β] (f : α -> β)
   证明: hc.pairwise_sUnion
 
 Depends on / 依赖: hc.pairwise_sUnion, pairwise_sUnion

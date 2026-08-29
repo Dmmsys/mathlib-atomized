@@ -44,7 +44,7 @@ definition toSubring
 
 中文:
 定义 toSubring
-  签名: (hp : (↑p.coeffs : Set R) subseteq T)
+  签名: (hp : (↑p.coeffs : 集合 R) subseteq T)
   定义体: ∑ i in p.support,
     monomial i
       (⟨p.coeff i,
@@ -299,7 +299,7 @@ theorem map_toSubring
 
 中文:
 定理 map_toSubring
-  结论: (p.toSubring T hp).map (Subring.subtype T) = p
+  结论: (p.toSubring T hp).map (子环.subtype T) = p
   证明: by
   ext n
   simp [coeff_map]
@@ -384,7 +384,7 @@ theorem coeffs_ofSubring
 中文:
 定理 coeffs_ofSubring
   条件: {p : T[X]}
-  结论: (↑(p.ofSubring T).coeffs : Set R) subseteq T
+  结论: (↑(p.ofSubring T).coeffs : 集合 R) subseteq T
   证明: by
   intro i hi
   simp only [coeffs, Set.mem_image, mem_support_iff, Ne, Finset.mem_coe,

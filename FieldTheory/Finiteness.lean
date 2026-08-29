@@ -42,7 +42,7 @@ theorem iff_rank_lt_aleph0
 
 中文:
 定理 iff_rank_lt_aleph0
-  结论: IsNoetherian K V ↔ Module.rank K V < ℵ₀
+  结论: 是Noether K V ↔ 模.rank K V < ℵ₀
   证明: by
   let b := Basis.ofVectorSpace K V
   rw [← b.mk_eq_rank'']; rw [lt_aleph0_iff_set_finite]
@@ -80,7 +80,7 @@ definition fintypeBasisIndex
 
 中文:
 定义 fintypeBasisIndex
-  签名: {ι : 类型} [IsNoetherian K V] (b : Basis ι K V)
+  签名: {ι : 类型} [是Noether K V] (b : 基 ι K V)
   定义体: b.fintypeIndexOfRankLtAleph0 (rank_lt_aleph0 K V)
 
 Depends on / 依赖: b.fintypeIndexOfRankLtAleph0, fintypeIndexOfRankLtAleph0, rank_lt_aleph0
@@ -97,8 +97,8 @@ instance [IsNoetherian
   body: fintypeBasisIndex (Basis.ofVectorSpace K V)
 
 中文:
-实例 [IsNoetherian
-  签名: K V] : Fintype (Basis.ofVectorSpaceIndex K V)
+实例 [是Noether
+  签名: K V] : 有限类型 (基.ofVectorSpaceIndex K V)
   定义体: fintypeBasisIndex (Basis.ofVectorSpace K V)
 
 Depends on / 依赖: Basis.ofVectorSpace, fintypeBasisIndex, ofVectorSpace
@@ -116,7 +116,7 @@ theorem finite_basis_index
 
 中文:
 定理 finite_basis_index
-  条件: {ι : 类型} {s : Set ι} [IsNoetherian K V] (b : Basis s K V)
+  条件: {ι : 类型} {s : 集合 ι} [是Noether K V] (b : 基 s K V)
   证明: b.finite_index_of_rank_lt_aleph0 (rank_lt_aleph0 K V)
 
 Depends on / 依赖: b.finite_index_of_rank_lt_aleph0, finite_index_of_rank_lt_aleph0, rank_lt_aleph0
@@ -139,7 +139,7 @@ definition finsetBasisIndex
 
 中文:
 定义 finsetBasisIndex
-  签名: [IsNoetherian K V]
+  签名: [是Noether K V]
   定义体: (finite_basis_index (Basis.ofVectorSpace K V)).toFinset
 
 @[simp]
@@ -162,7 +162,7 @@ theorem coe_finsetBasisIndex
 
 中文:
 定理 coe_finsetBasisIndex
-  条件: [IsNoetherian K V]
+  条件: [是Noether K V]
   证明: Set.Finite.coe_toFinset _
 
 @[simp]
@@ -184,7 +184,7 @@ theorem coeSort_finsetBasisIndex
 
 中文:
 定理 coeSort_finsetBasisIndex
-  条件: [IsNoetherian K V]
+  条件: [是Noether K V]
   证明: Set.Finite.coeSort_toFinset _
 
 Depends on / 依赖: Finite, Set.Finite.coeSort_toFinset, coeSort_toFinset
@@ -205,7 +205,7 @@ definition finsetBasis
 
 中文:
 定义 finsetBasis
-  签名: [IsNoetherian K V]
+  签名: [是Noether K V]
   定义体: (Basis.ofVectorSpace K V).reindex (by rw [coeSort_finsetBasisIndex])
 
 @[simp]
@@ -227,7 +227,7 @@ theorem range_finsetBasis
 
 中文:
 定理 range_finsetBasis
-  条件: [IsNoetherian K V]
+  条件: [是Noether K V]
   证明: by
   rw [finsetBasis]; rw [Basis.range_reindex]; rw [Basis.range_ofVectorSpace]
 
@@ -250,8 +250,8 @@ theorem _root_.Module.card_eq_pow_finrank
   rw [Module.card_fintype b]; rw [← Module.finrank_eq_card_basis b]
 
 中文:
-定理 _root_.Module.card_eq_pow_finrank
-  条件: [Fintype K] [Fintype V]
+定理 _root_.模.card_eq_pow_finrank
+  条件: [有限类型 K] [有限类型 V]
   证明: by
   let b := IsNoetherian.finsetBasis K V
   rw [Module.card_fintype b]; rw [← Module.finrank_eq_card_basis b]
@@ -274,8 +274,8 @@ theorem _root_.Module.natCard_eq_pow_finrank
   rw [Nat.card_congr b.equivFun.toEquiv]; rw [Nat.card_fun]; rw [finrank_eq_nat_card_basis b]
 
 中文:
-定理 _root_.Module.natCard_eq_pow_finrank
-  条件: [Module.Finite K V]
+定理 _root_.模.natCard_eq_pow_finrank
+  条件: [模.有限 K V]
   证明: by
   let b := IsNoetherian.finsetBasis K V
   rw [Nat.card_congr b.equivFun.toEquiv]; rw [Nat.card_fun]; rw [finrank_eq_nat_card_basis b]
@@ -297,7 +297,7 @@ theorem iff_fg
 
 中文:
 定理 iff_fg
-  结论: IsNoetherian K V ↔ Module.Finite K V
+  结论: 是Noether K V ↔ 模.有限 K V
   证明: ⟨fun _ => IsNoetherian.finite _ _, fun _ => isNoetherian_of_isNoetherianRing_of_finite _ _⟩
 
 Depends on / 依赖: IsNoetherian, IsNoetherian.finite, finite, isNoetherian_of_isNoetherianRing_of_finite

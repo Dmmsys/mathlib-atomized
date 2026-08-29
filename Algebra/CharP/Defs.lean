@@ -53,8 +53,8 @@ class _root_.CharP
     - cast_eq_zero_iff((R p)) : forall x : Nat, (x : R) = 0 ↔ p ∣ x
 
 中文:
-类 _root_.CharP
-  参数: (R : 类型) [AddMonoidWithOne R] (p : outParam 自然数)
+类 _root_.特征p
+  参数: (R : 类型) [加法带幺幺半群 R] (p : outParam 自然数)
   公理与运算 (1 个):
     - cast_eq_zero_iff((R p)) : 对任意 x : 自然数, (x : R) = 0 ↔ p ∣ x
 -/
@@ -73,8 +73,8 @@ lemma _root_.CharP.ofNat_eq_zero'
   rwa [← CharP.cast_eq_zero_iff R p] at h
 
 中文:
-引理 _root_.CharP.ofNat_eq_zero'
-  结论: (p : 自然数) [CharP R p]
+引理 _root_.特征p.of自然数_eq_zero'
+  结论: (p : 自然数) [特征p R p]
   证明: by
   rwa [← CharP.cast_eq_zero_iff R p] at h
 
@@ -98,7 +98,7 @@ lemma congr
 中文:
 引理 congr
   条件: {q : 自然数} (h : p = q)
-  结论: CharP R q
+  结论: 特征p R q
   证明: h ▸ ‹CharP R p›
 -/
 lemma congr {q : Nat} (h : p = q) : CharP R q := h ▸ ‹CharP R p›
@@ -172,7 +172,7 @@ lemma cast_eq_iff_mod_eq
 
 中文:
 引理 cast_eq_iff_mod_eq
-  条件: [IsLeftCancelAdd R]
+  条件: [是左消去加法 R]
   结论: (a : R) = (b : R) ↔ a % p = b % p
   证明: by
   wlog! hle : a <= b
@@ -212,7 +212,7 @@ lemma ofNat_eq_zero
   proof: cast_eq_zero R p
 
 中文:
-引理 ofNat_eq_zero
+引理 of自然数_eq_zero
   条件: [p.AtLeastTwo]
   结论: (of自然数(p) : R) = 0
   证明: cast_eq_zero R p
@@ -233,7 +233,7 @@ lemma eq
 
 中文:
 引理 eq
-  条件: {p q : 自然数} (hp : CharP R p) (hq : CharP R q)
+  条件: {p q : 自然数} (hp : 特征p R p) (hq : 特征p R q)
   结论: p = q
   证明: Nat.dvd_antisymm ((cast_eq_zero_iff (self := hp) R p q).1 (@cast_eq_zero _ _ _ hq))
     ((cast_eq_zero_iff (self := hq) R q p).1 (@cast_eq_zero _ _ _ hp))
@@ -254,7 +254,7 @@ instance ofCharZero
 
 中文:
 实例 ofCharZero
-  签名: [CharZero R]
+  签名: [特征零 R]
   定义体: by rw [zero_dvd_iff, ← Nat.cast_zero, Nat.cast_inj]
 
 Depends on / 依赖: Nat.cast_inj, Nat.cast_zero, cast_inj, cast_zero, zero_dvd_iff
@@ -316,8 +316,8 @@ lemma charP_to_charZero
 
 中文:
 引理 charP_to_charZero
-  条件: [CharP R 0]
-  结论: CharZero R
+  条件: [特征p R 0]
+  结论: 特征零 R
   证明: charZero_of_inj_zero fun n h0 => eq_zero_of_zero_dvd ((cast_eq_zero_iff R 0 n).mp h0)
 
 Depends on / 依赖: cast_eq_zero_iff, charZero_of_inj_zero, eq_zero_of_zero_dvd
@@ -335,7 +335,7 @@ lemma charP_zero_iff_charZero
 
 中文:
 引理 charP_zero_iff_charZero
-  结论: CharP R 0 ↔ CharZero R
+  结论: 特征p R 0 ↔ 特征零 R
   证明: ⟨fun _ => charP_to_charZero R, fun _ => ofCharZero R⟩
 
 Depends on / 依赖: charP_to_charZero, ofCharZero
@@ -366,8 +366,8 @@ lemma «exists»
             (by_con
 
 中文:
-引理 «exists»
-  结论: 存在 p, CharP R p
+引理 «存在»
+  结论: 存在 p, 特征p R p
   证明: letI := Classical.decEq R
   by_cases
     (fun H : forall p : Nat, (p : R) = 0 -> p = 0 =>
@@ -413,8 +413,8 @@ lemma existsUnique
   ⟨c, H, fun _y H2 => CharP.eq R H2 H⟩
 
 中文:
-引理 existsUnique
-  结论: 存在! p, CharP R p
+引理 存在Unique
+  结论: 存在! p, 特征p R p
   证明: let ⟨c, H⟩ := CharP.exists R
   ⟨c, H, fun _y H2 => CharP.eq R H2 H⟩
 
@@ -437,7 +437,7 @@ definition ringChar
 
 中文:
 定义 ringChar
-  签名: [NonAssocSemiring R]
+  签名: [非结合半环 R]
   定义体: Classical.choose (CharP.existsUnique R)
 
 Depends on / 依赖: CharP.existsUnique, Classical, Classical.choose, existsUnique
@@ -481,7 +481,7 @@ lemma eq
 
 中文:
 引理 eq
-  条件: (p : 自然数) [C : CharP R p]
+  条件: (p : 自然数) [C : 特征p R p]
   结论: ringChar R = p
   证明: ((Classical.choose_spec (CharP.existsUnique R)).2 p C).symm
 
@@ -507,7 +507,7 @@ lemma of_eq
 中文:
 引理 of_eq
   条件: {p : 自然数} (h : ringChar R = p)
-  结论: CharP R p
+  结论: 特征p R p
   证明: CharP.congr (ringChar R) h
 
 Depends on / 依赖: CharP.congr, ringChar
@@ -527,7 +527,7 @@ lemma eq_iff
 中文:
 引理 eq_iff
   条件: {p : 自然数}
-  结论: ringChar R = p ↔ CharP R p
+  结论: ringChar R = p ↔ 特征p R p
   证明: ⟨of_eq, @eq R _ p⟩
 
 Depends on / 依赖: of_eq
@@ -569,7 +569,7 @@ lemma eq_zero
 
 中文:
 引理 eq_zero
-  条件: [CharZero R]
+  条件: [特征零 R]
   结论: ringChar R = 0
   证明: eq R 0
 -/
@@ -587,7 +587,7 @@ lemma Nat.cast_ringChar
 @[simp]
 
 中文:
-引理 Nat.cast_ringChar
+引理 自然数.cast_ringChar
   结论: (ringChar R : R) = 0
   证明: by rw [ringChar.spec]
 
@@ -611,7 +611,7 @@ lemma ringChar_eq_one
 
 中文:
 引理 ringChar_eq_one
-  结论: ringChar R = 1 ↔ Subsingleton R
+  结论: ringChar R = 1 ↔ 子单例 R
   证明: by
   rw [← Nat.dvd_one]; rw [← spec]; rw [eq_comm]; rw [Nat.cast_one]; rw [subsingleton_iff_zero_eq_one]
 
@@ -634,7 +634,7 @@ lemma ringChar_subsingleton
 
 中文:
 引理 ringChar_subsingleton
-  条件: [Subsingleton R]
+  条件: [子单例 R]
   结论: ringChar R = 1
   证明: by simpa
 
@@ -655,8 +655,8 @@ lemma CharP.neg_one_ne_one
 exact fun h => (Fact.out : 2 < p).not_ge Nat.le_of_dvd Nat.zero_lt_two h
 
 中文:
-引理 CharP.neg_one_ne_one
-  条件: [AddGroupWithOne R] (p : 自然数) [CharP R p] [Fact (2 < p)]
+引理 特征p.neg_one_ne_one
+  条件: [加法带幺群 R] (p : 自然数) [特征p R p] [Fact (2 < p)]
   证明: by
   rw [ne_comm]; rw [← sub_ne_zero]; rw [sub_neg_eq_add]; rw [one_add_one_eq_two]; rw [← Nat.cast_two]; rw [Ne]; rw [CharP.cast_eq_zero_iff R p 2]
 exact fun h => (Fact.out : 2 < p).not_ge Nat.le_of_dvd Nat.zero_lt_two h
@@ -685,7 +685,7 @@ lemma ringChar_zero_iff_CharZero
 
 中文:
 引理 ringChar_zero_iff_CharZero
-  结论: ringChar R = 0 ↔ CharZero R
+  结论: ringChar R = 0 ↔ 特征零 R
   证明: by
   rw [ringChar.eq_iff]; rw [charP_zero_iff_charZero]
 
@@ -713,7 +713,7 @@ lemma char_ne_one
 
 中文:
 引理 char_ne_one
-  条件: [Nontrivial R] (p : 自然数) [hc : CharP R p]
+  条件: [非平凡 R] (p : 自然数) [hc : 特征p R p]
   结论: p != 1
   证明: fun hp : p = 1 =>
   have : (1 : R) = 0 := by simpa using (cast_eq_zero_iff R p 1).mpr (hp ▸ dvd_refl p)
@@ -743,8 +743,8 @@ lemma char_is_prime_of_two_le
 
 中文:
 引理 char_is_prime_of_two_le
-  条件: (p : 自然数) [CharP R p] (hp : 2 <= p)
-  结论: 自然数.Prime p
+  条件: (p : 自然数) [特征p R p] (hp : 2 <= p)
+  结论: 自然数.素 p
   证明: suffices forall (d) (_ : d ∣ p), d = 1 ∨ d = p from Nat.prime_def.mpr ⟨hp, this⟩
   fun (d : Nat) (hdvd : exists e, p = d * e) =>
   let ⟨e, hmul⟩ := hdvd
@@ -790,8 +790,8 @@ lemma char_is_prime_or_zero
 
 中文:
 引理 char_is_prime_or_zero
-  条件: (p : 自然数) [hc : CharP R p]
-  结论: 自然数.Prime p ∨ p = 0
+  条件: (p : 自然数) [hc : 特征p R p]
+  结论: 自然数.素 p ∨ p = 0
   证明: match p, hc with
   | 0, _ => Or.inr rfl
   | 1, hc => absurd (Eq.refl (1 : Nat)) (@char_ne_one R _ _ (1 : Nat) hc)
@@ -816,8 +816,8 @@ lemma char_prime_of_ne_zero
 
 中文:
 引理 char_prime_of_ne_zero
-  条件: {p : 自然数} [CharP R p] (hp : p != 0)
-  结论: p.Prime
+  条件: {p : 自然数} [特征p R p] (hp : p != 0)
+  结论: p.素
   证明: (CharP.char_is_prime_or_zero R p).resolve_right hp
 
 Depends on / 依赖: CharP.char_is_prime_or_zero, char_is_prime_or_zero, resolve_right
@@ -837,8 +837,8 @@ lemma exists'
   exacts [Or.inr ⟨p, Fact.mk h, hchar⟩, Or.inl (charP_to_charZero R)]
 
 中文:
-引理 exists'
-  条件: (R : 类型) [NonAssocRing R] [NoZeroDivisors R] [Nontrivial R]
+引理 存在'
+  条件: (R : 类型) [非结合环 R] [无零因子 R] [非平凡 R]
   证明: by
   obtain ⟨p, hchar⟩ := CharP.exists R
   rcases char_is_prime_or_zero R p with h | rfl
@@ -863,8 +863,8 @@ lemma char_is_prime_of_pos
 
 中文:
 引理 char_is_prime_of_pos
-  条件: (p : 自然数) [NeZero p] [CharP R p]
-  结论: Fact p.Prime
+  条件: (p : 自然数) [NeZero p] [特征p R p]
+  结论: Fact p.素
   证明: ⟨(CharP.char_is_prime_or_zero R _).resolve_right NeZero.ne p⟩
 
 Depends on / 依赖: CharP.char_is_prime_or_zero, NeZero, NeZero.ne, char_is_prime_or_zero, resolve_right
@@ -902,8 +902,8 @@ lemma CharOne.subsingleton
 
 中文:
 引理 CharOne.subsingleton
-  条件: [CharP R 1]
-  结论: Subsingleton R
+  条件: [特征p R 1]
+  结论: 子单例 R
   证明: Subsingleton.intro
     suffices forall r : R, r = 0 from fun a b => show a = b by rw [this a, this b]
     fun r =>
@@ -938,8 +938,8 @@ lemma false_of_nontrivial_of_char_one
 
 中文:
 引理 false_of_nontrivial_of_char_one
-  条件: [Nontrivial R] [CharP R 1]
-  结论: False
+  条件: [非平凡 R] [特征p R 1]
+  结论: 假
   证明: by
   have : Subsingleton R := CharOne.subsingleton
   exact false_of_nontrivial_of_subsingleton R
@@ -962,7 +962,7 @@ lemma ringChar_ne_one
 
 中文:
 引理 ringChar_ne_one
-  条件: [Nontrivial R]
+  条件: [非平凡 R]
   结论: ringChar R != 1
   证明: by
   simpa using not_subsingleton R
@@ -984,8 +984,8 @@ hv by rwa [CharP.cast_eq_zero_iff _ v, Nat.dvd_one] at h⟩⟩
 
 中文:
 引理 nontrivial_of_char_ne_one
-  条件: {v : 自然数} (hv : v != 1) [hr : CharP R v]
-  结论: Nontrivial R
+  条件: {v : 自然数} (hv : v != 1) [hr : 特征p R v]
+  结论: 非平凡 R
   证明: ⟨⟨(1 : Nat), 0, fun h =>
 hv by rwa [CharP.cast_eq_zero_iff _ v, Nat.dvd_one] at h⟩⟩
 
@@ -1013,7 +1013,7 @@ lemma of_not_dvd
 
 中文:
 引理 of_not_dvd
-  条件: [CharP R p] (h : ¬p ∣ n)
+  条件: [特征p R p] (h : ¬p ∣ n)
   结论: NeZero (n : R)
   证明: ⟨(CharP.cast_eq_zero_iff R p n).not.mpr h⟩
 
@@ -1034,7 +1034,7 @@ lemma not_char_dvd
 
 中文:
 引理 not_char_dvd
-  条件: (p : 自然数) [CharP R p] (k : 自然数) [h : NeZero (k : R)]
+  条件: (p : 自然数) [特征p R p] (k : 自然数) [h : NeZero (k : R)]
   结论: ¬p ∣ k
   证明: by
   rwa [← CharP.cast_eq_zero_iff R p k, ← Ne, ← neZero_iff]
@@ -1088,7 +1088,7 @@ instance expChar_prime
 
 中文:
 实例 expChar_prime
-  签名: (p) [CharP R p] [Fact p.Prime]
+  签名: (p) [特征p R p] [Fact p.素]
   定义体: ExpChar.prime Fact.out
 
 Depends on / 依赖: ExpChar, ExpChar.prime, Fact.out
@@ -1104,7 +1104,7 @@ instance expChar_one
 
 中文:
 实例 expChar_one
-  签名: [CharZero R]
+  签名: [特征零 R]
   定义体: ExpChar.zero
 
 Depends on / 依赖: ExpChar, ExpChar.zero
@@ -1208,7 +1208,7 @@ lemma expChar_one_of_char_zero
 
 中文:
 引理 expChar_one_of_char_zero
-  条件: (q : 自然数) [hp : CharP R 0] [hq : ExpChar R q]
+  条件: (q : 自然数) [hp : 特征p R 0] [hq : ExpChar R q]
   结论: q = 1
   证明: by
   rcases hq with q | hq_prime
@@ -1237,8 +1237,8 @@ lemma char_eq_expChar_iff
 
 中文:
 引理 char_eq_expChar_iff
-  条件: (p q : 自然数) [hp : CharP R p] [hq : ExpChar R q]
-  结论: p = q ↔ p.Prime
+  条件: (p q : 自然数) [hp : 特征p R p] [hq : ExpChar R q]
+  结论: p = q ↔ p.素
   证明: by
   rcases hq with q | hq_prime
   · rw [(CharP.eq R hp (.ofCharZero R) : p = 0)]
@@ -1268,7 +1268,7 @@ lemma expChar_is_prime_or_one
 中文:
 引理 expChar_is_prime_or_one
   条件: (q : 自然数) [hq : ExpChar R q]
-  结论: 自然数.Prime q ∨ q = 1
+  结论: 自然数.素 q ∨ q = 1
   证明: by
   cases hq with
   | zero => exact .inr rfl
@@ -1392,7 +1392,7 @@ lemma ringExpChar.eq_one
 
 中文:
 引理 ringExpChar.eq_one
-  条件: [CharZero R]
+  条件: [特征零 R]
   结论: ringExpChar R = 1
   证明: by
   rw [ringExpChar]; rw [ringChar.eq_zero]; rw [max_eq_right (Nat.zero_le _)]
@@ -1417,7 +1417,7 @@ lemma char_zero_of_expChar_one
 
 中文:
 引理 char_zero_of_expChar_one
-  条件: (p : 自然数) [hp : CharP R p] [hq : ExpChar R 1]
+  条件: (p : 自然数) [hp : 特征p R p] [hq : ExpChar R 1]
   结论: p = 0
   证明: by
   cases hq
@@ -1447,7 +1447,7 @@ lemma charZero_of_expChar_one'
 中文:
 引理 charZero_of_expChar_one'
   条件: [hq : ExpChar R 1]
-  结论: CharZero R
+  结论: 特征零 R
   证明: by
   cases hq
   · assumption
@@ -1476,7 +1476,7 @@ lemma expChar_one_iff_char_zero
 
 中文:
 引理 expChar_one_iff_char_zero
-  条件: (p q : 自然数) [CharP R p] [ExpChar R q]
+  条件: (p q : 自然数) [特征p R p] [ExpChar R q]
   结论: q = 1 ↔ p = 0
   证明: by
   constructor
@@ -1509,8 +1509,8 @@ lemma ExpChar.exists
   exacts [⟨1, .zero⟩, ⟨p, .prime hp⟩]
 
 中文:
-引理 ExpChar.exists
-  条件: [Ring R] [IsDomain R]
+引理 ExpChar.存在
+  条件: [环 R] [是整环 R]
   结论: 存在 q, ExpChar R q
   证明: by
   obtain _ | ⟨p, ⟨hp⟩, _⟩ := CharP.exists' R
@@ -1533,8 +1533,8 @@ lemma ExpChar.exists_unique
   ⟨q, H, fun _ H2 => ExpChar.eq H2 H⟩
 
 中文:
-引理 ExpChar.exists_unique
-  条件: [Ring R] [IsDomain R]
+引理 ExpChar.存在_unique
+  条件: [环 R] [是整环 R]
   结论: 存在! q, ExpChar R q
   证明: let ⟨q, H⟩ := ExpChar.exists R
   ⟨q, H, fun _ H2 => ExpChar.eq H2 H⟩
@@ -1557,7 +1557,7 @@ instance ringExpChar.expChar
 
 中文:
 实例 ringExpChar.expChar
-  签名: [Ring R] [IsDomain R]
+  签名: [环 R] [是整环 R]
   定义体: by
   obtain ⟨q, _⟩ := ExpChar.exists R
   rwa [ringExpChar.eq R q]
@@ -1580,7 +1580,7 @@ lemma ringExpChar.of_eq
 
 中文:
 引理 ringExpChar.of_eq
-  条件: [Ring R] [IsDomain R] {q : 自然数} (h : ringExpChar R = q)
+  条件: [环 R] [是整环 R] {q : 自然数} (h : ringExpChar R = q)
   结论: ExpChar R q
   证明: h ▸ ringExpChar.expChar R
 
@@ -1601,7 +1601,7 @@ lemma ringExpChar.eq_iff
 
 中文:
 引理 ringExpChar.eq_iff
-  条件: [Ring R] [IsDomain R] {q : 自然数}
+  条件: [环 R] [是整环 R] {q : 自然数}
   结论: ringExpChar R = q ↔ ExpChar R q
   证明: ⟨ringExpChar.of_eq, fun _ => ringExpChar.eq R q⟩
 

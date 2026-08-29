@@ -37,7 +37,7 @@ instance instIsScalarTowerRight
 
 中文:
 实例 instIsScalarTowerRight
-  签名: : IsScalarTower Rat>=0 R R where
+  签名: : 标量塔 有理数>=0 R R where
   定义体: by simp only [smul_def, smul_eq_mul, mul_assoc]
 
 Depends on / 依赖: mul_assoc, smul_def, smul_eq_mul
@@ -64,7 +64,7 @@ instance instIsScalarTowerRight
 
 中文:
 实例 instIsScalarTowerRight
-  签名: : IsScalarTower Rat R R where
+  签名: : 标量塔 有理数 R R where
   定义体: by simp only [smul_def, smul_eq_mul, mul_assoc]
 
 Depends on / 依赖: mul_assoc, smul_def, smul_eq_mul

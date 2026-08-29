@@ -171,7 +171,7 @@ definition obj
 
 中文:
 定义 obj
-  签名: : ChainComplex C 自然数
+  签名: : 链复形 C 自然数
   定义体: ChainComplex.of (fun n => X _⦋n⦌) (objD X) (d_squared X)
 
 @[simp]
@@ -306,7 +306,7 @@ definition alternatingFaceMapComplex
 
 中文:
 定义 alternatingFaceMapComplex
-  签名: : SimplicialObject C ⥤ ChainComplex C 自然数 where
+  签名: : SimplicialObject C ⥤ 链复形 C 自然数 where
   定义体: AlternatingFaceMapComplex.obj
   map f := AlternatingFaceMapComplex.map f
 
@@ -402,7 +402,7 @@ theorem map_alternatingFaceMapComplex
 
 中文:
 定理 map_alternatingFaceMapComplex
-  结论: {D : 类型} [Category* D] [Preadditive D] (F : C ⥤ D)
+  结论: {D : 类型} [范畴* D] [预加性 D] (F : C ⥤ D)
   证明: by
   apply CategoryTheory.Functor.ext
   · intro X Y f
@@ -443,7 +443,7 @@ instance :
 
 中文:
 实例 :
-  签名: (alternatingFaceMapComplex C).Additive
+  签名: (alternatingFaceMapComplex C).加性
 -/
 instance : (alternatingFaceMapComplex C).Additive where
 
@@ -456,8 +456,8 @@ instance [Limits.HasPullbacks
   body: HomologicalComplex.mono_of_mono_f _ fun _ => by dsimp; infer_instance
 
 中文:
-实例 [Limits.HasPullbacks
-  签名: C] : (alternatingFaceMapComplex C).PreservesMonomorphisms where
+实例 [Limits.有Pullbacks
+  签名: C] : (alternatingFaceMapComplex C).保持Monomorphisms where
   定义体: HomologicalComplex.mono_of_mono_f _ fun _ => by dsimp; infer_instance
 
 Depends on / 依赖: HomologicalComplex, HomologicalComplex.mono_of_mono_f, infer_instance, mono_of_mono_f
@@ -514,7 +514,7 @@ definition ε
 
 中文:
 定义 ε
-  签名: [Limits.HasZeroObject C]
+  签名: [Limits.有ZeroObject C]
   定义体: by
     refine (ChainComplex.toSingle₀Equiv _ _).symm ?_
     refine ⟨X.hom.app (op ⦋0⦌), ?_⟩
@@ -558,7 +558,7 @@ lemma ε_app_f_zero
 
 中文:
 引理 ε_app_f_zero
-  条件: [Limits.HasZeroObject C] (X : SimplicialObject.Augmented C)
+  条件: [Limits.有ZeroObject C] (X : SimplicialObject.Augmented C)
   证明: ChainComplex.toSingle₀Equiv_symm_apply_f_zero _ _
 
 @[simp]
@@ -580,7 +580,7 @@ lemma ε_app_f_succ
 
 中文:
 引理 ε_app_f_succ
-  条件: [Limits.HasZeroObject C] (X : SimplicialObject.Augmented C) (n : 自然数)
+  条件: [Limits.有ZeroObject C] (X : SimplicialObject.Augmented C) (n : 自然数)
   证明: rfl
 -/
 lemma ε_app_f_succ [Limits.HasZeroObject C] (X : SimplicialObject.Augmented C) (n : Nat) :
@@ -763,7 +763,7 @@ definition obj
 
 中文:
 定义 obj
-  签名: : CochainComplex C 自然数
+  签名: : 上链复形 C 自然数
   定义体: CochainComplex.of (fun n => X.obj ⦋n⦌) (objD X) (d_squared X)
 
 Depends on / 依赖: CochainComplex, CochainComplex.of, X.obj, d_squared
@@ -831,7 +831,7 @@ definition alternatingCofaceMapComplex
 
 中文:
 定义 alternatingCofaceMapComplex
-  签名: : CosimplicialObject C ⥤ CochainComplex C 自然数 where
+  签名: : CosimplicialObject C ⥤ 上链复形 C 自然数 where
   定义体: AlternatingCofaceMapComplex.obj
   map f := AlternatingCofaceMapComplex.map f
 

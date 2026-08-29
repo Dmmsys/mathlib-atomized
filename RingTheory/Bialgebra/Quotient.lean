@@ -130,7 +130,7 @@ instance :
 
 中文:
 实例 :
-  签名: Bialgebra R (A ⧸ I)
+  签名: 双代数 R (A ⧸ I)
   定义体: by
   refine .ofAlgHom (comulAlgHom I) (counitAlgHom I) ?_ ?_ ?_ <;>
     refine Ideal.Quotient.algHom_ext R (AlgHom.toLinearMap_injective ?_) <;>

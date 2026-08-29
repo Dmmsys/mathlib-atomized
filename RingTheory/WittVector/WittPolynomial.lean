@@ -193,7 +193,7 @@ theorem constantCoeff_wittPolynomial
 
 中文:
 定理 constantCoeff_wittPolynomial
-  条件: [hp : Fact p.Prime] (n : 自然数)
+  条件: [hp : Fact p.素] (n : 自然数)
   证明: by
   simp only [wittPolynomial, map_sum, constantCoeff_monomial]
   rw [sum_eq_zero]
@@ -275,7 +275,7 @@ theorem aeval_wittPolynomial
 
 中文:
 定理 aeval_wittPolynomial
-  条件: {A : 类型} [CommRing A] [Algebra R A] (f : 自然数 -> A) (n : 自然数)
+  条件: {A : 类型} [交换环 A] [代数 R A] (f : 自然数 -> A) (n : 自然数)
   证明: by
   simp [wittPolynomial, map_sum, aeval_monomial, Finsupp.prod_single_index]
 
@@ -342,7 +342,7 @@ theorem wittPolynomial_vars
 
 中文:
 定理 wittPolynomial_vars
-  条件: [CharZero R] (n : 自然数)
+  条件: [特征零 R] (n : 自然数)
   结论: (wittPolynomial p R n).vars = range (n + 1)
   证明: by
   have : forall i, (monomial (Finsupp.single i (p ^ (n - i))) ((p : R) ^ i)).vars = {i} := by
@@ -414,7 +414,7 @@ definition xInTermsOfW
 
 中文:
 定义 xInTermsOfW
-  签名: [Invertible (p : R)]
+  签名: [可逆 (p : R)]
 -/
 noncomputable def xInTermsOfW [Invertible (p : R)] : Nat -> MvPolynomial Nat R
   | n => (X n - ∑ i : Fin n,
@@ -434,7 +434,7 @@ theorem xInTermsOfW_eq
 
 中文:
 定理 xInTermsOfW_eq
-  条件: [Invertible (p : R)] {n : 自然数}
+  条件: [可逆 (p : R)] {n : 自然数}
   结论: xInTermsOfW p R n =
   证明: by
   rw [xInTermsOfW]; rw [← Fin.sum_univ_eq_sum_range]
@@ -464,7 +464,7 @@ theorem constantCoeff_xInTermsOfW
 
 中文:
 定理 constantCoeff_xInTermsOfW
-  条件: [hp : Fact p.Prime] [Invertible (p : R)] (n : 自然数)
+  条件: [hp : Fact p.素] [可逆 (p : R)] (n : 自然数)
   证明: by
   induction n using Nat.strongRecOn with | ind n IH => ?_
   rw [xInTermsOfW_eq]; rw [mul_comm]; rw [map_mul]; rw [map_sub]; rw [map_sum]; rw [constantCoeff_C]; rw [constantCoeff_X]; rw [zero_sub]; rw [mul_neg]; rw [neg_eq_zero]; rw [sum_eq_zero]; rw [mul_zero]
@@ -497,7 +497,7 @@ theorem xInTermsOfW_zero
 
 中文:
 定理 xInTermsOfW_zero
-  条件: [Invertible (p : R)]
+  条件: [可逆 (p : R)]
   结论: xInTermsOfW p R 0 = X 0
   证明: by
   rw [xInTermsOfW_eq]; rw [range_zero]; rw [sum_empty]; rw [pow_zero]; rw [C_1]; rw [mul_one]; rw [sub_zero]
@@ -574,7 +574,7 @@ theorem xInTermsOfW_vars_subset
 中文:
 定理 xInTermsOfW_vars_subset
   条件: (n : 自然数)
-  结论: (xInTermsOfW p Rat n).vars subseteq range (n + 1)
+  结论: (xInTermsOfW p 有理数 n).vars subseteq range (n + 1)
   证明: (xInTermsOfW_vars_aux p n).2
 
 Depends on / 依赖: xInTermsOfW_vars_aux
@@ -597,7 +597,7 @@ theorem xInTermsOfW_aux
 
 中文:
 定理 xInTermsOfW_aux
-  条件: [Invertible (p : R)] (n : 自然数)
+  条件: [可逆 (p : R)] (n : 自然数)
   证明: by
   rw [xInTermsOfW_eq]; rw [mul_assoc]; rw [← C_mul]; rw [← mul_pow]; rw [invOf_mul_self]; rw [one_pow]; rw [C_1]; rw [mul_one]
 
@@ -625,7 +625,7 @@ theorem bind₁_xInTermsOfW_wittPolynomial
 
 中文:
 定理 bind₁_xInTermsOfW_wittPolynomial
-  条件: [Invertible (p : R)] (k : 自然数)
+  条件: [可逆 (p : R)] (k : 自然数)
   证明: by
   rw [wittPolynomial_eq_sum_C_mul_X_pow]; rw [map_sum]
   simp only [map_pow, map_mul, algHom_C, algebraMap_eq]
@@ -655,7 +655,7 @@ theorem bind₁_wittPolynomial_xInTermsOfW
 
 中文:
 定理 bind₁_wittPolynomial_xInTermsOfW
-  条件: [Invertible (p : R)] (n : 自然数)
+  条件: [可逆 (p : R)] (n : 自然数)
   证明: by
   induction n using Nat.strongRecOn with | ind n H => ?_
   rw [xInTermsOfW_eq]; rw [map_mul]; rw [map_sub]; rw [bind₁_X_right]; rw [algHom_C]; rw [map_sum]; rw [show X n = (X n * C ((p : R) ^ n)) * C ((⅟p : R) ^ n) by

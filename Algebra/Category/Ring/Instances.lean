@@ -29,7 +29,7 @@ instance localization_unit_isIso
 
 中文:
 实例 localization_unit_isIso
-  签名: (R : CommRingCat)
+  签名: (R : 交换环范畴)
   定义体: Iso.isIso_hom (IsLocalization.atOne R (Localization.Away (1 : R))).toRingEquiv.toCommRingCatIso
 
 Depends on / 依赖: IsLocalization, IsLocalization.atOne, Iso.isIso_hom, Localization, Localization.Away, isIso_hom, toCommRingCatIso, toRingEquiv, toRingEquiv.toCommRingCatIso
@@ -50,7 +50,7 @@ instance localization_unit_isIso'
 
 中文:
 实例 localization_unit_isIso'
-  签名: (R : CommRingCat)
+  签名: (R : 交换环范畴)
   定义体: by
   cases R
   exact localization_unit_isIso _
@@ -71,8 +71,8 @@ theorem IsLocalization.epi
   proof: ⟨fun _ _ h => CommRingCat.hom_ext ringHom_ext M congr(($h).hom)⟩
 
 中文:
-定理 IsLocalization.epi
-  结论: {R : 类型} [CommRing R] (M : Submonoid R) (S : Type _) [CommRing S]
+定理 是Localization.epi
+  结论: {R : 类型} [交换环 R] (M : 子幺半群 R) (S : 类型 _) [交换环 S]
   证明: ⟨fun _ _ h => CommRingCat.hom_ext ringHom_ext M congr(($h).hom)⟩
 
 Depends on / 依赖: CommRingCat, CommRingCat.hom_ext, hom_ext, ringHom_ext
@@ -91,7 +91,7 @@ instance Localization.epi
 
 中文:
 实例 Localization.epi
-  签名: {R : 类型} [CommRing R] (M : Submonoid R)
+  签名: {R : 类型} [交换环 R] (M : 子幺半群 R)
   定义体: IsLocalization.epi M _
 
 Depends on / 依赖: IsLocalization, IsLocalization.epi
@@ -114,7 +114,7 @@ instance Localization.epi'
 
 中文:
 实例 Localization.epi'
-  签名: {R : CommRingCat} (M : Submonoid R)
+  签名: {R : 交换环范畴} (M : 子幺半群 R)
   定义体: by
   rcases R with ⟨α, str⟩
   exact IsLocalization.epi M _
@@ -138,8 +138,8 @@ theorem CommRingCat.isLocalHom_comp
   proof: RingHom.isLocalHom_comp _ _
 
 中文:
-定理 CommRingCat.isLocalHom_comp
-  结论: {R S T : CommRingCat} (f : R ⟶ S) (g : S ⟶ T)
+定理 交换环范畴.isLocalHom_comp
+  结论: {R S T : 交换环范畴} (f : R ⟶ S) (g : S ⟶ T)
   证明: RingHom.isLocalHom_comp _ _
 
 Depends on / 依赖: RingHom, RingHom.isLocalHom_comp, isLocalHom_comp
@@ -161,8 +161,8 @@ theorem isLocalHom_of_iso
 
 中文:
 定理 isLocalHom_of_iso
-  条件: {R S : CommRingCat} (f : R ≅ S)
-  结论: IsLocalHom f.hom.hom
+  条件: {R S : 交换环范畴} (f : R ≅ S)
+  结论: 是Local态射 f.hom.hom
   证明: { map_nonunit := fun a ha => by
       convert! f.inv.hom.isUnit_map ha
       simp }
@@ -186,7 +186,7 @@ theorem isLocalHom_of_isIso
 
 中文:
 定理 isLocalHom_of_isIso
-  条件: {R S : CommRingCat} (f : R ⟶ S) [IsIso f]
+  条件: {R S : 交换环范畴} (f : R ⟶ S) [是同构 f]
   证明: isLocalHom_of_iso (asIso f)
 
 Depends on / 依赖: isLocalHom_of_iso

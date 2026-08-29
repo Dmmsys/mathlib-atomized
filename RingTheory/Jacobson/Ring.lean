@@ -63,10 +63,10 @@ class IsJacobsonRing
     - out' : forall I : Ideal R, I.IsRadical -> I.jacobson = I
 
 中文:
-类 IsJacobsonRing
-  参数: (R : 类型) [CommRing R]
+类 是Jacobson环
+  参数: (R : 类型) [交换环 R]
   公理与运算 (1 个):
-    - out' : 对任意 I : Ideal R, I.IsRadical -> I.jacobson = I
+    - out' : 对任意 I : 理想 R, I.IsRadical -> I.jacobson = I
 -/
 class IsJacobsonRing (R : Type*) [CommRing R] : Prop where
   out' : forall I : Ideal R, I.IsRadical -> I.jacobson = I
@@ -81,7 +81,7 @@ theorem isJacobsonRing_iff
 
 中文:
 定理 isJacobsonRing_iff
-  条件: {R} [CommRing R]
+  条件: {R} [交换环 R]
   证明: ⟨fun h => h.1, fun h => ⟨h⟩⟩
 -/
 theorem isJacobsonRing_iff {R} [CommRing R] :
@@ -97,8 +97,8 @@ theorem IsJacobsonRing.out
   proof: isJacobsonRing_iff.1
 
 中文:
-定理 IsJacobsonRing.out
-  条件: {R} [CommRing R]
+定理 是Jacobson环.out
+  条件: {R} [交换环 R]
   证明: isJacobsonRing_iff.1
 
 Depends on / 依赖: isJacobsonRing_iff
@@ -154,7 +154,7 @@ theorem isJacobsonRing_iff_sInf_maximal
 
 中文:
 定理 isJacobsonRing_iff_sInf_maximal
-  结论: IsJacobsonRing R ↔ 对任意 {I : Ideal R}, I.IsPrime ->
+  结论: 是Jacobson环 R ↔ 对任意 {I : 理想 R}, I.是素 ->
   证明: ⟨fun H _I h => eq_jacobson_iff_sInf_maximal.1 (H.out h.isRadical), fun H =>
     isJacobsonRing_iff_prime_eq.2 fun _P hP => eq_jacobson_iff_sInf_maximal.2 (H hP)⟩
 
@@ -176,7 +176,7 @@ theorem isJacobsonRing_iff_sInf_maximal'
 
 中文:
 定理 isJacobsonRing_iff_sInf_maximal'
-  结论: IsJacobsonRing R ↔ 对任意 {I : Ideal R}, I.IsPrime ->
+  结论: 是Jacobson环 R ↔ 对任意 {I : 理想 R}, I.是素 ->
   证明: ⟨fun H _I h => eq_jacobson_iff_sInf_maximal'.1 (H.out h.isRadical), fun H =>
     isJacobsonRing_iff_prime_eq.2 fun _P hP => eq_jacobson_iff_sInf_maximal'.2 (H hP)⟩
 
@@ -198,8 +198,8 @@ theorem Ideal.radical_eq_jacobson
     (H.out (radical_isRadical I) ▸ jacobson_mono le_radical)
 
 中文:
-定理 Ideal.radical_eq_jacobson
-  条件: [H : IsJacobsonRing R] (I : Ideal R)
+定理 理想.radical_eq_jacobson
+  条件: [H : 是Jacobson环 R] (I : 理想 R)
   结论: I.radical = I.jacobson
   证明: le_antisymm (le_sInf fun _J ⟨hJ, hJ_max⟩ => (IsPrime.radical_le_iff hJ_max.isPrime).mpr hJ)
     (H.out (radical_isRadical I) ▸ jacobson_mono le_radical)
@@ -230,7 +230,7 @@ theorem isJacobsonRing_of_surjective
 
 中文:
 定理 isJacobsonRing_of_surjective
-  条件: [H : IsJacobsonRing R]
+  条件: [H : 是Jacobson环 R]
   证明: by
   rintro ⟨f, hf⟩
   rw [isJacobsonRing_iff_sInf_maximal]
@@ -272,7 +272,7 @@ theorem isJacobsonRing_iso
 中文:
 定理 isJacobsonRing_iso
   条件: (e : R ≃+* S)
-  结论: IsJacobsonRing R ↔ IsJacobsonRing S where
+  结论: 是Jacobson环 R ↔ 是Jacobson环 S where
   证明: isJacobsonRing_of_surjective ⟨(e : R ->+* S), e.surjective⟩
   mpr _ := isJacobsonRing_of_surjective ⟨(e.symm : S ->+* R), e.symm.surjective⟩
 
@@ -298,8 +298,8 @@ theorem isJacobsonRing_of_isIntegral
   refine eq_bot_of_comap_eq_
 
 中文:
-定理 isJacobsonRing_of_isIntegral
-  条件: [Algebra R S] [Algebra.Is整数egral R S] [IsJacobsonRing R]
+定理 isJacobsonRing_of_is整数egral
+  条件: [代数 R S] [代数.是整 R S] [是Jacobson环 R]
   证明: by
   rw [isJacobsonRing_iff_prime_eq]
   intro P hP
@@ -339,8 +339,8 @@ theorem isJacobsonRing_of_isIntegral'
   isJacobsonRing_of_isIntegral (R := R)
 
 中文:
-定理 isJacobsonRing_of_isIntegral'
-  条件: (f : R ->+* S) (hf : f.Is整数egral) [IsJacobsonRing R]
+定理 isJacobsonRing_of_is整数egral'
+  条件: (f : R ->+* S) (hf : f.是整) [是Jacobson环 R]
   证明: let _ : Algebra R S := f.toAlgebra
   have : Algebra.IsIntegral R S := ⟨hf⟩
   isJacobsonRing_of_isIntegral (R := R)
@@ -378,8 +378,8 @@ theorem IsLocalization.isMaximal_iff_isMaximal_disjoint
     have : y ∉ (J.under R).1 := Set.disjoint
 
 中文:
-定理 IsLocalization.isMaximal_iff_isMaximal_disjoint
-  条件: [H : IsJacobsonRing R] (J : Ideal S)
+定理 是Localization.isMaximal_iff_isMaximal_disjoint
+  条件: [H : 是Jacobson环 R] (J : 理想 S)
   证明: by
   constructor
   · refine fun h => ⟨?_, fun hy =>
@@ -424,7 +424,7 @@ theorem IsLocalization.isMaximal_of_isMaximal_disjoint
   · rwa [disjoint_powers_iff_notMem_of_isPrime]
 
 中文:
-定理 IsLocalization.isMaximal_of_isMaximal_disjoint
+定理 是Localization.isMaximal_of_isMaximal_disjoint
   证明: by
   rw [isMaximal_iff_isMaximal_disjoint S y]; rw [under_map_of_isPrime_disjoint (powers y) S hI.isPrime]
   · exact ⟨hI, hy⟩
@@ -451,8 +451,8 @@ definition IsLocalization.orderIsoOfMaximal
 right_inv := fun ⟨_, hIm, hI⟩ => Subtype.ext under_map_of_isPr
 
 中文:
-定义 IsLocalization.orderIsoOfMaximal
-  签名: [IsJacobsonRing R]
+定义 是Localization.orderIsoOfMaximal
+  签名: [是Jacobson环 R]
   定义体: ⟨Ideal.comap (algebraMap R S) p.1, (isMaximal_iff_isMaximal_disjoint S y p.1).1 p.2⟩
   invFun p := ⟨Ideal.map (algebraMap R S) p.1, isMaximal_of_isMaximal_disjoint y p.1 p.2.1 p.2.2⟩
   left_inv J := Subtype.ext (map_under (powers y) S J)
@@ -489,8 +489,8 @@ theorem isJacobsonRing_localization
 
 中文:
 定理 isJacobsonRing_localization
-  条件: [H : IsJacobsonRing R]
-  结论: IsJacobsonRing S
+  条件: [H : 是Jacobson环 R]
+  结论: 是Jacobson环 S
   证明: by
   rw [isJacobsonRing_iff_prime_eq]
   refine fun P' hP' => le_antisymm ?_ le_jacobson
@@ -557,7 +557,7 @@ lemma mem_closure_X_union_C
 
 中文:
 引理 mem_closure_X_union_C
-  条件: {R : 类型} [Ring R] (p : R[X])
+  条件: {R : 类型} [环 R] (p : R[X])
   证明: by
   refine Polynomial.induction_on p ?_ ?_ ?_
   · intro r
@@ -605,7 +605,7 @@ theorem isIntegral_isLocalization_polynomial_quotient
       (quo
 
 中文:
-定理 isIntegral_isLocalization_polynomial_quotient
+定理 is整数egral_isLocalization_polynomial_quotient
   证明: by
   let P' : Ideal R := P.comap C
   let M : Submonoid (R ⧸ P') :=
@@ -746,7 +746,7 @@ theorem isJacobsonRing_polynomial_of_domain
 
 中文:
 定理 isJacobsonRing_polynomial_of_domain
-  结论: (R : 类型) [CommRing R] [IsDomain R]
+  结论: (R : 类型) [交换环 R] [是整环 R]
   证明: by
   by_cases Pb : P = ⊥
   · exact Pb.symm ▸
@@ -792,7 +792,7 @@ theorem isJacobsonRing_polynomial_of_isJacobsonRing
 
 中文:
 定理 isJacobsonRing_polynomial_of_isJacobsonRing
-  条件: (hR : IsJacobsonRing R)
+  条件: (hR : 是Jacobson环 R)
   证明: by
   rw [isJacobsonRing_iff_prime_eq]
   intro I hI
@@ -844,7 +844,7 @@ theorem isJacobsonRing_polynomial_iff_isJacobsonRing
 
 中文:
 定理 isJacobsonRing_polynomial_iff_isJacobsonRing
-  结论: IsJacobsonRing R[X] ↔ IsJacobsonRing R
+  结论: 是Jacobson环 R[X] ↔ 是Jacobson环 R
   证明: by
   refine ⟨?_, isJacobsonRing_polynomial_of_isJacobsonRing⟩
   intro H
@@ -868,8 +868,8 @@ instance [IsJacobsonRing
   body: isJacobsonRing_polynomial_iff_isJacobsonRing.mpr ‹IsJacobsonRing R›
 
 中文:
-实例 [IsJacobsonRing
-  签名: R] : IsJacobsonRing R[X]
+实例 [是Jacobson环
+  签名: R] : 是Jacobson环 R[X]
   定义体: isJacobsonRing_polynomial_iff_isJacobsonRing.mpr ‹IsJacobsonRing R›
 
 Depends on / 依赖: IsJacobsonRing, isJacobsonRing_polynomial_iff_isJacobsonRing, isJacobsonRing_polynomial_iff_isJacobsonRing.mpr
@@ -901,7 +901,7 @@ theorem isMaximal_comap_C_of_isMaximal
 
 中文:
 定理 isMaximal_comap_C_of_isMaximal
-  结论: [IsJacobsonRing R] [Nontrivial R]
+  结论: [是Jacobson环 R] [非平凡 R]
   证明: by
   let P' := comap (C : R ->+* R[X]) P
   have hP'_prime : P'.IsPrime := comap_isPrime C P
@@ -971,8 +971,8 @@ theorem quotient_mk_comp_C_isIntegral_of_jacobson'
   let M : Submonoid (R ⧸ 
 
 中文:
-定理 quotient_mk_comp_C_isIntegral_of_jacobson'
-  结论: [Nontrivial R] (hR : IsJacobsonRing R)
+定理 quotient_mk_comp_C_is整数egral_of_jacobson'
+  结论: [非平凡 R] (hR : 是Jacobson环 R)
   证明: by
   refine (isIntegral_quotientMap_iff _).mp ?_
   let P' : Ideal R := P.comap C
@@ -1032,7 +1032,7 @@ theorem quotient_mk_comp_C_isIntegral_of_isJacobsonRing
   have hPJ : P = (P.map f).comap f :=
 
 中文:
-定理 quotient_mk_comp_C_isIntegral_of_isJacobsonRing
+定理 quotient_mk_comp_C_is整数egral_of_isJacobsonRing
   证明: by
   let P' : Ideal R := P.comap C
   have : P'.IsPrime := comap_isPrime C P
@@ -1080,7 +1080,7 @@ theorem isMaximal_comap_C_of_isJacobsonRing
 
 中文:
 定理 isMaximal_comap_C_of_isJacobsonRing
-  结论: (P.comap (C : R ->+* R[X])).IsMaximal
+  结论: (P.comap (C : R ->+* R[X])).是极大
   证明: by
   rw [← @mk_ker _ _ P]; rw [RingHom.ker_eq_comap_bot]; rw [comap_comap]
   have := (bot_quotient_isMaximal_iff _).mpr hP
@@ -1110,7 +1110,7 @@ theorem comp_C_integral_of_surjective_of_isJacobsonRing
 
 中文:
 定理 comp_C_integral_of_surjective_of_isJacobsonRing
-  结论: {S : 类型} [Field S] (f : R[X] ->+* S)
+  结论: {S : 类型} [域 S] (f : R[X] ->+* S)
   证明: by
   have : (RingHom.ker f).IsMaximal := RingHom.ker_isMaximal_of_surjective f hf
   let g : R[X] ⧸ (RingHom.ker f) ->+* S := Ideal.Quotient.lift (RingHom.ker f) f fun _ h => h
@@ -1148,7 +1148,7 @@ theorem isJacobsonRing_MvPolynomial_fin
 
 中文:
 定理 isJacobsonRing_MvPolynomial_fin
-  条件: {R : 类型u} [CommRing R] [H : IsJacobsonRing R]
+  条件: {R : 类型u} [交换环 R] [H : 是Jacobson环 R]
 -/
 theorem isJacobsonRing_MvPolynomial_fin {R : Type u} [CommRing R] [H : IsJacobsonRing R] :
     forall n : Nat, IsJacobsonRing (MvPolynomial (Fin n) R)
@@ -1171,7 +1171,7 @@ instance isJacobsonRing
 
 中文:
 实例 isJacobsonRing
-  签名: {R : 类型} [CommRing R] {ι : 类型} [Finite ι] [IsJacobsonRing R]
+  签名: {R : 类型} [交换环 R] {ι : 类型} [有限 ι] [是Jacobson环 R]
   定义体: by
   cases nonempty_fintype ι
   let e := Fintype.equivFin ι
@@ -1224,7 +1224,7 @@ lemma aux_IH
 
 中文:
 引理 aux_IH
-  结论: {R : 类型u} {S : 类型v} {T : Type w}
+  结论: {R : 类型u} {S : 类型v} {T : 类型 w}
   证明: by
   let Q := P.comap v.toAlgHom.toRingHom
   have hw : Ideal.map v Q = P := map_comap_of_surjective v v.surjective P
@@ -1277,7 +1277,7 @@ theorem quotient_mk_comp_C_isIntegral_of_isJacobsonRing'
   | succ n IH => apply aux_IH IH (finSuccEquiv R n).symm P hP
 
 中文:
-定理 quotient_mk_comp_C_isIntegral_of_isJacobsonRing'
+定理 quotient_mk_comp_C_is整数egral_of_isJacobsonRing'
   证明: by
   induction n with
   | zero =>
@@ -1309,8 +1309,8 @@ theorem quotient_mk_comp_C_isIntegral_of_isJacobsonRing
   infer_instance
 
 中文:
-定理 quotient_mk_comp_C_isIntegral_of_isJacobsonRing
-  结论: {R : 类型} [CommRing R] [IsJacobsonRing R]
+定理 quotient_mk_comp_C_is整数egral_of_isJacobsonRing
+  结论: {R : 类型} [交换环 R] [是Jacobson环 R]
   证明: by
   change RingHom.IsIntegral (algebraMap R (MvPolynomial (Fin n) R ⧸ P))
   apply quotient_mk_comp_C_isIntegral_of_isJacobsonRing'
@@ -1341,7 +1341,7 @@ theorem comp_C_integral_of_surjective_of_isJacobsonRing
 
 中文:
 定理 comp_C_integral_of_surjective_of_isJacobsonRing
-  结论: {R : 类型} [CommRing R] [IsJacobsonRing R]
+  结论: {R : 类型} [交换环 R] [是Jacobson环 R]
   证明: by
   cases nonempty_fintype σ
   have e := (Fintype.equivFin σ).symm
@@ -1390,7 +1390,7 @@ lemma isJacobsonRing_of_finiteType
 
 中文:
 引理 isJacobsonRing_of_finiteType
-  结论: {A B : 类型} [CommRing A] [CommRing B]
+  结论: {A B : 类型} [交换环 A] [交换环 B]
   证明: by
   obtain ⟨ι, hι, f, hf⟩ := Algebra.FiniteType.iff_quotient_mvPolynomial'.mp ‹_›
   exact isJacobsonRing_of_surjective ⟨f.toRingHom, hf⟩
@@ -1413,8 +1413,8 @@ lemma RingHom.FiniteType.isJacobsonRing
 @[stacks 0CY7 "See also https://en.wikipedia.org/wiki/Zariski%27s_lemma."]
 
 中文:
-引理 RingHom.FiniteType.isJacobsonRing
-  结论: {A B : 类型} [CommRing A] [CommRing B]
+引理 环态射.有限型.isJacobsonRing
+  结论: {A B : 类型} [交换环 A] [交换环 B]
   证明: @isJacobsonRing_of_finiteType A B _ _ f.toAlgebra _ H
 
 @[stacks 0CY7 "See also https://en.wikipedia.org/wiki/Zariski%27s_lemma."]
@@ -1441,7 +1441,7 @@ lemma finite_of_finite_type_of_isJacobsonRing
 
 中文:
 引理 finite_of_finite_type_of_isJacobsonRing
-  结论: (R S : 类型) [CommRing R] [Field S]
+  结论: (R S : 类型) [交换环 R] [域 S]
   证明: by
   obtain ⟨ι, hι, f, hf⟩ := Algebra.FiniteType.iff_quotient_mvPolynomial'.mp ‹_›
   have : (algebraMap R S).IsIntegral := by
@@ -1471,7 +1471,7 @@ lemma RingHom.finite_iff_finiteType_of_isJacobsonRing
     by intro; algebraize [f]; exact finite_of_finite_type_of_isJacobsonRing R S⟩
 
 中文:
-引理 RingHom.finite_iff_finiteType_of_isJacobsonRing
+引理 环态射.finite_iff_finiteType_of_isJacobsonRing
   证明: ⟨RingHom.FiniteType.of_finite,
     by intro; algebraize [f]; exact finite_of_finite_type_of_isJacobsonRing R S⟩
 

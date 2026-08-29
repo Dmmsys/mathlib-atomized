@@ -45,7 +45,7 @@ definition unitary
 
 中文:
 定义 unitary
-  签名: (R : 类型) [Monoid R] [StarMul R]
+  签名: (R : 类型) [幺半群 R] [StarMul R]
   定义体: { U | star U * U = 1 ∧ U * star U = 1 }
   one_mem' := by simp only [mul_one, and_self_iff, Set.mem_ofPred_eq, star_one]
   mul_mem' := @fun U B ⟨hA₁, hA₂⟩ ⟨hB₁, hB₂⟩ => by
@@ -199,7 +199,7 @@ instance :
 
 中文:
 实例 :
-  签名: Star (unitary R)
+  签名: 对合 (unitary R)
   定义体: ⟨fun U => ⟨star U, star_mem U.prop⟩⟩
 
 @[simp, norm_cast]
@@ -330,7 +330,7 @@ instance :
 
 中文:
 实例 :
-  签名: Group (unitary R)
+  签名: 群 (unitary R)
   定义体: { Submonoid.toMonoid _ with
     inv := star
     inv_mul_cancel := star_mul_self }
@@ -406,7 +406,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (unitary R)
+  签名: 可居 (unitary R)
   定义体: ⟨1⟩
 -/
 instance : Inhabited (unitary R) :=
@@ -440,7 +440,7 @@ theorem star_eq_inv'
 
 中文:
 定理 star_eq_inv'
-  结论: (star : unitary R -> unitary R) = Inv.inv
+  结论: (star : unitary R -> unitary R) = 取逆.inv
   证明: rfl
 -/
 theorem star_eq_inv' : (star : unitary R -> unitary R) = Inv.inv :=
@@ -483,7 +483,7 @@ Subtype.ext Units.ext_iff.mp h
 
 中文:
 定理 toUnits_injective
-  结论: Function.Injective (toUnits : unitary R -> Rˣ)
+  结论: 函数.单射 (toUnits : unitary R -> Rˣ)
   证明: fun _ _ h =>
 Subtype.ext Units.ext_iff.mp h
 -/
@@ -502,8 +502,8 @@ theorem _root_.IsUnit.mem_unitary_iff_star_mul_self
   exact left_inv_eq_right_inv h_mul u.mul_inv ▸ u.mul_inv
 
 中文:
-定理 _root_.IsUnit.mem_unitary_iff_star_mul_self
-  条件: {u : R} (hu : IsUnit u)
+定理 _root_.是单位.mem_unitary_iff_star_mul_self
+  条件: {u : R} (hu : 是单位 u)
   证明: by
   rw [mem_iff]; rw [and_iff_left_of_imp fun h_mul => ?_]
   lift u to Rˣ using hu
@@ -530,8 +530,8 @@ alias ⟨_, _root_.IsUnit.mem_unitary_of_star_mul_self⟩ := IsUnit.mem_unitary_
 alias ⟨_, _root_.IsUnit.mem_unitary_of_mul_star_self⟩ := IsUnit.mem_unitary_iff_mul_star_self
 
 中文:
-定理 _root_.IsUnit.mem_unitary_iff_mul_star_self
-  条件: {u : R} (hu : IsUnit u)
+定理 _root_.是单位.mem_unitary_iff_mul_star_self
+  条件: {u : R} (hu : 是单位 u)
   证明: by
   rw [← star_mem_iff]; rw [hu.star.mem_unitary_iff_star_mul_self]; rw [star_star]
 
@@ -559,7 +559,7 @@ theorem isUnit_coe
 中文:
 定理 isUnit_coe
   条件: {U : unitary R}
-  结论: IsUnit (U : R)
+  结论: 是单位 (U : R)
   证明: (Unitary.toUnits _).isUnit
 
 Depends on / 依赖: Unitary, Unitary.toUnits, isUnit, toUnits
@@ -611,7 +611,7 @@ lemma mul_inv_mem_iff
 
 中文:
 引理 mul_inv_mem_iff
-  条件: {G : 类型} [Group G] [StarMul G] (a b : G)
+  条件: {G : 类型} [群 G] [StarMul G] (a b : G)
   证明: by
   rw [(Group.isUnit _).mem_unitary_iff_star_mul_self]; rw [star_mul]; rw [star_inv]; rw [mul_assoc]; rw [inv_mul_eq_iff_eq_mul]; rw [mul_one]; rw [← mul_assoc]; rw [mul_inv_eq_iff_eq_mul]
 
@@ -632,7 +632,7 @@ lemma inv_mul_mem_iff
 
 中文:
 引理 inv_mul_mem_iff
-  条件: {G : 类型} [Group G] [StarMul G] (a b : G)
+  条件: {G : 类型} [群 G] [StarMul G] (a b : G)
   证明: by
   simpa [← mul_inv_rev] using mul_inv_mem_iff a⁻¹ b⁻¹
 
@@ -653,8 +653,8 @@ theorem _root_.Units.unitary_eq
   simp [mem_iff, Units.ext_iff]
 
 中文:
-定理 _root_.Units.unitary_eq
-  结论: unitary Rˣ = (unitary R).comap (Units.coeHom R)
+定理 _root_.单位群.unitary_eq
+  结论: unitary Rˣ = (unitary R).comap (单位群.coeHom R)
   证明: by
   ext
   simp [mem_iff, Units.ext_iff]
@@ -675,7 +675,7 @@ lemma _root_.Units.mul_inv_mem_unitary
   simp [← mul_inv_mem_iff, Units.unitary_eq]
 
 中文:
-引理 _root_.Units.mul_inv_mem_unitary
+引理 _root_.单位群.mul_inv_mem_unitary
   条件: (a b : Rˣ)
   证明: by
   simp [← mul_inv_mem_iff, Units.unitary_eq]
@@ -694,7 +694,7 @@ lemma _root_.Units.inv_mul_mem_unitary
   simp [← inv_mul_mem_iff, Units.unitary_eq]
 
 中文:
-引理 _root_.Units.inv_mul_mem_unitary
+引理 _root_.单位群.inv_mul_mem_unitary
   条件: (a b : Rˣ)
   证明: by
   simp [← inv_mul_mem_iff, Units.unitary_eq]
@@ -756,7 +756,7 @@ lemma _root_.isStarNormal_of_mem_unitary
 中文:
 引理 _root_.isStarNormal_of_mem_unitary
   条件: {u : R} (hu : u in unitary R)
-  结论: IsStarNormal u
+  结论: 是StarNormal u
   证明: coe_isStarNormal ⟨u, hu⟩
 
 Depends on / 依赖: coe_isStarNormal
@@ -903,7 +903,7 @@ theorem Unitary.inv_mem
   exact hg.symm
 
 中文:
-定理 Unitary.inv_mem
+定理 酉.inv_mem
   条件: {g : G} (hg : g in unitary G)
   结论: g⁻¹ in unitary G
   证明: by
@@ -930,7 +930,7 @@ definition unitarySubgroup
 
 中文:
 定义 unitarySubgroup
-  签名: : Subgroup G where
+  签名: : 子群 G where
   定义体: unitary G
   inv_mem' := Unitary.inv_mem
 
@@ -1058,7 +1058,7 @@ instance :
 
 中文:
 实例 :
-  签名: SMul (unitary R) (unitary A)
+  签名: 标量乘法 (unitary R) (unitary A)
   定义体: ⟨r • a, smul_mem r a.prop⟩
 
 @[simp, norm_cast]
@@ -1097,7 +1097,7 @@ mul_smul _ _ _ := Subtype.ext mul_smul ..
 
 中文:
 实例 :
-  签名: MulAction (unitary R) (unitary A)
+  签名: 乘法作用 (unitary R) (unitary A)
   定义体: Subtype.ext one_smul ..
 mul_smul _ _ _ := Subtype.ext mul_smul ..
 
@@ -1117,7 +1117,7 @@ instance :
 
 中文:
 实例 :
-  签名: StarModule (unitary R) (unitary A)
+  签名: 对合模 (unitary R) (unitary A)
   定义体: Subtype.ext star_smul (_ : R) _
 
 Depends on / 依赖: Subtype, Subtype.ext, star_smul
@@ -1145,8 +1145,8 @@ instance [SMulCommClass
   body: Subtype.ext smul_comm _ (_ : S) (_ : A)
 
 中文:
-实例 [SMulCommClass
-  签名: R S A] : SMulCommClass (unitary R) (unitary S) (unitary A) where
+实例 [标量交换类
+  签名: R S A] : 标量交换类 (unitary R) (unitary S) (unitary A) where
   定义体: Subtype.ext smul_comm _ (_ : S) (_ : A)
 
 Depends on / 依赖: Subtype, Subtype.ext, smul_comm
@@ -1163,8 +1163,8 @@ instance [IsScalarTower
   body: Subtype.ext smul_assoc _ (_ : S) (_ : A)
 
 中文:
-实例 [IsScalarTower
-  签名: R S S] [SMulCommClass R S S] [IsScalarTower R S A] :
+实例 [标量塔
+  签名: R S S] [标量交换类 R S S] [标量塔 R S A] :
   定义体: Subtype.ext smul_assoc _ (_ : S) (_ : A)
 
 Depends on / 依赖: Subtype, Subtype.ext, smul_assoc
@@ -1193,7 +1193,7 @@ lemma map_mem
 
 中文:
 引理 map_mem
-  结论: {F : 类型} [FunLike F R S] [StarHomClass F R S] [MonoidHomClass F R S]
+  结论: {F : 类型} [函数状 F R S] [对合态射类 F R S] [幺半群态射类 F R S]
   证明: by
   rw [mem_iff] at hr
   simpa [map_star, map_mul] using! And.intro congr(f $(hr.1)) congr(f $(hr.2))
@@ -1331,7 +1331,7 @@ lemma map_injective
 
 中文:
 引理 map_injective
-  条件: {f : R ->⋆* S} (hf : Function.Injective f)
+  条件: {f : R ->⋆* S} (hf : 函数.单射 f)
   证明: Subtype.map_injective (fun _ => map_mem f) hf
 
 Depends on / 依赖: Subtype, Subtype.map_injective, map_injective, map_mem
@@ -1496,7 +1496,7 @@ left_inv _ := Subtype.ext Units.ext rfl
 
 中文:
 定义 _root_.unitarySubgroupUnitsEquiv
-  签名: {M : 类型} [Monoid M] [StarMul M]
+  签名: {M : 类型} [幺半群 M] [StarMul M]
   定义体: ⟨x.val, congr_arg Units.val x.prop.1, congr_arg Units.val x.prop.2⟩
   invFun x := ⟨⟨x, star x, x.prop.2, x.prop.1⟩, Units.ext x.prop.1, Units.ext x.prop.2⟩
   map_mul' _ _ := rfl
@@ -1529,7 +1529,7 @@ instance :
 
 中文:
 实例 :
-  签名: CommGroup (unitary R)
+  签名: 交换群 (unitary R)
   定义体: { (inferInstance : Group (unitary R)), Submonoid.toCommMonoid _ with }
 
 Depends on / 依赖: Submonoid, Submonoid.toCommMonoid, toCommMonoid, unitary
@@ -1682,7 +1682,7 @@ instance :
 
 中文:
 实例 :
-  签名: Neg (unitary R)
+  签名: 取负 (unitary R)
   定义体: ⟨-U, by simp [mem_iff, star_neg]⟩
 
 @[norm_cast]
@@ -1722,7 +1722,7 @@ instance :
 
 中文:
 实例 :
-  签名: HasDistribNeg (unitary R)
+  签名: 有DistribNeg (unitary R)
   定义体: Subtype.coe_injective.hasDistribNeg _ coe_neg (unitary R).coe_mul
 
 Depends on / 依赖: Subtype, Subtype.coe_injective.hasDistribNeg, coe_injective, coe_mul, coe_neg, hasDistribNeg, unitary
@@ -1795,7 +1795,7 @@ theorem mem_iff_eq_one_or_eq_neg_one
 
 中文:
 定理 mem_iff_eq_one_or_eq_neg_one
-  结论: [Ring R] [StarRing R] [TrivialStar R] [NoZeroDivisors R]
+  结论: [环 R] [对合环 R] [TrivialStar R] [无零因子 R]
   证明: by
   simp [mem_iff, mul_self_eq_one_iff]
 
@@ -1820,8 +1820,8 @@ theorem IsStarProjection.two_mul_sub_one_mem_unitary
     mul_one, sub_sub_cancel, and_self]
 
 中文:
-定理 IsStarProjection.two_mul_sub_one_mem_unitary
-  结论: {R : 类型} [Ring R] [StarRing R] {p : R}
+定理 是StarProjection.two_mul_sub_one_mem_unitary
+  结论: {R : 类型} [环 R] [对合环 R] {p : R}
   证明: by
   simp only [two_mul, Unitary.mem_iff, star_sub, star_add,
     hp.isSelfAdjoint.star_eq, star_one, mul_sub, mul_add,

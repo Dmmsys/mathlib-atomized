@@ -48,8 +48,8 @@ structure Basis
     - j_mul_i : j * i = c₂ • j - k
 
 中文:
-结构 Basis
-  参数: {R : 类型} (A : 类型) [CommRing R] [Ring A] [Algebra R A] (c₁ c₂ c₃ : R)
+结构 基
+  参数: {R : 类型} (A : 类型) [交换环 R] [环 A] [代数 R A] (c₁ c₂ c₃ : R)
   公理与运算 (7 个):
     - i : A
     - j : A
@@ -94,7 +94,7 @@ theorem ext
 中文:
 定理 ext
   条件: ⦃q₁ q₂
-  结论: Basis A c₁ c₂ c₃⦄ (hi : q₁.i = q₂.i)
+  结论: 基 A c₁ c₂ c₃⦄ (hi : q₁.i = q₂.i)
   证明: by
   cases q₁; cases q₂; grind
 -/
@@ -121,7 +121,7 @@ definition self
 
 中文:
 定义 self
-  签名: : Basis ℍ[R,c₁,c₂,c₃] c₁ c₂ c₃ where
+  签名: : 基 ℍ[R,c₁,c₂,c₃] c₁ c₂ c₃ where
   定义体: ⟨0, 1, 0, 0⟩
   i_mul_i := by ext <;> simp
   j := ⟨0, 0, 1, 0⟩
@@ -149,7 +149,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (Basis ℍ[R,c₁,c₂,c₃] c₁ c₂ c₃)
+  签名: 可居 (基 ℍ[R,c₁,c₂,c₃] c₁ c₂ c₃)
   定义体: ⟨Basis.self R⟩
 
 Depends on / 依赖: Basis.self
@@ -484,7 +484,7 @@ theorem range_liftHom
 
 中文:
 定理 range_liftHom
-  条件: (B : Basis A c₁ c₂ c₃)
+  条件: (B : 基 A c₁ c₂ c₃)
   证明: by
   apply le_antisymm
   · rintro x ⟨y, rfl⟩
@@ -570,7 +570,7 @@ definition lift
 
 中文:
 定义 lift
-  签名: : Basis A c₁ c₂ c₃ ≃ (ℍ[R,c₁,c₂,c₃] ->ₐ[R] A) where
+  签名: : 基 A c₁ c₂ c₃ ≃ (ℍ[R,c₁,c₂,c₃] ->ₐ[R] A) where
   定义体: Basis.liftHom
   invFun := (Basis.self R).compHom
   left_inv q := by ext <;> simp [Basis.lift]

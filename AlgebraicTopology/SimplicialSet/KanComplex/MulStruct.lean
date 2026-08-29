@@ -103,7 +103,7 @@ lemma δ_map
 
 中文:
 引理 δ_map
-  条件: (f : X.PtSimplex (n + 1) x) (i : Fin (n + 2))
+  条件: (f : X.PtSimplex (n + 1) x) (i : 有限集 (n + 2))
   证明: comp_map_eq_const _ _
 
 Depends on / 依赖: comp_map_eq_const
@@ -217,13 +217,13 @@ structure RelStruct
 
 中文:
 结构 RelStruct
-  参数: (f g : X.PtSimplex n x) (i : Fin (n + 1))
+  参数: (f g : X.PtSimplex n x) (i : 有限集 (n + 1))
   公理与运算 (5 个):
     - map : Δ[n + 1] ⟶ X
     - δ_castSucc_map : stdSimplex.δ i.castSucc ≫ map = f.map  [默认: by cat_disch]
     - δ_succ_map : stdSimplex.δ i.succ ≫ map = g.map  [默认: by cat_disch]
-    - δ_map_of_lt((j : Fin (n + 2)) (hj : j < i.castSucc)) : stdSimplex.δ j ≫ map = const x  [默认: by cat_disch]
-    - δ_map_of_gt((j : Fin (n + 2)) (hj : i.succ < j)) : stdSimplex.δ j ≫ map = const x  [默认: by cat_disch]
+    - δ_map_of_lt((j : 有限集 (n + 2)) (hj : j < i.castSucc)) : stdSimplex.δ j ≫ map = const x  [默认: by cat_disch]
+    - δ_map_of_gt((j : 有限集 (n + 2)) (hj : i.succ < j)) : stdSimplex.δ j ≫ map = const x  [默认: by cat_disch]
 
 Depends on / 依赖: castSucc, cat_disch, g.map, i.castSucc, i.succ, stdSimplex
 -/
@@ -260,7 +260,7 @@ definition refl
 
 中文:
 定义 refl
-  签名: (f : X.PtSimplex n x) (i : Fin (n + 1))
+  签名: (f : X.PtSimplex n x) (i : 有限集 (n + 1))
   定义体: stdSimplex.σ i ≫ f.map
   δ_castSucc_map := by rw [CosimplicialObject.δ_comp_σ_self_assoc]
   δ_succ_map := by rw [CosimplicialObject.δ_comp_σ_succ_assoc]
@@ -305,7 +305,7 @@ definition copy
 
 中文:
 定义 copy
-  签名: {f g : X.PtSimplex n x} {i : Fin (n + 1)} (r : RelStruct f g i)
+  签名: {f g : X.PtSimplex n x} {i : 有限集 (n + 1)} (r : RelStruct f g i)
   定义体: r.map
   δ_castSucc_map := by rw [δ_castSucc_map, hf]
   δ_succ_map := by rw [δ_succ_map, hg]
@@ -335,7 +335,7 @@ definition ofEq
 
 中文:
 定义 ofEq
-  签名: {f g : X.PtSimplex n x} (h : f = g) (i : Fin (n + 1))
+  签名: {f g : X.PtSimplex n x} (h : f = g) (i : 有限集 (n + 1))
   定义体: (refl f i).copy rfl h
 -/
 def ofEq {f g : X.PtSimplex n x} (h : f = g) (i : Fin (n + 1)) :
@@ -360,14 +360,14 @@ structure MulStruct
 
 中文:
 结构 MulStruct
-  参数: (f g fg : X.PtSimplex n x) (i : Fin n)
+  参数: (f g fg : X.PtSimplex n x) (i : 有限集 n)
   公理与运算 (6 个):
     - map : Δ[n + 1] ⟶ X
     - δ_castSucc_castSucc_map : stdSimplex.δ (i.castSucc.castSucc) ≫ map = g.map  [默认: by cat_disch]
     - δ_succ_castSucc_map : stdSimplex.δ (i.castSucc.succ) ≫ map = fg.map  [默认: by cat_disch]
     - δ_succ_succ_map : stdSimplex.δ (i.succ.succ) ≫ map = f.map  [默认: by cat_disch]
-    - δ_map_of_lt((j : Fin (n + 2)) (hj : j < i.castSucc.castSucc)) : stdSimplex.δ j ≫ map = const x  [默认: by cat_disch]
-    - δ_map_of_gt((j : Fin (n + 2)) (hj : i.succ.succ < j)) : stdSimplex.δ j ≫ map = const x  [默认: by cat_disch]
+    - δ_map_of_lt((j : 有限集 (n + 2)) (hj : j < i.castSucc.castSucc)) : stdSimplex.δ j ≫ map = const x  [默认: by cat_disch]
+    - δ_map_of_gt((j : 有限集 (n + 2)) (hj : i.succ.succ < j)) : stdSimplex.δ j ≫ map = const x  [默认: by cat_disch]
 
 Depends on / 依赖: castSucc, cat_disch, f.map, fg.map, i.castSucc.castSucc, i.castSucc.succ, i.succ.succ, stdSimplex
 -/
@@ -402,7 +402,7 @@ definition op
 
 中文:
 定义 op
-  签名: {f g fg : X.PtSimplex n x} {i : Fin n} (h : MulStruct f g fg i) {j : Fin n}
+  签名: {f g fg : X.PtSimplex n x} {i : 有限集 n} (h : MulStruct f g fg i) {j : 有限集 n}
   定义体: yonedaEquiv.symm (opObjEquiv.symm (yonedaEquiv h.map))
   δ_castSucc_castSucc_map := by
     rw [stdSimplex.δ_comp_yonedaEquiv_symm]; rw [op_δ]; rw [Equiv.apply_symm_apply]; rw [← stdSimplex.yonedaEquiv_δ_comp]; rw [opEquiv_symm_apply_map]; rw [← h.δ_succ_succ_map]; rw [Fin.rev_castSucc]; rw [Fin.rev_
@@ -444,7 +444,7 @@ definition unop
 
 中文:
 定义 unop
-  签名: {f g fg : X.PtSimplex n x} {i : Fin n} (h : MulStruct g.op f.op fg.op i) {j : Fin n}
+  签名: {f g fg : X.PtSimplex n x} {i : 有限集 n} (h : MulStruct g.op f.op fg.op i) {j : 有限集 n}
   定义体: yonedaEquiv.symm (opObjEquiv (yonedaEquiv h.map))
   δ_castSucc_castSucc_map := by
     simp [stdSimplex.δ_comp_yonedaEquiv_symm, δ_opObjEquiv,
@@ -497,7 +497,7 @@ definition relStructCastSuccEquivMulStruct
 
 中文:
 定义 relStructCastSuccEquivMulStruct
-  签名: {f g : X.PtSimplex n x} {i : Fin n}
+  签名: {f g : X.PtSimplex n x} {i : 有限集 n}
   定义体: { map := h.map
       δ_map_of_gt j hj := h.δ_map_of_gt j (lt_trans (by simp) hj) }
   invFun h :=
@@ -541,7 +541,7 @@ definition relStructSuccEquivMulStruct
 
 中文:
 定义 relStructSuccEquivMulStruct
-  签名: {f g : X.PtSimplex n x} {i : Fin n}
+  签名: {f g : X.PtSimplex n x} {i : 有限集 n}
   定义体: { map := h.map
       δ_map_of_lt j hj := h.δ_map_of_lt j (lt_trans hj (by simp))
       δ_succ_castSucc_map := by rw [← Fin.castSucc_succ, h.δ_castSucc_map] }
@@ -582,7 +582,7 @@ definition oneMul
 
 中文:
 定义 oneMul
-  签名: (f : X.PtSimplex n x) (i : Fin n)
+  签名: (f : X.PtSimplex n x) (i : 有限集 n)
   定义体: relStructCastSuccEquivMulStruct (.refl f i.castSucc)
 
 Depends on / 依赖: castSucc, i.castSucc, relStructCastSuccEquivMulStruct
@@ -605,7 +605,7 @@ definition mulOne
 
 中文:
 定义 mulOne
-  签名: (f : X.PtSimplex n x) (i : Fin n)
+  签名: (f : X.PtSimplex n x) (i : 有限集 n)
   定义体: relStructSuccEquivMulStruct (.refl f i.succ)
 
 Depends on / 依赖: i.succ, relStructSuccEquivMulStruct

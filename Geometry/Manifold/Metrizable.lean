@@ -35,8 +35,8 @@ theorem Manifold.metrizableSpace
   exact metrizableSpace_of_t3_secondCountable M
 
 中文:
-定理 Manifold.metrizableSpace
-  结论: {E : 类型} [NormedAddCommGroup E] [NormedSpace 实数 E]
+定理 流形.metrizableSpace
+  结论: {E : 类型} [赋范交换加群 E] [赋范空间 实数 E]
   证明: by
   have := I.locallyCompactSpace; have := ChartedSpace.locallyCompactSpace H M
   have := I.secondCountableTopology

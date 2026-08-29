@@ -47,7 +47,7 @@ definition affineOverMk
 
 中文:
 定义 affineOverMk
-  签名: {P : Morphism命题erty Scheme.{u}} {R : CommRingCat.{u}}
+  签名: {P : MorphismProperty 概形.{u}} {R : 交换环范畴.{u}}
   定义体: .mk ⊤ f hf
 -/
 noncomputable def affineOverMk {P : MorphismProperty Scheme.{u}} {R : CommRingCat.{u}}

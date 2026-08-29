@@ -32,7 +32,7 @@ definition dissipate
 
 中文:
 定义 dissipate
-  签名: [LE α] (s : α -> Set β) (x : α)
+  签名: [LE α] (s : α -> 集合 β) (x : α)
   定义体: ⋂ y <= x, s y
 -/
 def dissipate [LE α] (s : α -> Set β) (x : α) : Set β :=
@@ -68,8 +68,8 @@ theorem dissipate_eq_biInter_lt
 @[simp]
 
 中文:
-定理 dissipate_eq_biInter_lt
-  条件: {s : 自然数 -> Set β} {n : 自然数}
+定理 dissipate_eq_bi整数er_lt
+  条件: {s : 自然数 -> 集合 β} {n : 自然数}
   结论: dissipate s n = ⋂ k < n + 1, s k
   证明: by
   simp_rw [Nat.lt_add_one_iff, dissipate]
@@ -136,7 +136,7 @@ theorem iInter_subset_dissipate
   exact fun x h => iInter_subset_of_subset x fun ⦃a⦄ a => a
 
 中文:
-定理 iInter_subset_dissipate
+定理 i整数er_subset_dissipate
   条件: [LE α] (x : α)
   结论: ⋂ i, s i subseteq dissipate s x
   证明: by
@@ -162,8 +162,8 @@ theorem antitone_dissipate
 
 中文:
 定理 antitone_dissipate
-  条件: [Preorder α]
-  结论: Antitone (dissipate s)
+  条件: [预序 α]
+  结论: 递减 (dissipate s)
   证明: fun _ _ hab => biInter_subset_biInter_left fun _ hz => le_trans hz hab
 
 @[gcongr]
@@ -186,7 +186,7 @@ theorem dissipate_subset_dissipate
 
 中文:
 定理 dissipate_subset_dissipate
-  条件: [Preorder α] {x y} (h : y <= x)
+  条件: [预序 α] {x y} (h : y <= x)
   证明: antitone_dissipate h
 
 @[simp]
@@ -215,8 +215,8 @@ theorem biInter_dissipate
 @[simp]
 
 中文:
-定理 biInter_dissipate
-  条件: [Preorder α] {s : α -> Set β} {x : α}
+定理 bi整数er_dissipate
+  条件: [预序 α] {s : α -> 集合 β} {x : α}
   证明: by
   apply Subset.antisymm
   · apply iInter_mono fun z y hy => ?_
@@ -254,8 +254,8 @@ theorem iInter_dissipate
 @[simp]
 
 中文:
-定理 iInter_dissipate
-  条件: [Preorder α]
+定理 i整数er_dissipate
+  条件: [预序 α]
   结论: ⋂ x, dissipate s x = ⋂ x, s x
   证明: by
   apply Subset.antisymm <;> simp_rw [subset_def, dissipate_def, mem_iInter]
@@ -286,7 +286,7 @@ lemma dissipate_bot
 
 中文:
 引理 dissipate_bot
-  条件: [PartialOrder α] [OrderBot α] (s : α -> Set β)
+  条件: [偏序 α] [有底序 α] (s : α -> 集合 β)
   结论: dissipate s ⊥ = s ⊥
   证明: by
   simp [dissipate_def]
@@ -313,7 +313,7 @@ lemma dissipate_zero_nat
 
 中文:
 引理 dissipate_zero_nat
-  条件: (s : 自然数 -> Set β)
+  条件: (s : 自然数 -> 集合 β)
   结论: dissipate s 0 = s 0
   证明: by
   simp [dissipate_def]
@@ -339,7 +339,7 @@ theorem dissipate_succ
 
 中文:
 定理 dissipate_succ
-  条件: (s : 自然数 -> Set α) (n : 自然数)
+  条件: (s : 自然数 -> 集合 α) (n : 自然数)
   证明: by
   ext x
   simp_all only [dissipate_def, mem_iInter, mem_inter_iff]
@@ -368,8 +368,8 @@ lemma exists_subset_dissipate_of_directed
     exact ⟨k, by simp; grind⟩
 
 中文:
-引理 exists_subset_dissipate_of_directed
-  结论: {s : 自然数 -> Set α}
+引理 存在_subset_dissipate_of_directed
+  结论: {s : 自然数 -> 集合 α}
   证明: by
   induction n with
   | zero => use 0; simp [dissipate_def]
@@ -400,7 +400,7 @@ lemma directed_dissipate
 
 中文:
 引理 directed_dissipate
-  条件: {s : 自然数 -> Set α}
+  条件: {s : 自然数 -> 集合 α}
   结论: Directed (· ⊇ ·) (dissipate s)
   证明: antitone_dissipate.directed_ge
 
@@ -423,8 +423,8 @@ lemma exists_dissipate_eq_empty_iff_of_directed
   exact (h m).mono hm
 
 中文:
-引理 exists_dissipate_eq_empty_iff_of_directed
-  条件: {s : 自然数 -> Set α} (hd : Directed (· ⊇ ·) s)
+引理 存在_dissipate_eq_empty_iff_of_directed
+  条件: {s : 自然数 -> 集合 α} (hd : Directed (· ⊇ ·) s)
   证明: by
   refine ⟨?_, fun ⟨n, hn⟩ => ⟨n, subset_eq_empty (dissipate_subset le_rfl) hn⟩⟩
   contrapose!

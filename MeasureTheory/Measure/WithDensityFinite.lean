@@ -56,8 +56,8 @@ definition Measure.toFiniteAux
   if IsFiniteMeasure μ then μ else (exists_isFiniteMeasure_absolutelyContinuous μ).choose
 
 中文:
-定义 Measure.toFiniteAux
-  签名: (μ : Measure α) [SFinite μ]
+定义 测度.toFiniteAux
+  签名: (μ : 测度 α) [SFinite μ]
   定义体: letI := Classical.dec
   if IsFiniteMeasure μ then μ else (exists_isFiniteMeasure_absolutelyContinuous μ).choose
 
@@ -78,8 +78,8 @@ definition Measure.toFinite
 @[local simp]
 
 中文:
-定义 Measure.toFinite
-  签名: (μ : Measure α) [SFinite μ]
+定义 测度.toFinite
+  签名: (μ : 测度 α) [SFinite μ]
   定义体: μ.toFiniteAux[|univ]
 
 @[local simp]
@@ -147,7 +147,7 @@ theorem isFiniteMeasure_toFiniteAux
 中文:
 定理 isFiniteMeasure_toFiniteAux
   条件: [SFinite μ]
-  结论: IsFiniteMeasure μ.toFiniteAux
+  结论: 是有限测度 μ.toFiniteAux
   证明: by
   rw [Measure.toFiniteAux]
   split_ifs
@@ -206,7 +206,7 @@ lemma toFinite_apply_eq_zero_iff
 
 中文:
 引理 toFinite_apply_eq_zero_iff
-  条件: [SFinite μ] {s : Set α}
+  条件: [SFinite μ] {s : 集合 α}
   结论: μ.toFinite s = 0 ↔ μ s = 0
   证明: by
   simp only [← compl_mem_ae_iff, ae_toFinite]
@@ -256,7 +256,7 @@ lemma toFinite_zero
 
 中文:
 引理 toFinite_zero
-  结论: Measure.toFinite (0 : Measure α) = 0
+  结论: 测度.toFinite (0 : 测度 α) = 0
   证明: by simp
 -/
 lemma toFinite_zero : Measure.toFinite (0 : Measure α) = 0 := by simp
@@ -274,7 +274,7 @@ lemma toFinite_eq_self
 
 中文:
 引理 toFinite_eq_self
-  条件: [IsProbabilityMeasure μ]
+  条件: [是概率测度 μ]
   结论: μ.toFinite = μ
   证明: by
   rw [Measure.toFinite]; rw [Measure.toFiniteAux]; rw [if_pos]; rw [ProbabilityTheory.cond_univ]
@@ -298,7 +298,7 @@ instance [SFinite
 
 中文:
 实例 [SFinite
-  签名: μ] : IsFiniteMeasure μ.toFinite
+  签名: μ] : 是有限测度 μ.toFinite
   定义体: by
   rw [Measure.toFinite]
   infer_instance
@@ -321,7 +321,7 @@ instance [SFinite
 
 中文:
 实例 [SFinite
-  签名: μ] [NeZero μ] : IsProbabilityMeasure μ.toFinite
+  签名: μ] [NeZero μ] : 是概率测度 μ.toFinite
   定义体: by
   apply ProbabilityTheory.cond_isProbabilityMeasure
   simp [ne_eq, ← compl_mem_ae_iff, ae_toFiniteAux]
@@ -343,7 +343,7 @@ lemma absolutelyContinuous_toFinite
 
 中文:
 引理 absolutelyContinuous_toFinite
-  条件: (μ : Measure α) [SFinite μ]
+  条件: (μ : 测度 α) [SFinite μ]
   结论: μ ≪ μ.toFinite
   证明: Measure.ae_le_iff_absolutelyContinuous.mp ae_toFinite.ge
 
@@ -362,7 +362,7 @@ lemma sfiniteSeq_absolutelyContinuous_toFinite
 
 中文:
 引理 sfiniteSeq_absolutelyContinuous_toFinite
-  条件: (μ : Measure α) [SFinite μ] (n : 自然数)
+  条件: (μ : 测度 α) [SFinite μ] (n : 自然数)
   证明: (sfiniteSeq_le μ n).absolutelyContinuous.trans (absolutelyContinuous_toFinite μ)
 
 Depends on / 依赖: absolutelyContinuous, absolutelyContinuous.trans, absolutelyContinuous_toFinite, sfiniteSeq_le
@@ -382,7 +382,7 @@ lemma toFinite_absolutelyContinuous
 
 中文:
 引理 toFinite_absolutelyContinuous
-  条件: (μ : Measure α) [SFinite μ]
+  条件: (μ : 测度 α) [SFinite μ]
   结论: μ.toFinite ≪ μ
   证明: Measure.ae_le_iff_absolutelyContinuous.mp ae_toFinite.le
 

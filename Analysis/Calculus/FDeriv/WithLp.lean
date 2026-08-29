@@ -112,7 +112,7 @@ theorem differentiable_piLp
 
 中文:
 定理 differentiable_piLp
-  结论: Differentiable 𝕜 f ↔ 对任意 i, Differentiable 𝕜 fun x => f x i
+  结论: 可微 𝕜 f ↔ 对任意 i, 可微 𝕜 fun x => f x i
   证明: by
   have := Fintype.ofFinite ι
   rw [← (PiLp.continuousLinearEquiv p 𝕜 E).comp_differentiable_iff]; rw [differentiable_pi]

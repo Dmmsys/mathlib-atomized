@@ -94,8 +94,8 @@ instance FiberBundle.chartedSpace'
   chart_mem_atlas _ := me
 
 中文:
-实例 FiberBundle.chartedSpace'
-  签名: : ChartedSpace (B × F) (TotalSpace F E) where
+实例 纤维丛.chartedSpace'
+  签名: : Charted空间 (B × F) (全空间 F E) where
   定义体: (fun e : Trivialization F (π F E) => e.toOpenPartialHomeomorph) '' trivializationAtlas F E
   chartAt x := (trivializationAt F E x.proj).toOpenPartialHomeomorph
   mem_chart_source x :=
@@ -121,8 +121,8 @@ theorem FiberBundle.chartedSpace'_chartAt
   proof: rfl
 
 中文:
-定理 FiberBundle.chartedSpace'_chartAt
-  条件: (x : TotalSpace F E)
+定理 纤维丛.chartedSpace'_chartAt
+  条件: (x : 全空间 F E)
   证明: rfl
 -/
 theorem FiberBundle.chartedSpace'_chartAt (x : TotalSpace F E) :
@@ -144,8 +144,8 @@ instance FiberBundle.chartedSpace
   body: ChartedSpace.comp _ (B × F) _
 
 中文:
-实例 FiberBundle.chartedSpace
-  签名: : ChartedSpace (ModelProd HB F) (TotalSpace F E)
+实例 纤维丛.chartedSpace
+  签名: : Charted空间 (ModelProd HB F) (全空间 F E)
   定义体: ChartedSpace.comp _ (B × F) _
 
 Depends on / 依赖: ChartedSpace, ChartedSpace.comp
@@ -166,8 +166,8 @@ theorem FiberBundle.chartedSpace_chartAt
   rw [Trivialization.coe_coe]; rw [Trivialization.coe_fst' _ (mem_baseSet_trivializationAt F E x.proj)]
 
 中文:
-定理 FiberBundle.chartedSpace_chartAt
-  条件: (x : TotalSpace F E)
+定理 纤维丛.chartedSpace_chartAt
+  条件: (x : 全空间 F E)
   证明: by
   dsimp only [chartAt_comp, prodChartedSpace_chartAt, FiberBundle.chartedSpace'_chartAt,
     chartAt_self_eq]
@@ -194,8 +194,8 @@ theorem FiberBundle.chartedSpace_chartAt_symm_fst
   exact (trivializationAt F E x.proj).proj_symm_apply hy.2
 
 中文:
-定理 FiberBundle.chartedSpace_chartAt_symm_fst
-  结论: (x : TotalSpace F E) (y : ModelProd HB F)
+定理 纤维丛.chartedSpace_chartAt_symm_fst
+  结论: (x : 全空间 F E) (y : ModelProd HB F)
   证明: by
   simp only [FiberBundle.chartedSpace_chartAt, mfld_simps] at hy ⊢
   exact (trivializationAt F E x.proj).proj_symm_apply hy.2
@@ -235,8 +235,8 @@ theorem FiberBundle.extChartAt
   rw [PartialEquiv.prod_trans]; rw [PartialEquiv.refl_trans]
 
 中文:
-定理 FiberBundle.extChartAt
-  条件: (x : TotalSpace F E)
+定理 纤维丛.extChartAt
+  条件: (x : 全空间 F E)
   证明: by
   simp_rw [extChartAt, FiberBundle.chartedSpace_chartAt, OpenPartialHomeomorph.extend]
   simp only [PartialEquiv.trans_assoc, mfld_simps]
@@ -263,8 +263,8 @@ theorem FiberBundle.extChartAt_target
   rfl
 
 中文:
-定理 FiberBundle.extChartAt_target
-  条件: (x : TotalSpace F E)
+定理 纤维丛.extChartAt_target
+  条件: (x : 全空间 F E)
   证明: by
   rw [FiberBundle.extChartAt]; rw [PartialEquiv.trans_target]; rw [Trivialization.target_eq]; rw [inter_prod]
   rfl
@@ -285,8 +285,8 @@ theorem FiberBundle.writtenInExtChartAt_trivializationAt
   proof: writtenInExtChartAt_chartAt_comp _ hy
 
 中文:
-定理 FiberBundle.writtenInExtChartAt_trivializationAt
-  结论: {x : TotalSpace F E} {y}
+定理 纤维丛.writtenInExtChartAt_trivializationAt
+  结论: {x : 全空间 F E} {y}
   证明: writtenInExtChartAt_chartAt_comp _ hy
 
 Depends on / 依赖: writtenInExtChartAt_chartAt_comp
@@ -306,8 +306,8 @@ theorem FiberBundle.writtenInExtChartAt_trivializationAt_symm
   proof: writtenInExtChartAt_chartAt_symm_comp _ hy
 
 中文:
-定理 FiberBundle.writtenInExtChartAt_trivializationAt_symm
-  结论: {x : TotalSpace F E} {y}
+定理 纤维丛.writtenInExtChartAt_trivializationAt_symm
+  结论: {x : 全空间 F E} {y}
   证明: writtenInExtChartAt_chartAt_symm_comp _ hy
 
 Depends on / 依赖: writtenInExtChartAt_chartAt_symm_comp
@@ -341,7 +341,7 @@ theorem contMDiffWithinAt_totalSpace
 
 中文:
 定理 contMDiffWithinAt_totalSpace
-  条件: {f : M -> TotalSpace F E} {s : Set M} {x₀ : M}
+  条件: {f : M -> 全空间 F E} {s : 集合 M} {x₀ : M}
   证明: by
   simp +singlePass only [contMDiffWithinAt_iff_target]
   rw [and_and_and_comm]; rw [← FiberBundle.continuousWithinAt_totalSpace]; rw [and_congr_right_iff]
@@ -382,7 +382,7 @@ theorem contMDiffAt_totalSpace
 
 中文:
 定理 contMDiffAt_totalSpace
-  条件: {f : M -> TotalSpace F E} {x₀ : M}
+  条件: {f : M -> 全空间 F E} {x₀ : M}
   证明: by
   simp_rw [← contMDiffWithinAt_univ]; exact contMDiffWithinAt_totalSpace
 
@@ -405,7 +405,7 @@ theorem contMDiffWithinAt_section
 
 中文:
 定理 contMDiffWithinAt_section
-  条件: {s : 对任意 x, E x} {a : Set B} {x₀ : B}
+  条件: {s : 对任意 x, E x} {a : 集合 B} {x₀ : B}
   证明: by
   simp_rw [contMDiffWithinAt_totalSpace, and_iff_right_iff_imp]; intro; exact contMDiffWithinAt_id
 
@@ -453,7 +453,7 @@ theorem contMDiff_proj
 
 中文:
 定理 contMDiff_proj
-  结论: ContMDiff (IB.prod 𝓘(𝕜, F)) IB n (π F E)
+  结论: ContMDiff (IB.乘积 𝓘(𝕜, F)) IB n (π F E)
   证明: fun x => by
   have : ContMDiffAt (IB.prod 𝓘(𝕜, F)) (IB.prod 𝓘(𝕜, F)) n id x := contMDiffAt_id
   rw [contMDiffAt_totalSpace] at this
@@ -476,7 +476,7 @@ theorem contMDiffOn_proj
 
 中文:
 定理 contMDiffOn_proj
-  条件: {s : Set (TotalSpace F E)}
+  条件: {s : 集合 (全空间 F E)}
   证明: (contMDiff_proj E).contMDiffOn
 
 Depends on / 依赖: contMDiffOn, contMDiff_proj
@@ -496,8 +496,8 @@ theorem contMDiffAt_proj
 
 中文:
 定理 contMDiffAt_proj
-  条件: {p : TotalSpace F E}
-  结论: ContMDiffAt (IB.prod 𝓘(𝕜, F)) IB n (π F E) p
+  条件: {p : 全空间 F E}
+  结论: ContMDiffAt (IB.乘积 𝓘(𝕜, F)) IB n (π F E) p
   证明: (contMDiff_proj E).contMDiffAt
 
 Depends on / 依赖: contMDiffAt, contMDiff_proj
@@ -515,7 +515,7 @@ theorem contMDiffWithinAt_proj
 
 中文:
 定理 contMDiffWithinAt_proj
-  条件: {s : Set (TotalSpace F E)} {p : TotalSpace F E}
+  条件: {s : 集合 (全空间 F E)} {p : 全空间 F E}
   证明: (contMDiffAt_proj E).contMDiffWithinAt
 
 Depends on / 依赖: contMDiffAt_proj, contMDiffWithinAt
@@ -546,7 +546,7 @@ using congr_arg Prod.snd (trivializationAt F E x).zeroSection 𝕜
 
 中文:
 定理 contMDiff_zeroSection
-  结论: ContMDiff IB (IB.prod 𝓘(𝕜, F)) n (zeroSection F E)
+  结论: ContMDiff IB (IB.乘积 𝓘(𝕜, F)) n (zeroSection F E)
   证明: by
   intro x
   unfold zeroSection
@@ -577,7 +577,7 @@ theorem contMDiffOn_zeroSection
 
 中文:
 定理 contMDiffOn_zeroSection
-  条件: {t : Set B}
+  条件: {t : 集合 B}
   证明: (contMDiff_zeroSection _ _).contMDiffOn
 
 Depends on / 依赖: contMDiffOn, contMDiff_zeroSection
@@ -598,7 +598,7 @@ theorem contMDiffAt_zeroSection
 中文:
 定理 contMDiffAt_zeroSection
   条件: {x : B}
-  结论: ContMDiffAt IB (IB.prod 𝓘(𝕜, F)) n (zeroSection F E) x
+  结论: ContMDiffAt IB (IB.乘积 𝓘(𝕜, F)) n (zeroSection F E) x
   证明: (contMDiff_zeroSection _ _).contMDiffAt
 
 Depends on / 依赖: contMDiffAt, contMDiff_zeroSection
@@ -616,7 +616,7 @@ theorem contMDiffWithinAt_zeroSection
 
 中文:
 定理 contMDiffWithinAt_zeroSection
-  条件: {t : Set B} {x : B}
+  条件: {t : 集合 B} {x : B}
   证明: (contMDiff_zeroSection _ _ x).contMDiffWithinAt
 
 Depends on / 依赖: contMDiffWithinAt, contMDiff_zeroSection
@@ -647,7 +647,7 @@ lemma contMDiffWithinAt_section_of_subsingleton
 
 中文:
 引理 contMDiffWithinAt_section_of_subsingleton
-  条件: [Subsingleton F]
+  条件: [子单例 F]
   证明: by
   rw [contMDiffWithinAt_section]
 .congr apply contMDiffWithinAt_const
@@ -682,7 +682,7 @@ lemma contMDiffAt_section_of_subsingleton
 
 中文:
 引理 contMDiffAt_section_of_subsingleton
-  条件: [Subsingleton F]
+  条件: [子单例 F]
   证明: by
   rw [← contMDiffWithinAt_univ]
   apply contMDiffWithinAt_section_of_subsingleton
@@ -709,7 +709,7 @@ lemma contMDiffOn_section_of_subsingleton
 
 中文:
 引理 contMDiffOn_section_of_subsingleton
-  条件: [Subsingleton F]
+  条件: [子单例 F]
   证明: fun _x _hx => contMDiffWithinAt_section_of_subsingleton ..
 
 @[nontriviality]
@@ -731,7 +731,7 @@ lemma contMDiff_section_of_subsingleton
 
 中文:
 引理 contMDiff_section_of_subsingleton
-  条件: [Subsingleton F]
+  条件: [子单例 F]
   证明: fun _x => contMDiffAt_section_of_subsingleton ..
 
 Depends on / 依赖: contMDiffAt_section_of_subsingleton
@@ -770,7 +770,7 @@ class ContMDiffVectorBundle
     - contMDiffOn_coordChangeL : forall (e e' : Trivialization F (π F E)) [MemTrivializationAtlas e] [MemTrivializationAtlas e'], ContMDiffOn IB 𝓘(𝕜, F ->L[𝕜] F) n (fun b : B => (e.coordChangeL 𝕜 e' b : F ->L[𝕜] F)) (e.baseSet inter e'.baseSet)
 
 中文:
-类 ContMDiffVectorBundle
+类 余ntMDiffVectorBundle
   参数: : 命题 where
   公理与运算 (1 个):
     - contMDiffOn_coordChangeL : 对任意 (e e' : Trivialization F (π F E)) [MemTrivializationAtlas e] [MemTrivializationAtlas e'], ContMDiffOn IB 𝓘(𝕜, F ->L[𝕜] F) n (fun b : B => (e.coordChangeL 𝕜 e' b : F ->L[𝕜] F)) (e.baseSet inter e'.baseSet)
@@ -793,7 +793,7 @@ theorem ContMDiffVectorBundle.of_le
   proof: ⟨fun e e' _ _ => (h.contMDiffOn_coordChangeL e e').of_le hmn⟩
 
 中文:
-定理 ContMDiffVectorBundle.of_le
+定理 余ntMDiffVectorBundle.of_le
   结论: {m n : 自然数∞ω} (hmn : m <= n)
   证明: ⟨fun e e' _ _ => (h.contMDiffOn_coordChangeL e e').of_le hmn⟩
 -/
@@ -817,8 +817,8 @@ instance [ContMDiffVectorBundle
   body: ContMDiffVectorBundle.of_le one_le_two
 
 中文:
-实例 [ContMDiffVectorBundle
-  签名: 2 F E IB] : ContMDiffVectorBundle 1 F E IB
+实例 [余ntMDiffVectorBundle
+  签名: 2 F E IB] : 余ntMDiffVectorBundle 1 F E IB
   定义体: ContMDiffVectorBundle.of_le one_le_two
 
 Depends on / 依赖: ContMDiffVectorBundle, ContMDiffVectorBundle.of_le, of_le, one_le_two
@@ -840,7 +840,7 @@ instance :
 
 中文:
 实例 :
-  签名: ContMDiffVectorBundle 0 F E IB
+  签名: 余ntMDiffVectorBundle 0 F E IB
   定义体: by
   constructor
   intro e e' he he'
@@ -1134,7 +1134,7 @@ theorem ContMDiffWithinAt.change_section_trivialization
 
 中文:
 定理 ContMDiffWithinAt.change_section_trivialization
-  结论: {f : M -> TotalSpace F E}
+  结论: {f : M -> 全空间 F E}
   证明: by
   rw [Trivialization.mem_source] at he he'
   refine (hp.coordChange hf he he').congr_of_eventuallyEq ?_ (by simp [he])
@@ -1163,7 +1163,7 @@ theorem Bundle.Trivialization.contMDiffWithinAt_snd_comp_iff₂
 
 中文:
 定理 Bundle.Trivialization.contMDiffWithinAt_snd_comp_iff₂
-  结论: {f : M -> TotalSpace F E}
+  结论: {f : M -> 全空间 F E}
   证明: ⟨(hp.change_section_trivialization · he he'), (hp.change_section_trivialization · he' he)⟩
 
 Depends on / 依赖: change_section_trivialization, hp.change_section_trivialization
@@ -1237,7 +1237,7 @@ instance Bundle.TotalSpace.isManifold
   
 
 中文:
-实例 Bundle.TotalSpace.isManifold
+实例 Bundle.全空间.isManifold
   签名: :
   定义体: by
   refine { StructureGroupoid.HasGroupoid.comp (contMDiffFiberwiseLinear B F IB n) ?_ with }
@@ -1284,7 +1284,7 @@ theorem contMDiffWithinAt_iff
 
 中文:
 定理 contMDiffWithinAt_iff
-  结论: {f : M -> TotalSpace F E} {s : Set M} {x₀ : M}
+  结论: {f : M -> 全空间 F E} {s : 集合 M} {x₀ : M}
   证明: contMDiffWithinAt_totalSpace.trans and_congr_right fun h =>
     Trivialization.contMDiffWithinAt_snd_comp_iff₂ h FiberBundle.mem_trivializationAt_proj_source he
 
@@ -1308,7 +1308,7 @@ theorem contMDiffAt_iff
 
 中文:
 定理 contMDiffAt_iff
-  条件: {f : M -> TotalSpace F E} {x₀ : M} (he : f x₀ in e.source)
+  条件: {f : M -> 全空间 F E} {x₀ : M} (he : f x₀ in e.source)
   证明: e.contMDiffWithinAt_iff he
 
 Depends on / 依赖: contMDiffWithinAt_iff, e.contMDiffWithinAt_iff
@@ -1331,7 +1331,7 @@ theorem contMDiffOn_iff
 
 中文:
 定理 contMDiffOn_iff
-  结论: {f : M -> TotalSpace F E} {s : Set M}
+  结论: {f : M -> 全空间 F E} {s : 集合 M}
   证明: by
   simp only [ContMDiffOn, ← forall_and]
   exact forall₂_congr fun x hx => e.contMDiffWithinAt_iff (he hx)
@@ -1356,7 +1356,7 @@ theorem contMDiff_iff
 
 中文:
 定理 contMDiff_iff
-  条件: {f : M -> TotalSpace F E} (he : 对任意 x, f x in e.source)
+  条件: {f : M -> 全空间 F E} (he : 对任意 x, f x in e.source)
   证明: (forall_congr' fun x => e.contMDiffAt_iff (he x)).trans forall_and
 
 Depends on / 依赖: contMDiffAt_iff, e.contMDiffAt_iff, forall_and, forall_congr
@@ -1438,7 +1438,7 @@ theorem contMDiffWithinAt_section
 
 中文:
 定理 contMDiffWithinAt_section
-  结论: {s : 对任意 x, E x} (a : Set B) {x₀ : B}
+  结论: {s : 对任意 x, E x} (a : 集合 B) {x₀ : B}
   证明: by
   rw [e.contMDiffWithinAt_iff]
   · change ContMDiffWithinAt IB IB n id a x₀ ∧ _ ↔ _
@@ -1498,7 +1498,7 @@ have := (h x hx).contMDiffAt ha.mem_nhds hx
 
 中文:
 定理 contMDiffOn_section_iff
-  结论: {s : 对任意 x, E x} {a : Set B}
+  结论: {s : 对任意 x, E x} {a : 集合 B}
   证明: by
   refine ⟨fun h x hx => ?_, fun h x hx => ?_⟩ <;>
 have := (h x hx).contMDiffAt ha.mem_nhds hx
@@ -1560,8 +1560,8 @@ class IsContMDiff
     - contMDiffOn_coordChange : forall i j, ContMDiffOn IB 𝓘(𝕜, F ->L[𝕜] F) n (Z.coordChange i j) (Z.baseSet i inter Z.baseSet j)
 
 中文:
-类 IsContMDiff
-  参数: (IB : ModelWithCorners 𝕜 EB HB) (n : 自然数∞ω)
+类 是余ntMDiff
+  参数: (IB : 带角模型 𝕜 EB HB) (n : 自然数∞ω)
   公理与运算 (1 个):
     - contMDiffOn_coordChange : 对任意 i j, ContMDiffOn IB 𝓘(𝕜, F ->L[𝕜] F) n (Z.coordChange i j) (Z.baseSet i inter Z.baseSet j)
 -/
@@ -1579,7 +1579,7 @@ theorem contMDiffOn_coordChange
 
 中文:
 定理 contMDiffOn_coordChange
-  条件: (IB : ModelWithCorners 𝕜 EB HB) [h : Z.IsContMDiff IB n] (i j : ι)
+  条件: (IB : 带角模型 𝕜 EB HB) [h : Z.是余ntMDiff IB n] (i j : ι)
   证明: h.1 i j
 -/
 theorem contMDiffOn_coordChange (IB : ModelWithCorners 𝕜 EB HB) [h : Z.IsContMDiff IB n] (i j : ι) :
@@ -1602,7 +1602,7 @@ instance instContMDiffVectorBundle
 
 中文:
 实例 instContMDiffVectorBundle
-  签名: : ContMDiffVectorBundle n F Z.Fiber IB where
+  签名: : 余ntMDiffVectorBundle n F Z.Fiber IB where
   定义体: by
     rintro - - ⟨i, rfl⟩ ⟨i', rfl⟩
     refine (Z.contMDiffOn_coordChange IB i i').congr fun b hb => ?_
@@ -1636,7 +1636,7 @@ instance Bundle.Trivial.contMDiffVectorBundle
     exact contMDiff_const.contMDiffOn
 
 中文:
-实例 Bundle.Trivial.contMDiffVectorBundle
+实例 Bundle.平凡.contMDiffVectorBundle
   签名: :
   定义体: by
     intro e e' he he'
@@ -1688,8 +1688,8 @@ instance Bundle.Prod.contMDiffVectorBundle
       mfld_s
 
 中文:
-实例 Bundle.Prod.contMDiffVectorBundle
-  签名: : ContMDiffVectorBundle n (F₁ × F₂) (E₁ ×ᵇ E₂) IB where
+实例 Bundle.积类型.contMDiffVectorBundle
+  签名: : 余ntMDiffVectorBundle n (F₁ × F₂) (E₁ ×ᵇ E₂) IB where
   定义体: by
     rintro _ _ ⟨e₁, e₂, i₁, i₂, rfl⟩ ⟨e₁', e₂', i₁', i₂', rfl⟩
     refine ContMDiffOn.congr ?_ (e₁.coordChangeL_prod 𝕜 e₁' e₂ e₂')
@@ -1733,7 +1733,7 @@ class IsContMDiff
     - exists_contMDiffCoordChange : forallᵉ (e in a.pretrivializationAtlas) (e' in a.pretrivializationAtlas), exists f : B -> F ->L[𝕜] F, ContMDiffOn IB 𝓘(𝕜, F ->L[𝕜] F) n f (e.baseSet inter e'.baseSet) ∧ forall (b : B) (_ : b in e.baseSet inter e'.baseSet) (v : F), f b v = (e' ⟨b, e.symm b v⟩).2
 
 中文:
-类 IsContMDiff
+类 是余ntMDiff
   参数: (a : VectorPrebundle 𝕜 F E) (n : 自然数∞ω)
   公理与运算 (1 个):
     - exists_contMDiffCoordChange : 对任意ᵉ (e in a.pretrivializationAtlas) (e' in a.pretrivializationAtlas), 存在 f : B -> F ->L[𝕜] F, ContMDiffOn IB 𝓘(𝕜, F ->L[𝕜] F) n f (e.baseSet inter e'.baseSet) ∧ 对任意 (b : B) (_ : b in e.baseSet inter e'.baseSet) (v : F), f b v = (e' ⟨b, e.symm b v⟩).2
@@ -1855,7 +1855,7 @@ theorem contMDiffVectorBundle
 
 中文:
 定理 contMDiffVectorBundle
-  结论: @ContMDiffVectorBundle n
+  结论: @余ntMDiffVectorBundle n
   证明: letI := a.totalSpaceTopology; letI := a.toFiberBundle; letI := a.toVectorBundle
   { contMDiffOn_coordChangeL := by
       rintro _ _ ⟨e, he, rfl⟩ ⟨e', he', rfl⟩

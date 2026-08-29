@@ -62,7 +62,7 @@ class HasWeakKernels
     - hasWeakLimit : forall {X Y : C} (f : X ⟶ Y), HasWeakKernel f  [default: by infer_instance]
 
 中文:
-类 HasWeakKernels
+类 有WeakKernels
   参数: : 命题 where
   公理与运算 (1 个):
     - hasWeakLimit : 对任意 {X Y : C} (f : X ⟶ Y), HasWeakKernel f  [默认: by infer_instance]
@@ -262,7 +262,7 @@ definition isWeakLimitForkOfKernelFork
 
 中文:
 定义 isWeakLimitForkOfKernelFork
-  签名: {c : KernelFork (f - g)} (i : IsWeakLimit c)
+  签名: {c : 核叉 (f - g)} (i : 是WeakLimit c)
   定义体: Fork.IsWeakLimit.mk' _ fun s => ⟨i.lift (kernelForkOfFork s), i.fac _ _⟩
 
 @[simp]
@@ -284,7 +284,7 @@ theorem isWeakLimitForkOfKernelFork_lift
 
 中文:
 定理 isWeakLimitForkOfKernelFork_lift
-  结论: {c : KernelFork (f - g)} (i : IsWeakLimit c)
+  结论: {c : 核叉 (f - g)} (i : 是WeakLimit c)
   证明: rfl
 -/
 theorem isWeakLimitForkOfKernelFork_lift {c : KernelFork (f - g)} (i : IsWeakLimit c)
@@ -301,7 +301,7 @@ definition isWeakLimitKernelForkOfFork
 
 中文:
 定义 isWeakLimitKernelForkOfFork
-  签名: {c : Fork f g} (i : IsWeakLimit c)
+  签名: {c : 叉 f g} (i : 是WeakLimit c)
   定义体: Fork.IsWeakLimit.mk' _ fun s => ⟨i.lift (forkOfKernelFork s), i.fac _ _⟩
 
 Depends on / 依赖: Fork.IsWeakLimit.mk, IsWeakLimit, forkOfKernelFork, i.fac, i.lift
@@ -376,7 +376,7 @@ theorem hasWeakEqualizers_of_hasWeakKernels
 
 中文:
 定理 hasWeakEqualizers_of_hasWeakKernels
-  条件: [HasWeakKernels C]
+  条件: [有WeakKernels C]
   结论: HasWeakEqualizers C
   证明: have {X Y : C} (f g : X ⟶ Y) := hasWeakEqualizer_of_hasWeakKernel f g
   hasWeakEqualizers_of_hasWeakLimit_parallelPair C

@@ -28,10 +28,10 @@ class Differential
     - deriv : Derivation Int R R
 
 中文:
-类 Differential
-  参数: (R : 类型) [CommRing R]
+类 微分
+  参数: (R : 类型) [交换环 R]
   公理与运算 (1 个):
-    - deriv : Derivation 整数 R R
+    - deriv : 导子 整数 R R
 -/
 class Differential (R : Type*) [CommRing R] where
   /-- The `Derivation` associated with the ring. -/
@@ -65,8 +65,8 @@ class DifferentialAlgebra
     - deriv_algebraMap : forall a : A, (algebraMap A B a)′ = algebraMap A B a′
 
 中文:
-类 DifferentialAlgebra
-  参数: (A B : 类型) [CommRing A] [CommRing B] [Algebra A B]
+类 微分代数
+  参数: (A B : 类型) [交换环 A] [交换环 B] [代数 A B]
   公理与运算 (1 个):
     - deriv_algebraMap : 对任意 a : A, (algebraMap A B a)′ = algebraMap A B a′
 -/
@@ -87,7 +87,7 @@ lemma algebraMap.coe_deriv
 
 中文:
 引理 algebraMap.coe_deriv
-  结论: {A : 类型} {B : 类型} [CommRing A] [CommRing B] [Algebra A B]
+  结论: {A : 类型} {B : 类型} [交换环 A] [交换环 B] [代数 A B]
   证明: (DifferentialAlgebra.deriv_algebraMap _).symm
 
 Depends on / 依赖: DifferentialAlgebra, DifferentialAlgebra.deriv_algebraMap, deriv_algebraMap
@@ -107,8 +107,8 @@ class Differential.ContainConstants
     - mem_range_of_deriv_eq_zero({x : B} (h : x′ = 0)) : x in (algebraMap A B).range
 
 中文:
-类 Differential.ContainConstants
-  参数: (A B : 类型) [CommRing A] [CommRing B]
+类 微分.余ntainConstants
+  参数: (A B : 类型) [交换环 A] [交换环 B]
   公理与运算 (1 个):
     - mem_range_of_deriv_eq_zero({x : B} (h : x′ = 0)) : x in (algebraMap A B).range
 -/
@@ -127,7 +127,7 @@ lemma mem_range_of_deriv_eq_zero
 
 中文:
 引理 mem_range_of_deriv_eq_zero
-  结论: (A : 类型) {B : 类型} [CommRing A] [CommRing B] [Algebra A B]
+  结论: (A : 类型) {B : 类型} [交换环 A] [交换环 B] [代数 A B]
   证明: Differential.ContainConstants.mem_range_of_deriv_eq_zero h
 
 Depends on / 依赖: ContainConstants, Differential, Differential.ContainConstants.mem_range_of_deriv_eq_zero, mem_range_of_deriv_eq_zero
@@ -155,8 +155,8 @@ definition Differential.equiv
     Differential.deriv.toLinearMap ∘ₗ h.toAddMonoidHom.toIntLinearMap) (by simp)⟩
 
 中文:
-定义 Differential.equiv
-  签名: {R R₂ : 类型} [CommRing R] [CommRing R₂] [Differential R₂]
+定义 微分.equiv
+  签名: {R R₂ : 类型} [交换环 R] [交换环 R₂] [微分 R₂]
   定义体: ⟨Derivation.mk' (h.symm.toAddMonoidHom.toIntLinearMap ∘ₗ
     Differential.deriv.toLinearMap ∘ₗ h.toAddMonoidHom.toIntLinearMap) (by simp)⟩
 
@@ -181,8 +181,8 @@ lemma DifferentialAlgebra.equiv
     simp [deriv_algebraMap]⟩
 
 中文:
-引理 DifferentialAlgebra.equiv
-  结论: {A : 类型} [CommRing A] [Differential A]
+引理 微分代数.equiv
+  结论: {A : 类型} [交换环 A] [微分 A]
   证明: Differential.equiv h.toRingEquiv
     DifferentialAlgebra A R :=
   letI := Differential.equiv h.toRingEquiv

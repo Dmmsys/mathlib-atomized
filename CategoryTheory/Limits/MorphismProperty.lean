@@ -70,7 +70,7 @@ definition forgetCreatesLimitsOfShapeOfClosed
 
 中文:
 定义 forgetCreatesLimitsOfShapeOfClosed
-  签名: [HasLimitsOfShape J (Comma L R)]
+  签名: [有形状极限 J (交换a L R)]
   定义体: forgetCreatesLimitOfClosed _ _
 
 Depends on / 依赖: forgetCreatesLimitOfClosed
@@ -112,7 +112,7 @@ instance hasLimitsOfShape_of_closedUnderLimitsOfShape
 
 中文:
 实例 hasLimitsOfShape_of_closedUnderLimitsOfShape
-  签名: [HasLimitsOfShape J (Comma L R)]
+  签名: [有形状极限 J (交换a L R)]
   定义体: hasLimit_of_closedUnderLimitsOfShape _ _
 
 Depends on / 依赖: hasLimit_of_closedUnderLimitsOfShape
@@ -164,7 +164,7 @@ definition forgetCreatesColimitsOfShapeOfClosed
 
 中文:
 定义 forgetCreatesColimitsOfShapeOfClosed
-  签名: [HasColimitsOfShape J (Comma L R)]
+  签名: [有形状余极限 J (交换a L R)]
   定义体: forgetCreatesColimitOfClosed _ _
 
 Depends on / 依赖: forgetCreatesColimitOfClosed
@@ -206,7 +206,7 @@ instance hasColimitsOfShape_of_closedUnderColimitsOfShape
 
 中文:
 实例 hasColimitsOfShape_of_closedUnderColimitsOfShape
-  签名: [HasColimitsOfShape J (Comma L R)]
+  签名: [有形状余极限 J (交换a L R)]
   定义体: hasColimit_of_closedUnderColimitsOfShape _ _
 
 Depends on / 依赖: hasColimit_of_closedUnderColimitsOfShape
@@ -237,7 +237,7 @@ instance CostructuredArrow.closedUnderLimitsOfShape_discrete_empty
 
 中文:
 实例 CostructuredArrow.closedUnderLimitsOfShape_discrete_empty
-  签名: [L.Faithful] [L.Full] {Y : A}
+  签名: [L.忠实] [L.满] {Y : A}
   定义体: by
     rintro X p
     let t : IsTerminal X := (ObjectProperty.limitsOfShape_isEmpty_iff _ _ _ |>.mp p).some
@@ -275,7 +275,7 @@ lemma CostructuredArrow.isClosedUnderColimitsOfShape
 
 中文:
 引理 CostructuredArrow.isClosedUnderColimitsOfShape
-  结论: {J : 类型} [Category* J]
+  结论: {J : 类型} [范畴* J]
   证明: by
     intro ⟨d⟩
     let hd : IsColimit ((CategoryTheory.CostructuredArrow.proj L X ⋙ L).mapCocone d.cocone) :=
@@ -321,7 +321,7 @@ IsPullback.of_isLimit_cone isLimitOfPreserves
 
 中文:
 引理 CostructuredArrow.closedUnderLimitsOfShape_walkingCospan
-  结论: [HasPullbacks A] [HasPullbacks T]
+  结论: [有Pullbacks A] [有Pullbacks T]
   证明: by
     rintro Y ⟨pres, hpres⟩
     have h : IsPullback (L.map (pres.π.app .left).left) (L.map (pres.π.app .right).left)
@@ -396,7 +396,7 @@ instance hasPullbacks
 
 中文:
 实例 hasPullbacks
-  签名: : HasPullbacks (P.CostructuredArrow ⊤ L X)
+  签名: : 有Pullbacks (P.CostructuredArrow ⊤ L X)
   定义体: by
   apply +allowSynthFailures hasLimitsOfShape_of_closedUnderLimitsOfShape
   · exact inferInstanceAs (HasLimitsOfShape WalkingCospan (CostructuredArrow L X))
@@ -423,7 +423,7 @@ inferInstanceAs PreservesLimitsOfShape WalkingCospan
 
 中文:
 实例 :
-  签名: PreservesLimitsOfShape WalkingCospan (CostructuredArrow.toOver P L X)
+  签名: 保持形状极限 WalkingCospan (CostructuredArrow.toOver P L X)
   定义体: have : PreservesLimitsOfShape WalkingCospan
       (CostructuredArrow.toOver P L X ⋙ Over.forget P ⊤ X) :=
 inferInstanceAs PreservesLimitsOfShape WalkingCospan
@@ -461,8 +461,8 @@ instance StructuredArrow.closedUnderColimitsOfShape_discrete_empty
       P.structuredArrow_iso_iff e] using P.
 
 中文:
-实例 StructuredArrow.closedUnderColimitsOfShape_discrete_empty
-  签名: [L.Faithful] [L.Full] {Y : A}
+实例 结构化箭头.closedUnderColimitsOfShape_discrete_empty
+  签名: [L.忠实] [L.满] {Y : A}
   定义体: by
     rintro X p
     let t : IsInitial X := (ObjectProperty.colimitsOfShape_isEmpty_iff _ _ _ |>.mp p).some
@@ -500,8 +500,8 @@ lemma StructuredArrow.isClosedUnderLimitsOfShape
       
 
 中文:
-引理 StructuredArrow.isClosedUnderLimitsOfShape
-  结论: {J : 类型} [Category* J]
+引理 结构化箭头.isClosedUnderLimitsOfShape
+  结论: {J : 类型} [范畴* J]
   证明: by
     intro ⟨d⟩
     let hd : IsLimit ((CategoryTheory.StructuredArrow.proj X L ⋙ L).mapCone d.cone) :=
@@ -547,7 +547,7 @@ instance Over.closedUnderLimitsOfShape_discrete_empty
 
 中文:
 实例 Over.closedUnderLimitsOfShape_discrete_empty
-  签名: [P.ContainsIdentities] [P.RespectsIso]
+  签名: [P.余ntainsIdentities] [P.RespectsIso]
   定义体: CostructuredArrow.closedUnderLimitsOfShape_discrete_empty P
 
 Depends on / 依赖: Discrete, IsClosedUnderLimitsOfShape, PEmpty
@@ -567,7 +567,7 @@ instance Over.closedUnderLimitsOfShape_pullback
 
 中文:
 实例 Over.closedUnderLimitsOfShape_pullback
-  签名: [HasPullbacks T]
+  签名: [有Pullbacks T]
   定义体: CostructuredArrow.closedUnderLimitsOfShape_walkingCospan _ _
 
 Depends on / 依赖: Functor, Functor.Monoidal.map_tensor, IsClosedUnderLimitsOfShape, Monoidal, MorphismProperty, MorphismProperty.RespectsIso.postcomp, MorphismProperty.RespectsIso.precomp, RespectsIso, WalkingCospan, inverseImage_iff, map_tensor, postcomp, precomp, tensorHom_mem
@@ -593,7 +593,7 @@ instance Under.closedUnderColimitsOfShape_discrete_empty
 
 中文:
 实例 Under.closedUnderColimitsOfShape_discrete_empty
-  签名: [P.ContainsIdentities] [P.RespectsIso]
+  签名: [P.余ntainsIdentities] [P.RespectsIso]
   定义体: StructuredArrow.closedUnderColimitsOfShape_discrete_empty (L := 𝟭 _) P
 
 Depends on / 依赖: Discrete, IsClosedUnderColimitsOfShape, PEmpty
@@ -615,7 +615,7 @@ instance Under.closedUnderColimitsOfShape_pushout
 
 中文:
 实例 Under.closedUnderColimitsOfShape_pushout
-  签名: [HasPushouts T]
+  签名: [有Pushouts T]
   定义体: by
   rw [ObjectProperty.isClosedUnderColimitsOfShape_iff_op]; rw [←
     ObjectProperty.isClosedUnderLimitsOfShape_inverseImage_iff _ _ (Over.opEquivOpUnder _)]; rw [MorphismProperty.inverseImage_op_underObj]; rw [ObjectProperty.isClosedUnderLimitsOfShape_iff_of_equivalence _ walkingSpanOpEquiv]
@@ -648,7 +648,7 @@ instance [P.ContainsIdentities]
   · apply Over.closedUnderLimitsOfShape_discrete_empty _
 
 中文:
-实例 [P.ContainsIdentities]
+实例 [P.余ntainsIdentities]
   签名: [P.RespectsIso]
   定义体: by
   apply +allowSynthFailures forgetCreatesLimitsOfShapeOfClosed
@@ -680,7 +680,7 @@ instance [P.ContainsIdentities]
       simp only [mk_left, Functor.const_obj_obj, mk_hom, Category.comp_id]
 
 中文:
-实例 [P.ContainsIdentities]
+实例 [P.余ntainsIdentities]
   签名: (Y : P.Over ⊤ X)
   定义体: Over.homMk Y.hom
   uniq a := by
@@ -710,7 +710,7 @@ definition mkIdTerminal
 
 中文:
 定义 mkIdTerminal
-  签名: [P.ContainsIdentities]
+  签名: [P.余ntainsIdentities]
   定义体: IsTerminal.ofUnique _
 
 Depends on / 依赖: IsTerminal, IsTerminal.ofUnique, ofUnique
@@ -729,8 +729,8 @@ instance [P.ContainsIdentities]
   h.hasTerminal
 
 中文:
-实例 [P.ContainsIdentities]
-  签名: : HasTerminal (P.Over ⊤ X)
+实例 [P.余ntainsIdentities]
+  签名: : 有终止 (P.Over ⊤ X)
   定义体: let h : IsTerminal (Over.mk ⊤ (𝟙 X) (P.id_mem X)) := Over.mkIdTerminal P X
   h.hasTerminal
 
@@ -750,7 +750,7 @@ instance createsLimitsOfShape_walkingCospan
 
 中文:
 实例 createsLimitsOfShape_walkingCospan
-  签名: [HasPullbacks T]
+  签名: [有Pullbacks T]
   定义体: CostructuredArrow.createsLimitsOfShape_walkingCospan _ _
 
 Depends on / 依赖: CostructuredArrow, CostructuredArrow.createsLimitsOfShape_walkingCospan, createsLimitsOfShape_walkingCospan
@@ -779,7 +779,7 @@ instance hasFiniteLimits
 
 中文:
 实例 hasFiniteLimits
-  签名: : HasFiniteLimits (P.Over ⊤ X)
+  签名: : 有有限极限 (P.Over ⊤ X)
   定义体: hasFiniteLimits_of_hasTerminal_and_pullbacks
 
 Depends on / 依赖: hasFiniteLimits_of_hasTerminal_and_pullbacks
@@ -797,7 +797,7 @@ instance :
 
 中文:
 实例 :
-  签名: CreatesFiniteLimits (Over.forget P ⊤ X)
+  签名: 创造有限极限 (Over.forget P ⊤ X)
   定义体: createsFiniteLimitsOfCreatesTerminalAndPullbacks _
 
 Depends on / 依赖: createsFiniteLimitsOfCreatesTerminalAndPullbacks
@@ -814,8 +814,8 @@ instance [HasFiniteWidePullbacks
   body: hasFiniteLimits_of_hasLimitsLimits_of_createsFiniteLimits (Over.forget P ⊤ X)
 
 中文:
-实例 [HasFiniteWidePullbacks
-  签名: T] : HasFiniteLimits (P.Over ⊤ X)
+实例 [有FiniteWidePullbacks
+  签名: T] : 有有限极限 (P.Over ⊤ X)
   定义体: hasFiniteLimits_of_hasLimitsLimits_of_createsFiniteLimits (Over.forget P ⊤ X)
 
 Depends on / 依赖: Over.forget, forget, hasFiniteLimits_of_hasLimitsLimits_of_createsFiniteLimits
@@ -833,7 +833,7 @@ instance :
 
 中文:
 实例 :
-  签名: PreservesFiniteLimits (Over.forget P ⊤ X)
+  签名: 保持FiniteLimits (Over.forget P ⊤ X)
   定义体: preservesFiniteLimits_of_preservesTerminal_and_pullbacks (Over.forget P ⊤ X)
 
 Depends on / 依赖: Over.forget, forget, preservesFiniteLimits_of_preservesTerminal_and_pullbacks
@@ -868,7 +868,7 @@ instance [P.ContainsIdentities]
   · apply Under.closedUnderColimitsOfShape_discrete_empty _
 
 中文:
-实例 [P.ContainsIdentities]
+实例 [P.余ntainsIdentities]
   签名: [P.RespectsIso]
   定义体: by
   apply +allowSynthFailures forgetCreatesColimitsOfShapeOfClosed
@@ -896,7 +896,7 @@ instance [P.ContainsIdentities]
   uniq a := by ext; simp [← Under.w a]
 
 中文:
-实例 [P.ContainsIdentities]
+实例 [P.余ntainsIdentities]
   签名: (Y : P.Under ⊤ X)
   定义体: Under.homMk Y.hom (by simp)
   uniq a := by ext; simp [← Under.w a]
@@ -918,7 +918,7 @@ definition mkIdInitial
 
 中文:
 定义 mkIdInitial
-  签名: [P.ContainsIdentities]
+  签名: [P.余ntainsIdentities]
   定义体: .ofUnique _
 
 Depends on / 依赖: ofUnique
@@ -936,7 +936,7 @@ instance [P.ContainsIdentities]
   body: (Under.mkIdInitial P X).hasInitial
 
 中文:
-实例 [P.ContainsIdentities]
+实例 [P.余ntainsIdentities]
   签名: : HasInitial (P.Under ⊤ X)
   定义体: (Under.mkIdInitial P X).hasInitial
 
@@ -957,7 +957,7 @@ instance [HasPushouts
   · apply Under.closedUnderColimitsOfShape_pushout
 
 中文:
-实例 [HasPushouts
+实例 [有Pushouts
   签名: T]
   定义体: by
   apply +allowSynthFailures forgetCreatesColimitsOfShapeOfClosed
@@ -994,7 +994,7 @@ instance :
 
 中文:
 实例 :
-  签名: CreatesFiniteColimits (Under.forget P ⊤ X)
+  签名: 创造有限余极限 (Under.forget P ⊤ X)
   定义体: createsFiniteColimitsOfCreatesInitialAndPushouts _
 
 Depends on / 依赖: createsFiniteColimitsOfCreatesInitialAndPushouts
@@ -1011,8 +1011,8 @@ instance [HasFiniteWidePushouts
   body: hasFiniteColimits_of_hasColimits_of_createsFiniteColimits (Under.forget P ⊤ X)
 
 中文:
-实例 [HasFiniteWidePushouts
-  签名: T] : HasFiniteColimits (P.Under ⊤ X)
+实例 [有FiniteWidePushouts
+  签名: T] : 有有限余极限 (P.Under ⊤ X)
   定义体: hasFiniteColimits_of_hasColimits_of_createsFiniteColimits (Under.forget P ⊤ X)
 
 Depends on / 依赖: Under.forget, forget, hasFiniteColimits_of_hasColimits_of_createsFiniteColimits
@@ -1030,7 +1030,7 @@ instance :
 
 中文:
 实例 :
-  签名: PreservesFiniteColimits (Under.forget P ⊤ X)
+  签名: 保持FiniteColimits (Under.forget P ⊤ X)
   定义体: preservesFiniteColimits_of_preservesInitial_and_pushouts (Under.forget P ⊤ X)
 
 Depends on / 依赖: Under.forget, forget, preservesFiniteColimits_of_preservesInitial_and_pushouts

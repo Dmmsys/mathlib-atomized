@@ -204,7 +204,7 @@ lemma const_apply
 中文:
 引理 const_apply
   条件: (x : M₂)
-  结论: LinearMap.const (R := R) x = Function.const ι x
+  结论: 线性映射.const (R := R) x = 函数.const ι x
   证明: rfl
 -/
 @[simp] lemma const_apply (x : M₂) : LinearMap.const (R := R) x = Function.const ι x := rfl
@@ -252,7 +252,7 @@ theorem coe_proj
 中文:
 定理 coe_proj
   条件: (i : ι)
-  结论: ⇑(proj i : ((i : ι) -> φ i) ->ₗ[R] φ i) = Function.eval i
+  结论: ⇑(proj i : ((i : ι) -> φ i) ->ₗ[R] φ i) = 函数.eval i
   证明: rfl
 
 @[simp]
@@ -273,7 +273,7 @@ theorem toAddMonoidHom_proj
 中文:
 定理 toAddMonoidHom_proj
   条件: (i : ι)
-  结论: (proj i).toAddMonoidHom (R := R) = Pi.evalAddMonoidHom φ i
+  结论: (proj i).toAddMonoidHom (R := R) = 依赖函数类型.evalAddMonoidHom φ i
   证明: rfl
 
 Depends on / 依赖: Pi.evalAddMonoidHom, evalAddMonoidHom
@@ -338,7 +338,7 @@ theorem pi_proj
 
 中文:
 定理 pi_proj
-  结论: pi proj = LinearMap.id (R := R) (M := 对任意 i, φ i)
+  结论: pi proj = 线性映射.id (R := R) (M := 对任意 i, φ i)
   证明: rfl
 
 @[simp]
@@ -375,7 +375,7 @@ theorem proj_surjective
 中文:
 定理 proj_surjective
   条件: (i : ι)
-  结论: Surjective (proj i : ((i : ι) -> φ i) ->ₗ[R] φ i)
+  结论: 满射 (proj i : ((i : ι) -> φ i) ->ₗ[R] φ i)
   证明: surjective_eval i
 
 Depends on / 依赖: surjective_eval
@@ -397,8 +397,8 @@ definition _root_.LinearEquiv.linearMapPi
   right_inv _ := rfl
 
 中文:
-定义 _root_.LinearEquiv.linearMapPi
-  签名: (S) [Semiring S] [(i : ι) -> Module S (φ i)]
+定义 _root_.线性等价.linearMapPi
+  签名: (S) [半环 S] [(i : ι) -> 模 S (φ i)]
   定义体: pi
   map_add' _ _ := rfl
   map_smul' _ _ := rfl
@@ -452,8 +452,8 @@ instance CompatibleSMul.pi
   body: by ext i; apply ((LinearMap.proj i).comp f).map_smul_of_tower
 
 中文:
-实例 CompatibleSMul.pi
-  签名: (R S M N ι : 类型) [Semiring S]
+实例 余mpatibleSMul.pi
+  签名: (R S M N ι : 类型) [半环 S]
   定义体: by ext i; apply ((LinearMap.proj i).comp f).map_smul_of_tower
 
 Depends on / 依赖: LinearMap, LinearMap.proj, map_smul_of_tower
@@ -475,7 +475,7 @@ definition piMap
 
 中文:
 定义 piMap
-  签名: {ψ : ι -> 类型} [对任意 i, AddCommMonoid (ψ i)] [对任意 i, Module R (ψ i)]
+  签名: {ψ : ι -> 类型} [对任意 i, 加法交换幺半群 (ψ i)] [对任意 i, 模 R (ψ i)]
   定义体: .pi fun i => f i ∘ₗ proj i
 
 @[simp]
@@ -495,7 +495,7 @@ theorem coe_piMap
 
 中文:
 定理 coe_piMap
-  结论: {ψ : ι -> 类型} [对任意 i, AddCommMonoid (ψ i)] [对任意 i, Module R (ψ i)]
+  结论: {ψ : ι -> 类型} [对任意 i, 加法交换幺半群 (ψ i)] [对任意 i, 模 R (ψ i)]
   证明: rfl
 -/
 theorem coe_piMap {ψ : ι -> Type*} [forall i, AddCommMonoid (ψ i)] [forall i, Module R (ψ i)]
@@ -543,7 +543,7 @@ theorem apply_single
 
 中文:
 定理 apply_single
-  结论: [AddCommMonoid M] [Module R M] [DecidableEq ι] (f : (i : ι) -> φ i ->ₗ[R] M)
+  结论: [加法交换幺半群 M] [模 R M] [DecidableEq ι] (f : (i : ι) -> φ i ->ₗ[R] M)
   证明: Pi.apply_single (fun i => f i) (fun i => (f i).map_zero) _ _ _
 
 Depends on / 依赖: Pi.apply_single, apply_single, map_zero
@@ -607,7 +607,7 @@ lemma sum_single_apply
 
 中文:
 引理 sum_single_apply
-  条件: [Fintype ι] [DecidableEq ι] (v : Π i, φ i)
+  条件: [有限类型 ι] [DecidableEq ι] (v : Π i, φ i)
   证明: by ext; simp
 
 @[simp]
@@ -691,7 +691,7 @@ theorem iSup_range_single_le_iInf_ker_proj
 
 中文:
 定理 iSup_range_single_le_iInf_ker_proj
-  条件: (I J : Set ι) (h : Disjoint I J)
+  条件: (I J : 集合 ι) (h : Disjoint I J)
   证明: by
   refine iSup_le fun i => iSup_le fun hi => range_le_iff_comap.2 ?_
   simp only [← ker_comp, eq_top_iff, SetLike.le_def, mem_ker, comap_iInf, mem_iInf]
@@ -729,7 +729,7 @@ theorem iInf_ker_proj_le_iSup_range_single
 
 中文:
 定理 iInf_ker_proj_le_iSup_range_single
-  条件: {I J : Set ι} (hI : I.Finite) (hIJ : Codisjoint I J)
+  条件: {I J : 集合 ι} (hI : I.有限) (hIJ : Codisjoint I J)
   证明: by
   lift I to Finset ι using hI
   intro b hb
@@ -768,7 +768,7 @@ theorem iSup_range_single_eq_iInf_ker_proj
 
 中文:
 定理 iSup_range_single_eq_iInf_ker_proj
-  条件: {I J : Set ι} (hIJ : IsCompl I J) (hI : I.Finite)
+  条件: {I J : 集合 ι} (hIJ : 是补集 I J) (hI : I.有限)
   证明: le_antisymm (iSup_range_single_le_iInf_ker_proj _ _ _ _ hIJ.disjoint)
     iInf_ker_proj_le_iSup_range_single R φ hI hIJ.codisjoint
 
@@ -791,7 +791,7 @@ theorem iSup_range_single
 
 中文:
 定理 iSup_range_single
-  条件: [Finite ι]
+  条件: [有限 ι]
   结论: ⨆ i, range (single R φ i) = ⊤
   证明: by
   simpa using iInf_ker_proj_le_iSup_range_single R φ Set.finite_univ isCompl_top_bot.codisjoint
@@ -817,7 +817,7 @@ theorem disjoint_single_single
 
 中文:
 定理 disjoint_single_single
-  条件: (I J : Set ι) (h : Disjoint I J)
+  条件: (I J : 集合 ι) (h : Disjoint I J)
   证明: by
   refine
     Disjoint.mono (iSup_range_single_le_iInf_ker_proj _ _ _ _ <| disjoint_compl_right)
@@ -863,7 +863,7 @@ definition lsum
 
 中文:
 定义 lsum
-  签名: (S) [AddCommMonoid M] [Module R M] [Fintype ι] [Semiring S] [Module S M]
+  签名: (S) [加法交换幺半群 M] [模 R M] [有限类型 ι] [半环 S] [模 S M]
   定义体: ∑ i : ι, (f i).comp (proj i)
   invFun f i := f.comp (single R φ i)
   map_add' f g := by simp only [Pi.add_apply, add_comp, Finset.sum_add_distrib]
@@ -898,7 +898,7 @@ theorem lsum_apply
 
 中文:
 定理 lsum_apply
-  结论: (S) [AddCommMonoid M] [Module R M] [Fintype ι] [Semiring S]
+  结论: (S) [加法交换幺半群 M] [模 R M] [有限类型 ι] [半环 S]
   证明: rfl
 -/
 theorem lsum_apply (S) [AddCommMonoid M] [Module R M] [Fintype ι] [Semiring S]
@@ -918,7 +918,7 @@ theorem lsum_piSingle
 
 中文:
 定理 lsum_piSingle
-  结论: (S) [AddCommMonoid M] [Module R M] [Fintype ι] [Semiring S]
+  结论: (S) [加法交换幺半群 M] [模 R M] [有限类型 ι] [半环 S]
   证明: by
   simp_rw [lsum_apply, sum_apply, comp_apply, proj_apply, apply_single, Fintype.sum_pi_single']
 
@@ -942,7 +942,7 @@ theorem lsum_single
 
 中文:
 定理 lsum_single
-  结论: (S) [Fintype ι] [Semiring S]
+  结论: (S) [有限类型 ι] [半环 S]
   证明: LinearMap.ext fun x => by simp [Finset.univ_sum_single]
 
 Depends on / 依赖: Finset, Finset.univ_sum_single, LinearMap, LinearMap.ext, univ_sum_single
@@ -969,7 +969,7 @@ theorem pi_ext
 
 中文:
 定理 pi_ext
-  条件: (h : 对任意 i x, f (Pi.single i x) = g (Pi.single i x))
+  条件: (h : 对任意 i x, f (依赖函数类型.single i x) = g (依赖函数类型.single i x))
   结论: f = g
   证明: toAddMonoidHom_injective AddMonoidHom.functions_ext _ _ _ h
 
@@ -988,7 +988,7 @@ theorem pi_ext_iff
 
 中文:
 定理 pi_ext_iff
-  结论: f = g ↔ 对任意 i x, f (Pi.single i x) = g (Pi.single i x)
+  结论: f = g ↔ 对任意 i x, f (依赖函数类型.single i x) = g (依赖函数类型.single i x)
   证明: ⟨fun h _ _ => h ▸ rfl, pi_ext⟩
 
 Depends on / 依赖: pi_ext
@@ -1047,7 +1047,7 @@ definition iInfKerProjEquiv
 
 中文:
 定义 iInfKerProjEquiv
-  签名: {I J : Set ι} [DecidablePred fun i => i in I] (hd : Disjoint I J)
+  签名: {I J : 集合 ι} [DecidablePred fun i => i in I] (hd : Disjoint I J)
   定义体: by
   refine
     LinearEquiv.ofLinearMap (pi fun i => (proj (i : ι)).comp (Submodule.subtype _))
@@ -1222,7 +1222,7 @@ theorem pi_apply_eq_sum_univ
 
 中文:
 定理 pi_apply_eq_sum_univ
-  条件: [Fintype ι] (f : (ι -> R) ->ₗ[R] M₂) (x : ι -> R)
+  条件: [有限类型 ι] (f : (ι -> R) ->ₗ[R] M₂) (x : ι -> R)
   证明: by
   conv_lhs => rw [pi_eq_sum_univ x, map_sum]
   refine Finset.sum_congr rfl (fun _ _ => ?_)
@@ -1261,7 +1261,7 @@ definition pi
 
 中文:
 定义 pi
-  签名: (I : Set ι) (p : (i : ι) -> Submodule R (φ i))
+  签名: (I : 集合 ι) (p : (i : ι) -> 子模 R (φ i))
   定义体: Set.pi I fun i => p i
   zero_mem' i _ := (p i).zero_mem
   add_mem' {_ _} hx hy i hi := (p i).add_mem (hx i hi) (hy i hi)
@@ -1316,7 +1316,7 @@ theorem pi_empty
 
 中文:
 定理 pi_empty
-  条件: (p : (i : ι) -> Submodule R (φ i))
+  条件: (p : (i : ι) -> 子模 R (φ i))
   结论: pi ∅ p = ⊤
   证明: SetLike.coe_injective Set.empty_pi _
 
@@ -1341,8 +1341,8 @@ theorem pi_top
 
 中文:
 定理 pi_top
-  条件: (s : Set ι)
-  结论: (pi s fun i : ι => (⊤ : Submodule R (φ i))) = ⊤
+  条件: (s : 集合 ι)
+  结论: (pi s fun i : ι => (⊤ : 子模 R (φ i))) = ⊤
   证明: SetLike.coe_injective Set.pi_univ _
 
 @[simp]
@@ -1365,7 +1365,7 @@ theorem pi_univ_bot
 
 中文:
 定理 pi_univ_bot
-  结论: (pi Set.univ fun i : ι => (⊥ : Submodule R (φ i))) = ⊥
+  结论: (pi 集合.univ fun i : ι => (⊥ : 子模 R (φ i))) = ⊥
   证明: le_bot_iff.mp fun _ h => funext fun i => h i trivial
 
 @[gcongr]
@@ -1387,7 +1387,7 @@ theorem pi_mono
 
 中文:
 定理 pi_mono
-  条件: {s : Set ι} (h : 对任意 i in s, p i <= q i)
+  条件: {s : 集合 ι} (h : 对任意 i in s, p i <= q i)
   结论: pi s p <= pi s q
   证明: Set.pi_mono h
 
@@ -1452,7 +1452,7 @@ theorem le_comap_single_pi
 
 中文:
 定理 le_comap_single_pi
-  条件: [DecidableEq ι] (p : (i : ι) -> Submodule R (φ i)) {I i}
+  条件: [DecidableEq ι] (p : (i : ι) -> 子模 R (φ i)) {I i}
   证明: by
   intro x hx
   rw [Submodule.mem_comap]; rw [Submodule.mem_pi]
@@ -1501,7 +1501,7 @@ theorem iSup_map_single
 
 中文:
 定理 iSup_map_single
-  条件: [DecidableEq ι] [Finite ι]
+  条件: [DecidableEq ι] [有限 ι]
   证明: by
   cases nonempty_fintype ι
   refine iSup_map_single_le.antisymm fun x hx => ?_
@@ -1534,7 +1534,7 @@ lemma ker_compLeft
 
 中文:
 引理 ker_compLeft
-  结论: [AddCommMonoid M] [AddCommMonoid M₂]
+  结论: [加法交换幺半群 M] [加法交换幺半群 M₂]
   证明: Submodule.ext fun _ => ⟨fun (hx : _ = _) i _ => congr_fun hx i,
     fun hx => funext fun i => hx i trivial⟩
 
@@ -1558,7 +1558,7 @@ lemma range_compLeft
 
 中文:
 引理 range_compLeft
-  结论: [AddCommMonoid M] [AddCommMonoid M₂]
+  结论: [加法交换幺半群 M] [加法交换幺半群 M₂]
   证明: Submodule.ext fun _ => ⟨fun ⟨y, hy⟩ i _ => ⟨y i, congr_fun hy i⟩, fun hx => by
     choose y hy using hx
     exact ⟨fun i => y i trivial, funext fun i => hy i trivial⟩⟩
@@ -1820,7 +1820,7 @@ definition piOptionEquivProd
 
 中文:
 定义 piOptionEquivProd
-  签名: {ι : 类型} {M : Option ι -> 类型} [(i : Option ι) -> AddCommMonoid (M i)]
+  签名: {ι : 类型} {M : 选项类型 ι -> 类型} [(i : 选项类型 ι) -> 加法交换幺半群 (M i)]
   定义体: { Equiv.piOptionEquivProd with
     map_add' := by simp [funext_iff]
     map_smul' := by simp [funext_iff] }
@@ -1875,7 +1875,7 @@ theorem piRing_apply
 中文:
 定理 piRing_apply
   条件: (f : (ι -> R) ->ₗ[R] M) (i : ι)
-  结论: piRing R M ι S f i = f (Pi.single i 1)
+  结论: piRing R M ι S f i = f (依赖函数类型.single i 1)
   证明: rfl
 
 @[simp]
@@ -1926,7 +1926,7 @@ definition sumArrowLequivProdArrow
 
 中文:
 定义 sumArrowLequivProdArrow
-  签名: (α β R M : 类型) [Semiring R] [AddCommMonoid M] [Module R M]
+  签名: (α β R M : 类型) [半环 R] [加法交换幺半群 M] [模 R M]
   定义体: { Equiv.sumArrowEquivProdArrow α β
       M with
     map_add' := by
@@ -2050,7 +2050,7 @@ definition funUnique
 
 中文:
 定义 funUnique
-  签名: (ι R M : 类型) [Unique ι] [Semiring R] [AddCommMonoid M] [Module R M]
+  签名: (ι R M : 类型) [唯一 ι] [半环 R] [加法交换幺半群 M] [模 R M]
   定义体: .funUnique ι M
   map_smul' _ _ := rfl
 
@@ -2074,7 +2074,7 @@ theorem funUnique_apply
 
 中文:
 定理 funUnique_apply
-  条件: (ι R M : 类型) [Unique ι] [Semiring R] [AddCommMonoid M] [Module R M]
+  条件: (ι R M : 类型) [唯一 ι] [半环 R] [加法交换幺半群 M] [模 R M]
   证明: rfl
 -/
 theorem funUnique_apply (ι R M : Type*) [Unique ι] [Semiring R] [AddCommMonoid M] [Module R M] :
@@ -2098,7 +2098,7 @@ definition piFinTwo
 
 中文:
 定义 piFinTwo
-  签名: (M : Fin 2 -> 类型v)
+  签名: (M : 有限集 2 -> 类型v)
   定义体: { piFinTwoEquiv M with
     map_add' := fun _ _ => rfl
     map_smul' := fun _ _ => rfl }
@@ -2125,7 +2125,7 @@ theorem piFinTwo_apply
 
 中文:
 定理 piFinTwo_apply
-  结论: (M : Fin 2 -> 类型v)
+  结论: (M : 有限集 2 -> 类型v)
   证明: rfl
 -/
 theorem piFinTwo_apply (M : Fin 2 -> Type v)
@@ -2144,7 +2144,7 @@ definition finTwoArrow
 
 中文:
 定义 finTwoArrow
-  签名: : (Fin 2 -> M) ≃ₗ[R] M × M
+  签名: : (有限集 2 -> M) ≃ₗ[R] M × M
   定义体: { finTwoArrowEquiv M, piFinTwo R fun _ => M with }
 
 Depends on / 依赖: finTwoArrowEquiv, piFinTwo
@@ -2170,7 +2170,7 @@ lemma Pi.mem_span_range_single_inl_iff
     suffices x = ∑ i : ι, x (Sum.inl i) • Pi.s
 
 中文:
-引理 Pi.mem_span_range_single_inl_iff
+引理 依赖函数类型.mem_span_range_single_inl_iff
   证明: by
   refine ⟨fun hx k => ?_, fun hx => ?_⟩
   · induction hx using span_induction with
@@ -2217,7 +2217,7 @@ definition Function.ExtendByZero.linearMap
     map_smul' := fun r f => by simpa using Function.extend_smul r s f 0 }
 
 中文:
-定义 Function.ExtendByZero.linearMap
+定义 函数.ExtendByZero.linearMap
   签名: : (ι -> R) ->ₗ[R] η -> R
   定义体: { Function.ExtendByZero.hom R s with
     toFun := fun f => Function.extend s f 0
@@ -2245,7 +2245,7 @@ map_add' x y := funext Fin.cases rfl (by simp)
 map_smul' c x := funext Fin.cases rfl (by simp)
 
 中文:
-定义 Fin.consLinearEquiv
+定义 有限集.consLinearEquiv
   定义体: Fin.consEquiv M
 map_add' x y := funext Fin.cases rfl (by simp)
 map_smul' c x := funext Fin.cases rfl (by simp)
@@ -2294,8 +2294,8 @@ definition LinearMap.vecEmpty
 @[simp]
 
 中文:
-定义 LinearMap.vecEmpty
-  签名: : M ->ₗ[R] Fin 0 -> M₃ where
+定义 线性映射.vecEmpty
+  签名: : M ->ₗ[R] 有限集 0 -> M₃ where
   定义体: Matrix.vecEmpty
   map_add' _ _ := Subsingleton.elim _ _
   map_smul' _ _ := Subsingleton.elim _ _
@@ -2320,9 +2320,9 @@ theorem LinearMap.vecEmpty_apply
   proof: rfl
 
 中文:
-定理 LinearMap.vecEmpty_apply
+定理 线性映射.vecEmpty_apply
   条件: (m : M)
-  结论: (LinearMap.vecEmpty : M ->ₗ[R] Fin 0 -> M₃) m = ![]
+  结论: (线性映射.vecEmpty : M ->ₗ[R] 有限集 0 -> M₃) m = ![]
   证明: rfl
 -/
 theorem LinearMap.vecEmpty_apply (m : M) : (LinearMap.vecEmpty : M ->ₗ[R] Fin 0 -> M₃) m = ![] :=
@@ -2339,8 +2339,8 @@ definition LinearMap.vecCons
 @[simp]
 
 中文:
-定义 LinearMap.vecCons
-  签名: {n} (f : M ->ₗ[R] M₂) (g : M ->ₗ[R] Fin n -> M₂)
+定义 线性映射.vecCons
+  签名: {n} (f : M ->ₗ[R] M₂) (g : M ->ₗ[R] 有限集 n -> M₂)
   定义体: Fin.consLinearEquiv R (fun _ : Fin n.succ => M₂) ∘ₗ f.prod g
 
 @[simp]
@@ -2360,8 +2360,8 @@ theorem LinearMap.vecCons_apply
   proof: rfl
 
 中文:
-定理 LinearMap.vecCons_apply
-  条件: {n} (f : M ->ₗ[R] M₂) (g : M ->ₗ[R] Fin n -> M₂) (m : M)
+定理 线性映射.vecCons_apply
+  条件: {n} (f : M ->ₗ[R] M₂) (g : M ->ₗ[R] 有限集 n -> M₂) (m : M)
   证明: rfl
 -/
 theorem LinearMap.vecCons_apply {n} (f : M ->ₗ[R] M₂) (g : M ->ₗ[R] Fin n -> M₂) (m : M) :
@@ -2397,8 +2397,8 @@ lemma Module.pi_induction
 exact equiv' (LinearEquiv.piOptionEquivProd R).symm prod (
 
 中文:
-引理 Module.pi_induction
-  结论: {ι : 类型v} [Finite ι]
+引理 模.pi_induction
+  结论: {ι : 类型v} [有限 ι]
   证明: by
   cases nonempty_fintype ι
   revert M
@@ -2447,8 +2447,8 @@ definition LinearMap.vecEmpty₂
   map_smul' _ _ := LinearMap.ext fun _ => Subsingleton.elim _ _
 
 中文:
-定义 LinearMap.vecEmpty₂
-  签名: : M ->ₗ[R] M₂ ->ₗ[R] Fin 0 -> M₃ where
+定义 线性映射.vecEmpty₂
+  签名: : M ->ₗ[R] M₂ ->ₗ[R] 有限集 0 -> M₃ where
   定义体: LinearMap.vecEmpty
   map_add' _ _ := LinearMap.ext fun _ => Subsingleton.elim _ _
   map_smul' _ _ := LinearMap.ext fun _ => Subsingleton.elim _ _
@@ -2477,8 +2477,8 @@ definition LinearMap.vecCons₂
   map_smul' r x := LinearMap.ext fun z => by simp [Matrix.smul_cons r (f x z)]
 
 中文:
-定义 LinearMap.vecCons₂
-  签名: {n} (f : M ->ₗ[R] M₂ ->ₗ[R] M₃) (g : M ->ₗ[R] M₂ ->ₗ[R] Fin n -> M₃)
+定义 线性映射.vecCons₂
+  签名: {n} (f : M ->ₗ[R] M₂ ->ₗ[R] M₃) (g : M ->ₗ[R] M₂ ->ₗ[R] 有限集 n -> M₃)
   定义体: LinearMap.vecCons (f m) (g m)
   map_add' x y :=
     LinearMap.ext fun z => by
@@ -2516,8 +2516,8 @@ lemma Module.pi_induction'
 exact equiv' (LinearEquiv.piOptionEquivProd R).symm prod (
 
 中文:
-引理 Module.pi_induction'
-  结论: {ι : 类型v} [Finite ι] (R : 类型) [Ring R]
+引理 模.pi_induction'
+  结论: {ι : 类型v} [有限 ι] (R : 类型) [环 R]
   证明: by
   cases nonempty_fintype ι
   revert M

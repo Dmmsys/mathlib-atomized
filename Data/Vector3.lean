@@ -50,8 +50,8 @@ instance [Inhabited
   body: fun _ => default
 
 中文:
-实例 [Inhabited
-  签名: α] : Inhabited (Vector3 α n) where
+实例 [可居
+  签名: α] : 可居 (Vector3 α n) where
   定义体: fun _ => default
 -/
 instance [Inhabited α] : Inhabited (Vector3 α n) where
@@ -286,7 +286,7 @@ definition nilElim
 
 中文:
 定义 nilElim
-  签名: {C : Vector3 α 0 -> Sort u} (H : C []) (v : Vector3 α 0)
+  签名: {C : Vector3 α 0 -> 类型层 u} (H : C []) (v : Vector3 α 0)
   定义体: by
   rw [eq_nil v]; apply H
 
@@ -309,7 +309,7 @@ definition consElim
 
 中文:
 定义 consElim
-  签名: {C : Vector3 α (n + 1) -> Sort u} (H : 对任意 (a : α) (t : Vector3 α n), C (a :: t))
+  签名: {C : Vector3 α (n + 1) -> 类型层 u} (H : 对任意 (a : α) (t : Vector3 α n), C (a :: t))
   定义体: by rw [← cons_head_tail v]; apply H
 
 @[simp]
@@ -354,7 +354,7 @@ definition recOn
 
 中文:
 定义 recOn
-  签名: {C : 对任意 {n}, Vector3 α n -> Sort u} {n} (v : Vector3 α n) (H0 : C [])
+  签名: {C : 对任意 {n}, Vector3 α n -> 类型层 u} {n} (v : Vector3 α n) (H0 : C [])
   定义体: match n with
   | 0 => v.nilElim H0
   | _ + 1 => v.consElim fun a t => Hs a t (Vector3.recOn t H0 Hs)
@@ -675,9 +675,9 @@ theorem exists_vector_zero
   proof: ⟨fun ⟨v, fv⟩ => by rw [← eq_nil v]; exact fv, fun f0 => ⟨[], f0⟩⟩
 
 中文:
-定理 exists_vector_zero
+定理 存在_vector_zero
   条件: (f : Vector3 α 0 -> 命题)
-  结论: Exists f ↔ f []
+  结论: 存在 f ↔ f []
   证明: ⟨fun ⟨v, fv⟩ => by rw [← eq_nil v]; exact fv, fun f0 => ⟨[], f0⟩⟩
 
 Depends on / 依赖: eq_nil
@@ -695,9 +695,9 @@ theorem exists_vector_succ
   proof: ⟨fun ⟨v, fv⟩ => ⟨_, _, by rw [cons_head_tail v]; exact fv⟩, fun ⟨_, _, fxv⟩ => ⟨_, fxv⟩⟩
 
 中文:
-定理 exists_vector_succ
+定理 存在_vector_succ
   条件: (f : Vector3 α (succ n) -> 命题)
-  结论: Exists f ↔ 存在 x v, f (x :: v)
+  结论: 存在 f ↔ 存在 x v, f (x :: v)
   证明: ⟨fun ⟨v, fv⟩ => ⟨_, _, by rw [cons_head_tail v]; exact fv⟩, fun ⟨_, _, fxv⟩ => ⟨_, fxv⟩⟩
 
 Depends on / 依赖: cons_head_tail
@@ -713,8 +713,8 @@ theorem vectorEx_iff_exists
   statement: forall {n} (f : Vector3 α n -> Prop), VectorEx n f ↔ Exists f
 
 中文:
-定理 vectorEx_iff_exists
-  结论: 对任意 {n} (f : Vector3 α n -> 命题), VectorEx n f ↔ Exists f
+定理 vectorEx_iff_存在
+  结论: 对任意 {n} (f : Vector3 α n -> 命题), VectorEx n f ↔ 存在 f
 -/
 theorem vectorEx_iff_exists : forall {n} (f : Vector3 α n -> Prop), VectorEx n f ↔ Exists f
   | 0, f => (exists_vector_zero f).symm
@@ -729,7 +729,7 @@ theorem vectorAll_iff_forall
   statement: forall {n} (f : Vector3 α n -> Prop), VectorAll n f ↔ forall v, f v
 
 中文:
-定理 vectorAll_iff_forall
+定理 vectorAll_iff_对任意
   结论: 对任意 {n} (f : Vector3 α n -> 命题), VectorAll n f ↔ 对任意 v, f v
 -/
 theorem vectorAll_iff_forall : forall {n} (f : Vector3 α n -> Prop), VectorAll n f ↔ forall v, f v
@@ -778,7 +778,7 @@ theorem vectorAllP_nil
 中文:
 定理 vectorAllP_nil
   条件: (p : α -> 命题)
-  结论: VectorAllP p [] = True
+  结论: VectorAllP p [] = 真
   证明: rfl
 
 @[simp]
@@ -847,7 +847,7 @@ theorem vectorAllP_iff_forall
     · 
 
 中文:
-定理 vectorAllP_iff_forall
+定理 vectorAllP_iff_对任意
   条件: (p : α -> 命题) (v : Vector3 α n)
   证明: by
   refine v.recOn ?_ ?_

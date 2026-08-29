@@ -47,7 +47,7 @@ class SurjectiveOnStalks
 类 SurjectiveOnStalks
   参数: (f : X ⟶ Y)
   公理与运算 (1 个):
-    - stalkMap_surjective((f)) : 对任意 x, Function.Surjective (f.stalkMap x)
+    - stalkMap_surjective((f)) : 对任意 x, 函数.满射 (f.stalkMap x)
 
 Depends on / 依赖: SurjectiveOnStalks, SurjectiveOnStalks.stalkMap_surjective, stalkMap_surjective
 -/
@@ -78,7 +78,7 @@ instance :
 
 中文:
 实例 :
-  签名: Morphism命题erty.IsMultiplicative @SurjectiveOnStalks
+  签名: MorphismProperty.是Multiplicative @SurjectiveOnStalks
   定义体: inferInstance
   comp_mem {X Y Z} f g hf hg := by
     refine ⟨fun x => ?_⟩
@@ -103,7 +103,7 @@ instance comp
 
 中文:
 实例 comp
-  签名: {X Y Z : Scheme} (f : X ⟶ Y) (g : Y ⟶ Z) [SurjectiveOnStalks f]
+  签名: {X Y Z : 概形} (f : X ⟶ Y) (g : Y ⟶ Z) [SurjectiveOnStalks f]
   定义体: MorphismProperty.IsStableUnderComposition.comp_mem f g inferInstance inferInstance
 
 Depends on / 依赖: IsStableUnderComposition, MorphismProperty, MorphismProperty.IsStableUnderComposition.comp_mem, comp_mem
@@ -178,7 +178,7 @@ lemma Spec_iff
 
 中文:
 引理 Spec_iff
-  条件: {R S : CommRingCat.{u}} {φ : R ⟶ S}
+  条件: {R S : 交换环范畴.{u}} {φ : R ⟶ S}
   证明: by
   rw [eq_stalkwise]; rw [stalkwise_SpecMap_iff RingHom.surjective_respectsIso]; rw [RingHom.SurjectiveOnStalks]
 
@@ -198,7 +198,7 @@ instance :
 
 中文:
 实例 :
-  签名: HasRingHom命题erty @SurjectiveOnStalks RingHom.SurjectiveOnStalks
+  签名: 有RingHomProperty @SurjectiveOnStalks 环态射.SurjectiveOnStalks
   定义体: eq_stalkwise ▸ .stalkwise RingHom.surjective_respectsIso
 
 Depends on / 依赖: RingHom, RingHom.surjective_respectsIso, eq_stalkwise, stalkwise, surjective_respectsIso
@@ -219,7 +219,7 @@ lemma iff_of_isAffine
 
 中文:
 引理 iff_of_isAffine
-  条件: [IsAffine X] [IsAffine Y]
+  条件: [是仿射 X] [是仿射 Y]
   证明: by
   rw [← Spec_iff]; rw [MorphismProperty.arrow_mk_iso_iff @SurjectiveOnStalks (arrowIsoSpecΓOfIsAffine f)]
 
@@ -310,8 +310,8 @@ lemma mono_of_injective
 
 中文:
 引理 mono_of_injective
-  条件: [SurjectiveOnStalks f] (hf : Function.Injective f)
-  结论: Mono f
+  条件: [SurjectiveOnStalks f] (hf : 函数.单射 f)
+  结论: 单态射 f
   证明: by
   refine (Scheme.forgetToLocallyRingedSpace ⋙
     LocallyRingedSpace.forgetToSheafedSpace).mono_of_mono_map ?_
@@ -344,7 +344,7 @@ lemma isEmbedding_pullback
 
 中文:
 引理 isEmbedding_pullback
-  条件: {X Y S : Scheme.{u}} (f : X ⟶ S) (g : Y ⟶ S) [SurjectiveOnStalks g]
+  条件: {X Y S : 概形.{u}} (f : X ⟶ S) (g : Y ⟶ S) [SurjectiveOnStalks g]
   证明: by
   let L := (fun x => (pullback.fst f g x, pullback.snd f g x))
   have H : forall R A B (f' : Spec A ⟶ Spec R) (g' : Spec B ⟶ Spec R) (iX : Spec A ⟶ X)

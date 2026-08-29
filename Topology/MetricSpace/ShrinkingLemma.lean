@@ -47,8 +47,8 @@ theorem exists_subset_iUnion_ball_radius_lt
 exact ⟨r', hsv.trans iUnion_mono hsub, hlt⟩
 
 中文:
-定理 exists_subset_iUnion_ball_radius_lt
-  结论: {r : ι -> 实数} (hs : IsClosed s)
+定理 存在_subset_iUnion_ball_radius_lt
+  结论: {r : ι -> 实数} (hs : 是闭集 s)
   证明: by
   rcases exists_subset_iUnion_closed_subset hs (fun i => @isOpen_ball _ _ (c i) (r i)) uf us with
     ⟨v, hsv, hvc, hcv⟩
@@ -77,8 +77,8 @@ theorem exists_iUnion_ball_eq_radius_lt
   ⟨r', univ_subset_iff.1 hU, hv⟩
 
 中文:
-定理 exists_iUnion_ball_eq_radius_lt
-  结论: {r : ι -> 实数} (uf : 对任意 x, { i | x in ball (c i) (r i) }.Finite)
+定理 存在_iUnion_ball_eq_radius_lt
+  结论: {r : ι -> 实数} (uf : 对任意 x, { i | x in ball (c i) (r i) }.有限)
   证明: let ⟨r', hU, hv⟩ := exists_subset_iUnion_ball_radius_lt isClosed_univ (fun x _ => uf x) uU.ge
   ⟨r', univ_subset_iff.1 hU, hv⟩
 
@@ -104,8 +104,8 @@ theorem exists_subset_iUnion_ball_radius_pos_lt
 exact ⟨r', hsv.trans iUnion_mono hsub, hlt⟩
 
 中文:
-定理 exists_subset_iUnion_ball_radius_pos_lt
-  结论: {r : ι -> 实数} (hr : 对任意 i, 0 < r i) (hs : IsClosed s)
+定理 存在_subset_iUnion_ball_radius_pos_lt
+  结论: {r : ι -> 实数} (hr : 对任意 i, 0 < r i) (hs : 是闭集 s)
   证明: by
   rcases exists_subset_iUnion_closed_subset hs (fun i => @isOpen_ball _ _ (c i) (r i)) uf us with
     ⟨v, hsv, hvc, hcv⟩
@@ -135,7 +135,7 @@ theorem exists_iUnion_ball_eq_radius_pos_lt
   ⟨r', univ_subset_iff.1 hU, hv⟩
 
 中文:
-定理 exists_iUnion_ball_eq_radius_pos_lt
+定理 存在_iUnion_ball_eq_radius_pos_lt
   结论: {r : ι -> 实数} (hr : 对任意 i, 0 < r i)
   证明: let ⟨r', hU, hv⟩ :=
     exists_subset_iUnion_ball_radius_pos_lt hr isClosed_univ (fun x _ => uf x) uU.ge
@@ -164,8 +164,8 @@ theorem exists_locallyFinite_subset_iUnion_ball_radius_lt
   rcases exis
 
 中文:
-定理 exists_locallyFinite_subset_iUnion_ball_radius_lt
-  结论: (hs : IsClosed s) {R : α -> 实数}
+定理 存在_locallyFinite_subset_iUnion_ball_radius_lt
+  结论: (hs : 是闭集 s) {R : α -> 实数}
   证明: by
   have : forall x in s, (𝓝 x).HasBasis (fun r : Real => 0 < r ∧ r < R x) fun r => ball x r := fun x hx =>
     nhds_basis_uniformity (uniformity_basis_dist_lt (hR x hx))
@@ -200,7 +200,7 @@ theorem exists_locallyFinite_iUnion_eq_ball_radius_lt
   ⟨ι, c, r, r', fun i => (hlt i).2, hfin, univ_subset_iff.1 hsub⟩
 
 中文:
-定理 exists_locallyFinite_iUnion_eq_ball_radius_lt
+定理 存在_locallyFinite_iUnion_eq_ball_radius_lt
   条件: {R : α -> 实数} (hR : 对任意 x, 0 < R x)
   证明: let ⟨ι, c, r, r', hlt, hfin, hsub⟩ :=
     exists_locallyFinite_subset_iUnion_ball_radius_lt isClosed_univ fun x _ => hR x

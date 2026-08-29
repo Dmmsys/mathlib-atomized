@@ -58,7 +58,7 @@ inductive DirectLimit.Eqv
 归纳类型 DirectLimit.Eqv
   参数: [DecidableEq ι]
   构造子 (1 个):
-    - of_map: {i j} (h : i <= j) (x : G i) : Eqv (DirectSum.lof R ι G i x) (DirectSum.lof R ι G j <| f i j h x)
+    - of_map: {i j} (h : i <= j) (x : G i) : Eqv (直和.lof R ι G i x) (直和.lof R ι G j <| f i j h x)
 -/
 inductive DirectLimit.Eqv [DecidableEq ι] : DirectSum ι G -> DirectSum ι G -> Prop
   | of_map {i j} (h : i <= j) (x : G i) :
@@ -117,7 +117,7 @@ instance addCommMonoid
 
 中文:
 实例 addCommMonoid
-  签名: : AddCommMonoid (DirectLimit G f)
+  签名: : 加法交换幺半群 (DirectLimit G f)
   定义体: inferInstanceAs (AddCommMonoid (moduleCon f).Quotient)
 
 Depends on / 依赖: AddCommMonoid, Quotient, moduleCon
@@ -135,7 +135,7 @@ instance module
 
 中文:
 实例 module
-  签名: : Module R (DirectLimit G f)
+  签名: : 模 R (DirectLimit G f)
   定义体: inferInstanceAs (Module R (moduleCon f).Quotient)
 
 Depends on / 依赖: Module, Quotient, moduleCon
@@ -152,7 +152,7 @@ instance addCommGroup
 
 中文:
 实例 addCommGroup
-  签名: (G : ι -> 类型) [对任意 i, AddCommGroup (G i)] [对任意 i, Module R (G i)]
+  签名: (G : ι -> 类型) [对任意 i, 加法交换群 (G i)] [对任意 i, 模 R (G i)]
   定义体: inferInstanceAs (AddCommGroup (moduleCon f).Quotient)
 
 Depends on / 依赖: AddCommGroup, Quotient, moduleCon
@@ -171,7 +171,7 @@ instance inhabited
 
 中文:
 实例 inhabited
-  签名: : Inhabited (DirectLimit G f)
+  签名: : 可居 (DirectLimit G f)
   定义体: ⟨0⟩
 -/
 instance inhabited : Inhabited (DirectLimit G f) :=
@@ -187,7 +187,7 @@ instance unique
 
 中文:
 实例 unique
-  签名: [IsEmpty ι]
+  签名: [是空 ι]
   定义体: inferInstanceAs Unique (Quotient _)
 
 Depends on / 依赖: Quotient, Unique
@@ -231,7 +231,7 @@ theorem quotMk_of
 中文:
 定理 quotMk_of
   条件: (i x)
-  结论: Quot.mk _ (.of G i x) = of R ι G f i x
+  结论: 商.mk _ (.of G i x) = of R ι G f i x
   证明: rfl
 
 @[simp]
@@ -274,8 +274,8 @@ theorem exists_of
       
 
 中文:
-定理 exists_of
-  条件: [Nonempty ι] [IsDirectedOrder ι] (z : DirectLimit G f)
+定理 存在_of
+  条件: [非空 ι] [IsDirectedOrder ι] (z : DirectLimit G f)
   证明: Nonempty.elim (by infer_instance) fun ind : ι =>
     Quotient.inductionOn' z fun z =>
       DirectSum.induction_on z ⟨ind, 0, map_zero _⟩ (fun i x => ⟨i, x, rfl⟩)
@@ -311,8 +311,8 @@ theorem exists_of₂
 @[elab_as_elim]
 
 中文:
-定理 exists_of₂
-  条件: [Nonempty ι] [IsDirectedOrder ι] (z w : DirectLimit G f)
+定理 存在_of₂
+  条件: [非空 ι] [IsDirectedOrder ι] (z w : DirectLimit G f)
   证明: have ⟨i, x, hx⟩ := exists_of z
   have ⟨j, y, hy⟩ := exists_of w
   have ⟨k, hik, hjk⟩ := exists_ge_ge i j
@@ -341,7 +341,7 @@ theorem induction_on
 
 中文:
 定理 induction_on
-  结论: [Nonempty ι] [IsDirectedOrder ι] {C : DirectLimit G f -> 命题}
+  结论: [非空 ι] [IsDirectedOrder ι] {C : DirectLimit G f -> 命题}
   证明: let ⟨i, x, h⟩ := exists_of z
   h ▸ ih i x
 -/
@@ -785,7 +785,7 @@ theorem exists_eq_of_of_eq
   exact ⟨j, h.1, h.2.2⟩
 
 中文:
-定理 exists_eq_of_of_eq
+定理 存在_eq_of_of_eq
   条件: {i x y} (h : of R ι G f i x = of R ι G f i y)
   证明: by
   have := Nonempty.intro i
@@ -877,7 +877,7 @@ instance addCommGroup
 
 中文:
 实例 addCommGroup
-  签名: (G : ι -> 类型) [对任意 i, AddCommGroup (G i)]
+  签名: (G : ι -> 类型) [对任意 i, 加法交换群 (G i)]
   定义体: inferInstanceAs AddCommGroup (Module.DirectLimit G _)
 
 Depends on / 依赖: AddCommGroup, DirectLimit, Module, Module.DirectLimit
@@ -895,8 +895,8 @@ instance [IsEmpty
   body: inferInstanceAs Unique (Module.DirectLimit G _)
 
 中文:
-实例 [IsEmpty
-  签名: ι] : Unique (DirectLimit G f)
+实例 [是空
+  签名: ι] : 唯一 (DirectLimit G f)
   定义体: inferInstanceAs Unique (Module.DirectLimit G _)
 
 Depends on / 依赖: DirectLimit, Module, Module.DirectLimit, Unique
@@ -960,7 +960,7 @@ theorem induction_on
 
 中文:
 定理 induction_on
-  结论: [Nonempty ι] [IsDirectedOrder ι] {C : DirectLimit G f -> 命题}
+  结论: [非空 ι] [IsDirectedOrder ι] {C : DirectLimit G f -> 命题}
   证明: Module.DirectLimit.induction_on z ih
 -/
 protected theorem induction_on [Nonempty ι] [IsDirectedOrder ι] {C : DirectLimit G f -> Prop}

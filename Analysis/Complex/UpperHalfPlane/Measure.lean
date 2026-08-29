@@ -40,7 +40,7 @@ instance :
 
 中文:
 实例 :
-  签名: MeasurableSpace ℍ
+  签名: 可测空间 ℍ
   定义体: .comap UpperHalfPlane.coe inferInstance
 
 Depends on / 依赖: UpperHalfPlane, UpperHalfPlane.coe
@@ -57,7 +57,7 @@ instance :
 
 中文:
 实例 :
-  签名: BorelSpace ℍ
+  签名: Borel空间 ℍ
   定义体: ⟨borel_comap.symm⟩
 
 Depends on / 依赖: borel_comap, borel_comap.symm
@@ -76,7 +76,7 @@ lemma measurableEmbedding_coe
 
 中文:
 引理 measurableEmbedding_coe
-  结论: MeasurableEmbedding UpperHalfPlane.coe
+  结论: 可测嵌入 UpperHalfPlane.coe
   证明: isOpenEmbedding_coe.measurableEmbedding
 
 @[fun_prop]
@@ -97,7 +97,7 @@ lemma measurable_coe
 
 中文:
 引理 measurable_coe
-  结论: Measurable UpperHalfPlane.coe
+  结论: 可测 UpperHalfPlane.coe
   证明: measurableEmbedding_coe.measurable
 
 Depends on / 依赖: measurable, measurableEmbedding_coe, measurableEmbedding_coe.measurable
@@ -116,7 +116,7 @@ instance :
 
 中文:
 实例 :
-  签名: MeasureSpace ℍ
+  签名: 测度空间 ℍ
   定义体: ⟨(volume.comap UpperHalfPlane.coe).withDensity
     fun z => ↑((1 / NNReal.mk z.im z.im_pos.le : Real>=0) ^ 2)⟩
 
@@ -152,7 +152,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsFiniteMeasureOnCompacts (volume.comap UpperHalfPlane.coe)
+  签名: 紧集上有限测度 (volume.comap UpperHalfPlane.coe)
   定义体: .comap' _ continuous_coe measurableEmbedding_coe
 
 Depends on / 依赖: continuous_coe, measurableEmbedding_coe
@@ -170,7 +170,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsLocallyFiniteMeasure (volume.comap UpperHalfPlane.coe)
+  签名: 是局部有限测度 (volume.comap UpperHalfPlane.coe)
   定义体: inferInstance
 -/
 instance : IsLocallyFiniteMeasure (volume.comap UpperHalfPlane.coe) := inferInstance
@@ -185,7 +185,7 @@ instance :
 
 中文:
 实例 :
-  签名: SigmaFinite (volume.comap UpperHalfPlane.coe)
+  签名: σ有限 (volume.comap UpperHalfPlane.coe)
   定义体: inferInstance
 -/
 instance : SigmaFinite (volume.comap UpperHalfPlane.coe) := inferInstance
@@ -219,7 +219,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsLocallyFiniteMeasure (volume : Measure ℍ)
+  签名: 是局部有限测度 (volume : 测度 ℍ)
   定义体: by
   refine .withDensity_coe ?_
   refine .pow (.div₀ continuous_const ?_ ?_) _
@@ -244,7 +244,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsFiniteMeasureOnCompacts (volume : Measure ℍ)
+  签名: 紧集上有限测度 (volume : 测度 ℍ)
   定义体: inferInstance
 -/
 instance : IsFiniteMeasureOnCompacts (volume : Measure ℍ) := inferInstance
@@ -259,7 +259,7 @@ instance :
 
 中文:
 实例 :
-  签名: SigmaFinite (volume : Measure ℍ)
+  签名: σ有限 (volume : 测度 ℍ)
   定义体: inferInstance
 -/
 instance : SigmaFinite (volume : Measure ℍ) := inferInstance
@@ -274,7 +274,7 @@ instance :
 
 中文:
 实例 :
-  签名: SFinite (volume : Measure ℍ)
+  签名: SFinite (volume : 测度 ℍ)
   定义体: inferInstance
 -/
 instance : SFinite (volume : Measure ℍ) := inferInstance
@@ -293,7 +293,7 @@ lemma volume_eq_lintegral
 
 中文:
 引理 volume_eq_lintegral
-  条件: (s : Set ℍ)
+  条件: (s : 集合 ℍ)
   证明: by
   have : MeasurePreserving UpperHalfPlane.coe (volume.comap UpperHalfPlane.coe)
       (volume.restrict (.range UpperHalfPlane.coe)) :=
@@ -325,7 +325,7 @@ instance :
 
 中文:
 实例 :
-  签名: SMulInvariantMeasure (GL (Fin 2) 实数) ℍ volume
+  签名: 标量乘不变测度 (GL (有限集 2) 实数) ℍ volume
   定义体: by
   -- It suffices to show `volume (g • s) = volume s` for measurable sets `s`. First
   -- we write this as a lintegral over subsets of `ℂ`.

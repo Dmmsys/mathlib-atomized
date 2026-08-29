@@ -67,7 +67,7 @@ deriving TopologicalSpace, Inhabited, FunLike, ContinuousLinearMapClass
 
 中文:
 定义 WeakDual
-  签名: (𝕜 E : 类型) [CommSemiring 𝕜] [TopologicalSpace 𝕜] [ContinuousAdd 𝕜]
+  签名: (𝕜 E : 类型) [交换半环 𝕜] [拓扑空间 𝕜] [连续加法 𝕜]
   定义体: WeakBilin (topDualPairing 𝕜 E)
 deriving TopologicalSpace, Inhabited, FunLike, ContinuousLinearMapClass
 
@@ -95,7 +95,7 @@ deriving instance AddCommMonoid, ContinuousAdd for WeakDual
 
 中文:
 实例 instMulAction
-  签名: (M) [Monoid M] [DistribMulAction M 𝕜] [SMulCommClass 𝕜 M 𝕜]
+  签名: (M) [幺半群 M] [分配乘法作用 M 𝕜] [标量交换类 𝕜 M 𝕜]
   定义体: inferInstanceAs MulAction M (E ->L[𝕜] 𝕜)
 
 deriving instance AddCommMonoid, ContinuousAdd for WeakDual
@@ -118,7 +118,7 @@ instance instDistribMulAction
 
 中文:
 实例 instDistribMulAction
-  签名: (M) [Monoid M] [DistribMulAction M 𝕜] [SMulCommClass 𝕜 M 𝕜]
+  签名: (M) [幺半群 M] [分配乘法作用 M 𝕜] [标量交换类 𝕜 M 𝕜]
   定义体: inferInstanceAs DistribMulAction M (E ->L[𝕜] 𝕜)
 
 Depends on / 依赖: DistribMulAction
@@ -138,7 +138,7 @@ continuous_induced_rng.2 (WeakBilin.coeFn_continuous (topDualPairing 𝕜 E)).co
 
 中文:
 实例 instContinuousConstSMul
-  签名: (M) [Monoid M] [DistribMulAction M 𝕜] [SMulCommClass 𝕜 M 𝕜]
+  签名: (M) [幺半群 M] [分配乘法作用 M 𝕜] [标量交换类 𝕜 M 𝕜]
   定义体: ⟨fun m =>
 continuous_induced_rng.2 (WeakBilin.coeFn_continuous (topDualPairing 𝕜 E)).const_smul m⟩
 
@@ -160,7 +160,7 @@ instance instContinuousSMul
 
 中文:
 实例 instContinuousSMul
-  签名: (M) [Monoid M] [DistribMulAction M 𝕜] [SMulCommClass 𝕜 M 𝕜]
+  签名: (M) [幺半群 M] [分配乘法作用 M 𝕜] [标量交换类 𝕜 M 𝕜]
   定义体: ⟨continuous_induced_rng.2
       continuous_fst.smul ((WeakBilin.coeFn_continuous (topDualPairing 𝕜 E)).comp continuous_snd)⟩
 
@@ -188,7 +188,7 @@ instance instModule
 
 中文:
 实例 instModule
-  签名: : Module 𝕜 (WeakDual 𝕜 E)
+  签名: : 模 𝕜 (WeakDual 𝕜 E)
   定义体: inferInstance
 -/
 instance instModule : Module 𝕜 (WeakDual 𝕜 E) := inferInstance
@@ -463,7 +463,7 @@ theorem coeFn_continuous
 
 中文:
 定理 coeFn_continuous
-  结论: Continuous fun (x : WeakDual 𝕜 E) y => x y
+  结论: 连续 fun (x : WeakDual 𝕜 E) y => x y
   证明: continuous_induced_dom
 
 Depends on / 依赖: continuous_induced_dom
@@ -483,7 +483,7 @@ theorem eval_continuous
 中文:
 定理 eval_continuous
   条件: (y : E)
-  结论: Continuous fun x : WeakDual 𝕜 E => x y
+  结论: 连续 fun x : WeakDual 𝕜 E => x y
   证明: continuous_pi_iff.mp coeFn_continuous y
 
 Depends on / 依赖: coeFn_continuous, continuous_pi_iff, continuous_pi_iff.mp
@@ -501,7 +501,7 @@ theorem continuous_of_continuous_eval
 
 中文:
 定理 continuous_of_continuous_eval
-  结论: [TopologicalSpace α] {g : α -> WeakDual 𝕜 E}
+  结论: [拓扑空间 α] {g : α -> WeakDual 𝕜 E}
   证明: continuous_induced_rng.2 (continuous_pi_iff.mpr h)
 
 Depends on / 依赖: continuous_induced_rng, continuous_pi_iff, continuous_pi_iff.mpr
@@ -520,7 +520,7 @@ instance instT2Space
 
 中文:
 实例 instT2Space
-  签名: [T2Space 𝕜]
+  签名: [T2空间 𝕜]
   定义体: (WeakBilin.isEmbedding ContinuousLinearMap.coe_injective).t2Space
 
 Depends on / 依赖: ContinuousLinearMap, ContinuousLinearMap.coe_injective, WeakBilin, WeakBilin.isEmbedding, coe_injective, isEmbedding, t2Space
@@ -545,7 +545,7 @@ instance instAddCommGroup
 
 中文:
 实例 instAddCommGroup
-  签名: : AddCommGroup (WeakDual 𝕜 E)
+  签名: : 加法交换群 (WeakDual 𝕜 E)
   定义体: inferInstanceAs AddCommGroup (WeakBilin (topDualPairing 𝕜 E))
 
 Depends on / 依赖: AddCommGroup, WeakBilin, topDualPairing
@@ -563,7 +563,7 @@ instance instIsTopologicalAddGroup
 
 中文:
 实例 instIsTopologicalAddGroup
-  签名: : IsTopologicalAddGroup (WeakDual 𝕜 E)
+  签名: : 是拓扑加群 (WeakDual 𝕜 E)
   定义体: WeakBilin.instIsTopologicalAddGroup (topDualPairing 𝕜 E)
 
 Depends on / 依赖: WeakBilin, WeakBilin.instIsTopologicalAddGroup, instIsTopologicalAddGroup, topDualPairing
@@ -586,7 +586,7 @@ deriving TopologicalSpace
 
 中文:
 定义 WeakSpace
-  签名: (𝕜 E) [CommSemiring 𝕜] [TopologicalSpace 𝕜] [ContinuousAdd 𝕜]
+  签名: (𝕜 E) [交换半环 𝕜] [拓扑空间 𝕜] [连续加法 𝕜]
   定义体: WeakBilin (topDualPairing 𝕜 E).flip
 deriving TopologicalSpace
 
@@ -621,7 +621,7 @@ instance instModule'
 
 中文:
 实例 instModule'
-  签名: [CommSemiring 𝕝] [Module 𝕝 E]
+  签名: [交换半环 𝕝] [模 𝕝 E]
   定义体: inferInstanceAs Module 𝕝 (WeakBilin (topDualPairing 𝕜 E).flip)
 
 Depends on / 依赖: Module, WeakBilin, topDualPairing
@@ -639,7 +639,7 @@ instance instModule
 
 中文:
 实例 instModule
-  签名: : Module 𝕜 (WeakSpace 𝕜 E)
+  签名: : 模 𝕜 (WeakSpace 𝕜 E)
   定义体: inferInstance
 -/
 instance instModule : Module 𝕜 (WeakSpace 𝕜 E) := inferInstance
@@ -654,7 +654,7 @@ instance instIsScalarTower
 
 中文:
 实例 instIsScalarTower
-  签名: [CommSemiring 𝕝] [Module 𝕝 𝕜] [Module 𝕝 E] [IsScalarTower 𝕝 𝕜 E]
+  签名: [交换半环 𝕝] [模 𝕝 𝕜] [模 𝕝 E] [标量塔 𝕝 𝕜 E]
   定义体: WeakBilin.instIsScalarTower (topDualPairing 𝕜 E).flip
 
 Depends on / 依赖: WeakBilin, WeakBilin.instIsScalarTower, instIsScalarTower, topDualPairing
@@ -673,7 +673,7 @@ instance instContinuousSMul
 
 中文:
 实例 instContinuousSMul
-  签名: [ContinuousSMul 𝕜 𝕜]
+  签名: [连续标量乘法 𝕜 𝕜]
   定义体: WeakBilin.instContinuousSMul _
 
 Depends on / 依赖: WeakBilin, WeakBilin.instContinuousSMul, instContinuousSMul
@@ -842,7 +842,7 @@ theorem isOpenMap_toWeakSpace_symm
 
 中文:
 定理 isOpenMap_toWeakSpace_symm
-  结论: IsOpenMap (toWeakSpace 𝕜 E).symm
+  结论: 是开映射 (toWeakSpace 𝕜 E).symm
   证明: IsOpenMap.of_inverse (toWeakSpaceCLM 𝕜 E).cont
     (toWeakSpace 𝕜 E).left_inv (toWeakSpace 𝕜 E).right_inv
 
@@ -863,7 +863,7 @@ theorem WeakSpace.isOpen_of_isOpen
 
 中文:
 定理 WeakSpace.isOpen_of_isOpen
-  结论: (V : Set E)
+  结论: (V : 集合 E)
   证明: by
   simpa [Set.image_image] using isOpenMap_toWeakSpace_symm _ hV
 
@@ -882,8 +882,8 @@ theorem tendsto_iff_forall_eval_tendsto_topDualPairing
   proof: WeakBilin.tendsto_iff_forall_eval_tendsto _ ContinuousLinearMap.coe_injective
 
 中文:
-定理 tendsto_iff_forall_eval_tendsto_topDualPairing
-  结论: {l : Filter α} {f : α -> WeakDual 𝕜 E}
+定理 tendsto_iff_对任意_eval_tendsto_topDualPairing
+  结论: {l : 滤子 α} {f : α -> WeakDual 𝕜 E}
   证明: WeakBilin.tendsto_iff_forall_eval_tendsto _ ContinuousLinearMap.coe_injective
 
 Depends on / 依赖: ContinuousLinearMap, ContinuousLinearMap.coe_injective, WeakBilin, WeakBilin.tendsto_iff_forall_eval_tendsto, coe_injective, tendsto_iff_forall_eval_tendsto
@@ -913,7 +913,7 @@ instance instAddCommGroup
 
 中文:
 实例 instAddCommGroup
-  签名: : AddCommGroup (WeakSpace 𝕜 E)
+  签名: : 加法交换群 (WeakSpace 𝕜 E)
   定义体: inferInstanceAs AddCommGroup (WeakBilin (topDualPairing 𝕜 E).flip)
 
 Depends on / 依赖: AddCommGroup, WeakBilin, topDualPairing
@@ -931,7 +931,7 @@ instance instIsTopologicalAddGroup
 
 中文:
 实例 instIsTopologicalAddGroup
-  签名: : IsTopologicalAddGroup (WeakSpace 𝕜 E)
+  签名: : 是拓扑加群 (WeakSpace 𝕜 E)
   定义体: WeakBilin.instIsTopologicalAddGroup (topDualPairing 𝕜 E).flip
 
 Depends on / 依赖: WeakBilin, WeakBilin.instIsTopologicalAddGroup, instIsTopologicalAddGroup, topDualPairing

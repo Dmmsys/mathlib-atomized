@@ -45,10 +45,10 @@ structure Closeds
 
 中文:
 结构 Closeds
-  参数: (α : 类型) [TopologicalSpace α]
+  参数: (α : 类型) [拓扑空间 α]
   公理与运算 (2 个):
-    - carrier : Set α
-    - isClosed' : IsClosed carrier
+    - carrier : 集合 α
+    - isClosed' : 是闭集 carrier
 -/
 structure Closeds (α : Type*) [TopologicalSpace α] where
   /-- the carrier set, i.e. the points in this set -/
@@ -68,7 +68,7 @@ instance :
 
 中文:
 实例 :
-  签名: SetLike (Closeds α) α
+  签名: 集合状 (Closeds α) α
   定义体: Closeds.carrier
   coe_injective s t h := by cases s; cases t; congr
 
@@ -88,7 +88,7 @@ instance :
 
 中文:
 实例 :
-  签名: PartialOrder (Closeds α)
+  签名: 偏序 (Closeds α)
   定义体: fast_instance% .ofSetLike (Closeds α) α
 
 Depends on / 依赖: Closeds, fast_instance, ofSetLike
@@ -105,7 +105,7 @@ instance :
 
 中文:
 实例 :
-  签名: CanLift (Set α) (Closeds α) (↑) IsClosed
+  签名: CanLift (集合 α) (Closeds α) (↑) 是闭集
   定义体: ⟨⟨s, hs⟩, rfl⟩
 -/
 instance : CanLift (Set α) (Closeds α) (↑) IsClosed where
@@ -123,7 +123,7 @@ theorem isClosed
 中文:
 定理 isClosed
   条件: (s : Closeds α)
-  结论: IsClosed (s : Set α)
+  结论: 是闭集 (s : 集合 α)
   证明: s.isClosed'
 
 Depends on / 依赖: isClosed, s.isClosed
@@ -171,7 +171,7 @@ lemma carrier_eq_coe
 中文:
 引理 carrier_eq_coe
   条件: (s : Closeds α)
-  结论: s.carrier = (s : Set α)
+  结论: s.carrier = (s : 集合 α)
   证明: rfl
 
 @[ext]
@@ -192,7 +192,7 @@ theorem ext
 
 中文:
 定理 ext
-  条件: {s t : Closeds α} (h : (s : Set α) = t)
+  条件: {s t : Closeds α} (h : (s : 集合 α) = t)
   结论: s = t
   证明: SetLike.ext' h
 
@@ -215,8 +215,8 @@ theorem coe_mk
 
 中文:
 定理 coe_mk
-  条件: (s : Set α) (h)
-  结论: (mk s h : Set α) = s
+  条件: (s : 集合 α) (h)
+  结论: (mk s h : 集合 α) = s
   证明: rfl
 
 @[simp]
@@ -236,7 +236,7 @@ lemma mem_mk
 
 中文:
 引理 mem_mk
-  条件: {s : Set α} {hs : IsClosed s} {x : α}
+  条件: {s : 集合 α} {hs : 是闭集 s} {x : α}
   结论: x in (⟨s, hs⟩ : Closeds α) ↔ x in s
   证明: .rfl
 -/
@@ -257,7 +257,7 @@ definition closure
 
 中文:
 定义 closure
-  签名: (s : Set α)
+  签名: (s : 集合 α)
   定义体: ⟨closure s, isClosed_closure⟩
 
 @[simp]
@@ -277,7 +277,7 @@ theorem mem_closure
 
 中文:
 定理 mem_closure
-  条件: {s : Set α} {x : α}
+  条件: {s : 集合 α} {x : α}
   结论: x in Closeds.closure s ↔ x in closure s
   证明: .rfl
 -/
@@ -296,7 +296,7 @@ theorem gc
 
 中文:
 定理 gc
-  结论: GaloisConnection Closeds.closure ((↑) : Closeds α -> Set α)
+  结论: GaloisConnection Closeds.closure ((↑) : Closeds α -> 集合 α)
   证明: fun _ U =>
   ⟨subset_closure.trans, fun h => closure_minimal h U.isClosed⟩
 
@@ -317,7 +317,7 @@ lemma closure_le
 
 中文:
 引理 closure_le
-  条件: {s : Set α} {t : Closeds α}
+  条件: {s : 集合 α} {t : Closeds α}
   结论: .closure s <= t ↔ s subseteq t
   证明: t.isClosed.closure_subset_iff
 
@@ -339,7 +339,7 @@ choice_eq _s hs := SetLike.coe_injective subset_closure.antisymm hs
 
 中文:
 定义 gi
-  签名: : GaloisInsertion (@Closeds.closure α _) (↑) where
+  签名: : Galois嵌入 (@Closeds.closure α _) (↑) where
   定义体: ⟨s, closure_eq_iff_isClosed.1 hs.antisymm subset_closure⟩
   gc := gc
   le_l_u _ := subset_closure
@@ -373,7 +373,7 @@ instance instCompleteLattice
 
 中文:
 实例 instCompleteLattice
-  签名: : CompleteLattice (Closeds α)
+  签名: : 完备格 (Closeds α)
   定义体: fast_instance% CompleteLattice.copy
     (GaloisInsertion.liftCompleteLattice gi)
     -- le
@@ -420,7 +420,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (Closeds α)
+  签名: 可居 (Closeds α)
   定义体: ⟨⊥⟩
 
 @[simp, norm_cast]
@@ -444,7 +444,7 @@ theorem coe_sup
 中文:
 定理 coe_sup
   条件: (s t : Closeds α)
-  结论: (↑(s ⊔ t) : Set α) = ↑s union ↑t
+  结论: (↑(s ⊔ t) : 集合 α) = ↑s union ↑t
   证明: by
   rfl
 
@@ -468,7 +468,7 @@ theorem coe_inf
 中文:
 定理 coe_inf
   条件: (s t : Closeds α)
-  结论: (↑(s ⊓ t) : Set α) = ↑s inter ↑t
+  结论: (↑(s ⊓ t) : 集合 α) = ↑s inter ↑t
   证明: rfl
 
 @[simp, norm_cast]
@@ -489,7 +489,7 @@ theorem coe_top
 
 中文:
 定理 coe_top
-  结论: (↑(⊤ : Closeds α) : Set α) = univ
+  结论: (↑(⊤ : Closeds α) : 集合 α) = univ
   证明: rfl
 
 @[simp, norm_cast]
@@ -512,7 +512,7 @@ theorem coe_eq_univ
 中文:
 定理 coe_eq_univ
   条件: {s : Closeds α}
-  结论: (s : Set α) = univ ↔ s = ⊤
+  结论: (s : 集合 α) = univ ↔ s = ⊤
   证明: SetLike.coe_injective.eq_iff' rfl
 
 @[simp, norm_cast]
@@ -535,7 +535,7 @@ theorem coe_bot
 
 中文:
 定理 coe_bot
-  结论: (↑(⊥ : Closeds α) : Set α) = ∅
+  结论: (↑(⊥ : Closeds α) : 集合 α) = ∅
   证明: rfl
 
 @[simp, norm_cast]
@@ -556,7 +556,7 @@ theorem coe_eq_empty
 中文:
 定理 coe_eq_empty
   条件: {s : Closeds α}
-  结论: (s : Set α) = ∅ ↔ s = ⊥
+  结论: (s : 集合 α) = ∅ ↔ s = ⊥
   证明: SetLike.coe_injective.eq_iff' rfl
 
 Depends on / 依赖: SetLike, SetLike.coe_injective.eq_iff, coe_injective, eq_iff
@@ -578,7 +578,7 @@ theorem coe_nonempty
 中文:
 定理 coe_nonempty
   条件: {s : Closeds α}
-  结论: (s : Set α).Nonempty ↔ s != ⊥
+  结论: (s : 集合 α).非空 ↔ s != ⊥
   证明: nonempty_iff_ne_empty.trans coe_eq_empty.not
 
 @[simp, norm_cast]
@@ -602,8 +602,8 @@ theorem coe_sInf
 
 中文:
 定理 coe_sInf
-  条件: {S : Set (Closeds α)}
-  结论: (↑(sInf S) : Set α) = ⋂ i in S, ↑i
+  条件: {S : 集合 (Closeds α)}
+  结论: (↑(sInf S) : 集合 α) = ⋂ i in S, ↑i
   证明: rfl
 
 @[simp]
@@ -625,8 +625,8 @@ lemma coe_sSup
 
 中文:
 引理 coe_sSup
-  条件: {S : Set (Closeds α)}
-  结论: ((sSup S : Closeds α) : Set α) =
+  条件: {S : 集合 (Closeds α)}
+  结论: ((sSup S : Closeds α) : 集合 α) =
   证明: by rfl
 
 @[simp, norm_cast]
@@ -647,7 +647,7 @@ theorem coe_finset_sup
 
 中文:
 定理 coe_finset_sup
-  条件: (f : ι -> Closeds α) (s : Finset ι)
+  条件: (f : ι -> Closeds α) (s : 有限集 ι)
   证明: map_finset_sup (⟨⟨(↑), coe_sup⟩, coe_bot⟩ : SupBotHom (Closeds α) (Set α)) _ _
 
 @[simp, norm_cast]
@@ -671,7 +671,7 @@ theorem coe_finset_inf
 
 中文:
 定理 coe_finset_inf
-  条件: (f : ι -> Closeds α) (s : Finset ι)
+  条件: (f : ι -> Closeds α) (s : 有限集 ι)
   证明: map_finset_inf (⟨⟨(↑), coe_inf⟩, coe_top⟩ : InfTopHom (Closeds α) (Set α)) _ _
 
 @[simp]
@@ -696,7 +696,7 @@ theorem mem_sInf
 
 中文:
 定理 mem_sInf
-  条件: {S : Set (Closeds α)} {x : α}
+  条件: {S : 集合 (Closeds α)} {x : α}
   结论: x in sInf S ↔ 对任意 s in S, x in s
   证明: mem_iInter₂
 
@@ -740,7 +740,7 @@ theorem coe_iInf
 中文:
 定理 coe_iInf
   条件: {ι} (s : ι -> Closeds α)
-  结论: ((⨅ i, s i : Closeds α) : Set α) = ⋂ i, s i
+  结论: ((⨅ i, s i : Closeds α) : 集合 α) = ⋂ i, s i
   证明: by
   ext; simp
 -/
@@ -778,7 +778,7 @@ theorem iInf_mk
 
 中文:
 定理 iInf_mk
-  条件: {ι} (s : ι -> Set α) (h : 对任意 i, IsClosed (s i))
+  条件: {ι} (s : ι -> 集合 α) (h : 对任意 i, 是闭集 (s i))
   证明: iInf_def _
 
 Depends on / 依赖: iInf_def
@@ -801,7 +801,7 @@ instance instCoframe
 
 中文:
 实例 instCoframe
-  签名: : Coframe (Closeds α)
+  签名: : 余frame (Closeds α)
   定义体: fast_instance% .ofMinimalAxioms {
   iInf_sup_le_sup_sInf a s :=
     (SetLike.coe_injective <| by simp only [coe_sup, coe_iInf, coe_sInf, Set.union_iInter₂]).le }
@@ -826,8 +826,8 @@ instance [T1Space
 @[simp]
 
 中文:
-实例 [T1Space
-  签名: α] : Singleton α (Closeds α) where
+实例 [T1空间
+  签名: α] : 单例 α (Closeds α) where
   定义体: ⟨{x}, isClosed_singleton⟩
 
 @[simp]
@@ -848,7 +848,7 @@ theorem mk_singleton
 
 中文:
 定理 mk_singleton
-  条件: [T1Space α] {x : α}
+  条件: [T1空间 α] {x : α}
   证明: rfl
 -/
 theorem mk_singleton [T1Space α] {x : α} :
@@ -866,7 +866,7 @@ lemma mem_singleton
 
 中文:
 引理 mem_singleton
-  条件: [T1Space α] {a b : α}
+  条件: [T1空间 α] {a b : α}
   结论: a in ({b} : Closeds α) ↔ a = b
   证明: Iff.rfl
 -/
@@ -885,8 +885,8 @@ theorem singleton_injective
 
 中文:
 定理 singleton_injective
-  条件: [T1Space α]
-  结论: Function.Injective ({·} : α -> Closeds α)
+  条件: [T1空间 α]
+  结论: 函数.单射 ({·} : α -> Closeds α)
   证明: .of_comp (f := SetLike.coe) Set.singleton_injective
 
 @[simp]
@@ -908,7 +908,7 @@ theorem singleton_inj
 
 中文:
 定理 singleton_inj
-  条件: [T1Space α] {x y : α}
+  条件: [T1空间 α] {x y : α}
   结论: ({x} : Closeds α) = {y} ↔ x = y
   证明: singleton_injective.eq_iff
 
@@ -928,8 +928,8 @@ definition preimage
   body: ⟨f ⁻¹' s, s.isClosed.preimage hf⟩
 
 中文:
-定义 preimage
-  签名: (s : Closeds β) {f : α -> β} (hf : Continuous f)
+定义 原像
+  签名: (s : Closeds β) {f : α -> β} (hf : 连续 f)
   定义体: ⟨f ⁻¹' s, s.isClosed.preimage hf⟩
 
 Depends on / 依赖: isClosed, preimage, s.isClosed.preimage
@@ -1017,7 +1017,7 @@ theorem singleton_prod_singleton
 
 中文:
 定理 singleton_prod_singleton
-  条件: [T1Space α] [T1Space β] (x : α) (y : β)
+  条件: [T1空间 α] [T1空间 β] (x : α) (y : β)
   证明: Closeds.ext Set.singleton_prod_singleton
 
 Depends on / 依赖: Closeds, Closeds.ext, Set.singleton_prod_singleton, singleton_prod_singleton
@@ -1096,7 +1096,7 @@ theorem Closeds.compl_bijective
 
 中文:
 定理 Closeds.compl_bijective
-  结论: Function.Bijective (@Closeds.compl α _)
+  结论: 函数.双射 (@Closeds.compl α _)
   证明: Function.bijective_iff_has_inverse.mpr ⟨Opens.compl, Closeds.compl_compl, Opens.compl_compl⟩
 
 Depends on / 依赖: Closeds, Closeds.compl_compl, Function, Function.bijective_iff_has_inverse.mpr, Opens.compl, Opens.compl_compl, bijective_iff_has_inverse, compl_compl
@@ -1114,7 +1114,7 @@ theorem Opens.compl_bijective
 
 中文:
 定理 Opens.compl_bijective
-  结论: Function.Bijective (@Opens.compl α _)
+  结论: 函数.双射 (@Opens.compl α _)
   证明: Function.bijective_iff_has_inverse.mpr ⟨Closeds.compl, Opens.compl_compl, Closeds.compl_compl⟩
 
 Depends on / 依赖: Closeds, Closeds.compl, Closeds.compl_compl, Function, Function.bijective_iff_has_inverse.mpr, Opens.compl_compl, bijective_iff_has_inverse, compl_compl
@@ -1205,7 +1205,7 @@ exact SetLike.coe_injective.eq_iff.2 (hs.le_iff_eq <| coe_nonempty.1 ht).1 hts
 
 中文:
 引理 Closeds.coe_eq_singleton_of_isAtom
-  条件: [T0Space α] {s : Closeds α} (hs : IsAtom s)
+  条件: [T0空间 α] {s : Closeds α} (hs : IsAtom s)
   证明: by
   refine minimal_nonempty_closed_eq_singleton s.2 (coe_nonempty.2 hs.1) fun t hts ht ht' => ?_
   lift t to Closeds α using ht'
@@ -1230,7 +1230,7 @@ lemma Closeds.isAtom_coe
 
 中文:
 引理 Closeds.isAtom_coe
-  条件: [T1Space α] {s : Closeds α}
+  条件: [T1空间 α] {s : Closeds α}
   证明: Closeds.gi.isAtom_iff' rfl
     (fun t ht => by obtain ⟨x, rfl⟩ := Set.isAtom_iff.1 ht; exact closure_singleton) s
 -/
@@ -1250,7 +1250,7 @@ theorem Closeds.isAtom_iff
 
 中文:
 定理 Closeds.isAtom_iff
-  条件: [T1Space α] {s : Closeds α}
+  条件: [T1空间 α] {s : Closeds α}
   证明: by
   simp [← Closeds.isAtom_coe, Set.isAtom_iff, SetLike.ext_iff, Set.ext_iff]
 
@@ -1274,7 +1274,7 @@ theorem Opens.isCoatom_iff
 
 中文:
 定理 Opens.isCoatom_iff
-  条件: [T1Space α] {s : Opens α}
+  条件: [T1空间 α] {s : Opens α}
   证明: by
   rw [← s.compl_compl]; rw [← isAtom_dual_iff_isCoatom]
   change IsAtom (Closeds.complOrderIso α s.compl) ↔ _
@@ -1305,9 +1305,9 @@ structure Clopens
 
 中文:
 结构 Clopens
-  参数: (α : 类型) [TopologicalSpace α]
+  参数: (α : 类型) [拓扑空间 α]
   公理与运算 (2 个):
-    - carrier : Set α
+    - carrier : 集合 α
     - isClopen' : IsClopen carrier
 -/
 structure Clopens (α : Type*) [TopologicalSpace α] where
@@ -1328,7 +1328,7 @@ instance :
 
 中文:
 实例 :
-  签名: SetLike (Clopens α) α
+  签名: 集合状 (Clopens α) α
   定义体: s.carrier
   coe_injective s t h := by cases s; cases t; congr
 
@@ -1348,7 +1348,7 @@ instance :
 
 中文:
 实例 :
-  签名: PartialOrder (Clopens α)
+  签名: 偏序 (Clopens α)
   定义体: fast_instance% .ofSetLike (Clopens α) α
 
 Depends on / 依赖: Clopens, fast_instance, ofSetLike
@@ -1367,7 +1367,7 @@ theorem isClopen
 中文:
 定理 isClopen
   条件: (s : Clopens α)
-  结论: IsClopen (s : Set α)
+  结论: IsClopen (s : 集合 α)
   证明: s.isClopen'
 
 Depends on / 依赖: isClopen, s.isClopen
@@ -1387,7 +1387,7 @@ lemma isOpen
 中文:
 引理 isOpen
   条件: (s : Clopens α)
-  结论: IsOpen (s : Set α)
+  结论: 是开集 (s : 集合 α)
   证明: s.isClopen.isOpen
 
 Depends on / 依赖: isClopen, isOpen, s.isClopen.isOpen
@@ -1406,7 +1406,7 @@ lemma isClosed
 中文:
 引理 isClosed
   条件: (s : Clopens α)
-  结论: IsClosed (s : Set α)
+  结论: 是闭集 (s : 集合 α)
   证明: s.isClopen.isClosed
 
 Depends on / 依赖: isClopen, isClosed, s.isClopen.isClosed
@@ -1482,7 +1482,7 @@ theorem ext
 
 中文:
 定理 ext
-  条件: {s t : Clopens α} (h : (s : Set α) = t)
+  条件: {s t : Clopens α} (h : (s : 集合 α) = t)
   结论: s = t
   证明: SetLike.ext' h
 
@@ -1503,8 +1503,8 @@ theorem coe_mk
 
 中文:
 定理 coe_mk
-  条件: (s : Set α) (h)
-  结论: (mk s h : Set α) = s
+  条件: (s : 集合 α) (h)
+  结论: (mk s h : 集合 α) = s
   证明: rfl
 -/
 theorem coe_mk (s : Set α) (h) : (mk s h : Set α) = s :=
@@ -1521,7 +1521,7 @@ lemma mem_mk
 
 中文:
 引理 mem_mk
-  条件: {s : Set α} {x h}
+  条件: {s : 集合 α} {x h}
   结论: x in mk s h ↔ x in s
   证明: .rfl
 -/
@@ -1537,7 +1537,7 @@ instance :
 
 中文:
 实例 :
-  签名: Max (Clopens α)
+  签名: 最大值 (Clopens α)
   定义体: ⟨fun s t => ⟨s union t, s.isClopen.union t.isClopen⟩⟩
 
 Depends on / 依赖: isClopen, s.isClopen.union, t.isClopen
@@ -1553,7 +1553,7 @@ instance :
 
 中文:
 实例 :
-  签名: Min (Clopens α)
+  签名: 最小值 (Clopens α)
   定义体: ⟨fun s t => ⟨s inter t, s.isClopen.inter t.isClopen⟩⟩
 
 Depends on / 依赖: isClopen, s.isClopen.inter, t.isClopen
@@ -1569,7 +1569,7 @@ instance :
 
 中文:
 实例 :
-  签名: Top (Clopens α)
+  签名: 顶元素 (Clopens α)
   定义体: ⟨⟨⊤, isClopen_univ⟩⟩
 
 Depends on / 依赖: isClopen_univ
@@ -1585,7 +1585,7 @@ instance :
 
 中文:
 实例 :
-  签名: Bot (Clopens α)
+  签名: 底元素 (Clopens α)
   定义体: ⟨⟨⊥, isClopen_empty⟩⟩
 
 Depends on / 依赖: isClopen_empty
@@ -1601,7 +1601,7 @@ instance :
 
 中文:
 实例 :
-  签名: SDiff (Clopens α)
+  签名: 对称差 (Clopens α)
   定义体: ⟨fun s t => ⟨s \ t, s.isClopen.diff t.isClopen⟩⟩
 
 Depends on / 依赖: isClopen, s.isClopen.diff, t.isClopen
@@ -1633,7 +1633,7 @@ instance :
 
 中文:
 实例 :
-  签名: Compl (Clopens α)
+  签名: 补集 (Clopens α)
   定义体: ⟨fun s => ⟨sᶜ, s.isClopen.compl⟩⟩
 
 Depends on / 依赖: isClopen, s.isClopen.compl
@@ -1652,7 +1652,7 @@ lemma coe_sup
 中文:
 引理 coe_sup
   条件: (s t : Clopens α)
-  结论: ↑(s ⊔ t) = (s union t : Set α)
+  结论: ↑(s ⊔ t) = (s union t : 集合 α)
   证明: rfl
 -/
 @[simp, norm_cast] lemma coe_sup (s t : Clopens α) : ↑(s ⊔ t) = (s union t : Set α) := rfl
@@ -1668,7 +1668,7 @@ lemma coe_inf
 中文:
 引理 coe_inf
   条件: (s t : Clopens α)
-  结论: ↑(s ⊓ t) = (s inter t : Set α)
+  结论: ↑(s ⊓ t) = (s inter t : 集合 α)
   证明: rfl
 -/
 @[simp, norm_cast] lemma coe_inf (s t : Clopens α) : ↑(s ⊓ t) = (s inter t : Set α) := rfl
@@ -1682,7 +1682,7 @@ lemma coe_top
 
 中文:
 引理 coe_top
-  结论: (↑(⊤ : Clopens α) : Set α) = univ
+  结论: (↑(⊤ : Clopens α) : 集合 α) = univ
   证明: rfl
 -/
 @[simp, norm_cast] lemma coe_top : (↑(⊤ : Clopens α) : Set α) = univ := rfl
@@ -1696,7 +1696,7 @@ lemma coe_bot
 
 中文:
 引理 coe_bot
-  结论: (↑(⊥ : Clopens α) : Set α) = ∅
+  结论: (↑(⊥ : Clopens α) : 集合 α) = ∅
   证明: rfl
 -/
 @[simp, norm_cast] lemma coe_bot : (↑(⊥ : Clopens α) : Set α) = ∅ := rfl
@@ -1712,7 +1712,7 @@ lemma coe_sdiff
 中文:
 引理 coe_sdiff
   条件: (s t : Clopens α)
-  结论: ↑(s \ t) = (s \ t : Set α)
+  结论: ↑(s \ t) = (s \ t : 集合 α)
   证明: rfl
 -/
 @[simp, norm_cast] lemma coe_sdiff (s t : Clopens α) : ↑(s \ t) = (s \ t : Set α) := rfl
@@ -1728,7 +1728,7 @@ lemma coe_himp
 中文:
 引理 coe_himp
   条件: (s t : Clopens α)
-  结论: ↑(s ⇨ t) = (s ⇨ t : Set α)
+  结论: ↑(s ⇨ t) = (s ⇨ t : 集合 α)
   证明: rfl
 -/
 @[simp, norm_cast] lemma coe_himp (s t : Clopens α) : ↑(s ⇨ t) = (s ⇨ t : Set α) := rfl
@@ -1744,7 +1744,7 @@ lemma coe_compl
 中文:
 引理 coe_compl
   条件: (s : Clopens α)
-  结论: (↑sᶜ : Set α) = (↑s)ᶜ
+  结论: (↑sᶜ : 集合 α) = (↑s)ᶜ
   证明: rfl
 -/
 @[simp, norm_cast] lemma coe_compl (s : Clopens α) : (↑sᶜ : Set α) = (↑s)ᶜ := rfl
@@ -1761,7 +1761,7 @@ instance :
 
 中文:
 实例 :
-  签名: 布尔eanAlgebra (Clopens α)
+  签名: 布尔代数 (Clopens α)
   定义体: fast_instance%
   SetLike.coe_injective.booleanAlgebra _ .rfl .rfl coe_sup coe_inf coe_top coe_bot coe_compl
     coe_sdiff coe_himp
@@ -1782,7 +1782,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (Clopens α)
+  签名: 可居 (Clopens α)
   定义体: ⟨⊥⟩
 -/
 instance : Inhabited (Clopens α) := ⟨⊥⟩
@@ -1845,7 +1845,7 @@ lemma coe_finset_sup
 
 中文:
 引理 coe_finset_sup
-  条件: (s : Finset ι) (U : ι -> Clopens α)
+  条件: (s : 有限集 ι) (U : ι -> Clopens α)
   证明: by
   classical
   induction s using Finset.induction_on with
@@ -1877,7 +1877,7 @@ lemma coe_disjoint
 中文:
 引理 coe_disjoint
   条件: {s t : Clopens α}
-  结论: Disjoint (s : Set α) t ↔ Disjoint s t
+  结论: Disjoint (s : 集合 α) t ↔ Disjoint s t
   证明: by
   simp [disjoint_iff, ← SetLike.coe_set_eq]
 
@@ -1903,11 +1903,11 @@ structure IrreducibleCloseds
 
 中文:
 结构 IrreducibleCloseds
-  参数: (α : 类型) [TopologicalSpace α]
+  参数: (α : 类型) [拓扑空间 α]
   公理与运算 (3 个):
-    - carrier : Set α
-    - isIrreducible' : IsIrreducible carrier
-    - isClosed' : IsClosed carrier
+    - carrier : 集合 α
+    - isIrreducible' : 是不可约 carrier
+    - isClosed' : 是闭集 carrier
 -/
 structure IrreducibleCloseds (α : Type*) [TopologicalSpace α] where
   /-- the carrier set, i.e. the points in this set -/
@@ -1928,7 +1928,7 @@ instance :
 
 中文:
 实例 :
-  签名: SetLike (IrreducibleCloseds α) α
+  签名: 集合状 (IrreducibleCloseds α) α
   定义体: IrreducibleCloseds.carrier
   coe_injective s t h := by cases s; cases t; congr
 
@@ -1948,7 +1948,7 @@ instance :
 
 中文:
 实例 :
-  签名: PartialOrder (IrreducibleCloseds α)
+  签名: 偏序 (IrreducibleCloseds α)
   定义体: fast_instance% .ofSetLike (IrreducibleCloseds α) α
 
 Depends on / 依赖: IrreducibleCloseds, fast_instance, ofSetLike
@@ -1965,7 +1965,7 @@ instance :
 
 中文:
 实例 :
-  签名: CanLift (Set α) (IrreducibleCloseds α) (↑) (fun s => IsIrreducible s ∧ IsClosed s)
+  签名: CanLift (集合 α) (IrreducibleCloseds α) (↑) (fun s => 是不可约 s ∧ 是闭集 s)
   定义体: ⟨⟨s, hs.1, hs.2⟩, rfl⟩
 -/
 instance : CanLift (Set α) (IrreducibleCloseds α) (↑) (fun s => IsIrreducible s ∧ IsClosed s) where
@@ -1983,7 +1983,7 @@ theorem isIrreducible
 中文:
 定理 isIrreducible
   条件: (s : IrreducibleCloseds α)
-  结论: IsIrreducible (s : Set α)
+  结论: 是不可约 (s : 集合 α)
   证明: s.isIrreducible'
 
 Depends on / 依赖: isIrreducible, s.isIrreducible
@@ -2002,7 +2002,7 @@ theorem isClosed
 中文:
 定理 isClosed
   条件: (s : IrreducibleCloseds α)
-  结论: IsClosed (s : Set α)
+  结论: 是闭集 (s : 集合 α)
   证明: s.isClosed'
 
 Depends on / 依赖: isClosed, s.isClosed
@@ -2048,7 +2048,7 @@ theorem ext
 
 中文:
 定理 ext
-  条件: {s t : IrreducibleCloseds α} (h : (s : Set α) = t)
+  条件: {s t : IrreducibleCloseds α} (h : (s : 集合 α) = t)
   结论: s = t
   证明: SetLike.ext' h
 
@@ -2071,8 +2071,8 @@ theorem coe_mk
 
 中文:
 定理 coe_mk
-  条件: (s : Set α) (h : IsIrreducible s) (h' : IsClosed s)
-  结论: (mk s h h' : Set α) = s
+  条件: (s : 集合 α) (h : 是不可约 s) (h' : 是闭集 s)
+  结论: (mk s h h' : 集合 α) = s
   证明: rfl
 
 @[simps]
@@ -2092,8 +2092,8 @@ instance [T1Space
 @[simp]
 
 中文:
-实例 [T1Space
-  签名: α] : Singleton α (IrreducibleCloseds α) where
+实例 [T1空间
+  签名: α] : 单例 α (IrreducibleCloseds α) where
   定义体: ⟨{x}, isIrreducible_singleton, isClosed_singleton⟩
 
 @[simp]
@@ -2114,7 +2114,7 @@ theorem mk_singleton
 
 中文:
 定理 mk_singleton
-  条件: [T1Space α] {x : α}
+  条件: [T1空间 α] {x : α}
   证明: rfl
 -/
 theorem mk_singleton [T1Space α] {x : α} :
@@ -2132,7 +2132,7 @@ lemma mem_singleton
 
 中文:
 引理 mem_singleton
-  条件: [T1Space α] {a b : α}
+  条件: [T1空间 α] {a b : α}
   结论: a in ({b} : IrreducibleCloseds α) ↔ a = b
   证明: Iff.rfl
 -/
@@ -2152,8 +2152,8 @@ theorem singleton_injective
 
 中文:
 定理 singleton_injective
-  条件: [T1Space α]
-  结论: Function.Injective ({·} : α -> IrreducibleCloseds α)
+  条件: [T1空间 α]
+  结论: 函数.单射 ({·} : α -> IrreducibleCloseds α)
   证明: .of_comp (f := SetLike.coe) Set.singleton_injective
 
 @[simp]
@@ -2175,7 +2175,7 @@ theorem singleton_inj
 
 中文:
 定理 singleton_inj
-  条件: [T1Space α] {x y : α}
+  条件: [T1空间 α] {x y : α}
   结论: ({x} : IrreducibleCloseds α) = {y} ↔ x = y
   证明: singleton_injective.eq_iff
 
@@ -2200,7 +2200,7 @@ definition equivSubtype
 
 中文:
 定义 equivSubtype
-  签名: : IrreducibleCloseds α ≃ { x : Set α // IsIrreducible x ∧ IsClosed x } where
+  签名: : IrreducibleCloseds α ≃ { x : 集合 α // 是不可约 x ∧ 是闭集 x } where
   定义体: ⟨a.1, a.2, a.3⟩
   invFun a := ⟨a.1, a.2.1, a.2.2⟩
 -/
@@ -2224,7 +2224,7 @@ definition equivSubtype'
 
 中文:
 定义 equivSubtype'
-  签名: : IrreducibleCloseds α ≃ { x : Set α // IsClosed x ∧ IsIrreducible x } where
+  签名: : IrreducibleCloseds α ≃ { x : 集合 α // 是闭集 x ∧ 是不可约 x } where
   定义体: ⟨a.1, a.3, a.2⟩
   invFun a := ⟨a.1, a.2.2, a.2.1⟩
 -/
@@ -2243,7 +2243,7 @@ definition orderIsoSubtype
 
 中文:
 定义 orderIsoSubtype
-  签名: : IrreducibleCloseds α ≃o { x : Set α // IsIrreducible x ∧ IsClosed x }
+  签名: : IrreducibleCloseds α ≃o { x : 集合 α // 是不可约 x ∧ 是闭集 x }
   定义体: equivSubtype.toOrderIso (fun _ _ h => h) (fun _ _ h => h)
 
 Depends on / 依赖: equivSubtype, equivSubtype.toOrderIso, toOrderIso
@@ -2262,7 +2262,7 @@ definition orderIsoSubtype'
 
 中文:
 定义 orderIsoSubtype'
-  签名: : IrreducibleCloseds α ≃o { x : Set α // IsClosed x ∧ IsIrreducible x }
+  签名: : IrreducibleCloseds α ≃o { x : 集合 α // 是闭集 x ∧ 是不可约 x }
   定义体: equivSubtype'.toOrderIso (fun _ _ h => h) (fun _ _ h => h)
 
 Depends on / 依赖: equivSubtype, toOrderIso
@@ -2286,7 +2286,7 @@ definition map
 
 中文:
 定义 map
-  签名: (f : β -> α) (hf : Continuous f)
+  签名: (f : β -> α) (hf : 连续 f)
   定义体: closure (f '' c)
 .closure isIrreducible' := c.isIrreducible.image f hf.continuousOn
   isClosed' := isClosed_closure
@@ -2312,7 +2312,7 @@ lemma coe_map
 
 中文:
 引理 coe_map
-  条件: (f : β -> α) (hf : Continuous f) (s : IrreducibleCloseds β)
+  条件: (f : β -> α) (hf : 连续 f) (s : IrreducibleCloseds β)
   证明: rfl
 -/
 lemma coe_map (f : β -> α) (hf : Continuous f) (s : IrreducibleCloseds β) :
@@ -2330,8 +2330,8 @@ lemma map_mono
 
 中文:
 引理 map_mono
-  条件: {f : β -> α} (hf : Continuous f)
-  结论: Monotone (map f hf)
+  条件: {f : β -> α} (hf : 连续 f)
+  结论: 递增 (map f hf)
   证明: fun _ _ h_le => closure_mono Set.image_mono h_le
 
 Depends on / 依赖: Set.image_mono, closure_mono, h_le, image_mono
@@ -2353,7 +2353,7 @@ lemma map_injective_of_isInducing
 
 中文:
 引理 map_injective_of_isInducing
-  条件: {f : β -> α} (hf : IsInducing f)
+  条件: {f : β -> α} (hf : 是Inducing f)
   证明: by
   intro A B h_images_eq
   apply SetLike.coe_injective
@@ -2379,7 +2379,7 @@ lemma map_strictMono_of_isInducing
 
 中文:
 引理 map_strictMono_of_isInducing
-  条件: {f : β -> α} (hf : IsInducing f)
+  条件: {f : β -> α} (hf : 是Inducing f)
   证明: Monotone.strictMono_of_injective (map_mono hf.continuous) (map_injective_of_isInducing hf)
 
 Depends on / 依赖: Monotone, Monotone.strictMono_of_injective, continuous, hf.continuous, map_injective_of_isInducing, map_mono, strictMono_of_injective
@@ -2411,7 +2411,7 @@ definition orderIsoOfIsOpenEmbedding
 
 中文:
 定义 orderIsoOfIsOpenEmbedding
-  签名: (f : β -> α) (h : IsOpenEmbedding f)
+  签名: (f : β -> α) (h : 是开嵌入 f)
   定义体: ⟨map f h.continuous T, nonempty_preimage_closure_image h.continuous T T.2.nonempty⟩
   invFun V :=
     { carrier := f ⁻¹' V

@@ -32,7 +32,7 @@ abbreviation CanonicallyOrderedAdd.toLinearOrderedCommGroupWithZero
     mul_lt_mul_of_pos_left hbc ha
 
 中文:
-缩写 CanonicallyOrderedAdd.toLinearOrderedCommGroupWithZero
+缩写 典范有序加法.toLinearOrderedCommGroupWithZero
   签名: :
   定义体: 0
   bot_le _ := zero_le

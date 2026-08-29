@@ -53,7 +53,7 @@ abbreviation tensorObj
 
 中文:
 缩写 tensorObj
-  签名: (X Y : QuadraticModuleCat.{u} R)
+  签名: (X Y : 二次模范畴.{u} R)
   定义体: of (X.form.tmul Y.form)
 
 Depends on / 依赖: X.form.tmul, Y.form
@@ -71,7 +71,7 @@ abbreviation tensorHom
 
 中文:
 缩写 tensorHom
-  签名: {W X Y Z : QuadraticModuleCat.{u} R} (f : W ⟶ X) (g : Y ⟶ Z)
+  签名: {W X Y Z : 二次模范畴.{u} R} (f : W ⟶ X) (g : Y ⟶ Z)
   定义体: ⟨f.toIsometry.tmul g.toIsometry⟩
 
 Depends on / 依赖: f.toIsometry.tmul, g.toIsometry, toIsometry
@@ -102,7 +102,7 @@ instance :
 
 中文:
 实例 :
-  签名: MonoidalCategoryStruct (QuadraticModuleCat.{u} R)
+  签名: 幺半群范畴结构 (二次模范畴.{u} R)
   定义体: instMonoidalCategory.tensorObj
   whiskerLeft X _ _ f := tensorHom (𝟙 X) f
   whiskerRight {X₁ X₂} (f : X₁ ⟶ X₂) Y := tensorHom f (𝟙 Y)
@@ -135,7 +135,7 @@ theorem toIsometry_tensorHom
 
 中文:
 定理 toIsometry_tensorHom
-  条件: {K L M N : QuadraticModuleCat.{u} R} (f : K ⟶ L) (g : M ⟶ N)
+  条件: {K L M N : 二次模范畴.{u} R} (f : K ⟶ L) (g : M ⟶ N)
   证明: rfl
 -/
 theorem toIsometry_tensorHom {K L M N : QuadraticModuleCat.{u} R} (f : K ⟶ L) (g : M ⟶ N) :
@@ -184,7 +184,7 @@ theorem toIsometry_hom_leftUnitor
 
 中文:
 定理 toIsometry_hom_leftUnitor
-  条件: {M : QuadraticModuleCat.{u} R}
+  条件: {M : 二次模范畴.{u} R}
   证明: rfl
 -/
 theorem toIsometry_hom_leftUnitor {M : QuadraticModuleCat.{u} R} :
@@ -201,7 +201,7 @@ theorem toIsometry_inv_leftUnitor
 
 中文:
 定理 toIsometry_inv_leftUnitor
-  条件: {M : QuadraticModuleCat.{u} R}
+  条件: {M : 二次模范畴.{u} R}
   证明: rfl
 -/
 theorem toIsometry_inv_leftUnitor {M : QuadraticModuleCat.{u} R} :
@@ -218,7 +218,7 @@ theorem toIsometry_hom_rightUnitor
 
 中文:
 定理 toIsometry_hom_rightUnitor
-  条件: {M : QuadraticModuleCat.{u} R}
+  条件: {M : 二次模范畴.{u} R}
   证明: rfl
 -/
 theorem toIsometry_hom_rightUnitor {M : QuadraticModuleCat.{u} R} :
@@ -235,7 +235,7 @@ theorem toIsometry_inv_rightUnitor
 
 中文:
 定理 toIsometry_inv_rightUnitor
-  条件: {M : QuadraticModuleCat.{u} R}
+  条件: {M : 二次模范畴.{u} R}
   证明: rfl
 
 Depends on / 依赖: isFiniteMeasure_restrict, measure_spanningSets_trim_lt_top
@@ -254,7 +254,7 @@ theorem hom_hom_associator
 
 中文:
 定理 hom_hom_associator
-  条件: {M N K : QuadraticModuleCat.{u} R}
+  条件: {M N K : 二次模范畴.{u} R}
   证明: rfl
 -/
 theorem hom_hom_associator {M N K : QuadraticModuleCat.{u} R} :
@@ -271,7 +271,7 @@ theorem hom_inv_associator
 
 中文:
 定理 hom_inv_associator
-  条件: {M N K : QuadraticModuleCat.{u} R}
+  条件: {M N K : 二次模范畴.{u} R}
   证明: rfl
 -/
 theorem hom_inv_associator {M N K : QuadraticModuleCat.{u} R} :
@@ -288,7 +288,7 @@ theorem toModuleCat_tensor
 
 中文:
 定理 toModuleCat_tensor
-  条件: (X Y : QuadraticModuleCat.{u} R)
+  条件: (X Y : 二次模范畴.{u} R)
   证明: rfl
 -/
 @[simp] theorem toModuleCat_tensor (X Y : QuadraticModuleCat.{u} R) :
@@ -304,7 +304,7 @@ theorem forget₂_map_associator_hom
 
 中文:
 定理 forget₂_map_associator_hom
-  条件: (X Y Z : QuadraticModuleCat.{u} R)
+  条件: (X Y Z : 二次模范畴.{u} R)
   证明: rfl
 -/
 theorem forget₂_map_associator_hom (X Y Z : QuadraticModuleCat.{u} R) :
@@ -321,7 +321,7 @@ theorem forget₂_map_associator_inv
 
 中文:
 定理 forget₂_map_associator_inv
-  条件: (X Y Z : QuadraticModuleCat.{u} R)
+  条件: (X Y Z : 二次模范畴.{u} R)
   证明: rfl
 -/
 theorem forget₂_map_associator_inv (X Y Z : QuadraticModuleCat.{u} R) :
@@ -344,7 +344,7 @@ instance instMonoidalCategory
 
 中文:
 实例 instMonoidalCategory
-  签名: : MonoidalCategory (QuadraticModuleCat.{u} R)
+  签名: : 幺半群范畴 (二次模范畴.{u} R)
   定义体: Monoidal.induced
     (forget₂ (QuadraticModuleCat R) (ModuleCat R))
     { μIso := fun _ _ => Iso.refl _

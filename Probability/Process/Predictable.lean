@@ -61,7 +61,7 @@ definition predictable
 
 中文:
 定义 predictable
-  签名: [Preorder ι] [OrderBot ι] (𝓕 : Filtration ι m)
+  签名: [预序 ι] [有底序 ι] (𝓕 : 滤子 ι m)
   定义体: MeasurableSpace.generateFrom
     {s | exists A, MeasurableSet[𝓕 ⊥] A ∧ s = {⊥} ×ˢ A} union
     {s | exists i A, MeasurableSet[𝓕 i] A ∧ s = Set.Ioi i ×ˢ A}
@@ -85,7 +85,7 @@ lemma measurableSet_predictable_singleton_bot_prod
 
 中文:
 引理 measurableSet_predictable_singleton_bot_prod
-  结论: [LinearOrder ι] [OrderBot ι]
+  结论: [线性序 ι] [有底序 ι]
   证明: MeasurableSpace.measurableSet_generateFrom Or.inl ⟨s, hs, rfl⟩
 
 Depends on / 依赖: MeasurableSpace, MeasurableSpace.measurableSet_generateFrom, Or.inl, measurableSet_generateFrom
@@ -105,7 +105,7 @@ lemma measurableSet_predictable_Ioi_prod
 
 中文:
 引理 measurableSet_predictable_Ioi_prod
-  结论: [LinearOrder ι] [OrderBot ι]
+  结论: [线性序 ι] [有底序 ι]
   证明: MeasurableSpace.measurableSet_generateFrom Or.inr ⟨i, s, hs, rfl⟩
 
 Depends on / 依赖: MeasurableSpace, MeasurableSpace.measurableSet_generateFrom, Or.inr, measurableSet_generateFrom
@@ -131,7 +131,7 @@ lemma measurableSet_predictable_Ioc_prod
 
 中文:
 引理 measurableSet_predictable_Ioc_prod
-  结论: [LinearOrder ι] [OrderBot ι]
+  结论: [线性序 ι] [有底序 ι]
   证明: by
   obtain hij | hij := le_total j i
   · simp [hij]
@@ -198,7 +198,7 @@ measurable_prodMk_le
 
 中文:
 引理 measurableSet_prodMk_add_one_of_predictable
-  结论: {𝓕 : Filtration 自然数 m} {s : Set (自然数 × Ω)}
+  结论: {𝓕 : 滤子 自然数 m} {s : 集合 (自然数 × Ω)}
   证明: by
   rw [(by aesop : {ω | (n + 1]; rw [ω) in s} = (Prod.mk (α := Set.singleton (n + 1)) (β := Ω)
       ⟨n + 1]; rw [rfl⟩) ⁻¹' ((fun (p : Set.singleton (n + 1) × Ω) => ((p.1 : Nat)]; rw [p.2)) ⁻¹' s))]
@@ -257,7 +257,7 @@ lemma measurableSpace_le_predictable_of_measurableSet
 
 中文:
 引理 measurableSpace_le_predictable_of_measurableSet
-  结论: [Preorder ι] [OrderBot ι]
+  结论: [预序 ι] [有底序 ι]
   证明: by
   refine MeasurableSpace.generateFrom_le ?_
   rintro - (⟨A, hA, rfl⟩ | ⟨i, A, hA, rfl⟩)
@@ -293,7 +293,7 @@ exact (measurab
 
 中文:
 引理 measurable_inclusion_predictable
-  结论: [LinearOrder ι] [OrderBot ι] [MeasurableSpace ι]
+  结论: [线性序 ι] [有底序 ι] [可测空间 ι]
   证明: by
   rw [measurable_iff_comap_le]
 refine MeasurableSpace.comap_le_iff_le_map.2
@@ -338,7 +338,7 @@ definition IsStronglyPredictable
 
 中文:
 定义 IsStronglyPredictable
-  签名: [Preorder ι] [OrderBot ι] (𝓕 : Filtration ι m) (u : ι -> Ω -> E)
+  签名: [预序 ι] [有底序 ι] (𝓕 : 滤子 ι m) (u : ι -> Ω -> E)
   定义体: StronglyMeasurable[𝓕.predictable] Function.uncurry u
 
 Depends on / 依赖: Function, Function.uncurry, StronglyMeasurable, predictable, uncurry
@@ -369,7 +369,7 @@ lemma isStronglyProgressive
 
 中文:
 引理 isStronglyProgressive
-  条件: {𝓕 : Filtration ι m} {u : ι -> Ω -> E} (h𝓕 : IsStronglyPredictable 𝓕 u)
+  条件: {𝓕 : 滤子 ι m} {u : ι -> Ω -> E} (h𝓕 : IsStronglyPredictable 𝓕 u)
   证明: by
   intro i
   let : MeasurableSpace (ι × Ω) := 𝓕.predictable
@@ -401,7 +401,7 @@ lemma stronglyAdapted
 
 中文:
 引理 stronglyAdapted
-  条件: {𝓕 : Filtration ι m} {u : ι -> Ω -> E} (h𝓕 : IsStronglyPredictable 𝓕 u)
+  条件: {𝓕 : 滤子 ι m} {u : ι -> Ω -> E} (h𝓕 : IsStronglyPredictable 𝓕 u)
   证明: h𝓕.isStronglyProgressive.stronglyAdapted
 
 Depends on / 依赖: isStronglyProgressive, isStronglyProgressive.stronglyAdapted, stronglyAdapted
@@ -428,7 +428,7 @@ lemma measurable_add_one
 
 中文:
 引理 measurable_add_one
-  结论: {𝓕 : Filtration 自然数 m} {u : 自然数 -> Ω -> E}
+  结论: {𝓕 : 滤子 自然数 m} {u : 自然数 -> Ω -> E}
   证明: by
   let : MeasurableSpace (Nat × Ω) := 𝓕.predictable
   let : MeasurableSpace Ω := 𝓕 n
@@ -470,7 +470,7 @@ lemma of_measurable_add_one
 
 中文:
 引理 of_measurable_add_one
-  结论: {𝓕 : Filtration 自然数 m} {u : 自然数 -> Ω -> E}
+  结论: {𝓕 : 滤子 自然数 m} {u : 自然数 -> Ω -> E}
   证明: by
   let : MeasurableSpace (Nat × Ω) := 𝓕.predictable
   -- first layer of approximation
@@ -536,7 +536,7 @@ lemma iff_measurable_add_one
 
 中文:
 引理 iff_measurable_add_one
-  条件: {𝓕 : Filtration 自然数 m} {u : 自然数 -> Ω -> E}
+  条件: {𝓕 : 滤子 自然数 m} {u : 自然数 -> Ω -> E}
   证明: ⟨fun h𝓕 => ⟨h𝓕.isStronglyProgressive.stronglyAdapted 0, h𝓕.measurable_add_one⟩,
     fun h => .of_measurable_add_one h.1 h.2⟩
 
@@ -574,7 +574,7 @@ alias IsPredictable.progMeasurable := IsStronglyPredictable.isStronglyProgressiv
 
 中文:
 定理 Predictable.stronglyAdapted
-  结论: {β : 类型} [TopologicalSpace β] {f : Filtration 自然数 m}
+  结论: {β : 类型} [拓扑空间 β] {f : 滤子 自然数 m}
   证明: fun n =>
   match n with
   | 0 => hu0

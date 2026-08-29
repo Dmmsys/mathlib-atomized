@@ -86,10 +86,10 @@ class RegularSpace
     - regular : forall {s : Set X} {a}, IsClosed s -> a ∉ s -> Disjoint (𝓝ˢ s) (𝓝 a)
 
 中文:
-类 RegularSpace
-  参数: (X : 类型u) [TopologicalSpace X]
+类 正则空间
+  参数: (X : 类型u) [拓扑空间 X]
   公理与运算 (1 个):
-    - regular : 对任意 {s : Set X} {a}, IsClosed s -> a ∉ s -> Disjoint (𝓝ˢ s) (𝓝 a)
+    - regular : 对任意 {s : 集合 X} {a}, 是闭集 s -> a ∉ s -> Disjoint (𝓝ˢ s) (𝓝 a)
 -/
 class RegularSpace (X : Type u) [TopologicalSpace X] : Prop where
   /-- If `a` is a point that does not belong to a closed set `s`, then `a` and `s` admit disjoint
@@ -111,7 +111,7 @@ theorem regularSpace_TFAE
 
 中文:
 定理 regularSpace_TFAE
-  条件: (X : 类型u) [TopologicalSpace X]
+  条件: (X : 类型u) [拓扑空间 X]
   证明: by
   tfae_have 1 ↔ 5 := by
     rw [regularSpace_iff]; rw [(@compl_surjective (Set X) _).forall]; rw [forall_comm]
@@ -161,7 +161,7 @@ theorem RegularSpace.of_lift'_closure_le
   proof: Iff.mpr ((regularSpace_TFAE X).out 0 4) h
 
 中文:
-定理 RegularSpace.of_lift'_closure_le
+定理 正则空间.of_lift'_closure_le
   条件: (h : 对任意 x : X, (𝓝 x).lift' closure <= 𝓝 x)
   证明: Iff.mpr ((regularSpace_TFAE X).out 0 4) h
 
@@ -181,9 +181,9 @@ theorem RegularSpace.of_lift'_closure
   proof: Iff.mpr ((regularSpace_TFAE X).out 0 5) h
 
 中文:
-定理 RegularSpace.of_lift'_closure
+定理 正则空间.of_lift'_closure
   条件: (h : 对任意 x : X, (𝓝 x).lift' closure = 𝓝 x)
-  结论: RegularSpace X
+  结论: 正则空间 X
   证明: Iff.mpr ((regularSpace_TFAE X).out 0 5) h
 -/
 theorem RegularSpace.of_lift'_closure (h : forall x : X, (𝓝 x).lift' closure = 𝓝 x) : RegularSpace X :=
@@ -198,8 +198,8 @@ theorem RegularSpace.of_hasBasis
   proof: .of_lift'_closure fun a => (h₁ a).lift'_closure_eq_self (h₂ a)
 
 中文:
-定理 RegularSpace.of_hasBasis
-  结论: {ι : X -> Sort*} {p : 对任意 a, ι a -> 命题} {s : 对任意 a, ι a -> Set X}
+定理 正则空间.of_hasBasis
+  结论: {ι : X -> 类型层*} {p : 对任意 a, ι a -> 命题} {s : 对任意 a, ι a -> 集合 X}
   证明: .of_lift'_closure fun a => (h₁ a).lift'_closure_eq_self (h₂ a)
 
 Depends on / 依赖: _closure, _closure_eq_self, of_lift
@@ -217,7 +217,7 @@ theorem RegularSpace.of_exists_mem_nhds_isClosed_subset
   proof: Iff.mpr ((regularSpace_TFAE X).out 0 3) h
 
 中文:
-定理 RegularSpace.of_exists_mem_nhds_isClosed_subset
+定理 正则空间.of_存在_mem_nhds_isClosed_subset
   证明: Iff.mpr ((regularSpace_TFAE X).out 0 3) h
 
 Depends on / 依赖: Iff.mpr, regularSpace_TFAE
@@ -246,7 +246,7 @@ theorem regularSpace_generateFrom
 
 中文:
 定理 regularSpace_generateFrom
-  条件: {s : Set (Set X)} (h : ‹_› = generateFrom s)
+  条件: {s : 集合 (集合 X)} (h : ‹_› = generateFrom s)
   证明: by
   refine ⟨fun _ t ht a ha => RegularSpace.regular
     (h ▸ isOpen_generateFrom_of_mem ht).isClosed_compl
@@ -334,8 +334,8 @@ theorem exists_mem_nhds_isClosed_subset
   exact h'.mp ‹_› _ _ h
 
 中文:
-定理 exists_mem_nhds_isClosed_subset
-  条件: {x : X} {s : Set X} (h : s in 𝓝 x)
+定理 存在_mem_nhds_isClosed_subset
+  条件: {x : X} {s : 集合 X} (h : s in 𝓝 x)
   证明: by
   have h' := (regularSpace_TFAE X).out 0 3
   exact h'.mp ‹_› _ _ h
@@ -359,7 +359,7 @@ theorem closed_nhds_basis
 中文:
 定理 closed_nhds_basis
   条件: (x : X)
-  结论: (𝓝 x).HasBasis (fun s : Set X => s in 𝓝 x ∧ IsClosed s) id
+  结论: (𝓝 x).有基 (fun s : 集合 X => s in 𝓝 x ∧ 是闭集 s) id
   证明: hasBasis_self.2 fun _ => exists_mem_nhds_isClosed_subset
 
 Depends on / 依赖: exists_mem_nhds_isClosed_subset, hasBasis_self
@@ -394,8 +394,8 @@ theorem Filter.HasBasis.nhds_closure
   proof: lift'_nhds_closure x ▸ h.lift'_closure
 
 中文:
-定理 Filter.HasBasis.nhds_closure
-  结论: {ι : Sort*} {x : X} {p : ι -> 命题} {s : ι -> Set X}
+定理 滤子.有基.nhds_closure
+  结论: {ι : 类型层*} {x : X} {p : ι -> 命题} {s : ι -> 集合 X}
   证明: lift'_nhds_closure x ▸ h.lift'_closure
 
 Depends on / 依赖: _closure, _nhds_closure, h.lift
@@ -416,7 +416,7 @@ theorem hasBasis_nhds_closure
 中文:
 定理 hasBasis_nhds_closure
   条件: (x : X)
-  结论: (𝓝 x).HasBasis (fun s => s in 𝓝 x) closure
+  结论: (𝓝 x).有基 (fun s => s in 𝓝 x) closure
   证明: (𝓝 x).basis_sets.nhds_closure
 
 Depends on / 依赖: basis_sets, basis_sets.nhds_closure, nhds_closure
@@ -436,7 +436,7 @@ theorem hasBasis_opens_closure
 中文:
 定理 hasBasis_opens_closure
   条件: (x : X)
-  结论: (𝓝 x).HasBasis (fun s => x in s ∧ IsOpen s) closure
+  结论: (𝓝 x).有基 (fun s => x in s ∧ 是开集 s) closure
   证明: (nhds_basis_opens x).nhds_closure
 
 Depends on / 依赖: nhds_basis_opens, nhds_closure
@@ -459,8 +459,8 @@ theorem IsCompact.exists_isOpen_closure_subset
   refine ⟨V, hVo, hKV, Subset
 
 中文:
-定理 IsCompact.exists_isOpen_closure_subset
-  条件: {K U : Set X} (hK : IsCompact K) (hU : U in 𝓝ˢ K)
+定理 是紧集.存在_isOpen_closure_subset
+  条件: {K U : 集合 X} (hK : 是紧集 K) (hU : U in 𝓝ˢ K)
   证明: by
   have hd : Disjoint (𝓝ˢ K) (𝓝ˢ Uᶜ) := by
     simpa [hK.disjoint_nhdsSet_left, disjoint_nhds_nhdsSet,
@@ -493,8 +493,8 @@ theorem IsCompact.lift'_closure_nhdsSet
   exact mem_of_superset (mem_lift' <| hVo.mem_nhdsSet.2 hKV) hVU
 
 中文:
-定理 IsCompact.lift'_closure_nhdsSet
-  条件: {K : Set X} (hK : IsCompact K)
+定理 是紧集.lift'_closure_nhdsSet
+  条件: {K : 集合 X} (hK : 是紧集 K)
   证明: by
   refine le_antisymm (fun U hU => ?_) (le_lift'_closure _)
   rcases hK.exists_isOpen_closure_subset hU with ⟨V, hVo, hKV, hVU⟩
@@ -518,8 +518,8 @@ theorem TopologicalSpace.IsTopologicalBasis.nhds_basis_closure
   simpa only [and_comm] using hB.nhds_hasBasis.nhds_closure
 
 中文:
-定理 TopologicalSpace.IsTopologicalBasis.nhds_basis_closure
-  结论: {B : Set (Set X)}
+定理 拓扑空间.是TopologicalBasis.nhds_basis_closure
+  结论: {B : 集合 (集合 X)}
   证明: by
   simpa only [and_comm] using hB.nhds_hasBasis.nhds_closure
 
@@ -540,8 +540,8 @@ theorem TopologicalSpace.IsTopologicalBasis.exists_closure_subset
   simpa only [exists_prop, and_assoc] using hB.nhds_hasBasis.nhds_closure.mem_iff.mp h
 
 中文:
-定理 TopologicalSpace.IsTopologicalBasis.exists_closure_subset
-  结论: {B : Set (Set X)}
+定理 拓扑空间.是TopologicalBasis.存在_closure_subset
+  结论: {B : 集合 (集合 X)}
   证明: by
   simpa only [exists_prop, and_assoc] using hB.nhds_hasBasis.nhds_closure.mem_iff.mp h
 
@@ -563,8 +563,8 @@ theorem Topology.IsInducing.regularSpace
     fun b s hs => by exact hs.2.preimage hf.continuous
 
 中文:
-定理 Topology.IsInducing.regularSpace
-  结论: [TopologicalSpace Y] {f : Y -> X}
+定理 拓扑.是Inducing.regularSpace
+  结论: [拓扑空间 Y] {f : Y -> X}
   证明: .of_hasBasis
     (fun b => by rw [hf.nhds_eq_comap b]; exact (closed_nhds_basis _).comap _)
     fun b s hs => by exact hs.2.preimage hf.continuous
@@ -588,7 +588,7 @@ theorem regularSpace_induced
 中文:
 定理 regularSpace_induced
   条件: (f : Y -> X)
-  结论: @RegularSpace Y (induced f ‹_›)
+  结论: @正则空间 Y (induced f ‹_›)
   证明: letI := induced f ‹_›
   (IsInducing.induced f).regularSpace
 
@@ -615,7 +615,7 @@ theorem regularSpace_sInf
 
 中文:
 定理 regularSpace_sInf
-  条件: {X} {T : Set (TopologicalSpace X)} (h : 对任意 t in T, @RegularSpace X t)
+  条件: {X} {T : 集合 (拓扑空间 X)} (h : 对任意 t in T, @正则空间 X t)
   证明: by
   let _ := sInf T
   have : forall a, (𝓝 a).HasBasis
@@ -649,7 +649,7 @@ theorem regularSpace_iInf
 
 中文:
 定理 regularSpace_iInf
-  条件: {ι X} {t : ι -> TopologicalSpace X} (h : 对任意 i, @RegularSpace X (t i))
+  条件: {ι X} {t : ι -> 拓扑空间 X} (h : 对任意 i, @正则空间 X (t i))
   证明: regularSpace_sInf forall_mem_range.mpr h
 
 Depends on / 依赖: forall_mem_range, forall_mem_range.mpr, regularSpace_sInf
@@ -669,8 +669,8 @@ theorem RegularSpace.inf
   exact regularSpace_iInf (Bool.forall_bool.2 ⟨h₂, h₁⟩)
 
 中文:
-定理 RegularSpace.inf
-  结论: {X} {t₁ t₂ : TopologicalSpace X} (h₁ : @RegularSpace X t₁)
+定理 正则空间.下确界
+  结论: {X} {t₁ t₂ : 拓扑空间 X} (h₁ : @正则空间 X t₁)
   证明: by
   rw [inf_eq_iInf]
   exact regularSpace_iInf (Bool.forall_bool.2 ⟨h₂, h₁⟩)
@@ -694,8 +694,8 @@ instance [TopologicalSpace
   body: (regularSpace_induced (@Prod.fst X Y)).inf (regularSpace_induced (@Prod.snd X Y))
 
 中文:
-实例 [TopologicalSpace
-  签名: Y] [RegularSpace Y] : RegularSpace (X × Y)
+实例 [拓扑空间
+  签名: Y] [正则空间 Y] : 正则空间 (X × Y)
   定义体: (regularSpace_induced (@Prod.fst X Y)).inf (regularSpace_induced (@Prod.snd X Y))
 
 Depends on / 依赖: Prod.fst, Prod.snd, regularSpace_induced
@@ -719,7 +719,7 @@ lemma SeparatedNhds.of_isCompact_isClosed
 
 中文:
 引理 SeparatedNhds.of_isCompact_isClosed
-  结论: {s t : Set X}
+  结论: {s t : 集合 X}
   证明: by
   simpa only [separatedNhds_iff_disjoint, hs.disjoint_nhdsSet_left, disjoint_nhds_nhdsSet,
     ht.closure_eq, disjoint_left] using hst
@@ -746,8 +746,8 @@ lemma IsClosed.HasSeparatingCover
 .1 exact hasSeparatingCovers_iff_separatedNhds.mpr (SeparatedNhds.empty_lef
 
 中文:
-引理 IsClosed.HasSeparatingCover
-  结论: {s t : Set X} [LindelofSpace X] [RegularSpace X]
+引理 是闭集.HasSeparatingCover
+  结论: {s t : 集合 X} [Lindelof空间 X] [正则空间 X]
   证明: by
   -- `IsLindelof.indexed_countable_subcover` requires the space be Nonempty
   rcases isEmpty_or_nonempty X with empty_X | nonempty_X
@@ -793,7 +793,7 @@ theorem disjoint_nested_nhds_of_not_inseparable
 
 中文:
 定理 disjoint_nested_nhds_of_not_inseparable
-  条件: [RegularSpace X] {x y : X} (h : ¬Inseparable x y)
+  条件: [正则空间 X] {x y : X} (h : ¬不可分 x y)
   证明: by
   rcases r1_separation h with ⟨U₁, U₂, U₁_op, U₂_op, x_in, y_in, H⟩
   rcases exists_mem_nhds_isClosed_subset (U₁_op.mem_nhds x_in) with ⟨V₁, V₁_in, V₁_closed, h₁⟩
@@ -826,8 +826,8 @@ theorem exists_compact_closed_between
     L_comp.closure_subset_of_isOpen hU LU⟩
 
 中文:
-定理 exists_compact_closed_between
-  结论: [LocallyCompactSpace X] [RegularSpace X]
+定理 存在_compact_closed_between
+  结论: [局部紧空间 X] [正则空间 X]
   证明: let ⟨L, L_comp, KL, LU⟩ := exists_compact_between hK hU h_KU
 ⟨closure L, L_comp.closure, isClosed_closure, KL.trans interior_mono subset_closure,
     L_comp.closure_subset_of_isOpen hU LU⟩
@@ -853,7 +853,7 @@ theorem IsCompact.nhdsSet_basis_isCompact_isClosed
   exact ⟨L, by rwa [← subset_interior_iff_mem_nhdsSet], ⟨hL, hL'⟩, hLU⟩
 
 中文:
-定理 IsCompact.nhdsSet_basis_isCompact_isClosed
+定理 是紧集.nhdsSet_basis_isCompact_isClosed
   证明: by
   rw [hasBasis_self]; rw [(hasBasis_nhdsSet _).forall_iff (by grind)]
   intro U ⟨hU, h_KU⟩
@@ -884,8 +884,8 @@ theorem exists_open_between_and_isCompact_closure
   exact L_compact.closur
 
 中文:
-定理 exists_open_between_and_isCompact_closure
-  结论: [LocallyCompactSpace X] [RegularSpace X]
+定理 存在_open_between_and_isCompact_closure
+  结论: [局部紧空间 X] [正则空间 X]
   证明: by
   rcases exists_compact_closed_between hK hU hKU with ⟨L, L_compact, L_closed, KL, LU⟩
   have A : closure (interior L) subseteq L := by
@@ -920,8 +920,8 @@ lemma IsCompact.closure_eq_nhdsKer
     obtain ⟨t, hts, t', ht'y, H⟩ :=
 
 中文:
-引理 IsCompact.closure_eq_nhdsKer
-  条件: [RegularSpace X] {s : Set X} (hs : IsCompact s)
+引理 是紧集.closure_eq_nhdsKer
+  条件: [正则空间 X] {s : 集合 X} (hs : 是紧集 s)
   证明: by
   apply subset_antisymm
   · rw [nhdsKer, ← hs.lift'_closure_nhdsSet]
@@ -958,8 +958,8 @@ class T25Space
     - t2_5 : forall ⦃x y : X⦄, x != y -> Disjoint ((𝓝 x).lift' closure) ((𝓝 y).lift' closure)
 
 中文:
-类 T25Space
-  参数: (X : 类型u) [TopologicalSpace X]
+类 T25空间
+  参数: (X : 类型u) [拓扑空间 X]
   公理与运算 (1 个):
     - t2_5 : 对任意 ⦃x y : X⦄, x != y -> Disjoint ((𝓝 x).lift' closure) ((𝓝 y).lift' closure)
 -/
@@ -979,7 +979,7 @@ theorem disjoint_lift'_closure_nhds
 
 中文:
 定理 disjoint_lift'_closure_nhds
-  条件: [T25Space X] {x y : X}
+  条件: [T25空间 X] {x y : X}
   证明: ⟨fun h hxy => by simp [hxy, nhds_neBot.ne] at h, fun h => T25Space.t2_5 h⟩
 
 Depends on / 依赖: T25Space, T25Space.t2_5, nhds_neBot, nhds_neBot.ne, t2_5
@@ -1003,8 +1003,8 @@ theorem exists_nhds_disjoint_closure
     disjoint_lift'_closure_nhds.2 h
 
 中文:
-定理 exists_nhds_disjoint_closure
-  条件: [T25Space X] {x y : X} (h : x != y)
+定理 存在_nhds_disjoint_closure
+  条件: [T25空间 X] {x y : X} (h : x != y)
   证明: ((𝓝 x).basis_sets.lift'_closure.disjoint_iff (𝓝 y).basis_sets.lift'_closure).1
     disjoint_lift'_closure_nhds.2 h
 
@@ -1027,8 +1027,8 @@ theorem exists_open_nhds_disjoint_closure
       (disjoint_lift'_closure_nhds.2 h)
 
 中文:
-定理 exists_open_nhds_disjoint_closure
-  条件: [T25Space X] {x y : X} (h : x != y)
+定理 存在_open_nhds_disjoint_closure
+  条件: [T25空间 X] {x y : X} (h : x != y)
   证明: by
   simpa only [exists_prop, and_assoc] using
     ((nhds_basis_opens x).lift'_closure.disjoint_iff (nhds_basis_opens y).lift'_closure).1
@@ -1053,8 +1053,8 @@ theorem T25Space.of_injective_continuous
     (tendsto_lift'_closure_nhds hcont y)
 
 中文:
-定理 T25Space.of_injective_continuous
-  结论: [TopologicalSpace Y] [T25Space Y] {f : X -> Y}
+定理 T25空间.of_injective_continuous
+  结论: [拓扑空间 Y] [T25空间 Y] {f : X -> Y}
   证明: (tendsto_lift'_closure_nhds hcont x).disjoint (t2_5 <| hinj.ne hne)
     (tendsto_lift'_closure_nhds hcont y)
 
@@ -1074,8 +1074,8 @@ theorem Topology.IsEmbedding.t25Space
   proof: .of_injective_continuous hf.injective hf.continuous
 
 中文:
-定理 Topology.IsEmbedding.t25Space
-  结论: [TopologicalSpace Y] [T25Space Y] {f : X -> Y}
+定理 拓扑.是嵌入.t25Space
+  结论: [拓扑空间 Y] [T25空间 Y] {f : X -> Y}
   证明: .of_injective_continuous hf.injective hf.continuous
 
 Depends on / 依赖: continuous, hf.continuous, hf.injective, injective, of_injective_continuous
@@ -1094,9 +1094,9 @@ theorem Homeomorph.t25Space
   proof: h.symm.isEmbedding.t25Space
 
 中文:
-定理 Homeomorph.t25Space
-  条件: [TopologicalSpace Y] [T25Space X] (h : X ≃ₜ Y)
-  结论: T25Space Y
+定理 同胚.t25Space
+  条件: [拓扑空间 Y] [T25空间 X] (h : X ≃ₜ Y)
+  结论: T25空间 Y
   证明: h.symm.isEmbedding.t25Space
 -/
 protected theorem Homeomorph.t25Space [TopologicalSpace Y] [T25Space X] (h : X ≃ₜ Y) : T25Space Y :=
@@ -1111,8 +1111,8 @@ instance Subtype.instT25Space
   body: IsEmbedding.subtypeVal.t25Space
 
 中文:
-实例 Subtype.instT25Space
-  签名: [T25Space X] {p : X -> 命题}
+实例 子类型.instT25Space
+  签名: [T25空间 X] {p : X -> 命题}
   定义体: IsEmbedding.subtypeVal.t25Space
 
 Depends on / 依赖: IsEmbedding, IsEmbedding.subtypeVal.t25Space, subtypeVal, t25Space
@@ -1134,9 +1134,9 @@ class T3Space
   (no additional axioms)
 
 中文:
-类 T3Space
-  参数: (X : 类型u) [TopologicalSpace X]
-  继承: T0Space X, RegularSpace X
+类 T3空间
+  参数: (X : 类型u) [拓扑空间 X]
+  继承: T0空间 X, 正则空间 X
   (无附加公理)
 -/
 class T3Space (X : Type u) [TopologicalSpace X] : Prop extends T0Space X, RegularSpace X
@@ -1154,9 +1154,9 @@ theorem RegularSpace.t3Space_iff_t0Space
   constructor <;> intro <;> infer_instance
 
 中文:
-定理 RegularSpace.t3Space_iff_t0Space
-  条件: [RegularSpace X]
-  结论: T3Space X ↔ T0Space X
+定理 正则空间.t3Space_iff_t0Space
+  条件: [正则空间 X]
+  结论: T3空间 X ↔ T0空间 X
   证明: by
   constructor <;> intro <;> infer_instance
 
@@ -1184,8 +1184,8 @@ theorem Topology.IsEmbedding.t3Space
     toRegularSpace := hf.isInducing.regularSpace }
 
 中文:
-定理 Topology.IsEmbedding.t3Space
-  结论: [TopologicalSpace Y] [T3Space Y] {f : X -> Y}
+定理 拓扑.是嵌入.t3Space
+  结论: [拓扑空间 Y] [T3空间 Y] {f : X -> Y}
   证明: { toT0Space := hf.t0Space
     toRegularSpace := hf.isInducing.regularSpace }
 -/
@@ -1204,9 +1204,9 @@ theorem Homeomorph.t3Space
   proof: h.symm.isEmbedding.t3Space
 
 中文:
-定理 Homeomorph.t3Space
-  条件: [TopologicalSpace Y] [T3Space X] (h : X ≃ₜ Y)
-  结论: T3Space Y
+定理 同胚.t3Space
+  条件: [拓扑空间 Y] [T3空间 X] (h : X ≃ₜ Y)
+  结论: T3空间 Y
   证明: h.symm.isEmbedding.t3Space
 -/
 protected theorem Homeomorph.t3Space [TopologicalSpace Y] [T3Space X] (h : X ≃ₜ Y) : T3Space Y :=
@@ -1221,8 +1221,8 @@ instance Subtype.t3Space
   body: IsEmbedding.subtypeVal.t3Space
 
 中文:
-实例 Subtype.t3Space
-  签名: [T3Space X] {p : X -> 命题}
+实例 子类型.t3Space
+  签名: [T3空间 X] {p : X -> 命题}
   定义体: IsEmbedding.subtypeVal.t3Space
 
 Depends on / 依赖: IsEmbedding, IsEmbedding.subtypeVal.t3Space, subtypeVal, t3Space
@@ -1239,8 +1239,8 @@ instance ULift.instT3Space
   body: IsEmbedding.uliftDown.t3Space
 
 中文:
-实例 ULift.instT3Space
-  签名: [T3Space X]
+实例 类型层提升.instT3Space
+  签名: [T3空间 X]
   定义体: IsEmbedding.uliftDown.t3Space
 
 Depends on / 依赖: IsEmbedding, IsEmbedding.uliftDown.t3Space, t3Space, uliftDown
@@ -1257,8 +1257,8 @@ instance [TopologicalSpace
   body: ⟨⟩
 
 中文:
-实例 [TopologicalSpace
-  签名: Y] [T3Space X] [T3Space Y] : T3Space (X × Y)
+实例 [拓扑空间
+  签名: Y] [T3空间 X] [T3空间 Y] : T3空间 (X × Y)
   定义体: ⟨⟩
 -/
 instance [TopologicalSpace Y] [T3Space X] [T3Space Y] : T3Space (X × Y) := ⟨⟩
@@ -1276,7 +1276,7 @@ theorem disjoint_nested_nhds
 
 中文:
 定理 disjoint_nested_nhds
-  条件: [T3Space X] {x y : X} (h : x != y)
+  条件: [T3空间 X] {x y : X} (h : x != y)
   证明: disjoint_nested_nhds_of_not_inseparable (mt Inseparable.eq h)
 
 Depends on / 依赖: Inseparable, Inseparable.eq, disjoint_nested_nhds_of_not_inseparable
@@ -1300,8 +1300,8 @@ instance [RegularSpace
     exact RegularSpace.regular (hs.preimage continuous_mk) ha
 
 中文:
-实例 [RegularSpace
-  签名: X] : T3Space (SeparationQuotient X) where
+实例 [正则空间
+  签名: X] : T3空间 (SeparationQuotient X) where
   定义体: by
     rcases surjective_mk a with ⟨a, rfl⟩
     rw [← disjoint_comap_iff surjective_mk]; rw [comap_mk_nhds_mk]; rw [comap_mk_nhdsSet]
@@ -1329,10 +1329,10 @@ class NormalSpace
     - normal : forall s t : Set X, IsClosed s -> IsClosed t -> Disjoint s t -> SeparatedNhds s t
 
 中文:
-类 NormalSpace
-  参数: (X : 类型u) [TopologicalSpace X]
+类 正规空间
+  参数: (X : 类型u) [拓扑空间 X]
   公理与运算 (1 个):
-    - normal : 对任意 s t : Set X, IsClosed s -> IsClosed t -> Disjoint s t -> SeparatedNhds s t
+    - normal : 对任意 s t : 集合 X, 是闭集 s -> 是闭集 t -> Disjoint s t -> SeparatedNhds s t
 -/
 class NormalSpace (X : Type u) [TopologicalSpace X] : Prop where
   /-- Two disjoint sets in a normal space admit disjoint neighbourhoods. -/
@@ -1348,7 +1348,7 @@ theorem normal_separation
 
 中文:
 定理 normal_separation
-  结论: [NormalSpace X] {s t : Set X} (H1 : IsClosed s) (H2 : IsClosed t)
+  结论: [正规空间 X] {s t : 集合 X} (H1 : 是闭集 s) (H2 : 是闭集 t)
   证明: NormalSpace.normal s t H1 H2 H3
 
 Depends on / 依赖: NormalSpace, NormalSpace.normal, normal
@@ -1367,7 +1367,7 @@ theorem disjoint_nhdsSet_nhdsSet
 
 中文:
 定理 disjoint_nhdsSet_nhdsSet
-  结论: [NormalSpace X] {s t : Set X} (hs : IsClosed s) (ht : IsClosed t)
+  结论: [正规空间 X] {s t : 集合 X} (hs : 是闭集 s) (ht : 是闭集 t)
   证明: (normal_separation hs ht hd).disjoint_nhdsSet
 
 Depends on / 依赖: disjoint_nhdsSet, normal_separation
@@ -1390,8 +1390,8 @@ theorem normal_exists_closure_subset
     (compl_subset_comm.1
 
 中文:
-定理 normal_exists_closure_subset
-  结论: [NormalSpace X] {s t : Set X} (hs : IsClosed s) (ht : IsOpen t)
+定理 normal_存在_closure_subset
+  结论: [正规空间 X] {s t : 集合 X} (hs : 是闭集 s) (ht : 是开集 t)
   证明: by
   have : Disjoint s tᶜ := Set.disjoint_left.mpr fun x hxs hxt => hxt (hst hxs)
   rcases normal_separation hs (isClosed_compl_iff.2 ht) this with
@@ -1423,8 +1423,8 @@ theorem exists_mem_nhdsSet_isClosed_subset
   exact mem_of_superset (mem_nhdsSet_iff_exists.mpr ⟨v, hv_open, huv, subset_rfl⟩) subset_closu
 
 中文:
-定理 exists_mem_nhdsSet_isClosed_subset
-  结论: [NormalSpace X] {u s : Set X} (h : s in 𝓝ˢ u)
+定理 存在_mem_nhdsSet_isClosed_subset
+  结论: [正规空间 X] {u s : 集合 X} (h : s in 𝓝ˢ u)
   证明: by
   obtain ⟨o, ho_open, huo, hos⟩ := mem_nhdsSet_iff_exists.mp h
   obtain ⟨v, hv_open, huv, hcvo⟩ := normal_exists_closure_subset hu ho_open huo
@@ -1452,8 +1452,8 @@ theorem closed_nhdsSet_basis
 
 中文:
 定理 closed_nhdsSet_basis
-  条件: [NormalSpace X] (u : Set X) (hu : IsClosed u)
-  结论: (𝓝ˢ u).HasBasis
+  条件: [正规空间 X] (u : 集合 X) (hu : 是闭集 u)
+  结论: (𝓝ˢ u).有基
   证明: by
   refine hasBasis_self.2 fun _ ht => exists_mem_nhdsSet_isClosed_subset ht hu
 
@@ -1473,7 +1473,7 @@ theorem lift'_nhdsSet_closure
 
 中文:
 定理 lift'_nhdsSet_closure
-  条件: [NormalSpace X] (u : Set X) (hu : IsClosed u)
+  条件: [正规空间 X] (u : 集合 X) (hu : 是闭集 u)
   证明: (closed_nhdsSet_basis u hu).lift'_closure_eq_self fun _ => And.right
 -/
 theorem lift'_nhdsSet_closure [NormalSpace X] (u : Set X) (hu : IsClosed u) :
@@ -1489,8 +1489,8 @@ theorem Filter.HasBasis.nhdsSet_closure
   proof: lift'_nhdsSet_closure u hu ▸ h.lift'_closure
 
 中文:
-定理 Filter.HasBasis.nhdsSet_closure
-  结论: [NormalSpace X] {ι : Sort*} {u : Set X} {p : ι -> 命题}
+定理 滤子.有基.nhdsSet_closure
+  结论: [正规空间 X] {ι : 类型层*} {u : 集合 X} {p : ι -> 命题}
   证明: lift'_nhdsSet_closure u hu ▸ h.lift'_closure
 
 Depends on / 依赖: _closure, _nhdsSet_closure, h.lift
@@ -1510,7 +1510,7 @@ theorem hasBasis_nhdsSet_closure
 
 中文:
 定理 hasBasis_nhdsSet_closure
-  条件: [NormalSpace X] (u : Set X) (hu : IsClosed u)
+  条件: [正规空间 X] (u : 集合 X) (hu : 是闭集 u)
   证明: (𝓝ˢ u).basis_sets.nhdsSet_closure hu
 
 Depends on / 依赖: basis_sets, basis_sets.nhdsSet_closure, nhdsSet_closure
@@ -1532,8 +1532,8 @@ theorem Topology.IsClosedEmbedding.normalSpace
     exact (H.preimage hf.continuous).mono (subset_preimage_image _ _) (subset_preimage_image _ _)
 
 中文:
-定理 Topology.IsClosedEmbedding.normalSpace
-  结论: [TopologicalSpace Y] [NormalSpace Y]
+定理 拓扑.是闭嵌入.normalSpace
+  结论: [拓扑空间 Y] [正规空间 Y]
   证明: by
     have H : SeparatedNhds (f '' s) (f '' t) :=
       NormalSpace.normal (f '' s) (f '' t) (hf.isClosedMap s hs) (hf.isClosedMap t ht)
@@ -1557,8 +1557,8 @@ theorem Homeomorph.normalSpace
   proof: h.symm.isClosedEmbedding.normalSpace
 
 中文:
-定理 Homeomorph.normalSpace
-  条件: [TopologicalSpace Y] [NormalSpace X] (h : X ≃ₜ Y)
+定理 同胚.normalSpace
+  条件: [拓扑空间 Y] [正规空间 X] (h : X ≃ₜ Y)
   证明: h.symm.isClosedEmbedding.normalSpace
 -/
 protected theorem Homeomorph.normalSpace [TopologicalSpace Y] [NormalSpace X] (h : X ≃ₜ Y) :
@@ -1596,9 +1596,9 @@ class T4Space
   (no additional axioms)
 
 中文:
-类 T4Space
-  参数: (X : 类型u) [TopologicalSpace X]
-  继承: T1Space X, NormalSpace X
+类 T4空间
+  参数: (X : 类型u) [拓扑空间 X]
+  继承: T1空间 X, 正规空间 X
   (无附加公理)
 -/
 class T4Space (X : Type u) [TopologicalSpace X] : Prop extends T1Space X, NormalSpace X
@@ -1620,8 +1620,8 @@ theorem Topology.IsClosedEmbedding.t4Space
   toNormalSpace := hf.normalSpace
 
 中文:
-定理 Topology.IsClosedEmbedding.t4Space
-  结论: [TopologicalSpace Y] [T4Space Y] {f : X -> Y}
+定理 拓扑.是闭嵌入.t4Space
+  结论: [拓扑空间 Y] [T4空间 Y] {f : X -> Y}
   证明: hf.isEmbedding.t1Space
   toNormalSpace := hf.normalSpace
 -/
@@ -1640,9 +1640,9 @@ theorem Homeomorph.t4Space
   proof: h.symm.isClosedEmbedding.t4Space
 
 中文:
-定理 Homeomorph.t4Space
-  条件: [TopologicalSpace Y] [T4Space X] (h : X ≃ₜ Y)
-  结论: T4Space Y
+定理 同胚.t4Space
+  条件: [拓扑空间 Y] [T4空间 X] (h : X ≃ₜ Y)
+  结论: T4空间 Y
   证明: h.symm.isClosedEmbedding.t4Space
 -/
 protected theorem Homeomorph.t4Space [TopologicalSpace Y] [T4Space X] (h : X ≃ₜ Y) : T4Space Y :=
@@ -1657,8 +1657,8 @@ instance ULift.instT4Space
   body: IsClosedEmbedding.uliftDown.t4Space
 
 中文:
-实例 ULift.instT4Space
-  签名: [T4Space X]
+实例 类型层提升.instT4Space
+  签名: [T4空间 X]
   定义体: IsClosedEmbedding.uliftDown.t4Space
 
 Depends on / 依赖: IsClosedEmbedding, IsClosedEmbedding.uliftDown.t4Space, t4Space, uliftDown
@@ -1679,8 +1679,8 @@ instance [NormalSpace
       (hd.preimage mk)
 
 中文:
-实例 [NormalSpace
-  签名: X] : NormalSpace (SeparationQuotient X) where
+实例 [正规空间
+  签名: X] : 正规空间 (SeparationQuotient X) where
   定义体: separatedNhds_iff_disjoint.2 by
     rw [← disjoint_comap_iff surjective_mk]; rw [comap_mk_nhdsSet]; rw [comap_mk_nhdsSet]
     exact disjoint_nhdsSet_nhdsSet (hs.preimage continuous_mk) (ht.preimage continuous_mk)
@@ -1710,10 +1710,10 @@ class CompletelyNormalSpace
     - completely_normal : forall ⦃s t : Set X⦄, Disjoint (closure s) t -> Disjoint s (closure t) -> Disjoint (𝓝ˢ s) (𝓝ˢ t)
 
 中文:
-类 CompletelyNormalSpace
-  参数: (X : 类型u) [TopologicalSpace X]
+类 余mpletelyNormal空间
+  参数: (X : 类型u) [拓扑空间 X]
   公理与运算 (1 个):
-    - completely_normal : 对任意 ⦃s t : Set X⦄, Disjoint (closure s) t -> Disjoint s (closure t) -> Disjoint (𝓝ˢ s) (𝓝ˢ t)
+    - completely_normal : 对任意 ⦃s t : 集合 X⦄, Disjoint (closure s) t -> Disjoint s (closure t) -> Disjoint (𝓝ˢ s) (𝓝ˢ t)
 -/
 class CompletelyNormalSpace (X : Type u) [TopologicalSpace X] : Prop where
   /-- If `closure s` is disjoint with `t`, and `s` is disjoint with `closure t`, then `s` and `t`
@@ -1745,8 +1745,8 @@ theorem Topology.IsInducing.completelyNormalSpace
   · rwa [← subset_compl_i
 
 中文:
-定理 Topology.IsInducing.completelyNormalSpace
-  结论: [TopologicalSpace Y] [CompletelyNormalSpace Y]
+定理 拓扑.是Inducing.completelyNormalSpace
+  结论: [拓扑空间 Y] [余mpletelyNormal空间 Y]
   证明: by
   refine ⟨fun s t hd₁ hd₂ => ?_⟩
   simp only [he.nhdsSet_eq_comap]
@@ -1776,7 +1776,7 @@ instance [CompletelyNormalSpace
   body: IsEmbedding.subtypeVal.completelyNormalSpace
 
 中文:
-实例 [CompletelyNormalSpace
+实例 [余mpletelyNormal空间
   签名: X] {p
   定义体: IsEmbedding.subtypeVal.completelyNormalSpace
 
@@ -1794,8 +1794,8 @@ instance ULift.instCompletelyNormalSpace
   body: IsEmbedding.uliftDown.completelyNormalSpace
 
 中文:
-实例 ULift.instCompletelyNormalSpace
-  签名: [CompletelyNormalSpace X]
+实例 类型层提升.instCompletelyNormalSpace
+  签名: [余mpletelyNormal空间 X]
   定义体: IsEmbedding.uliftDown.completelyNormalSpace
 
 Depends on / 依赖: IsEmbedding, IsEmbedding.uliftDown.completelyNormalSpace, completelyNormalSpace, uliftDown
@@ -1817,7 +1817,7 @@ theorem completelyNormalSpace_iff_forall_isOpen_normalSpace
   have hst : Disjoint (((↑) : e -> X) ⁻¹' closure s) (((↑) : e -> X) ⁻¹' closure t) :=
 
 中文:
-定理 completelyNormalSpace_iff_forall_isOpen_normalSpace
+定理 completelyNormalSpace_iff_对任意_isOpen_normalSpace
   证明: by
   refine ⟨fun _ _ _ => inferInstance, fun h => ⟨fun s t hSt hsT => ?_⟩⟩
   let e := (closure s inter closure t)ᶜ
@@ -1868,7 +1868,7 @@ alias ⟨_, CompletelyNormalSpace.of_forall_normalSpace⟩ :=
   completely
 
 中文:
-定理 completelyNormalSpace_iff_forall_normalSpace
+定理 completelyNormalSpace_iff_对任意_normalSpace
   证明: ⟨fun _ _ => inferInstance, fun h =>
     completelyNormalSpace_iff_forall_isOpen_normalSpace.2 fun s _ => h s⟩
 
@@ -1903,9 +1903,9 @@ class T5Space
   (no additional axioms)
 
 中文:
-类 T5Space
-  参数: (X : 类型u) [TopologicalSpace X]
-  继承: T1Space X, CompletelyNormalSpace X
+类 T5空间
+  参数: (X : 类型u) [拓扑空间 X]
+  继承: T1空间 X, 余mpletelyNormal空间 X
   (无附加公理)
 -/
 class T5Space (X : Type u) [TopologicalSpace X] : Prop extends T1Space X, CompletelyNormalSpace X
@@ -1920,8 +1920,8 @@ theorem Topology.IsEmbedding.t5Space
   toT1Space := he.t1Space
 
 中文:
-定理 Topology.IsEmbedding.t5Space
-  结论: [TopologicalSpace Y] [T5Space Y] {e : X -> Y}
+定理 拓扑.是嵌入.t5Space
+  结论: [拓扑空间 Y] [T5空间 Y] {e : X -> Y}
   证明: he.completelyNormalSpace
   toT1Space := he.t1Space
 
@@ -1942,9 +1942,9 @@ theorem Homeomorph.t5Space
   proof: h.symm.isClosedEmbedding.t5Space
 
 中文:
-定理 Homeomorph.t5Space
-  条件: [TopologicalSpace Y] [T5Space X] (h : X ≃ₜ Y)
-  结论: T5Space Y
+定理 同胚.t5Space
+  条件: [拓扑空间 Y] [T5空间 X] (h : X ≃ₜ Y)
+  结论: T5空间 Y
   证明: h.symm.isClosedEmbedding.t5Space
 -/
 protected theorem Homeomorph.t5Space [TopologicalSpace Y] [T5Space X] (h : X ≃ₜ Y) : T5Space Y :=
@@ -1964,7 +1964,7 @@ instance [T5Space
   body: IsEmbedding.subtypeVal.t5Space
 
 中文:
-实例 [T5Space
+实例 [T5空间
   签名: X] {p
   定义体: IsEmbedding.subtypeVal.t5Space
 
@@ -1982,8 +1982,8 @@ instance ULift.instT5Space
   body: IsEmbedding.uliftDown.t5Space
 
 中文:
-实例 ULift.instT5Space
-  签名: [T5Space X]
+实例 类型层提升.instT5Space
+  签名: [T5空间 X]
   定义体: IsEmbedding.uliftDown.t5Space
 
 Depends on / 依赖: IsEmbedding, IsEmbedding.uliftDown.t5Space, t5Space, uliftDown
@@ -2006,7 +2006,7 @@ theorem t5Space_iff_forall_isOpen_t4Space
           (fun _ _ => congrArg Subtype.val) (con
 
 中文:
-定理 t5Space_iff_forall_isOpen_t4Space
+定理 t5Space_iff_对任意_isOpen_t4Space
   证明: inferInstance
   mpr h :=
     { toCompletelyNormalSpace :=
@@ -2038,7 +2038,7 @@ alias ⟨_, T5Space.of_forall_isOpen_t4Space⟩ := t5Space_iff_forall_isOpen_t4S
 alias ⟨_, T5Space.of_forall_t4Space⟩ := t5Space_iff_forall_t4Space
 
 中文:
-定理 t5Space_iff_forall_t4Space
+定理 t5Space_iff_对任意_t4Space
   证明: ⟨fun _ _ => inferInstance, fun h => t5Space_iff_forall_isOpen_t4Space.2 fun s _ => h s⟩
 
 alias ⟨_, T5Space.of_forall_isOpen_t4Space⟩ := t5Space_iff_forall_isOpen_t4Space
@@ -2069,8 +2069,8 @@ instance [CompletelyNormalSpace
     exacts [hd₁.pr
 
 中文:
-实例 [CompletelyNormalSpace
-  签名: X] [R0Space X] : T5Space (SeparationQuotient X) where
+实例 [余mpletelyNormal空间
+  签名: X] [R0空间 X] : T5空间 (SeparationQuotient X) where
   定义体: by
     rwa [((t1Space_TFAE (SeparationQuotient X)).out 1 0 :), SeparationQuotient.t1Space_iff]
   completely_normal s t hd₁ hd₂ := by
@@ -2104,8 +2104,8 @@ theorem connectedComponent_eq_iInter_isClopen
   --
 
 中文:
-定理 connectedComponent_eq_iInter_isClopen
-  条件: [T2Space X] [CompactSpace X] (x : X)
+定理 connectedComponent_eq_i整数er_isClopen
+  条件: [T2空间 X] [紧空间 X] (x : X)
   证明: by
   apply Subset.antisymm connectedComponent_subset_iInter_isClopen
   -- Reduce to showing that the clopen intersection is connected.
@@ -2186,7 +2186,7 @@ instance ConnectedComponents.t2
 
 中文:
 实例 ConnectedComponents.t2
-  签名: [T2Space X] [CompactSpace X]
+  签名: [T2空间 X] [紧空间 X]
   定义体: by
   -- Fix 2 distinct connected components, with points a and b
   refine ⟨ConnectedComponents.surjective_coe.forall₂.2 fun a b ne => ?_⟩

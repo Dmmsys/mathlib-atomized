@@ -56,7 +56,7 @@ definition functor
 
 中文:
 定义 functor
-  签名: : 自然数ᵒᵖ ⥤ StructuredArrow c.pt toLightProfinite where
+  签名: : 自然数ᵒᵖ ⥤ 结构化箭头 c.pt toLightProfinite where
   定义体: StructuredArrow.mk (c.π.app i)
   map f := StructuredArrow.homMk (F.map f) (c.w f)
 
@@ -117,8 +117,8 @@ theorem functor_initial
 
 中文:
 定理 functor_initial
-  条件: (hc : IsLimit c) [对任意 i, Epi (c.π.app i)]
-  结论: Initial (functor c)
+  条件: (hc : 是极限 c) [对任意 i, 满态射 (c.π.app i)]
+  结论: 初始 (functor c)
   证明: by
   rw [initial_iff_comp_equivalence _ (StructuredArrow.post _ _ lightToProfinite)]
   have : forall i, Epi ((lightToProfinite.mapCone c).π.app i) :=
@@ -149,8 +149,8 @@ theorem functorOp_final
 
 中文:
 定理 functorOp_final
-  条件: (hc : IsLimit c) [对任意 i, Epi (c.π.app i)]
-  结论: Final (functorOp c)
+  条件: (hc : 是极限 c) [对任意 i, 满态射 (c.π.app i)]
+  结论: 终 (functorOp c)
   证明: by
   have := functor_initial c hc
   have : ((StructuredArrow.toCostructuredArrow toLightProfinite c.pt)).IsEquivalence :=
@@ -222,7 +222,7 @@ definition isLimitCone
 
 中文:
 定义 isLimitCone
-  签名: (hc : IsLimit c) [对任意 i, Epi (c.π.app i)] (hc' : IsLimit <| G.mapCone c)
+  签名: (hc : 是极限 c) [对任意 i, 满态射 (c.π.app i)] (hc' : 是极限 <| G.mapCone c)
   定义体: (functor_initial c hc).isLimitWhiskerEquiv _ _ hc'
 
 Depends on / 依赖: functor_initial, isLimitWhiskerEquiv
@@ -306,7 +306,7 @@ definition isColimitCocone
 
 中文:
 定义 isColimitCocone
-  签名: (hc : IsLimit c) [对任意 i, Epi (c.π.app i)] (hc' : IsColimit <| G.mapCocone c.op)
+  签名: (hc : 是极限 c) [对任意 i, 满态射 (c.π.app i)] (hc' : 是余极限 <| G.mapCocone c.op)
   定义体: haveI := functorOp_final c hc
   (Functor.final_comp (opOpEquivalence Nat).functor (functorOp c)).isColimitWhiskerEquiv _ _ hc'
 
@@ -337,7 +337,7 @@ abbreviation fintypeDiagram'
 
 中文:
 缩写 fintypeDiagram'
-  签名: : StructuredArrow S toLightProfinite ⥤ FintypeCat
+  签名: : 结构化箭头 S toLightProfinite ⥤ FintypeCat
   定义体: StructuredArrow.proj S toLightProfinite
 
 Depends on / 依赖: StructuredArrow, StructuredArrow.proj, toLightProfinite
@@ -355,7 +355,7 @@ abbreviation diagram'
 
 中文:
 缩写 diagram'
-  签名: : StructuredArrow S toLightProfinite ⥤ LightProfinite
+  签名: : 结构化箭头 S toLightProfinite ⥤ LightProfinite
   定义体: S.fintypeDiagram' ⋙ toLightProfinite
 
 Depends on / 依赖: S.fintypeDiagram, fintypeDiagram, toLightProfinite
@@ -373,7 +373,7 @@ definition asLimitCone'
 
 中文:
 定义 asLimitCone'
-  签名: : Cone (S.diagram')
+  签名: : 锥 (S.diagram')
   定义体: cone (𝟭 _) S
 -/
 def asLimitCone' : Cone (S.diagram') := cone (𝟭 _) S
@@ -391,7 +391,7 @@ definition asLimit'
 
 中文:
 定义 asLimit'
-  签名: : IsLimit S.asLimitCone'
+  签名: : 是极限 S.asLimitCone'
   定义体: isLimitCone _ (𝟭 _) S.asLimit S.asLimit
 
 Depends on / 依赖: S.asLimit, asLimit, isLimitCone
@@ -408,7 +408,7 @@ definition lim'
 
 中文:
 定义 lim'
-  签名: : LimitCone S.diagram'
+  签名: : 极限锥 S.diagram'
   定义体: ⟨S.asLimitCone', S.asLimit'⟩
 
 Depends on / 依赖: S.asLimit, S.asLimitCone, asLimit, asLimitCone

@@ -58,10 +58,10 @@ class LocallyConvexSpace
     - convex_basis : forall x : E, (𝓝 x).HasBasis (fun s : Set E => s in 𝓝 x ∧ Convex 𝕜 s) id
 
 中文:
-类 LocallyConvexSpace
-  参数: (𝕜 E : 类型) [Semiring 𝕜] [PartialOrder 𝕜]
+类 LocallyConvex空间
+  参数: (𝕜 E : 类型) [半环 𝕜] [偏序 𝕜]
   公理与运算 (1 个):
-    - convex_basis : 对任意 x : E, (𝓝 x).HasBasis (fun s : Set E => s in 𝓝 x ∧ Convex 𝕜 s) id
+    - convex_basis : 对任意 x : E, (𝓝 x).有基 (fun s : 集合 E => s in 𝓝 x ∧ 凸 𝕜 s) id
 -/
 class LocallyConvexSpace (𝕜 E : Type*) [Semiring 𝕜] [PartialOrder 𝕜]
     [AddCommMonoid E] [Module 𝕜 E] [TopologicalSpace E] : Prop where
@@ -100,8 +100,8 @@ theorem LocallyConvexSpace.ofBases
       ⟨(hbasis x).index s hs.1, ⟨(hbasis x).property_index hs.1, (hbasis x).set_index_subset hs.1⟩⟩⟩
 
 中文:
-定理 LocallyConvexSpace.ofBases
-  结论: {ι : 类型} (b : E -> ι -> Set E) (p : E -> ι -> 命题)
+定理 LocallyConvex空间.ofBases
+  结论: {ι : 类型} (b : E -> ι -> 集合 E) (p : E -> ι -> 命题)
   证明: ⟨fun x =>
     (hbasis x).to_hasBasis
       (fun i hi => ⟨b x i, ⟨⟨(hbasis x).mem_of_mem hi, hconvex x i hi⟩, le_refl (b x i)⟩⟩)
@@ -128,8 +128,8 @@ theorem LocallyConvexSpace.convex_basis_zero
   proof: LocallyConvexSpace.convex_basis 0
 
 中文:
-定理 LocallyConvexSpace.convex_basis_zero
-  条件: [LocallyConvexSpace 𝕜 E]
+定理 LocallyConvex空间.convex_basis_zero
+  条件: [LocallyConvex空间 𝕜 E]
   证明: LocallyConvexSpace.convex_basis 0
 
 Depends on / 依赖: LocallyConvexSpace, LocallyConvexSpace.convex_basis, convex_basis
@@ -146,7 +146,7 @@ theorem locallyConvexSpace_iff_exists_convex_subset
   proof: (locallyConvexSpace_iff 𝕜 E).trans (forall_congr' fun _ => hasBasis_self)
 
 中文:
-定理 locallyConvexSpace_iff_exists_convex_subset
+定理 locallyConvexSpace_iff_存在_convex_subset
   证明: (locallyConvexSpace_iff 𝕜 E).trans (forall_congr' fun _ => hasBasis_self)
 
 Depends on / 依赖: forall_congr, hasBasis_self, locallyConvexSpace_iff
@@ -176,8 +176,8 @@ theorem LocallyConvexSpace.ofBasisZero
   exact hbasis.map _
 
 中文:
-定理 LocallyConvexSpace.ofBasisZero
-  结论: {ι : 类型} (b : ι -> Set E) (p : ι -> 命题)
+定理 LocallyConvex空间.ofBasisZero
+  结论: {ι : 类型} (b : ι -> 集合 E) (p : ι -> 命题)
   证明: by
   refine LocallyConvexSpace.ofBases 𝕜 E (fun (x : E) (i : ι) => (x + ·) '' b i) (fun _ => p)
     (fun x => ?_) fun x i hi => (hconvex i hi).translate x
@@ -205,7 +205,7 @@ theorem locallyConvexSpace_iff_zero
 
 中文:
 定理 locallyConvexSpace_iff_zero
-  结论: LocallyConvexSpace 𝕜 E ↔
+  结论: LocallyConvex空间 𝕜 E ↔
   证明: ⟨fun _ => LocallyConvexSpace.convex_basis 0, fun h =>
     LocallyConvexSpace.ofBasisZero 𝕜 E _ _ h fun _ => And.right⟩
 
@@ -224,7 +224,7 @@ theorem locallyConvexSpace_iff_exists_convex_subset_zero
   proof: (locallyConvexSpace_iff_zero 𝕜 E).trans hasBasis_self
 
 中文:
-定理 locallyConvexSpace_iff_exists_convex_subset_zero
+定理 locallyConvexSpace_iff_存在_convex_subset_zero
   证明: (locallyConvexSpace_iff_zero 𝕜 E).trans hasBasis_self
 
 Depends on / 依赖: hasBasis_self, locallyConvexSpace_iff_zero
@@ -253,8 +253,8 @@ theorem Convex.locallyPathConnectedSpace
   · exac
 
 中文:
-定理 Convex.locallyPathConnectedSpace
-  结论: [Module 实数 E] [ContinuousSMul 实数 E] [LocallyConvexSpace 实数 E]
+定理 凸.locallyPathConnectedSpace
+  结论: [模 实数 E] [连续标量乘法 实数 E] [LocallyConvex空间 实数 E]
   证明: by
   refine ⟨fun x => ⟨fun s => ⟨fun hs => ?_, fun ⟨t, ht⟩ => mem_of_superset ht.1.1 ht.2⟩⟩⟩
   let ⟨t, ht⟩ := (mem_nhds_subtype S x s).mp hs
@@ -298,8 +298,8 @@ theorem LocallyConvexSpace.convex_open_basis_zero
     fun s hs => ⟨s, ⟨hs.2.1.mem_nhds hs.1, hs.2.2⟩, subset_rfl⟩
 
 中文:
-定理 LocallyConvexSpace.convex_open_basis_zero
-  条件: [LocallyConvexSpace 𝕜 E]
+定理 LocallyConvex空间.convex_open_basis_zero
+  条件: [LocallyConvex空间 𝕜 E]
   证明: (LocallyConvexSpace.convex_basis_zero 𝕜 E).to_hasBasis
     (fun s hs =>
       ⟨interior s, ⟨mem_interior_iff_mem_nhds.mpr hs.1, isOpen_interior, hs.2.interior⟩,
@@ -332,7 +332,7 @@ theorem Disjoint.exists_open_convexes
   rcases disj.exists_unif
 
 中文:
-定理 Disjoint.exists_open_convexes
+定理 Disjoint.存在_open_convexes
   结论: (disj : Disjoint s t)
   证明: by
   let : UniformSpace E := IsTopologicalAddGroup.rightUniformSpace E
@@ -367,8 +367,8 @@ lemma exists_open_convex_of_notMem
   simpa [*] using Disjoint.exists_open_convexes (s := {x}) (t := s) (𝕜 := 𝕜)
 
 中文:
-引理 exists_open_convex_of_notMem
-  条件: (hx : x ∉ s) (hsconv : Convex 𝕜 s) (hsclosed : IsClosed s)
+引理 存在_open_convex_of_notMem
+  条件: (hx : x ∉ s) (hsconv : 凸 𝕜 s) (hsclosed : 是闭集 s)
   证明: by
   simpa [*] using Disjoint.exists_open_convexes (s := {x}) (t := s) (𝕜 := 𝕜)
 
@@ -401,8 +401,8 @@ theorem LocallyConvexSpace.sInf
       (fun x => ?_) fun x If hif =
 
 中文:
-定理 LocallyConvexSpace.sInf
-  结论: {ts : Set (TopologicalSpace E)}
+定理 LocallyConvex空间.sInf
+  结论: {ts : 集合 (拓扑空间 E)}
   证明: by
   let : TopologicalSpace E := sInf ts
   refine .ofBases 𝕜 E (fun _ => fun If : Set ts × (ts -> Set E) => ⋂ i in If.1, If.2 i)
@@ -430,8 +430,8 @@ theorem LocallyConvexSpace.iInf
   proof: .sInf by rwa [forall_mem_range]
 
 中文:
-定理 LocallyConvexSpace.iInf
-  结论: {ts' : ι -> TopologicalSpace E}
+定理 LocallyConvex空间.iInf
+  结论: {ts' : ι -> 拓扑空间 E}
   证明: .sInf by rwa [forall_mem_range]
 -/
 protected theorem LocallyConvexSpace.iInf {ts' : ι -> TopologicalSpace E}
@@ -451,8 +451,8 @@ theorem LocallyConvexSpace.inf
   cases b <;> assumption
 
 中文:
-定理 LocallyConvexSpace.inf
-  结论: {t₁ t₂ : TopologicalSpace E}
+定理 LocallyConvex空间.下确界
+  结论: {t₁ t₂ : 拓扑空间 E}
   证明: by
   rw [inf_eq_iInf]
   refine .iInf fun b => ?_
@@ -480,8 +480,8 @@ theorem LocallyConvexSpace.induced
   exact (LocallyConvexSpace.convex_basis <| f x).comap f
 
 中文:
-定理 LocallyConvexSpace.induced
-  结论: {t : TopologicalSpace F} [LocallyConvexSpace 𝕜 F]
+定理 LocallyConvex空间.induced
+  结论: {t : 拓扑空间 F} [LocallyConvex空间 𝕜 F]
   证明: by
   let : TopologicalSpace E := t.induced f
   refine LocallyConvexSpace.ofBases 𝕜 E (fun _ => preimage f)
@@ -510,8 +510,8 @@ theorem Topology.IsInducing.locallyConvexSpace
   exact .induced f
 
 中文:
-定理 Topology.IsInducing.locallyConvexSpace
-  结论: [TopologicalSpace F] [LocallyConvexSpace 𝕜 F]
+定理 拓扑.是Inducing.locallyConvexSpace
+  结论: [拓扑空间 F] [LocallyConvex空间 𝕜 F]
   证明: by
   rw [hf.eq_induced]
   exact .induced f
@@ -533,8 +533,8 @@ instance [TopologicalSpace
   body: IsInducing.locallyConvexSpace (f := S.subtype) .subtypeVal
 
 中文:
-实例 [TopologicalSpace
-  签名: E] [LocallyConvexSpace 𝕜 E] {S
+实例 [拓扑空间
+  签名: E] [LocallyConvex空间 𝕜 E] {S
   定义体: IsInducing.locallyConvexSpace (f := S.subtype) .subtypeVal
 
 Depends on / 依赖: IsInducing, IsInducing.locallyConvexSpace, S.subtype, locallyConvexSpace, subtype, subtypeVal
@@ -552,8 +552,8 @@ instance Pi.locallyConvexSpace
   body: .iInf fun i => .induced (LinearMap.proj i)
 
 中文:
-实例 Pi.locallyConvexSpace
-  签名: {ι : 类型} {X : ι -> 类型} [对任意 i, AddCommMonoid (X i)]
+实例 依赖函数类型.locallyConvexSpace
+  签名: {ι : 类型} {X : ι -> 类型} [对任意 i, 加法交换幺半群 (X i)]
   定义体: .iInf fun i => .induced (LinearMap.proj i)
 
 Depends on / 依赖: LinearMap, LinearMap.proj, induced
@@ -572,8 +572,8 @@ instance Prod.locallyConvexSpace
   body: .inf (.induced (LinearMap.fst _ _ _)) (.induced (LinearMap.snd _ _ _))
 
 中文:
-实例 Prod.locallyConvexSpace
-  签名: [TopologicalSpace E] [TopologicalSpace F] [LocallyConvexSpace 𝕜 E]
+实例 积类型.locallyConvexSpace
+  签名: [拓扑空间 E] [拓扑空间 F] [LocallyConvex空间 𝕜 E]
   定义体: .inf (.induced (LinearMap.fst _ _ _)) (.induced (LinearMap.snd _ _ _))
 
 Depends on / 依赖: LinearMap, LinearMap.fst, LinearMap.snd, induced
@@ -606,7 +606,7 @@ instance LinearOrderedSemiring.toLocallyConvexSpace
 
 中文:
 实例 LinearOrderedSemiring.toLocallyConvexSpace
-  签名: {R : 类型} [TopologicalSpace R]
+  签名: {R : 类型} [拓扑空间 R]
   定义体: by
     obtain hl | hl := isBot_or_exists_lt x
     · refine hl.rec ?_ _
@@ -662,7 +662,7 @@ lemma Convex.eventually_nhdsWithin_segment
   suffices segment 𝕜 x₀ x subseteq u from this h
 
 中文:
-引理 Convex.eventually_nhdsWithin_segment
+引理 凸.eventually_nhdsWithin_segment
   结论: {E 𝕜 : 类型}
   证明: by
   rw [eventually_nhdsWithin_iff]; rw [(LocallyConvexSpace.convex_basis (𝕜 := 𝕜) x₀).eventually_iff]

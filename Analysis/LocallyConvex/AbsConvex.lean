@@ -59,7 +59,7 @@ definition AbsConvex
 
 中文:
 定义 AbsConvex
-  签名: (s : Set E)
+  签名: (s : 集合 E)
   定义体: Balanced 𝕜 s ∧ Convex 𝕜 s
 
 Depends on / 依赖: Balanced, Convex
@@ -78,7 +78,7 @@ theorem AbsConvex.empty
 
 中文:
 定理 AbsConvex.empty
-  结论: AbsConvex 𝕜 (∅ : Set E)
+  结论: AbsConvex 𝕜 (∅ : 集合 E)
   证明: ⟨balanced_empty, convex_empty⟩
 
 Depends on / 依赖: balanced_empty, convex_empty
@@ -95,7 +95,7 @@ theorem AbsConvex.univ
 
 中文:
 定理 AbsConvex.univ
-  结论: AbsConvex 𝕜 (univ : Set E)
+  结论: AbsConvex 𝕜 (univ : 集合 E)
   证明: ⟨balanced_univ, convex_univ⟩
 
 Depends on / 依赖: balanced_univ, convex_univ
@@ -112,7 +112,7 @@ theorem AbsConvex.inter
 
 中文:
 定理 AbsConvex.inter
-  条件: {s t : Set E} (hs : AbsConvex 𝕜 s) (ht : AbsConvex 𝕜 t)
+  条件: {s t : 集合 E} (hs : AbsConvex 𝕜 s) (ht : AbsConvex 𝕜 t)
   证明: ⟨hs.1.inter ht.1, hs.2.inter ht.2⟩
 -/
 theorem AbsConvex.inter {s t : Set E} (hs : AbsConvex 𝕜 s) (ht : AbsConvex 𝕜 t) :
@@ -128,8 +128,8 @@ theorem AbsConvex.sInter
   proof: ⟨.sInter fun s hs => (h s hs).1, convex_sInter fun s hs => (h s hs).2⟩
 
 中文:
-定理 AbsConvex.sInter
-  条件: {S : Set (Set E)} (h : 对任意 s in S, AbsConvex 𝕜 s)
+定理 AbsConvex.集合交集
+  条件: {S : 集合 (集合 E)} (h : 对任意 s in S, AbsConvex 𝕜 s)
   结论: AbsConvex 𝕜 (⋂₀ S)
   证明: ⟨.sInter fun s hs => (h s hs).1, convex_sInter fun s hs => (h s hs).2⟩
 
@@ -147,8 +147,8 @@ theorem AbsConvex.iInter
   proof: sInter_range s ▸ AbsConvex.sInter forall_mem_range.2 h
 
 中文:
-定理 AbsConvex.iInter
-  条件: {ι : Sort*} {s : ι -> Set E} (h : 对任意 i, AbsConvex 𝕜 (s i))
+定理 AbsConvex.i整数er
+  条件: {ι : 类型层*} {s : ι -> 集合 E} (h : 对任意 i, AbsConvex 𝕜 (s i))
   证明: sInter_range s ▸ AbsConvex.sInter forall_mem_range.2 h
 
 Depends on / 依赖: AbsConvex, AbsConvex.sInter, forall_mem_range, sInter, sInter_range
@@ -166,8 +166,8 @@ theorem AbsConvex.iInter₂
   proof: AbsConvex.iInter fun _ => (AbsConvex.iInter fun _ => h _ _)
 
 中文:
-定理 AbsConvex.iInter₂
-  结论: {ι : Sort*} {κ : ι -> Sort*} {f : 对任意 i, κ i -> Set E}
+定理 AbsConvex.i整数er₂
+  结论: {ι : 类型层*} {κ : ι -> 类型层*} {f : 对任意 i, κ i -> 集合 E}
   证明: AbsConvex.iInter fun _ => (AbsConvex.iInter fun _ => h _ _)
 
 Depends on / 依赖: AbsConvex, AbsConvex.iInter, iInter
@@ -190,7 +190,7 @@ definition absConvexHull
 
 中文:
 定义 absConvexHull
-  签名: : ClosureOperator (Set E)
+  签名: : 闭包算子 (集合 E)
   定义体: .ofCompletePred (AbsConvex 𝕜) fun _ => .sInter
 
 Depends on / 依赖: AbsConvex, ofCompletePred, sInter
@@ -264,7 +264,7 @@ theorem convex_absConvexHull
 
 中文:
 定理 convex_absConvexHull
-  结论: Convex 𝕜 (absConvexHull 𝕜 s)
+  结论: 凸 𝕜 (absConvexHull 𝕜 s)
   证明: absConvex_absConvexHull.2
 
 Depends on / 依赖: absConvex_absConvexHull
@@ -283,7 +283,7 @@ theorem absConvexHull_eq_iInter
   simp [absConvexHull, iInter_subtype, iInter_and]
 
 中文:
-定理 absConvexHull_eq_iInter
+定理 absConvexHull_eq_i整数er
   证明: by
   simp [absConvexHull, iInter_subtype, iInter_and]
 
@@ -419,7 +419,7 @@ theorem absConvexHull_univ
 
 中文:
 定理 absConvexHull_univ
-  结论: absConvexHull 𝕜 (univ : Set E) = univ
+  结论: absConvexHull 𝕜 (univ : 集合 E) = univ
   证明: ClosureOperator.closure_top (absConvexHull 𝕜)
 
 @[simp]
@@ -442,7 +442,7 @@ theorem absConvexHull_empty
 
 中文:
 定理 absConvexHull_empty
-  结论: absConvexHull 𝕜 (∅ : Set E) = ∅
+  结论: absConvexHull 𝕜 (∅ : 集合 E) = ∅
   证明: AbsConvex.empty.absConvexHull_eq
 
 @[simp]
@@ -507,7 +507,7 @@ protected alias ⟨_, Set.Nonempty.absConvexHull⟩ := absConvexHull_nonempty
 
 中文:
 定理 absConvexHull_nonempty
-  结论: (absConvexHull 𝕜 s).Nonempty ↔ s.Nonempty
+  结论: (absConvexHull 𝕜 s).非空 ↔ s.非空
   证明: by
   rw [nonempty_iff_ne_empty]; rw [nonempty_iff_ne_empty]; rw [Ne]; rw [Ne]
   exact not_congr absConvexHull_eq_empty
@@ -533,8 +533,8 @@ theorem absConvex_closed_sInter
   proof: ⟨AbsConvex.sInter (fun s hs => (h s hs).1), isClosed_sInter fun _ hs => (h _ hs).2⟩
 
 中文:
-定理 absConvex_closed_sInter
-  条件: {S : Set (Set E)} (h : 对任意 s in S, AbsConvex 𝕜 s ∧ IsClosed s)
+定理 absConvex_closed_s整数er
+  条件: {S : 集合 (集合 E)} (h : 对任意 s in S, AbsConvex 𝕜 s ∧ 是闭集 s)
   证明: ⟨AbsConvex.sInter (fun s hs => (h s hs).1), isClosed_sInter fun _ hs => (h _ hs).2⟩
 
 Depends on / 依赖: AbsConvex, AbsConvex.sInter, isClosed_sInter, sInter
@@ -557,7 +557,7 @@ definition closedAbsConvexHull
 
 中文:
 定义 closedAbsConvexHull
-  签名: : ClosureOperator (Set E)
+  签名: : 闭包算子 (集合 E)
   定义体: .ofCompletePred (fun s => AbsConvex 𝕜 s ∧ IsClosed s) fun _ => absConvex_closed_sInter
 
 Depends on / 依赖: AbsConvex, IsClosed, absConvex_closed_sInter, ofCompletePred
@@ -575,7 +575,7 @@ theorem absConvex_convexClosedHull
 
 中文:
 定理 absConvex_convexClosedHull
-  条件: {s : Set E}
+  条件: {s : 集合 E}
   证明: ((closedAbsConvexHull 𝕜).isClosed_closure s).1
 
 Depends on / 依赖: closedAbsConvexHull, isClosed_closure
@@ -593,7 +593,7 @@ theorem isClosed_closedAbsConvexHull
 
 中文:
 定理 isClosed_closedAbsConvexHull
-  条件: {s : Set E}
+  条件: {s : 集合 E}
   证明: ((closedAbsConvexHull 𝕜).isClosed_closure s).2
 
 Depends on / 依赖: closedAbsConvexHull, isClosed_closure
@@ -612,7 +612,7 @@ theorem subset_closedAbsConvexHull
 
 中文:
 定理 subset_closedAbsConvexHull
-  条件: {s : Set E}
+  条件: {s : 集合 E}
   结论: s subseteq closedAbsConvexHull 𝕜 s
   证明: (closedAbsConvexHull 𝕜).le_closure s
 
@@ -632,7 +632,7 @@ theorem closure_subset_closedAbsConvexHull
 
 中文:
 定理 closure_subset_closedAbsConvexHull
-  条件: {s : Set E}
+  条件: {s : 集合 E}
   结论: closure s subseteq closedAbsConvexHull 𝕜 s
   证明: closure_minimal subset_closedAbsConvexHull isClosed_closedAbsConvexHull
 
@@ -651,7 +651,7 @@ theorem closedAbsConvexHull_min
 
 中文:
 定理 closedAbsConvexHull_min
-  结论: {s t : Set E} (hst : s subseteq t) (h_conv : AbsConvex 𝕜 t)
+  结论: {s t : 集合 E} (hst : s subseteq t) (h_conv : AbsConvex 𝕜 t)
   证明: (closedAbsConvexHull 𝕜).closure_min hst ⟨h_conv, h_closed⟩
 
 Depends on / 依赖: closedAbsConvexHull, closure_min, h_closed, h_conv
@@ -672,7 +672,7 @@ theorem absConvexHull_subset_closedAbsConvexHull
 
 中文:
 定理 absConvexHull_subset_closedAbsConvexHull
-  条件: {s : Set E}
+  条件: {s : 集合 E}
   证明: absConvexHull_min subset_closedAbsConvexHull absConvex_convexClosedHull
 
 @[simp]
@@ -696,7 +696,7 @@ theorem closedAbsConvexHull_closure_eq_closedAbsConvexHull
 
 中文:
 定理 closedAbsConvexHull_closure_eq_closedAbsConvexHull
-  条件: {s : Set E}
+  条件: {s : 集合 E}
   证明: subset_antisymm (by simpa using ((closedAbsConvexHull 𝕜).monotone
       (closure_subset_closedAbsConvexHull (𝕜 := 𝕜) (E := E))))
     ((closedAbsConvexHull 𝕜).monotone subset_closure)
@@ -728,7 +728,7 @@ theorem AbsConvex.closure
 
 中文:
 定理 AbsConvex.closure
-  条件: {s : Set E} (hs : AbsConvex 𝕜 s)
+  条件: {s : 集合 E} (hs : AbsConvex 𝕜 s)
   结论: AbsConvex 𝕜 (closure s)
   证明: ⟨Balanced.closure hs.1, Convex.closure hs.2⟩
 
@@ -750,7 +750,7 @@ theorem closedAbsConvexHull_eq_closure_absConvexHull
 
 中文:
 定理 closedAbsConvexHull_eq_closure_absConvexHull
-  条件: {s : Set E}
+  条件: {s : 集合 E}
   证明: subset_antisymm
   (closedAbsConvexHull_min (subset_trans (subset_absConvexHull) subset_closure)
     (AbsConvex.closure absConvex_absConvexHull) isClosed_closure)
@@ -783,7 +783,7 @@ theorem absConvexHull_add_subset
 
 中文:
 定理 absConvexHull_add_subset
-  条件: {s t : Set E}
+  条件: {s t : 集合 E}
   证明: absConvexHull_min (add_subset_add subset_absConvexHull subset_absConvexHull)
     ⟨Balanced.add balanced_absConvexHull balanced_absConvexHull,
       Convex.add convex_absConvexHull convex_absConvexHull⟩
@@ -811,7 +811,7 @@ theorem absConvexHull_eq_convexHull_balancedHull
 
 中文:
 定理 absConvexHull_eq_convexHull_balancedHull
-  条件: {s : Set E}
+  条件: {s : 集合 E}
   证明: le_antisymm
   (absConvexHull_min
     ((subset_convexHull 𝕜 s).trans (convexHull_mono (subset_balancedHull 𝕜)))
@@ -843,7 +843,7 @@ alias balancedHull_convexHull_subseteq_absConvexHull := balancedHull_convexHull_
 
 中文:
 定理 balancedHull_convexHull_subset_absConvexHull
-  条件: {s : Set E}
+  条件: {s : 集合 E}
   证明: balanced_absConvexHull.balancedHull_subset_of_subset
     (convexHull_min subset_absConvexHull convex_absConvexHull)
 
@@ -873,8 +873,8 @@ theorem IsOpen.absConvexHull
 .convexHull exact hs.balancedHull hzero
 
 中文:
-定理 IsOpen.absConvexHull
-  条件: {s : Set E} (hs : IsOpen s) (hzero : 0 in s)
+定理 是开集.absConvexHull
+  条件: {s : 集合 E} (hs : 是开集 s) (hzero : 0 in s)
   证明: by
   rw [absConvexHull_eq_convexHull_balancedHull]
 .convexHull exact hs.balancedHull hzero
@@ -1022,8 +1022,8 @@ theorem exists_nhds_hasAntitoneBasis_absConvex_open_add_closure_subset
   have hv_open (n : Nat) : IsOpen (v n) := i
 
 中文:
-定理 exists_nhds_hasAntitoneBasis_absConvex_open_add_closure_subset
-  条件: [FirstCountableTopology E]
+定理 存在_nhds_hasAntitoneBasis_absConvex_open_add_closure_subset
+  条件: [第一可数拓扑 E]
   证明: by
   obtain ⟨u, hu_basis, -⟩ := IsTopologicalAddGroup.exists_antitone_basis_nhds_zero E
   have hu_zero (n : Nat) : 0 in interior (u n) :=
@@ -1087,7 +1087,7 @@ lemma balancedHull_subset_convexHull_union_neg
 
 中文:
 引理 balancedHull_subset_convexHull_union_neg
-  条件: {s : Set E}
+  条件: {s : 集合 E}
   证明: by
   intro a ha
   obtain ⟨r, hr, y, hy, rfl⟩ := mem_balancedHull_iff.1 ha
@@ -1126,7 +1126,7 @@ theorem convexHull_union_neg_eq_absConvexHull
 
 中文:
 定理 convexHull_union_neg_eq_absConvexHull
-  条件: {s : Set E}
+  条件: {s : 集合 E}
   证明: by
   rw [absConvexHull_eq_convexHull_balancedHull]
   exact le_antisymm (convexHull_mono (union_subset (subset_balancedHull Real)
@@ -1164,7 +1164,7 @@ protected alias ⟨_, TotallyBounded.absConvexHull⟩ := totallyBounded_absConve
 
 中文:
 引理 totallyBounded_absConvexHull
-  结论: TotallyBounded (absConvexHull 实数 s) ↔ TotallyBounded s
+  结论: 全有界 (absConvexHull 实数 s) ↔ 全有界 s
   证明: by
   simp [← convexHull_union_neg_eq_absConvexHull]
 
@@ -1189,7 +1189,7 @@ lemma zero_mem_absConvexHull
 
 中文:
 引理 zero_mem_absConvexHull
-  结论: {s : Set E} [SeminormedRing 𝕜] [PartialOrder 𝕜] [AddCommGroup E]
+  结论: {s : 集合 E} [Seminormed环 𝕜] [偏序 𝕜] [加法交换群 E]
   证明: balanced_absConvexHull.zero_mem (Nonempty.mono subset_absConvexHull Set.Nonempty.of_subtype)
 
 Depends on / 依赖: Nonempty, Nonempty.mono, Set.Nonempty.of_subtype, balanced_absConvexHull, balanced_absConvexHull.zero_mem, of_subtype, subset_absConvexHull, zero_mem
@@ -1210,7 +1210,7 @@ theorem isCompact_closedAbsConvexHull_of_totallyBounded
 
 中文:
 定理 isCompact_closedAbsConvexHull_of_totallyBounded
-  结论: {E : 类型} [AddCommGroup E] [Module 实数 E]
+  结论: {E : 类型} [加法交换群 E] [模 实数 E]
   证明: by
   rw [closedAbsConvexHull_eq_closure_absConvexHull]
   exact isCompact_closure_of_totallyBounded_quasiComplete (𝕜 := Real) ht.absConvexHull

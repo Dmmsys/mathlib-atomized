@@ -38,7 +38,7 @@ theorem TietzeExtension.of_tvs
 
 中文:
 定理 TietzeExtension.of_tvs
-  结论: (𝕜 : 类型v) [NontriviallyNormedField 𝕜] {E : Type w}
+  结论: (𝕜 : 类型v) [NontriviallyNormedField 𝕜] {E : 类型 w}
   证明: .of_homeo .equivFun.toContinuousLinearEquiv.toHomeomorph Module.Basis.ofVectorSpace 𝕜 E
 
 Depends on / 依赖: Module, Module.Basis.ofVectorSpace, equivFun, equivFun.toContinuousLinearEquiv.toHomeomorph, ofVectorSpace, of_homeo, toContinuousLinearEquiv, toHomeomorph
@@ -58,8 +58,8 @@ instance Complex.instTietzeExtension
   body: TietzeExtension.of_tvs Real
 
 中文:
-实例 Complex.instTietzeExtension
-  签名: : TietzeExtension Complex
+实例 复形.instTietzeExtension
+  签名: : TietzeExtension 复形
   定义体: TietzeExtension.of_tvs Real
 
 Depends on / 依赖: TietzeExtension, TietzeExtension.of_tvs, of_tvs
@@ -80,7 +80,7 @@ instance RCLike.instTietzeExtensionTVS
 
 中文:
 实例 RCLike.instTietzeExtensionTVS
-  签名: {𝕜 : 类型v} [RCLike 𝕜] {E : Type w}
+  签名: {𝕜 : 类型v} [RCLike 𝕜] {E : 类型 w}
   定义体: TietzeExtension.of_tvs 𝕜
 
 Depends on / 依赖: TietzeExtension, TietzeExtension.of_tvs, of_tvs
@@ -101,8 +101,8 @@ instance Set.instTietzeExtensionUnitBall
   .of_homeo Homeomorph.unitBall.symm
 
 中文:
-实例 Set.instTietzeExtensionUnitBall
-  签名: {𝕜 : 类型v} [RCLike 𝕜] {E : Type w}
+实例 集合.instTietzeExtensionUnitBall
+  签名: {𝕜 : 类型v} [RCLike 𝕜] {E : 类型 w}
   定义体: have : NormedSpace Real E := NormedSpace.restrictScalars Real 𝕜 E
   .of_homeo Homeomorph.unitBall.symm
 
@@ -130,8 +130,8 @@ instance Set.instTietzeExtensionUnitClosedBall
     ref
 
 中文:
-实例 Set.instTietzeExtensionUnitClosedBall
-  签名: {𝕜 : 类型v} [RCLike 𝕜] {E : Type w}
+实例 集合.instTietzeExtensionUnitClosedBall
+  签名: {𝕜 : 类型v} [RCLike 𝕜] {E : 类型 w}
   定义体: by
   have : NormedSpace Real E := NormedSpace.restrictScalars Real 𝕜 E
   have : IsScalarTower Real 𝕜 E := Real.isScalarTower
@@ -179,7 +179,7 @@ theorem Metric.instTietzeExtensionBall
 
 中文:
 定理 Metric.instTietzeExtensionBall
-  结论: {𝕜 : 类型v} [RCLike 𝕜] {E : Type w}
+  结论: {𝕜 : 类型v} [RCLike 𝕜] {E : 类型 w}
   证明: have : NormedSpace Real E := NormedSpace.restrictScalars Real 𝕜 E
 .of_homeo show (Metric.ball (0 : E) r) ≃ₜ (Metric.ball (0 : E) 1) from
 .toHomeomorphSourceTarget.symm OpenPartialHomeomorph.unitBallBall (0 : E) r hr
@@ -208,7 +208,7 @@ theorem Metric.instTietzeExtensionClosedBall
 
 中文:
 定理 Metric.instTietzeExtensionClosedBall
-  结论: (𝕜 : 类型v) [RCLike 𝕜] {E : Type w}
+  结论: (𝕜 : 类型v) [RCLike 𝕜] {E : 类型 w}
   证明: .of_homeo (Z := Metric.closedBall (0 : E) 1) by
     symm
     apply (DilationEquiv.smulTorsor y (k := (r : 𝕜)) <| by exact_mod_cast hr.ne').toHomeomorph.sets
@@ -241,7 +241,7 @@ instance unitInterval.instTietzeExtension
   exact Metric.instTietzeExtensionClosedBall Real _ (by norm_num)
 
 中文:
-实例 unitInterval.instTietzeExtension
+实例 unit整数erval.instTietzeExtension
   签名: : TietzeExtension unit整数erval
   定义体: by
   rw [unitInterval.eq_closedBall]
@@ -273,7 +273,7 @@ theorem exists_norm_eq_domRestrict_eq
   obtain ⟨g, hg_mem, hg⟩ := (f : C(s, E)).exists_forall_mem_restrict_eq hs h
 
 中文:
-定理 exists_norm_eq_domRestrict_eq
+定理 存在_norm_eq_domRestrict_eq
   条件: (f : s ->ᵇ E)
   证明: by
   by_cases hf : ‖f‖ = 0; · exact ⟨0, by aesop⟩

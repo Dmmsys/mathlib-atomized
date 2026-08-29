@@ -46,7 +46,7 @@ structure Algebra
     - str : F.obj a ⟶ a
 
 中文:
-结构 Algebra
+结构 代数
   参数: (F : C ⥤ C)
   公理与运算 (2 个):
     - a : C
@@ -67,8 +67,8 @@ instance [Inhabited
   body: ⟨⟨default, 𝟙 _⟩⟩
 
 中文:
-实例 [Inhabited
-  签名: C] : Inhabited (Algebra (𝟭 C))
+实例 [可居
+  签名: C] : 可居 (代数 (𝟭 C))
   定义体: ⟨⟨default, 𝟙 _⟩⟩
 -/
 instance [Inhabited C] : Inhabited (Algebra (𝟭 C)) :=
@@ -102,8 +102,8 @@ structure Hom
     - h : F.map f ≫ A₁.str = A₀.str ≫ f  [default: by cat_disch]
 
 中文:
-结构 Hom
-  参数: (A₀ A₁ : Algebra F)
+结构 态射
+  参数: (A₀ A₁ : 代数 F)
   公理与运算 (2 个):
     - f : A₀.1 ⟶ A₁.1
     - h : F.map f ≫ A₁.str = A₀.str ≫ f  [默认: by cat_disch]
@@ -130,7 +130,7 @@ definition id
 
 中文:
 定义 id
-  签名: : Hom A A where f
+  签名: : 态射 A A where f
   定义体: 𝟙 _
 -/
 def id : Hom A A where f := 𝟙 _
@@ -145,7 +145,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (Hom A A)
+  签名: 可居 (态射 A A)
   定义体: ⟨{ f := 𝟙 _ }⟩
 -/
 instance : Inhabited (Hom A A) :=
@@ -161,7 +161,7 @@ definition comp
 
 中文:
 定义 comp
-  签名: (f : Hom A₀ A₁) (g : Hom A₁ A₂)
+  签名: (f : 态射 A₀ A₁) (g : 态射 A₁ A₂)
   定义体: f.1 ≫ g.1
 -/
 def comp (f : Hom A₀ A₁) (g : Hom A₁ A₂) : Hom A₀ A₂ where f := f.1 ≫ g.1
@@ -187,7 +187,7 @@ lemma ext
 
 中文:
 引理 ext
-  条件: {A B : Algebra F} {f g : A ⟶ B} (w : f.f = g.f := by cat_disch)
+  条件: {A B : 代数 F} {f g : A ⟶ B} (w : f.f = g.f := by cat_disch)
   结论: f = g
   证明: Hom.ext w
 
@@ -211,7 +211,7 @@ theorem id_eq_id
 
 中文:
 定理 id_eq_id
-  结论: Algebra.Hom.id A = 𝟙 A
+  结论: 代数.态射.id A = 𝟙 A
   证明: rfl
 
 @[simp]
@@ -251,7 +251,7 @@ theorem comp_eq_comp
 
 中文:
 定理 comp_eq_comp
-  结论: Algebra.Hom.comp f g = f ≫ g
+  结论: 代数.态射.comp f g = f ≫ g
   证明: rfl
 
 @[simp]
@@ -350,8 +350,8 @@ theorem iso_of_iso
 
 中文:
 定理 iso_of_iso
-  条件: (f : A₀ ⟶ A₁) [IsIso f.1]
-  结论: IsIso f
+  条件: (f : A₀ ⟶ A₁) [是同构 f.1]
+  结论: 是同构 f
   证明: ⟨⟨{ f := inv f.1
       h := by simp }, by cat_disch, by cat_disch⟩⟩
 
@@ -371,7 +371,7 @@ instance forget_reflects_iso
 
 中文:
 实例 forget_reflects_iso
-  签名: : (forget F).ReflectsIsomorphisms where reflects
+  签名: : (forget F).反映同构 where reflects
   定义体: iso_of_iso
 
 Depends on / 依赖: iso_of_iso
@@ -388,7 +388,7 @@ instance forget_faithful
 
 中文:
 实例 forget_faithful
-  签名: : (forget F).Faithful
+  签名: : (forget F).忠实
   定义体: { }
 -/
 instance forget_faithful : (forget F).Faithful := { }
@@ -404,8 +404,8 @@ theorem epi_of_epi
 
 中文:
 定理 epi_of_epi
-  条件: {X Y : Algebra F} (f : X ⟶ Y) [h : Epi f.1]
-  结论: Epi f
+  条件: {X Y : 代数 F} (f : X ⟶ Y) [h : 满态射 f.1]
+  结论: 满态射 f
   证明: (forget F).epi_of_epi_map h
 
 Depends on / 依赖: epi_of_epi_map, forget
@@ -424,8 +424,8 @@ theorem mono_of_mono
 
 中文:
 定理 mono_of_mono
-  条件: {X Y : Algebra F} (f : X ⟶ Y) [h : Mono f.1]
-  结论: Mono f
+  条件: {X Y : 代数 F} (f : X ⟶ Y) [h : 单态射 f.1]
+  结论: 单态射 f
   证明: (forget F).mono_of_mono_map h
 
 Depends on / 依赖: forget, mono_of_mono_map
@@ -448,7 +448,7 @@ definition functorOfNatTrans
   map f := { f := f.1 }
 
 中文:
-定义 functorOfNatTrans
+定义 functorOf自然数Trans
   签名: {F G : C ⥤ C} (α : G ⟶ F)
   定义体: { a := A.1
       str := α.app _ ≫ A.str }
@@ -475,7 +475,7 @@ definition functorOfNatTransId
   body: NatIso.ofComponents fun X => isoMk (Iso.refl _)
 
 中文:
-定义 functorOfNatTransId
+定义 functorOf自然数TransId
   签名: : functorOf自然数Trans (𝟙 F) ≅ 𝟭 _
   定义体: NatIso.ofComponents fun X => isoMk (Iso.refl _)
 
@@ -497,7 +497,7 @@ definition functorOfNatTransComp
   body: NatIso.ofComponents fun X => isoMk (Iso.refl _)
 
 中文:
-定义 functorOfNatTransComp
+定义 functorOf自然数TransComp
   签名: {F₀ F₁ F₂ : C ⥤ C} (α : F₀ ⟶ F₁) (β : F₁ ⟶ F₂)
   定义体: NatIso.ofComponents fun X => isoMk (Iso.refl _)
 
@@ -524,7 +524,7 @@ definition functorOfNatTransEq
   body: NatIso.ofComponents fun X => isoMk (Iso.refl _)
 
 中文:
-定义 functorOfNatTransEq
+定义 functorOf自然数TransEq
   签名: {F G : C ⥤ C} {α β : F ⟶ G} (h : α = β)
   定义体: NatIso.ofComponents fun X => isoMk (Iso.refl _)
 
@@ -553,7 +553,7 @@ definition equivOfNatIso
     (functorOfNatTransComp _ _).symm ≪≫ functorOfNatTransEq (by simp) ≪≫ functorOfNatTransId
 
 中文:
-定义 equivOfNatIso
+定义 equivOf自然数Iso
   签名: {F G : C ⥤ C} (α : F ≅ G)
   定义体: functorOfNatTrans α.inv
   inverse := functorOfNatTrans α.hom
@@ -666,7 +666,7 @@ theorem str_isIso
 中文:
 定理 str_isIso
   条件: (h : Limits.IsInitial A)
-  结论: IsIso A.str
+  结论: 是同构 A.str
   证明: { out := ⟨strInv h, right_inv _, left_inv _⟩ }
 
 Depends on / 依赖: left_inv, right_inv, strInv
@@ -689,7 +689,7 @@ structure Coalgebra
     - str : V ⟶ F.obj V
 
 中文:
-结构 Coalgebra
+结构 余algebra
   参数: (F : C ⥤ C)
   公理与运算 (2 个):
     - V : C
@@ -710,8 +710,8 @@ instance [Inhabited
   body: ⟨⟨default, 𝟙 _⟩⟩
 
 中文:
-实例 [Inhabited
-  签名: C] : Inhabited (Coalgebra (𝟭 C))
+实例 [可居
+  签名: C] : 可居 (余algebra (𝟭 C))
   定义体: ⟨⟨default, 𝟙 _⟩⟩
 -/
 instance [Inhabited C] : Inhabited (Coalgebra (𝟭 C)) :=
@@ -745,8 +745,8 @@ structure Hom
     - h : V₀.str ≫ F.map f = f ≫ V₁.str  [default: by cat_disch]
 
 中文:
-结构 Hom
-  参数: (V₀ V₁ : Coalgebra F)
+结构 态射
+  参数: (V₀ V₁ : 余algebra F)
   公理与运算 (2 个):
     - f : V₀.1 ⟶ V₁.1
     - h : V₀.str ≫ F.map f = f ≫ V₁.str  [默认: by cat_disch]
@@ -773,7 +773,7 @@ definition id
 
 中文:
 定义 id
-  签名: : Hom V V where f
+  签名: : 态射 V V where f
   定义体: 𝟙 _
 -/
 def id : Hom V V where f := 𝟙 _
@@ -788,7 +788,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (Hom V V)
+  签名: 可居 (态射 V V)
   定义体: ⟨{ f := 𝟙 _ }⟩
 -/
 instance : Inhabited (Hom V V) :=
@@ -804,7 +804,7 @@ definition comp
 
 中文:
 定义 comp
-  签名: (f : Hom V₀ V₁) (g : Hom V₁ V₂)
+  签名: (f : 态射 V₀ V₁) (g : 态射 V₁ V₂)
   定义体: f.1 ≫ g.1
 -/
 def comp (f : Hom V₀ V₁) (g : Hom V₁ V₂) : Hom V₀ V₂ where f := f.1 ≫ g.1
@@ -830,7 +830,7 @@ lemma ext
 
 中文:
 引理 ext
-  条件: {A B : Coalgebra F} {f g : A ⟶ B} (w : f.f = g.f := by cat_disch)
+  条件: {A B : 余algebra F} {f g : A ⟶ B} (w : f.f = g.f := by cat_disch)
   结论: f = g
   证明: Hom.ext w
 
@@ -854,7 +854,7 @@ theorem id_eq_id
 
 中文:
 定理 id_eq_id
-  结论: Coalgebra.Hom.id V = 𝟙 V
+  结论: 余algebra.态射.id V = 𝟙 V
   证明: rfl
 
 @[simp]
@@ -894,7 +894,7 @@ theorem comp_eq_comp
 
 中文:
 定理 comp_eq_comp
-  结论: Coalgebra.Hom.comp f g = f ≫ g
+  结论: 余algebra.态射.comp f g = f ≫ g
   证明: rfl
 
 @[simp]
@@ -995,8 +995,8 @@ theorem iso_of_iso
 
 中文:
 定理 iso_of_iso
-  条件: (f : V₀ ⟶ V₁) [IsIso f.1]
-  结论: IsIso f
+  条件: (f : V₀ ⟶ V₁) [是同构 f.1]
+  结论: 是同构 f
   证明: ⟨⟨{ f := inv f.1
       h := by
         rw [IsIso.eq_inv_comp f.1]; rw [← Category.assoc]; rw [← f.h]; rw [Category.assoc]
@@ -1020,7 +1020,7 @@ instance forget_reflects_iso
 
 中文:
 实例 forget_reflects_iso
-  签名: : (forget F).ReflectsIsomorphisms where reflects
+  签名: : (forget F).反映同构 where reflects
   定义体: iso_of_iso
 
 Depends on / 依赖: iso_of_iso
@@ -1037,7 +1037,7 @@ instance forget_faithful
 
 中文:
 实例 forget_faithful
-  签名: : (forget F).Faithful
+  签名: : (forget F).忠实
   定义体: { }
 -/
 instance forget_faithful : (forget F).Faithful := { }
@@ -1053,8 +1053,8 @@ theorem epi_of_epi
 
 中文:
 定理 epi_of_epi
-  条件: {X Y : Coalgebra F} (f : X ⟶ Y) [h : Epi f.1]
-  结论: Epi f
+  条件: {X Y : 余algebra F} (f : X ⟶ Y) [h : 满态射 f.1]
+  结论: 满态射 f
   证明: (forget F).epi_of_epi_map h
 
 Depends on / 依赖: epi_of_epi_map, forget
@@ -1073,8 +1073,8 @@ theorem mono_of_mono
 
 中文:
 定理 mono_of_mono
-  条件: {X Y : Coalgebra F} (f : X ⟶ Y) [h : Mono f.1]
-  结论: Mono f
+  条件: {X Y : 余algebra F} (f : X ⟶ Y) [h : 单态射 f.1]
+  结论: 单态射 f
   证明: (forget F).mono_of_mono_map h
 
 Depends on / 依赖: forget, mono_of_mono_map
@@ -1099,7 +1099,7 @@ definition functorOfNatTrans
       h := by rw [Category.assoc, ← α.naturality, ← Category.assoc, f.h, Category.assoc] }
 
 中文:
-定义 functorOfNatTrans
+定义 functorOf自然数Trans
   签名: {F G : C ⥤ C} (α : F ⟶ G)
   定义体: { V := V.1
       str := V.str ≫ α.app V.1 }
@@ -1130,7 +1130,7 @@ definition functorOfNatTransId
   body: NatIso.ofComponents fun X => isoMk (Iso.refl _)
 
 中文:
-定义 functorOfNatTransId
+定义 functorOf自然数TransId
   签名: : functorOf自然数Trans (𝟙 F) ≅ 𝟭 _
   定义体: NatIso.ofComponents fun X => isoMk (Iso.refl _)
 
@@ -1152,7 +1152,7 @@ definition functorOfNatTransComp
   body: NatIso.ofComponents fun X => isoMk (Iso.refl _)
 
 中文:
-定义 functorOfNatTransComp
+定义 functorOf自然数TransComp
   签名: {F₀ F₁ F₂ : C ⥤ C} (α : F₀ ⟶ F₁) (β : F₁ ⟶ F₂)
   定义体: NatIso.ofComponents fun X => isoMk (Iso.refl _)
 
@@ -1178,7 +1178,7 @@ definition functorOfNatTransEq
   body: NatIso.ofComponents fun X => isoMk (Iso.refl _)
 
 中文:
-定义 functorOfNatTransEq
+定义 functorOf自然数TransEq
   签名: {F G : C ⥤ C} {α β : F ⟶ G} (h : α = β)
   定义体: NatIso.ofComponents fun X => isoMk (Iso.refl _)
 
@@ -1207,7 +1207,7 @@ definition equivOfNatIso
     (functorOfNatTransComp _ _).symm ≪≫ functorOfNatTransEq (by simp) ≪≫ functorOfNatTransId
 
 中文:
-定义 equivOfNatIso
+定义 equivOf自然数Iso
   签名: {F G : C ⥤ C} (α : F ≅ G)
   定义体: functorOfNatTrans α.hom
   inverse := functorOfNatTrans α.inv
@@ -1320,8 +1320,8 @@ theorem str_isIso
 
 中文:
 定理 str_isIso
-  条件: (h : Limits.IsTerminal A)
-  结论: IsIso A.str
+  条件: (h : Limits.是终止 A)
+  结论: 是同构 A.str
   证明: { out := ⟨strInv h, right_inv _, left_inv _⟩ }
 
 Depends on / 依赖: left_inv, right_inv, strInv
@@ -1347,8 +1347,8 @@ theorem Algebra.homEquiv_naturality_str
   rw [← Adjunction.homEquiv_naturality_right]; rw [← Adjunction.homEquiv_naturality_left]; rw [f.h]
 
 中文:
-定理 Algebra.homEquiv_naturality_str
-  条件: (adj : F ⊣ G) (A₁ A₂ : Algebra F) (f : A₁ ⟶ A₂)
+定理 代数.homEquiv_naturality_str
+  条件: (adj : F ⊣ G) (A₁ A₂ : 代数 F) (f : A₁ ⟶ A₂)
   证明: by
   rw [← Adjunction.homEquiv_naturality_right]; rw [← Adjunction.homEquiv_naturality_left]; rw [f.h]
 
@@ -1368,8 +1368,8 @@ theorem Coalgebra.homEquiv_naturality_str_symm
   rw [← Adjunction.homEquiv_naturality_left_symm]; rw [← Adjunction.homEquiv_naturality_right_symm]; rw [f.h]
 
 中文:
-定理 Coalgebra.homEquiv_naturality_str_symm
-  条件: (adj : F ⊣ G) (V₁ V₂ : Coalgebra G) (f : V₁ ⟶ V₂)
+定理 余algebra.homEquiv_naturality_str_symm
+  条件: (adj : F ⊣ G) (V₁ V₂ : 余algebra G) (f : V₁ ⟶ V₂)
   证明: by
   rw [← Adjunction.homEquiv_naturality_left_symm]; rw [← Adjunction.homEquiv_naturality_right_symm]; rw [f.h]
 
@@ -1396,7 +1396,7 @@ definition Algebra.toCoalgebraOf
       h := Algebra.homEquiv_naturality_str adj _ _ f }
 
 中文:
-定义 Algebra.toCoalgebraOf
+定义 代数.toCoalgebraOf
   签名: (adj : F ⊣ G)
   定义体: { V := A.1
       str := (adj.homEquiv A.1 A.1).toFun A.2 }
@@ -1430,7 +1430,7 @@ definition Coalgebra.toAlgebraOf
       h := Coalgebra.homEquiv_naturality_str_symm adj _ _ f }
 
 中文:
-定义 Coalgebra.toAlgebraOf
+定义 余algebra.toAlgebraOf
   签名: (adj : F ⊣ G)
   定义体: { a := V.1
       str := (adj.homEquiv V.1 V.1).invFun V.2 }

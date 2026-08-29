@@ -33,7 +33,7 @@ theorem Filter.tendsto_cocompact_mul_left₀
   proof: Filter.tendsto_cocompact_mul_left (inv_mul_cancel₀ ha)
 
 中文:
-定理 Filter.tendsto_cocompact_mul_left₀
+定理 滤子.tendsto_cocompact_mul_left₀
   条件: [SeparatelyContinuousMul K] {a : K} (ha : a != 0)
   证明: Filter.tendsto_cocompact_mul_left (inv_mul_cancel₀ ha)
 
@@ -52,7 +52,7 @@ theorem Filter.tendsto_cocompact_mul_right₀
   proof: Filter.tendsto_cocompact_mul_right (mul_inv_cancel₀ ha)
 
 中文:
-定理 Filter.tendsto_cocompact_mul_right₀
+定理 滤子.tendsto_cocompact_mul_right₀
   条件: [SeparatelyContinuousMul K] {a : K} (ha : a != 0)
   证明: Filter.tendsto_cocompact_mul_right (mul_inv_cancel₀ ha)
 
@@ -75,8 +75,8 @@ theorem DivisionRing.finite_of_compactSpace_of_t2Space
   exact GroupWithZero.isOpen_singleton_zero
 
 中文:
-定理 DivisionRing.finite_of_compactSpace_of_t2Space
-  结论: {K} [DivisionRing K] [TopologicalSpace K]
+定理 除环.finite_of_compactSpace_of_t2Space
+  结论: {K} [除环 K] [拓扑空间 K]
   证明: by
   suffices DiscreteTopology K by
     exact finite_of_compact_of_discrete
@@ -104,9 +104,9 @@ class IsTopologicalDivisionRing
   (no additional axioms)
 
 中文:
-类 IsTopologicalDivisionRing
-  参数: : 命题 extends IsTopologicalRing K, ContinuousInv₀ K
-  继承: IsTopologicalRing K, ContinuousInv₀ K
+类 是TopologicalDivision环
+  参数: : 命题 extends 是拓扑环 K, 余ntinuousInv₀ K
+  继承: 是拓扑环 K, 余ntinuousInv₀ K
   (无附加公理)
 -/
 class IsTopologicalDivisionRing : Prop extends IsTopologicalRing K, ContinuousInv₀ K
@@ -130,8 +130,8 @@ definition Subfield.topologicalClosure
         exact mem_closure_image (continuousAt_inv₀ h) hx }
 
 中文:
-定义 Subfield.topologicalClosure
-  签名: (K : Subfield α)
+定义 子域.topologicalClosure
+  签名: (K : 子域 α)
   定义体: { K.toSubring.topologicalClosure with
     carrier := _root_.closure (K : Set α)
     inv_mem' := fun x hx => by
@@ -161,8 +161,8 @@ theorem Subfield.le_topologicalClosure
   proof: _root_.subset_closure
 
 中文:
-定理 Subfield.le_topologicalClosure
-  条件: (s : Subfield α)
+定理 子域.le_topologicalClosure
+  条件: (s : 子域 α)
   结论: s <= s.topologicalClosure
   证明: _root_.subset_closure
 
@@ -180,8 +180,8 @@ theorem Subfield.isClosed_topologicalClosure
   proof: isClosed_closure
 
 中文:
-定理 Subfield.isClosed_topologicalClosure
-  条件: (s : Subfield α)
+定理 子域.isClosed_topologicalClosure
+  条件: (s : 子域 α)
   证明: isClosed_closure
 
 Depends on / 依赖: isClosed_closure
@@ -199,8 +199,8 @@ theorem Subfield.topologicalClosure_minimal
   proof: closure_minimal h ht
 
 中文:
-定理 Subfield.topologicalClosure_minimal
-  结论: (s : Subfield α) {t : Subfield α} (h : s <= t)
+定理 子域.topologicalClosure_minimal
+  结论: (s : 子域 α) {t : 子域 α} (h : s <= t)
   证明: closure_minimal h ht
 
 Depends on / 依赖: closure_minimal
@@ -232,7 +232,7 @@ definition Nonneg.unitsHomeomorphPos
 
 中文:
 定义 Nonneg.unitsHomeomorphPos
-  签名: (R : 类型) [DivisionSemiring R] [PartialOrder R]
+  签名: (R : 类型) [除半环 R] [偏序 R]
   定义体: Nonneg.unitsEquivPos R
   continuous_toFun := by
     rw [Topology.IsEmbedding.subtypeVal.continuous_iff]
@@ -450,8 +450,8 @@ theorem IsPreconnected.eq_one_or_eq_neg_one_of_sq_eq
   simpa using! hS.eqOn_const_of_mapsTo (toFinite _).isDiscrete hf hmaps
 
 中文:
-定理 IsPreconnected.eq_one_or_eq_neg_one_of_sq_eq
-  结论: [Ring 𝕜] [NoZeroDivisors 𝕜]
+定理 是预连通.eq_one_or_eq_neg_one_of_sq_eq
+  结论: [环 𝕜] [无零因子 𝕜]
   证明: by
   have hmaps : MapsTo f S {1, -1} := by
     simpa only [EqOn, Pi.one_apply, Pi.pow_apply, sq_eq_one_iff] using! hsq
@@ -479,8 +479,8 @@ theorem IsPreconnected.eq_or_eq_neg_of_sq_eq
     using hS.eq_one_or_eq_neg_one_of_sq_eq (hf.div hg fun z => hg_ne) hsq
 
 中文:
-定理 IsPreconnected.eq_or_eq_neg_of_sq_eq
-  结论: [Field 𝕜] [ContinuousInv₀ 𝕜] [ContinuousMul 𝕜]
+定理 是预连通.eq_or_eq_neg_of_sq_eq
+  结论: [域 𝕜] [余ntinuousInv₀ 𝕜] [连续乘法 𝕜]
   证明: by
   have hsq : EqOn ((f / g) ^ 2) 1 S := fun x hx => by
     simpa [div_eq_one_iff_eq (pow_ne_zero _ (hg_ne hx)), div_pow] using hsq hx
@@ -511,8 +511,8 @@ theorem IsPreconnected.eq_of_sq_eq
       (iff_of_eq (iff_false _)).2 (hg_ne _)] at hy' ⊢ <;> assumption
 
 中文:
-定理 IsPreconnected.eq_of_sq_eq
-  结论: [Field 𝕜] [ContinuousInv₀ 𝕜] [ContinuousMul 𝕜]
+定理 是预连通.eq_of_sq_eq
+  结论: [域 𝕜] [余ntinuousInv₀ 𝕜] [连续乘法 𝕜]
   证明: fun x hx => by
   rcases hS.eq_or_eq_neg_of_sq_eq hf hg @hsq @hg_ne with (h | h)
   · exact h hx
@@ -546,8 +546,8 @@ instance Subfield.continuousSMul
   body: Subring.continuousSMul M.toSubring X
 
 中文:
-实例 Subfield.continuousSMul
-  签名: (M : Subfield F)
+实例 子域.continuousSMul
+  签名: (M : 子域 F)
   定义体: Subring.continuousSMul M.toSubring X
 
 Depends on / 依赖: M.toSubring, Subring, Subring.continuousSMul, continuousSMul, toSubring

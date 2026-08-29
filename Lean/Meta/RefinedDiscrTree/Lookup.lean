@@ -145,7 +145,7 @@ definition processPending
 
 中文:
 定义 processPending
-  签名: (pending : Array (LazyEntry × α)) (start stop : 自然数)
+  签名: (pending : 数组 (LazyEntry × α)) (start stop : 自然数)
   定义体: do
   Core.checkInterrupted
   let mut values := #[]
@@ -249,9 +249,9 @@ structure MatchResult
 
 中文:
 结构 MatchResult
-  参数: (α : Type)
+  参数: (α : 类型)
   公理与运算 (1 个):
-    - elts : Std.TreeMap 自然数 (Array (Array α))  [默认: {}]
+    - elts : Std.TreeMap 自然数 (数组 (数组 α))  [默认: {}]
 -/
 structure MatchResult (α : Type) where
   /--
@@ -273,7 +273,7 @@ definition MatchResult.push
 
 中文:
 定义 MatchResult.push
-  签名: (mr : MatchResult α) (score : 自然数) (e : Array α)
+  签名: (mr : MatchResult α) (score : 自然数) (e : 数组 α)
   定义体: { elts := mr.elts.alter score fun | some arr => arr.push e | none => #[e] }
 -/
 private def MatchResult.push (mr : MatchResult α) (score : Nat) (e : Array α) : MatchResult α :=
@@ -331,10 +331,10 @@ structure PartialMatch
 结构 PartialMatch
   参数: where
   公理与运算 (4 个):
-    - keys : List Key
+    - keys : 列表 Key
     - score : 自然数
     - trie : TrieIndex
-    - treeStars : Std.HashMap 自然数 (List Key)  [默认: {}]
+    - treeStars : Std.HashMap 自然数 (列表 Key)  [默认: {}]
 -/
 private structure PartialMatch where
   /-- Remaining terms to match -/
@@ -601,7 +601,7 @@ definition getMatchLoop
 
 中文:
 定义 getMatchLoop
-  签名: (todo : Array PartialMatch) (result : MatchResult α)
+  签名: (todo : 数组 PartialMatch) (result : MatchResult α)
   定义体: do
   if h : todo.size = 0 then
     return result
@@ -700,7 +700,7 @@ definition getMatch
 
 中文:
 定义 getMatch
-  签名: (d : RefinedDiscrTree α) (e : Expr) (unify matchRootStar : 布尔)
+  签名: (d : RefinedDiscrTree α) (e : Expr) (unify matchRootStar : 布尔值)
   定义体: do
   withReducible do runTreeM d do
     let (key, keys) ← encodeExpr e (labelledStars := false)

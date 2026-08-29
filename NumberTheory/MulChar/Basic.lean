@@ -77,11 +77,11 @@ structure MulChar
     - map_nonunit' : forall a : R, ¬IsUnit a -> toFun a = 0
 
 中文:
-结构 MulChar
-  参数: extends MonoidHom R R'
-  继承: MonoidHom R R'
+结构 乘法特征
+  参数: extends 幺半群态射 R R'
+  继承: 幺半群态射 R R'
   公理与运算 (1 个):
-    - map_nonunit' : 对任意 a : R, ¬IsUnit a -> toFun a = 0
+    - map_nonunit' : 对任意 a : R, ¬是单位 a -> toFun a = 0
 -/
 structure MulChar extends MonoidHom R R' where
   map_nonunit' : forall a : R, ¬IsUnit a -> toFun a = 0
@@ -96,8 +96,8 @@ instance MulChar.instFunLike
     fun χ₀ χ₁ h => by cases χ₀; cases χ₁; congr; apply MonoidHom.ext (fun _ => congr_fun h _)⟩
 
 中文:
-实例 MulChar.instFunLike
-  签名: : FunLike (MulChar R R') R R'
+实例 乘法特征.instFunLike
+  签名: : 函数状 (乘法特征 R R') R R'
   定义体: ⟨fun χ => χ.toFun,
     fun χ₀ χ₁ h => by cases χ₀; cases χ₁; congr; apply MonoidHom.ext (fun _ => congr_fun h _)⟩
 
@@ -118,11 +118,11 @@ class MulCharClass
     - map_nonunit : forall (χ : F) {a : R} (_ : ¬IsUnit a), χ a = 0
 
 中文:
-类 MulCharClass
-  参数: (F : 类型) (R R' : outParam 类型) [CommMonoid R]
-  继承: MonoidHomClass F R R'
+类 乘法特征类
+  参数: (F : 类型) (R R' : outParam 类型) [交换幺半群 R]
+  继承: 幺半群态射类 F R R'
   公理与运算 (1 个):
-    - map_nonunit : 对任意 (χ : F) {a : R} (_ : ¬IsUnit a), χ a = 0
+    - map_nonunit : 对任意 (χ : F) {a : R} (_ : ¬是单位 a), χ a = 0
 -/
 class MulCharClass (F : Type*) (R R' : outParam Type*) [CommMonoid R]
     [CommMonoidWithZero R'] [FunLike F R R'] : Prop extends MonoidHomClass F R R' where
@@ -169,7 +169,7 @@ definition trivial
 
 中文:
 定义 trivial
-  签名: : MulChar R R' where
+  签名: : 乘法特征 R R' where
   定义体: by classical exact fun x => if IsUnit x then 1 else 0
   map_nonunit' := by
     intro a ha
@@ -210,7 +210,7 @@ theorem coe_mk
 中文:
 定理 coe_mk
   条件: (f : R ->* R') (hf)
-  结论: (MulChar.mk f hf : R -> R') = f
+  结论: (乘法特征.mk f hf : R -> R') = f
   证明: rfl
 -/
 theorem coe_mk (f : R ->* R') (hf) : (MulChar.mk f hf : R -> R') = f :=
@@ -227,7 +227,7 @@ theorem ext'
 
 中文:
 定理 ext'
-  条件: {χ χ' : MulChar R R'} (h : 对任意 a, χ a = χ' a)
+  条件: {χ χ' : 乘法特征 R R'} (h : 对任意 a, χ a = χ' a)
   结论: χ = χ'
   证明: DFunLike.ext _ _ h
 
@@ -247,7 +247,7 @@ instance :
 
 中文:
 实例 :
-  签名: MulCharClass (MulChar R R') R R'
+  签名: 乘法特征类 (乘法特征 R R') R R'
   定义体: χ.map_mul'
   map_one χ := χ.map_one'
   map_nonunit χ := χ.map_nonunit' _
@@ -270,7 +270,7 @@ theorem map_nonunit
 
 中文:
 定理 map_nonunit
-  条件: (χ : MulChar R R') {a : R} (ha : ¬IsUnit a)
+  条件: (χ : 乘法特征 R R') {a : R} (ha : ¬是单位 a)
   结论: χ a = 0
   证明: χ.map_nonunit' a ha
 
@@ -298,7 +298,7 @@ theorem ext
 
 中文:
 定理 ext
-  条件: {χ χ' : MulChar R R'} (h : 对任意 a : Rˣ, χ a = χ' a)
+  条件: {χ χ' : 乘法特征 R R'} (h : 对任意 a : Rˣ, χ a = χ' a)
   结论: χ = χ'
   证明: by
   apply ext'
@@ -334,7 +334,7 @@ definition toUnitHom
 
 中文:
 定义 toUnitHom
-  签名: (χ : MulChar R R')
+  签名: (χ : 乘法特征 R R')
   定义体: Units.map χ
 
 Depends on / 依赖: Units.map
@@ -353,7 +353,7 @@ theorem coe_toUnitHom
 
 中文:
 定理 coe_toUnitHom
-  条件: (χ : MulChar R R') (a : Rˣ)
+  条件: (χ : 乘法特征 R R') (a : Rˣ)
   结论: ↑(χ.toUnitHom a) = χ a
   证明: rfl
 -/
@@ -452,7 +452,7 @@ definition equivToUnitHom
 
 中文:
 定义 equivToUnitHom
-  签名: : MulChar R R' ≃ (Rˣ ->* R'ˣ) where
+  签名: : 乘法特征 R R' ≃ (Rˣ ->* R'ˣ) where
   定义体: toUnitHom
   invFun := ofUnitHom
   left_inv := by
@@ -494,7 +494,7 @@ theorem toUnitHom_eq
 
 中文:
 定理 toUnitHom_eq
-  条件: (χ : MulChar R R')
+  条件: (χ : 乘法特征 R R')
   结论: toUnitHom χ = equivToUnitHom χ
   证明: rfl
 
@@ -540,7 +540,7 @@ theorem coe_equivToUnitHom
 
 中文:
 定理 coe_equivToUnitHom
-  条件: (χ : MulChar R R') (a : Rˣ)
+  条件: (χ : 乘法特征 R R') (a : Rˣ)
   结论: ↑(equivToUnitHom χ a) = χ a
   证明: coe_toUnitHom χ a
 
@@ -587,7 +587,7 @@ lemma coe_toMonoidHom
 
 中文:
 引理 coe_toMonoidHom
-  结论: (χ : MulChar R R')
+  结论: (χ : 乘法特征 R R')
   证明: rfl
 -/
 lemma coe_toMonoidHom (χ : MulChar R R')
@@ -603,7 +603,7 @@ theorem apply_ne_zero_iff
 
 中文:
 定理 apply_ne_zero_iff
-  条件: [Nontrivial R'] {χ : MulChar R R'} {a : R}
+  条件: [非平凡 R'] {χ : 乘法特征 R R'} {a : R}
   证明: ⟨by simpa using (map_nonunit χ).mt, fun h => (h.map χ).ne_zero⟩
 
 Depends on / 依赖: h.map, map_nonunit, ne_zero
@@ -623,7 +623,7 @@ theorem apply_eq_zero_iff
 
 中文:
 定理 apply_eq_zero_iff
-  条件: [Nontrivial R'] {χ : MulChar R R'} {a : R}
+  条件: [非平凡 R'] {χ : 乘法特征 R R'} {a : R}
   证明: by
   simpa using χ.apply_ne_zero_iff.not
 
@@ -646,7 +646,7 @@ theorem map_one
 
 中文:
 定理 map_one
-  条件: (χ : MulChar R R')
+  条件: (χ : 乘法特征 R R')
   结论: χ (1 : R) = 1
   证明: χ.map_one'
 
@@ -665,7 +665,7 @@ theorem map_zero
 
 中文:
 定理 map_zero
-  条件: {R : 类型} [CommMonoidWithZero R] [Nontrivial R] (χ : MulChar R R')
+  条件: {R : 类型} [带零交换幺半群 R] [非平凡 R] (χ : 乘法特征 R R')
   证明: by rw [map_nonunit χ not_isUnit_zero]
 -/
 protected theorem map_zero {R : Type*} [CommMonoidWithZero R] [Nontrivial R] (χ : MulChar R R') :
@@ -687,7 +687,7 @@ definition toMonoidWithZeroHom
 
 中文:
 定义 toMonoidWithZeroHom
-  签名: {R : 类型} [CommMonoidWithZero R] [Nontrivial R] (χ : MulChar R R')
+  签名: {R : 类型} [带零交换幺半群 R] [非平凡 R] (χ : 乘法特征 R R')
   定义体: χ.toFun
   map_zero' := χ.map_zero
   map_one' := χ.map_one'
@@ -710,7 +710,7 @@ theorem map_ringChar
 
 中文:
 定理 map_ringChar
-  条件: {R : 类型} [CommSemiring R] [Nontrivial R] (χ : MulChar R R')
+  条件: {R : 类型} [交换半环 R] [非平凡 R] (χ : 乘法特征 R R')
   证明: by rw [ringChar.Nat.cast_ringChar, χ.map_zero]
 
 Depends on / 依赖: cast_ringChar, map_zero, ringChar, ringChar.Nat.cast_ringChar
@@ -728,7 +728,7 @@ instance hasOne
 
 中文:
 实例 hasOne
-  签名: : One (MulChar R R')
+  签名: : 幺 (乘法特征 R R')
   定义体: ⟨trivial R R'⟩
 -/
 noncomputable instance hasOne : One (MulChar R R') :=
@@ -744,7 +744,7 @@ instance inhabited
 
 中文:
 实例 inhabited
-  签名: : Inhabited (MulChar R R')
+  签名: : 可居 (乘法特征 R R')
   定义体: ⟨1⟩
 -/
 noncomputable instance inhabited : Inhabited (MulChar R R') :=
@@ -764,7 +764,7 @@ theorem one_apply_coe
 中文:
 定理 one_apply_coe
   条件: (a : Rˣ)
-  结论: (1 : MulChar R R') a = 1
+  结论: (1 : 乘法特征 R R') a = 1
   证明: by exact dif_pos a.isUnit
 
 Depends on / 依赖: a.isUnit, dif_pos, isUnit
@@ -782,8 +782,8 @@ lemma one_apply
 
 中文:
 引理 one_apply
-  条件: {x : R} (hx : IsUnit x)
-  结论: (1 : MulChar R R') x = 1
+  条件: {x : R} (hx : 是单位 x)
+  结论: (1 : 乘法特征 R R') x = 1
   证明: one_apply_coe hx.unit
 
 Depends on / 依赖: hx.unit, one_apply_coe
@@ -802,7 +802,7 @@ definition mul
 
 中文:
 定义 mul
-  签名: (χ χ' : MulChar R R')
+  签名: (χ χ' : 乘法特征 R R')
   定义体: { χ.toMonoidHom * χ'.toMonoidHom with
     toFun := χ * χ'
     map_nonunit' := fun a ha => by simp only [map_nonunit χ ha, zero_mul, Pi.mul_apply] }
@@ -824,7 +824,7 @@ instance hasMul
 
 中文:
 实例 hasMul
-  签名: : Mul (MulChar R R')
+  签名: : 乘法 (乘法特征 R R')
   定义体: ⟨mul⟩
 -/
 instance hasMul : Mul (MulChar R R') :=
@@ -843,7 +843,7 @@ theorem mul_apply
 
 中文:
 定理 mul_apply
-  条件: (χ χ' : MulChar R R') (a : R)
+  条件: (χ χ' : 乘法特征 R R') (a : R)
   结论: (χ * χ') a = χ a * χ' a
   证明: rfl
 
@@ -864,7 +864,7 @@ theorem coeToFun_mul
 
 中文:
 定理 coeToFun_mul
-  条件: (χ χ' : MulChar R R')
+  条件: (χ χ' : 乘法特征 R R')
   结论: ⇑(χ * χ') = χ * χ'
   证明: rfl
 -/
@@ -884,8 +884,8 @@ theorem one_mul
 
 中文:
 定理 one_mul
-  条件: (χ : MulChar R R')
-  结论: (1 : MulChar R R') * χ = χ
+  条件: (χ : 乘法特征 R R')
+  结论: (1 : 乘法特征 R R') * χ = χ
   证明: by
   ext
   simp only [one_mul, Pi.mul_apply, MulChar.coeToFun_mul, MulChar.one_apply_coe]
@@ -907,7 +907,7 @@ theorem mul_one
 
 中文:
 定理 mul_one
-  条件: (χ : MulChar R R')
+  条件: (χ : 乘法特征 R R')
   结论: χ * 1 = χ
   证明: by
   ext
@@ -929,7 +929,7 @@ definition inv
 
 中文:
 定义 inv
-  签名: (χ : MulChar R R')
+  签名: (χ : 乘法特征 R R')
   定义体: { MonoidWithZero.inverse.toMonoidHom.comp χ.toMonoidHom with
     toFun := fun a => MonoidWithZero.inverse (χ a)
     map_nonunit' := fun a ha => by simp [map_nonunit _ ha] }
@@ -951,7 +951,7 @@ instance hasInv
 
 中文:
 实例 hasInv
-  签名: : Inv (MulChar R R')
+  签名: : 取逆 (乘法特征 R R')
   定义体: ⟨inv⟩
 -/
 noncomputable instance hasInv : Inv (MulChar R R') :=
@@ -968,7 +968,7 @@ theorem inv_apply_eq_inv
 
 中文:
 定理 inv_apply_eq_inv
-  条件: (χ : MulChar R R') (a : R)
+  条件: (χ : 乘法特征 R R') (a : R)
   结论: χ⁻¹ a = (χ a)⁻¹ʳ
   证明: Eq.refl inv χ a
 
@@ -987,7 +987,7 @@ theorem inv_apply_eq_inv'
 
 中文:
 定理 inv_apply_eq_inv'
-  条件: {R' : 类型} [CommGroupWithZero R'] (χ : MulChar R R') (a : R)
+  条件: {R' : 类型} [带零交换群 R'] (χ : 乘法特征 R R') (a : R)
   证明: (inv_apply_eq_inv χ a).trans Ring.inverse_eq_inv (χ a)
 
 Depends on / 依赖: Ring.inverse_eq_inv, inv_apply_eq_inv, inverse_eq_inv
@@ -1015,7 +1015,7 @@ theorem inv_apply
 
 中文:
 定理 inv_apply
-  条件: {R : 类型} [CommMonoidWithZero R] (χ : MulChar R R') (a : R)
+  条件: {R : 类型} [带零交换幺半群 R] (χ : 乘法特征 R R') (a : R)
   证明: by
   by_cases ha : IsUnit a
   · rw [inv_apply_eq_inv]
@@ -1054,7 +1054,7 @@ theorem inv_apply'
 
 中文:
 定理 inv_apply'
-  条件: {R : 类型} [CommGroupWithZero R] (χ : MulChar R R') (a : R)
+  条件: {R : 类型} [带零交换群 R] (χ : 乘法特征 R R') (a : R)
   结论: χ⁻¹ a = χ a⁻¹
   证明: (inv_apply χ a).trans congr_arg _ (Ring.inverse_eq_inv a)
 
@@ -1078,7 +1078,7 @@ theorem inv_mul
 
 中文:
 定理 inv_mul
-  条件: (χ : MulChar R R')
+  条件: (χ : 乘法特征 R R')
   结论: χ⁻¹ * χ = 1
   证明: by
   ext x
@@ -1114,7 +1114,7 @@ instance commGroup
 
 中文:
 实例 commGroup
-  签名: : CommGroup (MulChar R R') where
+  签名: : 交换群 (乘法特征 R R') where
   定义体: inv_mul
   mul_assoc := by
     intro χ₁ χ₂ χ₃
@@ -1156,7 +1156,7 @@ theorem pow_apply_coe
 
 中文:
 定理 pow_apply_coe
-  条件: (χ : MulChar R R') (n : 自然数) (a : Rˣ)
+  条件: (χ : 乘法特征 R R') (n : 自然数) (a : Rˣ)
   结论: (χ ^ n) a = χ a ^ n
   证明: by
   induction n with
@@ -1184,7 +1184,7 @@ theorem pow_apply'
 
 中文:
 定理 pow_apply'
-  条件: (χ : MulChar R R') {n : 自然数} (hn : n != 0) (a : R)
+  条件: (χ : 乘法特征 R R') {n : 自然数} (hn : n != 0) (a : R)
   结论: (χ ^ n) a = χ a ^ n
   证明: by
   by_cases ha : IsUnit a
@@ -1211,7 +1211,7 @@ lemma equivToUnitHom_mul_apply
 
 中文:
 引理 equivToUnitHom_mul_apply
-  条件: (χ₁ χ₂ : MulChar R R') (a : Rˣ)
+  条件: (χ₁ χ₂ : 乘法特征 R R') (a : Rˣ)
   证明: by
   apply_fun ((↑) : R'ˣ -> R') using Units.val_injective
   push_cast
@@ -1244,7 +1244,7 @@ definition mulEquivToUnitHom
 
 中文:
 定义 mulEquivToUnitHom
-  签名: : MulChar R R' ≃* (Rˣ ->* R'ˣ)
+  签名: : 乘法特征 R R' ≃* (Rˣ ->* R'ˣ)
   定义体: { equivToUnitHom with
     map_mul' := by
       intro χ ψ
@@ -1281,7 +1281,7 @@ definition domRestrict
 
 中文:
 定义 domRestrict
-  签名: {S : 类型} [SetLike S R] [SubmonoidClass S R] (T : S)
+  签名: {S : 类型} [集合状 S R] [子幺半群类 S R] (T : S)
   定义体: ofUnitHom χ.toUnitHom.comp Units.map (SubmonoidClass.subtype T)
 
 @[deprecated (since := "2026-07-19")] alias restrict := domRestrict
@@ -1317,7 +1317,7 @@ definition domRestrictHom
 
 中文:
 定义 domRestrictHom
-  签名: {S : 类型} [SetLike S R] [SubmonoidClass S R] (T : S)
+  签名: {S : 类型} [集合状 S R] [子幺半群类 S R] (T : S)
   定义体: domRestrict T
   map_one' := by
     ext x
@@ -1371,7 +1371,7 @@ lemma eq_one_iff
 
 中文:
 引理 eq_one_iff
-  条件: {χ : MulChar R R'}
+  条件: {χ : 乘法特征 R R'}
   结论: χ = 1 ↔ 对任意 a : Rˣ, χ a = 1
   证明: by
   simp only [MulChar.ext_iff, one_apply_coe]
@@ -1393,7 +1393,7 @@ lemma ne_one_iff
 
 中文:
 引理 ne_one_iff
-  条件: {χ : MulChar R R'}
+  条件: {χ : 乘法特征 R R'}
   结论: χ != 1 ↔ 存在 a : Rˣ, χ a != 1
   证明: by
   simp only [Ne, eq_one_iff, not_forall]
@@ -1416,7 +1416,7 @@ theorem domRestrict_eq_one_iff
 
 中文:
 定理 domRestrict_eq_one_iff
-  结论: {S : 类型} [SetLike S R] [SubmonoidClass S R] {T : S}
+  结论: {S : 类型} [集合状 S R] [子幺半群类 S R] {T : S}
   证明: by
   simp [eq_one_iff]
 
@@ -1446,7 +1446,7 @@ definition IsQuadratic
 
 中文:
 定义 IsQuadratic
-  签名: (χ : MulChar R R')
+  签名: (χ : 乘法特征 R R')
   定义体: forall a, χ a = 0 ∨ χ a = 1 ∨ χ a = -1
 -/
 def IsQuadratic (χ : MulChar R R') : Prop :=
@@ -1462,7 +1462,7 @@ theorem IsQuadratic.eq_of_eq_coe
 
 中文:
 定理 IsQuadratic.eq_of_eq_coe
-  结论: {χ : MulChar R 整数} (hχ : IsQuadratic χ) {χ' : MulChar R' 整数}
+  结论: {χ : 乘法特征 R 整数} (hχ : IsQuadratic χ) {χ' : 乘法特征 R' 整数}
   证明: Int.cast_injOn_of_ringChar_ne_two hR'' (hχ a) (hχ' a') h
 
 Depends on / 依赖: Int.cast_injOn_of_ringChar_ne_two, cast_injOn_of_ringChar_ne_two
@@ -1488,7 +1488,7 @@ definition ringHomComp
 
 中文:
 定义 ringHomComp
-  签名: (χ : MulChar R R') (f : R' ->+* R'')
+  签名: (χ : 乘法特征 R R') (f : R' ->+* R'')
   定义体: { f.toMonoidHom.comp χ.toMonoidHom with
     toFun := fun a => f (χ a)
     map_nonunit' := fun a ha => by simp only [map_nonunit χ ha, map_zero] }
@@ -1517,7 +1517,7 @@ lemma ringHomComp_one
 中文:
 引理 ringHomComp_one
   条件: (f : R' ->+* R'')
-  结论: (1 : MulChar R R').ringHomComp f = 1
+  结论: (1 : 乘法特征 R R').ringHomComp f = 1
   证明: by
   ext1
   simp only [MulChar.ringHomComp_apply, MulChar.one_apply_coe, map_one]
@@ -1540,7 +1540,7 @@ lemma ringHomComp_inv
 
 中文:
 引理 ringHomComp_inv
-  条件: {R : 类型} [CommMonoidWithZero R] (χ : MulChar R R') (f : R' ->+* R'')
+  条件: {R : 类型} [带零交换幺半群 R] (χ : 乘法特征 R R') (f : R' ->+* R'')
   证明: by
   ext1
   simp only [inv_apply, Ring.inverse_unit, ringHomComp_apply]
@@ -1564,7 +1564,7 @@ lemma ringHomComp_mul
 
 中文:
 引理 ringHomComp_mul
-  条件: (χ φ : MulChar R R') (f : R' ->+* R'')
+  条件: (χ φ : 乘法特征 R R') (f : R' ->+* R'')
   证明: by
   ext1
   simp only [ringHomComp_apply, coeToFun_mul, Pi.mul_apply, map_mul]
@@ -1589,7 +1589,7 @@ lemma ringHomComp_pow
 
 中文:
 引理 ringHomComp_pow
-  条件: (χ : MulChar R R') (f : R' ->+* R'') (n : 自然数)
+  条件: (χ : 乘法特征 R R') (f : R' ->+* R'') (n : 自然数)
   证明: by
   induction n with
   | zero => simp only [pow_zero, ringHomComp_one]
@@ -1639,7 +1639,7 @@ lemma ringHomComp_zpow
 
 中文:
 引理 ringHomComp_zpow
-  条件: (χ : MulChar R R') (f : R' ->+* R'') (n : 整数)
+  条件: (χ : 乘法特征 R R') (f : R' ->+* R'') (n : 整数)
   证明: ((ringHomCompHom f).map_zpow χ n).symm
 
 Depends on / 依赖: map_zpow, ringHomCompHom
@@ -1661,7 +1661,7 @@ theorem zpow_apply_coe
 
 中文:
 定理 zpow_apply_coe
-  结论: {R : 类型} [CommGroupWithZero R] {R' : 类型} [CommRing R']
+  结论: {R : 类型} [带零交换群 R] {R' : 类型} [交换环 R']
   证明: by
   obtain ⟨m, rfl | rfl⟩ := Int.eq_nat_or_neg n
   · simp [pow_apply_coe]
@@ -1688,7 +1688,7 @@ lemma injective_ringHomComp
 
 中文:
 引理 injective_ringHomComp
-  条件: {f : R' ->+* R''} (hf : Function.Injective f)
+  条件: {f : R' ->+* R''} (hf : 函数.单射 f)
   证明: by
   simpa
     only [Function.Injective, MulChar.ext_iff, ringHomComp, coe_mk, MonoidHom.coe_mk, OneHom.coe_mk]
@@ -1714,7 +1714,7 @@ lemma ringHomComp_eq_one_iff
 
 中文:
 引理 ringHomComp_eq_one_iff
-  条件: {f : R' ->+* R''} (hf : Function.Injective f) {χ : MulChar R R'}
+  条件: {f : R' ->+* R''} (hf : 函数.单射 f) {χ : 乘法特征 R R'}
   证明: by
   conv_lhs => rw [← (show (1 : MulChar R R').ringHomComp f = 1 by simp)]
   exact (injective_ringHomComp hf).eq_iff
@@ -1736,7 +1736,7 @@ lemma ringHomComp_ne_one_iff
 
 中文:
 引理 ringHomComp_ne_one_iff
-  条件: {f : R' ->+* R''} (hf : Function.Injective f) {χ : MulChar R R'}
+  条件: {f : R' ->+* R''} (hf : 函数.单射 f) {χ : 乘法特征 R R'}
   证明: (ringHomComp_eq_one_iff hf).not
 
 Depends on / 依赖: ringHomComp_eq_one_iff
@@ -1757,7 +1757,7 @@ theorem IsQuadratic.comp
 
 中文:
 定理 IsQuadratic.comp
-  条件: {χ : MulChar R R'} (hχ : χ.IsQuadratic) (f : R' ->+* R'')
+  条件: {χ : 乘法特征 R R'} (hχ : χ.IsQuadratic) (f : R' ->+* R'')
   证明: by
   intro a
   rcases hχ a with (ha | ha | ha) <;> simp [ha]
@@ -1786,7 +1786,7 @@ theorem IsQuadratic.inv
 
 中文:
 定理 IsQuadratic.inv
-  条件: {χ : MulChar R R'} (hχ : χ.IsQuadratic)
+  条件: {χ : 乘法特征 R R'} (hχ : χ.IsQuadratic)
   结论: χ⁻¹ = χ
   证明: by
   ext x
@@ -1822,7 +1822,7 @@ theorem IsQuadratic.sq_eq_one
 
 中文:
 定理 IsQuadratic.sq_eq_one
-  条件: {χ : MulChar R R'} (hχ : χ.IsQuadratic)
+  条件: {χ : 乘法特征 R R'} (hχ : χ.IsQuadratic)
   结论: χ ^ 2 = 1
   证明: by
   rw [← inv_mul_cancel χ]; rw [pow_two]; rw [hχ.inv]
@@ -1848,7 +1848,7 @@ theorem IsQuadratic.pow_char
 
 中文:
 定理 IsQuadratic.pow_char
-  结论: {χ : MulChar R R'} (hχ : χ.IsQuadratic) (p : 自然数) [hp : Fact p.Prime]
+  结论: {χ : 乘法特征 R R'} (hχ : χ.IsQuadratic) (p : 自然数) [hp : Fact p.素]
   证明: by
   ext x
   rw [pow_apply_coe]
@@ -1880,7 +1880,7 @@ theorem IsQuadratic.pow_even
 
 中文:
 定理 IsQuadratic.pow_even
-  条件: {χ : MulChar R R'} (hχ : χ.IsQuadratic) {n : 自然数} (hn : Even n)
+  条件: {χ : 乘法特征 R R'} (hχ : χ.IsQuadratic) {n : 自然数} (hn : Even n)
   证明: by
   obtain ⟨n, rfl⟩ := even_iff_two_dvd.mp hn
   rw [pow_mul]; rw [hχ.sq_eq_one]; rw [one_pow]
@@ -1904,7 +1904,7 @@ theorem IsQuadratic.pow_odd
 
 中文:
 定理 IsQuadratic.pow_odd
-  条件: {χ : MulChar R R'} (hχ : χ.IsQuadratic) {n : 自然数} (hn : Odd n)
+  条件: {χ : 乘法特征 R R'} (hχ : χ.IsQuadratic) {n : 自然数} (hn : Odd n)
   证明: by
   obtain ⟨n, rfl⟩ := hn
   rw [pow_add]; rw [pow_one]; rw [hχ.pow_even (even_two_mul _)]; rw [one_mul]
@@ -1933,7 +1933,7 @@ lemma isQuadratic_iff_sq_eq_one
 
 中文:
 引理 isQuadratic_iff_sq_eq_one
-  结论: {M R : 类型} [CommMonoid M] [CommRing R] [NoZeroDivisors R]
+  结论: {M R : 类型} [交换幺半群 M] [交换环 R] [无零因子 R]
   证明: by
   refine ⟨fun h => ext (fun x => ?_), fun h x => ?_⟩
   · rw [one_apply_coe, χ.pow_apply_coe]
@@ -1985,8 +1985,8 @@ lemma pow_card_eq_one
 
 中文:
 引理 pow_card_eq_one
-  条件: [Fintype Mˣ] (χ : MulChar M R)
-  结论: χ ^ (Fintype.card Mˣ) = 1
+  条件: [有限类型 Mˣ] (χ : 乘法特征 M R)
+  结论: χ ^ (有限类型.card Mˣ) = 1
   证明: by
   ext1
   rw [pow_apply_coe]; rw [← map_pow]; rw [one_apply_coe]; rw [← Units.val_pow_eq_pow_val]; rw [pow_card_eq_one]; rw [Units.val_eq_one.mpr rfl]; rw [map_one]
@@ -2009,7 +2009,7 @@ lemma orderOf_pos
 
 中文:
 引理 orderOf_pos
-  条件: [Finite Mˣ] (χ : MulChar M R)
+  条件: [有限 Mˣ] (χ : 乘法特征 M R)
   结论: 0 < orderOf χ
   证明: by
   cases nonempty_fintype Mˣ
@@ -2043,7 +2043,7 @@ theorem sum_eq_zero_of_ne_one
 
 中文:
 定理 sum_eq_zero_of_ne_one
-  条件: [IsDomain R'] {χ : MulChar R R'} (hχ : χ != 1)
+  条件: [是整环 R'] {χ : 乘法特征 R R'} (hχ : χ != 1)
   结论: ∑ a, χ a = 0
   证明: by
   rcases ne_one_iff.mp hχ with ⟨b, hb⟩
@@ -2121,7 +2121,7 @@ lemma val_neg_one_eq_one_of_odd_order
 
 中文:
 引理 val_neg_one_eq_one_of_odd_order
-  条件: {χ : MulChar R R'} {n : 自然数} (hn : Odd n) (hχ : χ ^ n = 1)
+  条件: {χ : 乘法特征 R R'} {n : 自然数} (hn : Odd n) (hχ : χ ^ n = 1)
   证明: by
   rw [← hn.neg_one_pow]; rw [map_pow]; rw [← χ.pow_apply' (Nat.ne_of_odd_add hn)]; rw [hχ]
   exact MulChar.one_apply_coe (-1)

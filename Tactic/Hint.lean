@@ -65,7 +65,7 @@ definition getHints
 
 中文:
 定义 getHints
-  签名: : CoreM (List (自然数 × TSyntax `tactic))
+  签名: : CoreM (列表 (自然数 × TSyntax `tactic))
   定义体: return hintExtension.getState (← getEnv)
 
 Depends on / 依赖: getEnv, getState, hintExtension, hintExtension.getState, return

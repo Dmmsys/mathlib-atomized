@@ -185,7 +185,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (LeftExtension (𝟙 a) g)
+  签名: 可居 (LeftExtension (𝟙 a) g)
   定义体: ⟨alongId g⟩
 
 Depends on / 依赖: alongId
@@ -567,7 +567,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (LeftLift (𝟙 a) g)
+  签名: 可居 (LeftLift (𝟙 a) g)
   定义体: ⟨alongId g⟩
 
 Depends on / 依赖: alongId
@@ -954,7 +954,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (RightExtension (𝟙 a) g)
+  签名: 可居 (RightExtension (𝟙 a) g)
   定义体: ⟨alongId g⟩
 
 Depends on / 依赖: alongId
@@ -1107,7 +1107,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (RightLift (𝟙 a) g)
+  签名: 可居 (RightLift (𝟙 a) g)
   定义体: ⟨alongId g⟩
 
 Depends on / 依赖: alongId

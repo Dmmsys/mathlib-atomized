@@ -72,8 +72,8 @@ theorem adic_basis
 
 中文:
 定理 adic_basis
-  条件: (I : Ideal R)
-  结论: SubmodulesRingBasis fun n : 自然数 => (I ^ n • ⊤ : Ideal R)
+  条件: (I : 理想 R)
+  结论: SubmodulesRingBasis fun n : 自然数 => (I ^ n • ⊤ : 理想 R)
   证明: { inter := by
       suffices forall i j : Nat, exists k, I ^ k <= I ^ i ∧ I ^ k <= I ^ j by
         simpa only [smul_eq_mul, mul_top, Algebra.algebraMap_self, map_id, le_inf_iff] using! this
@@ -115,7 +115,7 @@ definition ringFilterBasis
 
 中文:
 定义 ringFilterBasis
-  签名: (I : Ideal R)
+  签名: (I : 理想 R)
   定义体: I.adic_basis.toRing_subgroups_basis.toRingFilterBasis
 
 Depends on / 依赖: I.adic_basis.toRing_subgroups_basis.toRingFilterBasis, adic_basis, toRingFilterBasis, toRing_subgroups_basis
@@ -136,7 +136,7 @@ definition adicTopology
 
 中文:
 定义 adicTopology
-  签名: (I : Ideal R)
+  签名: (I : 理想 R)
   定义体: (adic_basis I).topology
 
 Depends on / 依赖: adic_basis, topology
@@ -155,8 +155,8 @@ theorem nonarchimedean
 
 中文:
 定理 nonarchimedean
-  条件: (I : Ideal R)
-  结论: @NonarchimedeanRing R _ I.adicTopology
+  条件: (I : 理想 R)
+  结论: @Nonarchimedean环 R _ I.adicTopology
   证明: I.adic_basis.toRing_subgroups_basis.nonarchimedean
 
 Depends on / 依赖: I.adic_basis.toRing_subgroups_basis.nonarchimedean, adic_basis, nonarchimedean, toRing_subgroups_basis
@@ -182,7 +182,7 @@ theorem hasBasis_nhds_zero_adic
 
 中文:
 定理 hasBasis_nhds_zero_adic
-  条件: (I : Ideal R)
+  条件: (I : 理想 R)
   证明: ⟨by
     intro U
     rw [I.ringFilterBasis.toAddGroupFilterBasis.nhds_zero_hasBasis.mem_iff]
@@ -221,7 +221,7 @@ theorem hasBasis_nhds_adic
 
 中文:
 定理 hasBasis_nhds_adic
-  条件: (I : Ideal R) (x : R)
+  条件: (I : 理想 R) (x : R)
   证明: by
   let := I.adicTopology
   have := I.hasBasis_nhds_zero_adic.map fun y => x + y
@@ -248,8 +248,8 @@ theorem isLinearTopology
 
 中文:
 定理 isLinearTopology
-  条件: (I : Ideal R)
-  结论: @IsLinearTopology R R _ _ _ I.adicTopology
+  条件: (I : 理想 R)
+  结论: @是线性拓扑 R R _ _ _ I.adicTopology
   证明: letI := I.adicTopology
   IsLinearTopology.mk_of_hasBasis _ I.hasBasis_nhds_zero_adic
 
@@ -314,7 +314,7 @@ definition adicModuleTopology
 
 中文:
 定义 adicModuleTopology
-  签名: : TopologicalSpace M
+  签名: : 拓扑空间 M
   定义体: @ModuleFilterBasis.topology R M _ I.adic_basis.topology _ _
     (I.ringFilterBasis.moduleFilterBasis (I.adic_module_basis M))
 
@@ -370,7 +370,7 @@ definition IsAdic
 
 中文:
 定义 IsAdic
-  签名: [H : TopologicalSpace R] (J : Ideal R)
+  签名: [H : 拓扑空间 R] (J : 理想 R)
   定义体: H = J.adicTopology
 
 Depends on / 依赖: J.adicTopology, adicTopology
@@ -401,7 +401,7 @@ theorem isAdic_iff
 
 中文:
 定理 isAdic_iff
-  条件: [top : TopologicalSpace R] [IsTopologicalRing R] {J : Ideal R}
+  条件: [top : 拓扑空间 R] [是拓扑环 R] {J : 理想 R}
   证明: by
   constructor
   · intro H
@@ -474,7 +474,7 @@ theorem is_ideal_adic_pow
 
 中文:
 定理 is_ideal_adic_pow
-  条件: {J : Ideal R} (h : IsAdic J) {n : 自然数} (hn : 0 < n)
+  条件: {J : 理想 R} (h : IsAdic J) {n : 自然数} (hn : 0 < n)
   结论: IsAdic (J ^ n)
   证明: by
   rw [isAdic_iff] at h ⊢
@@ -534,7 +534,7 @@ omit [IsTopologicalRing R] in
 
 中文:
 定理 is_bot_adic_iff
-  条件: {A : 类型} [CommRing A] [TopologicalSpace A] [IsTopologicalRing A]
+  条件: {A : 类型} [交换环 A] [拓扑空间 A] [是拓扑环 A]
   证明: by
   rw [isAdic_iff]
   constructor
@@ -579,7 +579,7 @@ omit [IsTopologicalRing R] in
 
 中文:
 定理 IsAdic.hasBasis_nhds_zero
-  条件: {I : Ideal R} (hI : IsAdic I)
+  条件: {I : 理想 R} (hI : IsAdic I)
   证明: hI ▸ Ideal.hasBasis_nhds_zero_adic I
 
 omit [IsTopologicalRing R] in
@@ -601,7 +601,7 @@ theorem IsAdic.hasBasis_nhds
 
 中文:
 定理 IsAdic.hasBasis_nhds
-  条件: {I : Ideal R} (hI : IsAdic I) (x : R)
+  条件: {I : 理想 R} (hI : IsAdic I) (x : R)
   证明: hI ▸ Ideal.hasBasis_nhds_adic I x
 
 Depends on / 依赖: Ideal.hasBasis_nhds_adic, hasBasis_nhds_adic
@@ -622,10 +622,10 @@ class WithIdeal
     - i : Ideal R
 
 中文:
-类 WithIdeal
-  参数: (R : 类型) [CommRing R]
+类 With理想
+  参数: (R : 类型) [交换环 R]
   公理与运算 (1 个):
-    - i : Ideal R
+    - i : 理想 R
 -/
 class WithIdeal (R : Type*) [CommRing R] where
   i : Ideal R
@@ -663,7 +663,7 @@ theorem uniformContinuous_of_map_le
 
 中文:
 定理 uniformContinuous_of_map_le
-  结论: {S : 类型} [CommRing S] [WithIdeal S] {f : R ->+* S}
+  结论: {S : 类型} [交换环 S] [With理想 S] {f : R ->+* S}
   证明: uniformContinuous_of_continuousAt_zero f (by
   rw [ContinuousAt]; rw [map_zero]; rw [i.hasBasis_nhds_zero_adic.tendsto_iff i.hasBasis_nhds_zero_adic]
   refine fun n _ => ⟨n, trivial, Ideal.map_le_iff_le_comap.mp ?_⟩
@@ -690,7 +690,7 @@ definition uniformEquiv
 
 中文:
 定义 uniformEquiv
-  签名: {S : 类型} [CommRing S] [WithIdeal S] (e : R ≃+* S)
+  签名: {S : 类型} [交换环 S] [With理想 S] (e : R ≃+* S)
   定义体: e
   uniformContinuous_toFun := uniformContinuous_of_map_le (f := e.toRingHom) (by rw [h])
   uniformContinuous_invFun := uniformContinuous_of_map_le (f := e.symm.toRingHom) (by simp [← h])
@@ -743,7 +743,7 @@ definition topologicalSpaceModule
 
 中文:
 定义 topologicalSpaceModule
-  签名: (M : 类型) [AddCommGroup M] [Module R M]
+  签名: (M : 类型) [加法交换群 M] [模 R M]
   定义体: (i : Ideal R).adicModuleTopology M
 
 Depends on / 依赖: adicModuleTopology

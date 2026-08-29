@@ -32,11 +32,11 @@ structure Embedding
     - inj' : Injective toFun
 
 中文:
-结构 Embedding
-  参数: (α : Sort*) (β : Sort*)
+结构 嵌入
+  参数: (α : 类型层*) (β : 类型层*)
   公理与运算 (2 个):
     - toFun : α -> β
-    - inj' : Injective toFun
+    - inj' : 单射 toFun
 -/
 structure Embedding (α : Sort*) (β : Sort*) where
   /-- An embedding as a function. Use coercion instead. -/
@@ -68,8 +68,8 @@ theorem exists_surjective_iff
     (fun _ => ⟨isEmptyElim, (isEmptyElim <| e ·)⟩) fun _ => ⟨_, invFun_surjective e.inj'⟩⟩
 
 中文:
-定理 exists_surjective_iff
-  条件: {α β : Sort*}
+定理 存在_surjective_iff
+  条件: {α β : 类型层*}
   证明: ⟨fun ⟨f, h⟩ => ⟨⟨f⟩, ⟨⟨_, injective_surjInv h⟩⟩⟩, fun ⟨h, ⟨e⟩⟩ => (nonempty_fun.mp h).elim
     (fun _ => ⟨isEmptyElim, (isEmptyElim <| e ·)⟩) fun _ => ⟨_, invFun_surjective e.inj'⟩⟩
 
@@ -165,7 +165,7 @@ theorem toEmbedding_injective
 
 中文:
 定理 toEmbedding_injective
-  结论: Function.Injective (Equiv.toEmbedding : (α ≃ β) -> (α ↪ β))
+  结论: 函数.单射 (等价.toEmbedding : (α ≃ β) -> (α ↪ β))
   证明: fun _ _ h => by rwa [DFunLike.ext'_iff] at h ⊢
 
 Depends on / 依赖: DFunLike, DFunLike.ext, _iff
@@ -211,7 +211,7 @@ theorem coe_injective
 中文:
 定理 coe_injective
   条件: {α β}
-  结论: @Injective (α ↪ β) (α -> β) (fun f => ↑f)
+  结论: @单射 (α ↪ β) (α -> β) (fun f => ↑f)
   证明: DFunLike.coe_injective
 
 @[ext]
@@ -233,7 +233,7 @@ theorem ext
 
 中文:
 定理 ext
-  条件: {α β} {f g : Embedding α β} (h : 对任意 x, f x = g x)
+  条件: {α β} {f g : 嵌入 α β} (h : 对任意 x, f x = g x)
   结论: f = g
   证明: DFunLike.ext f g h
 
@@ -328,7 +328,7 @@ theorem injective
 中文:
 定理 injective
   条件: {α β} (f : α ↪ β)
-  结论: Injective f
+  结论: 单射 f
   证明: EmbeddingLike.injective f
 -/
 protected theorem injective {α β} (f : α ↪ β) : Injective f :=
@@ -368,7 +368,7 @@ definition refl
 
 中文:
 定义 refl
-  签名: (α : Sort*)
+  签名: (α : 类型层*)
   定义体: ⟨id, injective_id⟩
 
 @[norm_cast]
@@ -388,8 +388,8 @@ theorem coe_refl
 
 中文:
 定理 coe_refl
-  条件: (α : Sort*)
-  结论: ⇑(Embedding.refl α) = id
+  条件: (α : 类型层*)
+  结论: ⇑(嵌入.refl α) = id
   证明: rfl
 -/
 theorem coe_refl (α : Sort*) : ⇑(Embedding.refl α) = id := rfl
@@ -507,7 +507,7 @@ instance :
 
 中文:
 实例 :
-  签名: Trans Embedding Embedding Embedding
+  签名: Trans 嵌入 嵌入 嵌入
   定义体: ⟨Embedding.trans⟩
 
 Depends on / 依赖: Embedding, Embedding.trans
@@ -558,7 +558,7 @@ theorem equiv_toEmbedding_trans_symm_toEmbedding
 
 中文:
 定理 equiv_toEmbedding_trans_symm_toEmbedding
-  条件: {α β : Sort*} (e : α ≃ β)
+  条件: {α β : 类型层*} (e : α ≃ β)
   证明: by
   simp
 -/
@@ -577,7 +577,7 @@ theorem equiv_symm_toEmbedding_trans_toEmbedding
 
 中文:
 定理 equiv_symm_toEmbedding_trans_toEmbedding
-  条件: {α β : Sort*} (e : α ≃ β)
+  条件: {α β : 类型层*} (e : α ≃ β)
   证明: by
   simp
 -/
@@ -597,7 +597,7 @@ definition congr
 
 中文:
 定义 congr
-  签名: {α : Sort u} {β : Sort v} {γ : Sort w} {δ : Sort x} (e₁ : α ≃ β) (e₂ : γ ≃ δ)
+  签名: {α : 类型层 u} {β : 类型层 v} {γ : 类型层 w} {δ : 类型层 x} (e₁ : α ≃ β) (e₂ : γ ≃ δ)
   定义体: (Equiv.toEmbedding e₁.symm).trans (f.trans e₂.toEmbedding)
 -/
 protected def congr {α : Sort u} {β : Sort v} {γ : Sort w} {δ : Sort x} (e₁ : α ≃ β) (e₂ : γ ≃ δ)
@@ -614,7 +614,7 @@ definition noncomputable
 
 中文:
 定义 noncomputable
-  签名: def ofSurjective {α β} (f : β -> α) (hf : Surjective f)
+  签名: def ofSurjective {α β} (f : β -> α) (hf : 满射 f)
   定义体: ⟨surjInv hf, injective_surjInv _⟩
 -/
 protected noncomputable def ofSurjective {α β} (f : β -> α) (hf : Surjective f) : α ↪ β :=
@@ -630,7 +630,7 @@ definition noncomputable
 
 中文:
 定义 noncomputable
-  签名: def equivOfSurjective {α β} (f : α ↪ β) (hf : Surjective f)
+  签名: def equivOfSurjective {α β} (f : α ↪ β) (hf : 满射 f)
   定义体: Equiv.ofBijective f ⟨f.injective, hf⟩
 -/
 protected noncomputable def equivOfSurjective {α β} (f : α ↪ β) (hf : Surjective f) : α ≃ β :=
@@ -650,7 +650,7 @@ definition _root_.Equiv.embeddingSurjectiveEquiv
   right_inv _ := by ext; rfl
 
 中文:
-定义 _root_.Equiv.embeddingSurjectiveEquiv
+定义 _root_.等价.embeddingSurjectiveEquiv
   签名: {α β}
   定义体: f.val.equivOfSurjective f.prop
   invFun f := ⟨f, f.surjective⟩
@@ -676,7 +676,7 @@ definition ofIsEmpty
 
 中文:
 定义 ofIsEmpty
-  签名: {α β} [IsEmpty α]
+  签名: {α β} [是空 α]
   定义体: ⟨isEmptyElim, isEmptyElim⟩
 -/
 protected def ofIsEmpty {α β} [IsEmpty α] : α ↪ β :=
@@ -696,7 +696,7 @@ definition setValue
 
 中文:
 定义 setValue
-  签名: {α β : Sort*} (f : α ↪ β) (a : α) (b : β) [对任意 a', Decidable (a' = a)]
+  签名: {α β : 类型层*} (f : α ↪ β) (a : α) (b : β) [对任意 a', 可判定 (a' = a)]
   定义体: ⟨fun a' => if a' = a then b else if f a' = b then f a else f a', by
     intro x y h
     grind⟩
@@ -723,7 +723,7 @@ theorem setValue_eq
 
 中文:
 定理 setValue_eq
-  结论: {α β} (f : α ↪ β) (a : α) (b : β) [对任意 a', Decidable (a' = a)]
+  结论: {α β} (f : α ↪ β) (a : α) (b : β) [对任意 a', 可判定 (a' = a)]
   证明: by
   simp [setValue]
 
@@ -746,7 +746,7 @@ theorem setValue_eq_iff
 
 中文:
 定理 setValue_eq_iff
-  结论: {α β} (f : α ↪ β) {a a' : α} {b : β} [对任意 a', Decidable (a' = a)]
+  结论: {α β} (f : α ↪ β) {a a' : α} {b : β} [对任意 a', 可判定 (a' = a)]
   证明: (setValue f a b).injective.eq_iff' setValue_eq ..
 
 Depends on / 依赖: eq_iff, injective, injective.eq_iff, setValue, setValue_eq
@@ -768,7 +768,7 @@ lemma setValue_eq_of_ne
 
 中文:
 引理 setValue_eq_of_ne
-  结论: {α β} {f : α ↪ β} {a : α} {b : β} {c : α} [对任意 a', Decidable (a' = a)]
+  结论: {α β} {f : α ↪ β} {a : α} {b : β} {c : α} [对任意 a', 可判定 (a' = a)]
   证明: by
   simp [setValue, hc, hb]
 
@@ -792,7 +792,7 @@ lemma setValue_right_apply_eq
 
 中文:
 引理 setValue_right_apply_eq
-  结论: {α β} (f : α ↪ β) (a c : α) [对任意 a', Decidable (a' = a)]
+  结论: {α β} (f : α ↪ β) (a c : α) [对任意 a', 可判定 (a' = a)]
   证明: by
   simp [setValue]
 
@@ -874,7 +874,7 @@ theorem subtype_apply
 
 中文:
 定理 subtype_apply
-  条件: {α} {p : α -> 命题} (x : Subtype p)
+  条件: {α} {p : α -> 命题} (x : 子类型 p)
   结论: subtype p x = x
   证明: rfl
 -/
@@ -895,7 +895,7 @@ theorem subtype_injective
 中文:
 定理 subtype_injective
   条件: {α} (p : α -> 命题)
-  结论: Function.Injective (subtype p)
+  结论: 函数.单射 (subtype p)
   证明: Subtype.coe_injective
 
 @[simp]
@@ -918,7 +918,7 @@ theorem coe_subtype
 中文:
 定理 coe_subtype
   条件: {α} (p : α -> 命题)
-  结论: ↑(subtype p) = Subtype.val
+  结论: ↑(subtype p) = 子类型.val
   证明: rfl
 -/
 theorem coe_subtype {α} (p : α -> Prop) : ↑(subtype p) = Subtype.val :=
@@ -936,7 +936,7 @@ definition quotientOut
 
 中文:
 定义 quotientOut
-  签名: (α) [s : Setoid α]
+  签名: (α) [s : 集合等价关系 α]
   定义体: ⟨_, Quotient.out_injective⟩
 
 @[simp]
@@ -958,8 +958,8 @@ theorem coe_quotientOut
 
 中文:
 定理 coe_quotientOut
-  条件: (α) [Setoid α]
-  结论: ↑(quotientOut α) = Quotient.out
+  条件: (α) [集合等价关系 α]
+  结论: ↑(quotientOut α) = 商.out
   证明: rfl
 -/
 theorem coe_quotientOut (α) [Setoid α] : ↑(quotientOut α) = Quotient.out :=
@@ -977,7 +977,7 @@ definition punit
 
 中文:
 定义 punit
-  签名: {β : Sort*} (b : β)
+  签名: {β : 类型层*} (b : β)
   定义体: ⟨fun _ => b, by
     rintro ⟨⟩ ⟨⟩ _
     rfl⟩
@@ -1001,7 +1001,7 @@ definition oneEmbeddingEquiv
 
 中文:
 定义 oneEmbeddingEquiv
-  签名: {one α : 类型} [Unique one]
+  签名: {one α : 类型} [唯一 one]
   定义体: f default
   invFun a := {
     toFun := fun _ => a
@@ -1027,7 +1027,7 @@ definition sectL
 
 中文:
 定义 sectL
-  签名: (α : Sort _) {β : Sort _} (b : β)
+  签名: (α : 类型层 _) {β : 类型层 _} (b : β)
   定义体: ⟨fun a => (a, b), fun _ _ h => congr_arg Prod.fst h⟩
 
 Depends on / 依赖: Prod.fst, congr_arg
@@ -1047,7 +1047,7 @@ definition sectR
 
 中文:
 定义 sectR
-  签名: {α : Sort _} (a : α) (β : Sort _)
+  签名: {α : 类型层 _} (a : α) (β : 类型层 _)
   定义体: ⟨fun b => (a, b), fun _ _ h => congr_arg Prod.snd h⟩
 
 Depends on / 依赖: Prod.snd, congr_arg
@@ -1105,7 +1105,7 @@ definition pprodMap
 
 中文:
 定义 pprodMap
-  签名: {α β γ δ : Sort*} (e₁ : α ↪ β) (e₂ : γ ↪ δ)
+  签名: {α β γ δ : 类型层*} (e₁ : α ↪ β) (e₂ : γ ↪ δ)
   定义体: ⟨fun x => ⟨e₁ x.1, e₂ x.2⟩, e₁.injective.pprod_map e₂.injective⟩
 
 Depends on / 依赖: injective, injective.pprod_map, pprod_map
@@ -1152,7 +1152,7 @@ theorem coe_sumMap
 中文:
 定理 coe_sumMap
   条件: {α β γ δ} (e₁ : α ↪ β) (e₂ : γ ↪ δ)
-  结论: sumMap e₁ e₂ = Sum.map e₁ e₂
+  结论: sumMap e₁ e₂ = 和.map e₁ e₂
   证明: rfl
 -/
 theorem coe_sumMap {α β γ δ} (e₁ : α ↪ β) (e₂ : γ ↪ δ) : sumMap e₁ e₂ = Sum.map e₁ e₂ :=
@@ -1262,7 +1262,7 @@ definition piCongrRight
 
 中文:
 定义 piCongrRight
-  签名: {α : Sort*} {β γ : α -> Sort*} (e : 对任意 a, β a ↪ γ a)
+  签名: {α : 类型层*} {β γ : α -> 类型层*} (e : 对任意 a, β a ↪ γ a)
   定义体: ⟨fun f a => e a (f a), fun _ _ h => funext fun a => (e a).injective (congr_fun h a)⟩
 
 Depends on / 依赖: congr_fun, injective
@@ -1282,7 +1282,7 @@ definition arrowCongrRight
 
 中文:
 定义 arrowCongrRight
-  签名: {α : Sort u} {β : Sort v} {γ : Sort w} (e : α ↪ β)
+  签名: {α : 类型层 u} {β : 类型层 v} {γ : 类型层 w} (e : α ↪ β)
   定义体: piCongrRight fun _ => e
 
 @[simp]
@@ -1303,7 +1303,7 @@ theorem arrowCongrRight_apply
 
 中文:
 定理 arrowCongrRight_apply
-  条件: {α : Sort u} {β : Sort v} {γ : Sort w} (e : α ↪ β) (f : γ -> α)
+  条件: {α : 类型层 u} {β : 类型层 v} {γ : 类型层 w} (e : α ↪ β) (f : γ -> α)
   证明: rfl
 -/
 theorem arrowCongrRight_apply {α : Sort u} {β : Sort v} {γ : Sort w} (e : α ↪ β) (f : γ -> α) :
@@ -1321,7 +1321,7 @@ definition arrowCongrLeft
 
 中文:
 定义 arrowCongrLeft
-  签名: {α : Sort u} {β : Sort v} {γ : Sort w} [Inhabited γ] (e : α ↪ β)
+  签名: {α : 类型层 u} {β : 类型层 v} {γ : 类型层 w} [可居 γ] (e : α ↪ β)
   定义体: ⟨fun f => extend e f default, fun f₁ f₂ h =>
     funext fun x => by simpa only [e.injective.extend_apply] using congr_fun h (e x)⟩
 
@@ -1346,7 +1346,7 @@ theorem arrowCongrLeft_apply
 
 中文:
 定理 arrowCongrLeft_apply
-  结论: {α : Sort u} {β : Sort v} {γ : Sort w} [Inhabited γ] (e : α ↪ β)
+  结论: {α : 类型层 u} {β : 类型层 v} {γ : 类型层 w} [可居 γ] (e : α ↪ β)
   证明: rfl
 
 @[simp]
@@ -1371,7 +1371,7 @@ theorem arrowCongrLeft_refl
 
 中文:
 定理 arrowCongrLeft_refl
-  条件: {α : Sort u} {γ : Sort w} [Inhabited γ]
+  条件: {α : 类型层 u} {γ : 类型层 w} [可居 γ]
   证明: by
   ext
   simp [coe_refl]
@@ -1399,7 +1399,7 @@ theorem trans_arrowCongrLeft
 
 中文:
 定理 trans_arrowCongrLeft
-  结论: {α₁ : Sort u} {α₂ : Sort v} {α₃ : Sort x} {γ : Sort w}
+  结论: {α₁ : 类型层 u} {α₂ : 类型层 v} {α₃ : 类型层 x} {γ : 类型层 w}
   证明: by
   ext f a
   simp only [trans_apply, arrowCongrLeft_apply, Pi.default_def, coe_trans]
@@ -1493,7 +1493,7 @@ definition asEmbedding
 
 中文:
 定义 asEmbedding
-  签名: {β α : Sort*} {p : β -> 命题} (e : α ≃ Subtype p)
+  签名: {β α : 类型层*} {p : β -> 命题} (e : α ≃ 子类型 p)
   定义体: e.toEmbedding.trans (subtype p)
 
 Depends on / 依赖: e.toEmbedding.trans, subtype, toEmbedding
@@ -1512,7 +1512,7 @@ definition subtypeInjectiveEquivEmbedding
 
 中文:
 定义 subtypeInjectiveEquivEmbedding
-  签名: (α β : Sort*)
+  签名: (α β : 类型层*)
   定义体: ⟨f.val, f.property⟩
   invFun f := ⟨f, f.injective⟩
 
@@ -1545,7 +1545,7 @@ definition embeddingCongr
 
 中文:
 定义 embeddingCongr
-  签名: {α β γ δ : Sort*} (h : α ≃ β) (h' : γ ≃ δ)
+  签名: {α β γ δ : 类型层*} (h : α ≃ β) (h' : γ ≃ δ)
   定义体: f.congr h h'
   invFun f := f.congr h.symm h'.symm
   left_inv x := by
@@ -1582,7 +1582,7 @@ theorem embeddingCongr_refl
 
 中文:
 定理 embeddingCongr_refl
-  条件: {α β : Sort*}
+  条件: {α β : 类型层*}
   证明: rfl
 
 @[simp]
@@ -1604,7 +1604,7 @@ theorem embeddingCongr_trans
 
 中文:
 定理 embeddingCongr_trans
-  结论: {α₁ β₁ α₂ β₂ α₃ β₃ : Sort*} (e₁ : α₁ ≃ α₂) (e₁' : β₁ ≃ β₂)
+  结论: {α₁ β₁ α₂ β₂ α₃ β₃ : 类型层*} (e₁ : α₁ ≃ α₂) (e₁' : β₁ ≃ β₂)
   证明: rfl
 
 @[simp]
@@ -1626,7 +1626,7 @@ theorem embeddingCongr_symm
 
 中文:
 定理 embeddingCongr_symm
-  条件: {α₁ β₁ α₂ β₂ : Sort*} (e₁ : α₁ ≃ α₂) (e₂ : β₁ ≃ β₂)
+  条件: {α₁ β₁ α₂ β₂ : 类型层*} (e₁ : α₁ ≃ α₂) (e₂ : β₁ ≃ β₂)
   证明: rfl
 -/
 theorem embeddingCongr_symm {α₁ β₁ α₂ β₂ : Sort*} (e₁ : α₁ ≃ α₂) (e₂ : β₁ ≃ β₂) :
@@ -1647,7 +1647,7 @@ theorem embeddingCongr_apply_trans
 
 中文:
 定理 embeddingCongr_apply_trans
-  结论: {α₁ β₁ γ₁ α₂ β₂ γ₂ : Sort*} (ea : α₁ ≃ α₂) (eb : β₁ ≃ β₂)
+  结论: {α₁ β₁ γ₁ α₂ β₂ γ₂ : 类型层*} (ea : α₁ ≃ α₂) (eb : β₁ ≃ β₂)
   证明: by
   ext
   simp
@@ -1676,7 +1676,7 @@ theorem refl_toEmbedding
 中文:
 定理 refl_toEmbedding
   条件: {α : 类型}
-  结论: (Equiv.refl α).toEmbedding = Embedding.refl α
+  结论: (等价.refl α).toEmbedding = 嵌入.refl α
   证明: rfl
 
 @[simp]
@@ -1822,7 +1822,7 @@ definition Subtype.impEmbedding
   body: ⟨fun x => ⟨x, h x x.prop⟩, fun x y => by simp [Subtype.ext_iff]⟩
 
 中文:
-定义 Subtype.impEmbedding
+定义 子类型.impEmbedding
   签名: (p q : α -> 命题) (h : 对任意 x, p x -> q x)
   定义体: ⟨fun x => ⟨x, h x x.prop⟩, fun x y => by simp [Subtype.ext_iff]⟩
 

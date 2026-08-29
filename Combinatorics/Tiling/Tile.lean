@@ -87,8 +87,8 @@ structure Prototile
 结构 Prototile
   参数: where
   公理与运算 (2 个):
-    - carrier : Set X
-    - symmetries : Subgroup (MulAction.stabilizer G carrier)
+    - carrier : 集合 X
+    - symmetries : 子群 (乘法作用.stabilizer G carrier)
 -/
 @[ext] structure Prototile where
   /-- The points in the prototile. Use the coercion to `Set X`, or `∈` on the `Prototile`, rather
@@ -110,7 +110,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (Prototile G X)
+  签名: 可居 (Prototile G X)
   定义体: ⟨∅, ⊥⟩
 -/
 instance : Inhabited (Prototile G X) where
@@ -126,7 +126,7 @@ instance :
 
 中文:
 实例 :
-  签名: CoeOut (Prototile G X) (Set X)
+  签名: CoeOut (Prototile G X) (集合 X)
   定义体: Prototile.carrier
 
 Depends on / 依赖: Prototile, Prototile.carrier, carrier
@@ -181,7 +181,7 @@ lemma mem_coe
 中文:
 引理 mem_coe
   条件: {x : X} {p : Prototile G X}
-  结论: x in (p : Set X) ↔ x in p
+  结论: x in (p : 集合 X) ↔ x in p
   证明: Iff.rfl
 -/
 @[simp] lemma mem_coe {x : X} {p : Prototile G X} : x in (p : Set X) ↔ x in p := Iff.rfl
@@ -221,7 +221,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (Protoset G X ιₚ)
+  签名: 可居 (Protoset G X ιₚ)
   定义体: ⟨fun _ => default⟩
 -/
 instance : Inhabited (Protoset G X ιₚ) where
@@ -289,7 +289,7 @@ lemma coe_injective
 
 中文:
 引理 coe_injective
-  结论: Injective (Protoset.tiles : Protoset G X ιₚ -> ιₚ -> Prototile G X)
+  结论: 单射 (Protoset.tiles : Protoset G X ιₚ -> ιₚ -> Prototile G X)
   证明: fun _ _ => coe_inj.1
 
 Depends on / 依赖: coe_inj
@@ -317,7 +317,7 @@ structure PlacedTile
   参数: where
   公理与运算 (2 个):
     - index : ιₚ
-    - groupElts : G ⧸ ((ps index).symmetries.map <| Subgroup.subtype _)
+    - groupElts : G ⧸ ((ps index).symmetries.map <| 子群.subtype _)
 -/
 @[ext] structure PlacedTile where
   /-- The index of the tile in the protoset. -/
@@ -336,8 +336,8 @@ instance [Nonempty
   body: ⟨⟨Classical.arbitrary _, (1 : G)⟩⟩
 
 中文:
-实例 [Nonempty
-  签名: ιₚ] : Nonempty (PlacedTile ps)
+实例 [非空
+  签名: ιₚ] : 非空 (PlacedTile ps)
   定义体: ⟨⟨Classical.arbitrary _, (1 : G)⟩⟩
 
 Depends on / 依赖: Classical, Classical.arbitrary, arbitrary
@@ -390,7 +390,7 @@ lemma ext_iff_of_exists
     · exact heq_of_eq (hg₁.symm
 
 中文:
-引理 ext_iff_of_exists
+引理 ext_iff_of_存在
   条件: {pt₁ pt₂ : PlacedTile ps}
   证明: by
   refine ⟨fun h => ?_, fun ⟨h, g, hg₁, hg₂⟩ => ?_⟩
@@ -513,7 +513,7 @@ instance :
 
 中文:
 实例 :
-  签名: CoeOut (PlacedTile ps) (Set X)
+  签名: CoeOut (PlacedTile ps) (集合 X)
   定义体: coeSet
 
 Depends on / 依赖: coeSet
@@ -549,7 +549,7 @@ lemma mem_coe
 中文:
 引理 mem_coe
   条件: {x : X} {pt : PlacedTile ps}
-  结论: x in (pt : Set X) ↔ x in pt
+  结论: x in (pt : 集合 X) ↔ x in pt
   证明: Iff.rfl
 -/
 @[simp] lemma mem_coe {x : X} {pt : PlacedTile ps} : x in (pt : Set X) ↔ x in pt := Iff.rfl
@@ -566,7 +566,7 @@ lemma coe_mk_mk
 中文:
 引理 coe_mk_mk
   条件: (i : ιₚ) (g : G)
-  结论: (⟨i, ⟦g⟧⟩ : PlacedTile ps) = g • (ps i : Set X)
+  结论: (⟨i, ⟦g⟧⟩ : PlacedTile ps) = g • (ps i : 集合 X)
   证明: rfl
 -/
 lemma coe_mk_mk (i : ιₚ) (g : G) : (⟨i, ⟦g⟧⟩ : PlacedTile ps) = g • (ps i : Set X) := rfl
@@ -583,7 +583,7 @@ lemma coe_mk_coe
 中文:
 引理 coe_mk_coe
   条件: (i : ιₚ) (g : G)
-  结论: (⟨i, g⟩ : PlacedTile ps) = g • (ps i : Set X)
+  结论: (⟨i, g⟩ : PlacedTile ps) = g • (ps i : 集合 X)
   证明: rfl
 -/
 lemma coe_mk_coe (i : ιₚ) (g : G) : (⟨i, g⟩ : PlacedTile ps) = g • (ps i : Set X) := rfl
@@ -696,7 +696,7 @@ instance :
 
 中文:
 实例 :
-  签名: SMul G (PlacedTile ps)
+  签名: 标量乘法 G (PlacedTile ps)
   定义体: Quotient.liftOn' pt.groupElts (fun h => ⟨pt.index, g * h⟩)
     fun a b r => by
       rw [QuotientGroup.leftRel_eq] at r
@@ -808,7 +808,7 @@ instance :
 
 中文:
 实例 :
-  签名: MulAction G (PlacedTile ps)
+  签名: 乘法作用 G (PlacedTile ps)
   定义体: inferInstance
   one_smul pt := by
     induction pt using PlacedTile.induction_on

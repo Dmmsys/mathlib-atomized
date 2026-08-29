@@ -77,7 +77,7 @@ scoped[Pointwise] attribute [instance] Submodule.pointwiseNeg
 
 中文:
 定义 pointwiseNeg
-  签名: : Neg (Submodule R M) where
+  签名: : 取负 (子模 R M) where
   定义体: { -p.toAddSubmonoid with
 smul_mem' := fun r m hm => Set.mem_neg.2 smul_neg r m ▸ p.smul_mem r Set.mem_neg.1 hm }
 
@@ -106,8 +106,8 @@ theorem coe_set_neg
 
 中文:
 定理 coe_set_neg
-  条件: (S : Submodule R M)
-  结论: ↑(-S) = -(S : Set M)
+  条件: (S : 子模 R M)
+  结论: ↑(-S) = -(S : 集合 M)
   证明: rfl
 
 @[simp]
@@ -129,7 +129,7 @@ theorem neg_toAddSubmonoid
 
 中文:
 定理 neg_toAddSubmonoid
-  条件: (S : Submodule R M)
+  条件: (S : 子模 R M)
   结论: (-S).toAddSubmonoid = -S.toAddSubmonoid
   证明: rfl
 
@@ -150,7 +150,7 @@ theorem mem_neg
 
 中文:
 定理 mem_neg
-  条件: {g : M} {S : Submodule R M}
+  条件: {g : M} {S : 子模 R M}
   结论: g in -S ↔ -g in S
   证明: Iff.rfl
 
@@ -177,7 +177,7 @@ scoped[Pointwise] attribute [instance] Submodule.involutivePointwiseNeg
 
 中文:
 定义 involutivePointwiseNeg
-  签名: : InvolutiveNeg (Submodule R M) where
+  签名: : InvolutiveNeg (子模 R M) where
   定义体: SetLike.coe_injective neg_neg _
 
 scoped[Pointwise] attribute [instance] Submodule.involutivePointwiseNeg
@@ -201,7 +201,7 @@ theorem neg_le_neg
 
 中文:
 定理 neg_le_neg
-  条件: {S T : Submodule R M}
+  条件: {S T : 子模 R M}
   结论: -S <= -T ↔ S <= T
   证明: SetLike.coe_subset_coe.symm.trans Set.neg_subset_neg
 
@@ -221,7 +221,7 @@ theorem neg_le
 
 中文:
 定理 neg_le
-  条件: {S T : Submodule R M}
+  条件: {S T : 子模 R M}
   结论: -S <= T ↔ S <= -T
   证明: SetLike.coe_subset_coe.symm.trans Set.neg_subset
 
@@ -241,7 +241,7 @@ theorem neg_eq_self_iff_neg_le
 
 中文:
 定理 neg_eq_self_iff_neg_le
-  条件: {S : Submodule R M}
+  条件: {S : 子模 R M}
   结论: -S = S ↔ -S <= S
   证明: ⟨le_of_eq, fun h => antisymm h neg_le.mp h⟩
 
@@ -263,7 +263,7 @@ definition negOrderIso
 
 中文:
 定义 negOrderIso
-  签名: : Submodule R M ≃o Submodule R M where
+  签名: : 子模 R M ≃o 子模 R M where
   定义体: Equiv.neg _
   map_rel_iff' := @neg_le_neg _ _ _ _ _
 
@@ -289,7 +289,7 @@ theorem neg_inf
 
 中文:
 定理 neg_inf
-  条件: (S T : Submodule R M)
+  条件: (S T : 子模 R M)
   结论: -(S ⊓ T) = -S ⊓ -T
   证明: rfl
 
@@ -311,7 +311,7 @@ theorem neg_sup
 
 中文:
 定理 neg_sup
-  条件: (S T : Submodule R M)
+  条件: (S T : 子模 R M)
   结论: -(S ⊔ T) = -S ⊔ -T
   证明: (negOrderIso : Submodule R M ≃o Submodule R M).map_sup S T
 
@@ -335,7 +335,7 @@ theorem neg_bot
 
 中文:
 定理 neg_bot
-  结论: -(⊥ : Submodule R M) = ⊥
+  结论: -(⊥ : 子模 R M) = ⊥
   证明: SetLike.coe_injective (Set.neg_singleton 0).trans congr_arg _ neg_zero
 
 @[simp]
@@ -358,7 +358,7 @@ theorem neg_top
 
 中文:
 定理 neg_top
-  结论: -(⊤ : Submodule R M) = ⊤
+  结论: -(⊤ : 子模 R M) = ⊤
   证明: SetLike.coe_injective Set.neg_univ
 
 @[simp]
@@ -382,7 +382,7 @@ theorem neg_iInf
 
 中文:
 定理 neg_iInf
-  条件: {ι : Sort*} (S : ι -> Submodule R M)
+  条件: {ι : 类型层*} (S : ι -> 子模 R M)
   结论: (-⨅ i, S i) = ⨅ i, -S i
   证明: (negOrderIso : Submodule R M ≃o Submodule R M).map_iInf _
 
@@ -405,7 +405,7 @@ theorem neg_iSup
 
 中文:
 定理 neg_iSup
-  条件: {ι : Sort*} (S : ι -> Submodule R M)
+  条件: {ι : 类型层*} (S : ι -> 子模 R M)
   结论: (-⨆ i, S i) = ⨆ i, -S i
   证明: (negOrderIso : Submodule R M ≃o Submodule R M).map_iSup _
 
@@ -426,7 +426,7 @@ theorem neg_restrictScalars
 
 中文:
 定理 neg_restrictScalars
-  条件: (p : Submodule R M)
+  条件: (p : 子模 R M)
   证明: by ext; simp
 -/
 @[simp] theorem neg_restrictScalars (p : Submodule R M) :
@@ -448,7 +448,7 @@ theorem neg_eq_self
 
 中文:
 定理 neg_eq_self
-  条件: [Ring R] [AddCommGroup M] [Module R M] (p : Submodule R M)
+  条件: [环 R] [加法交换群 M] [模 R M] (p : 子模 R M)
   结论: -p = p
   证明: ext fun _ => p.neg_mem_iff
 
@@ -471,7 +471,7 @@ instance pointwiseZero
 
 中文:
 实例 pointwiseZero
-  签名: : Zero (Submodule R M) where
+  签名: : 零 (子模 R M) where
   定义体: ⊥
 -/
 instance pointwiseZero : Zero (Submodule R M) where
@@ -487,7 +487,7 @@ instance pointwiseAdd
 
 中文:
 实例 pointwiseAdd
-  签名: : Add (Submodule R M) where
+  签名: : 加法 (子模 R M) where
   定义体: (· ⊔ ·)
 -/
 instance pointwiseAdd : Add (Submodule R M) where
@@ -509,7 +509,7 @@ instance pointwiseAddCommMonoid
 
 中文:
 实例 pointwiseAddCommMonoid
-  签名: : AddCommMonoid (Submodule R M) where
+  签名: : 加法交换幺半群 (子模 R M) where
   定义体: sup_assoc
   zero_add := bot_sup_eq
   add_zero := sup_bot_eq
@@ -541,7 +541,7 @@ theorem add_eq_sup
 
 中文:
 定理 add_eq_sup
-  条件: (p q : Submodule R M)
+  条件: (p q : 子模 R M)
   结论: p + q = p ⊔ q
   证明: rfl
 
@@ -561,7 +561,7 @@ theorem zero_eq_bot
 
 中文:
 定理 zero_eq_bot
-  结论: (0 : Submodule R M) = ⊥
+  结论: (0 : 子模 R M) = ⊥
   证明: rfl
 -/
 theorem zero_eq_bot : (0 : Submodule R M) = ⊥ :=
@@ -577,7 +577,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsOrderedAddMonoid (Submodule R M)
+  签名: 是OrderedAdd幺半群 (子模 R M)
   定义体: sup_le_sup_right
 
 Depends on / 依赖: sup_le_sup_right
@@ -597,7 +597,7 @@ instance :
 
 中文:
 实例 :
-  签名: CanonicallyOrderedAdd (Submodule R M)
+  签名: 典范有序加法 (子模 R M)
   定义体: ⟨b, (sup_eq_right.2 h).symm⟩
   le_add_self _ _ := le_sup_right
   le_self_add := fun _a _b => le_sup_left
@@ -632,7 +632,7 @@ definition pointwiseDistribMulAction
 
 中文:
 定义 pointwiseDistribMulAction
-  签名: : DistribMulAction α (Submodule R M) where
+  签名: : 分配乘法作用 α (子模 R M) where
   定义体: S.map (DistribSMul.toLinearMap R M a : M ->ₗ[R] M)
   one_smul S :=
     (congr_arg (fun f : Module.End R M => S.map f) (LinearMap.ext <| one_smul α)).trans S.map_id
@@ -662,7 +662,7 @@ theorem pointwise_smul_def
 
 中文:
 定理 pointwise_smul_def
-  条件: {a : α} {S : Submodule R M}
+  条件: {a : α} {S : 子模 R M}
   证明: rfl
 -/
 theorem pointwise_smul_def {a : α} {S : Submodule R M} :
@@ -684,8 +684,8 @@ theorem coe_pointwise_smul
 
 中文:
 定理 coe_pointwise_smul
-  条件: (a : α) (S : Submodule R M)
-  结论: ↑(a • S) = a • (S : Set M)
+  条件: (a : α) (S : 子模 R M)
+  结论: ↑(a • S) = a • (S : 集合 M)
   证明: rfl
 
 @[simp]
@@ -706,7 +706,7 @@ theorem pointwise_smul_toAddSubmonoid
 
 中文:
 定理 pointwise_smul_toAddSubmonoid
-  条件: (a : α) (S : Submodule R M)
+  条件: (a : α) (S : 子模 R M)
   证明: rfl
 
 @[simp]
@@ -726,7 +726,7 @@ theorem pointwise_smul_toAddSubgroup
 
 中文:
 定理 pointwise_smul_toAddSubgroup
-  结论: {R M : 类型} [Ring R] [AddCommGroup M] [DistribMulAction α M]
+  结论: {R M : 类型} [环 R] [加法交换群 M] [分配乘法作用 α M]
   证明: rfl
 -/
 theorem pointwise_smul_toAddSubgroup {R M : Type*} [Ring R] [AddCommGroup M] [DistribMulAction α M]
@@ -743,8 +743,8 @@ theorem mem_smul_pointwise_iff_exists
   proof: Set.mem_smul_set
 
 中文:
-定理 mem_smul_pointwise_iff_exists
-  条件: (m : M) (a : α) (S : Submodule R M)
+定理 mem_smul_pointwise_iff_存在
+  条件: (m : M) (a : α) (S : 子模 R M)
   证明: Set.mem_smul_set
 
 Depends on / 依赖: Set.mem_smul_set, mem_smul_set
@@ -764,7 +764,7 @@ theorem smul_mem_pointwise_smul
 
 中文:
 定理 smul_mem_pointwise_smul
-  条件: (m : M) (a : α) (S : Submodule R M)
+  条件: (m : M) (a : α) (S : 子模 R M)
   结论: m in S -> a • m in a • S
   证明: (Set.smul_mem_smul_set : _ -> _ in a • (S : Set M))
 
@@ -783,7 +783,7 @@ instance :
 
 中文:
 实例 :
-  签名: CovariantClass α (Submodule R M) HSMul.hSMul LE.le
+  签名: 协变类 α (子模 R M) 异质标量乘法.hSMul LE.le
   定义体: ⟨fun _ _ => map_mono⟩
 
 Depends on / 依赖: map_mono
@@ -805,7 +805,7 @@ theorem smul_bot'
 中文:
 定理 smul_bot'
   条件: (a : α)
-  结论: a • (⊥ : Submodule R M) = ⊥
+  结论: a • (⊥ : 子模 R M) = ⊥
   证明: map_bot _
 
 Depends on / 依赖: map_bot
@@ -824,7 +824,7 @@ theorem smul_sup'
 
 中文:
 定理 smul_sup'
-  条件: (a : α) (S T : Submodule R M)
+  条件: (a : α) (S T : 子模 R M)
   结论: a • (S ⊔ T) = a • S ⊔ a • T
   证明: map_sup _ _ _
 
@@ -843,7 +843,7 @@ theorem smul_iSup'
 
 中文:
 定理 smul_iSup'
-  条件: (a : α) {ι : Sort*} (f : ι -> Submodule R M)
+  条件: (a : α) {ι : 类型层*} (f : ι -> 子模 R M)
   证明: map_iSup _ _
 
 Depends on / 依赖: map_iSup
@@ -864,7 +864,7 @@ instance pointwiseCentralScalar
 
 中文:
 实例 pointwiseCentralScalar
-  签名: [DistribMulAction αᵐᵒᵖ M] [SMulCommClass αᵐᵒᵖ R M]
+  签名: [分配乘法作用 αᵐᵒᵖ M] [标量交换类 αᵐᵒᵖ R M]
   定义体: ⟨fun _a S => (congr_arg fun f : Module.End R M => S.map f) LinearMap.ext op_smul_eq_smul _⟩
 
 @[simp]
@@ -888,7 +888,7 @@ theorem smul_le_self_of_tower
 
 中文:
 定理 smul_le_self_of_tower
-  结论: {α : 类型} [Monoid α] [SMul α R] [DistribMulAction α M]
+  结论: {α : 类型} [幺半群 α] [标量乘法 α R] [分配乘法作用 α M]
   证明: by
   rintro y ⟨x, hx, rfl⟩
   exact smul_of_tower_mem _ a hx
@@ -927,7 +927,7 @@ scoped[Pointwise] attribute [instance] Submodule.pointwiseMulActionWithZero
 
 中文:
 定义 pointwiseMulActionWithZero
-  签名: : MulActionWithZero α (Submodule R M)
+  签名: : 带零乘法作用 α (子模 R M)
   定义体: { Submodule.pointwiseDistribMulAction with
     zero_smul := fun S =>
       (congr_arg (fun f : M ->ₗ[R] M => S.map f) (LinearMap.ext <| zero_smul α)).trans S.map_zero }
@@ -992,7 +992,7 @@ scoped[Pointwise] attribute [instance] Submodule.pointwiseSetSMul
 
 中文:
 定义 pointwiseSetSMul
-  签名: : SMul (Set S) (Submodule R M) where
+  签名: : 标量乘法 (集合 S) (子模 R M) where
   定义体: sInf { p | forall ⦃r : S⦄ ⦃n : M⦄, r in s -> n in N -> r • n in p }
 
 scoped[Pointwise] attribute [instance] Submodule.pointwiseSetSMul
@@ -1059,7 +1059,7 @@ lemma set_smul_le
 
 中文:
 引理 set_smul_le
-  结论: (p : Submodule R M)
+  结论: (p : 子模 R M)
   证明: sInf_le closed_under_smul
 
 Depends on / 依赖: closed_under_smul, sInf_le
@@ -1083,7 +1083,7 @@ exact h mem_set_smul_of_mem_mem hr hn
 
 中文:
 引理 set_smul_le_iff
-  条件: (p : Submodule R M)
+  条件: (p : 子模 R M)
   证明: by
   fconstructor
   · intro h r n hr hn
@@ -1110,7 +1110,7 @@ lemma set_smul_eq_of_le
 
 中文:
 引理 set_smul_eq_of_le
-  结论: (p : Submodule R M)
+  结论: (p : 子模 R M)
   证明: le_antisymm (set_smul_le s N p closed_under_smul) le
 
 Depends on / 依赖: closed_under_smul, le_antisymm, set_smul_le
@@ -1132,7 +1132,7 @@ instance :
 
 中文:
 实例 :
-  签名: CovariantClass (Set S) (Submodule R M) HSMul.hSMul LE.le
+  签名: 协变类 (集合 S) (子模 R M) 异质标量乘法.hSMul LE.le
   定义体: ⟨fun _ _ _ le => set_smul_le _ _ _ fun _ _ hr hm => mem_set_smul_of_mem_mem (mem1 := hr)
     (mem2 := le hm)⟩
 
@@ -1153,7 +1153,7 @@ lemma set_smul_mono_left
 
 中文:
 引理 set_smul_mono_left
-  条件: {s t : Set S} (le : s <= t)
+  条件: {s t : 集合 S} (le : s <= t)
   证明: set_smul_le _ _ _ fun _ _ hr hm => mem_set_smul_of_mem_mem (mem1 := le hr)
     (mem2 := hm)
 
@@ -1174,7 +1174,7 @@ lemma set_smul_le_of_le_le
 
 中文:
 引理 set_smul_le_of_le_le
-  结论: {s t : Set S} {p q : Submodule R M}
+  结论: {s t : 集合 S} {p q : 子模 R M}
   证明: le_trans (set_smul_mono_left _ le_set) smul_mono_right _ le_submodule
 
 Depends on / 依赖: le_set, le_submodule, le_trans, set_smul_mono_left, smul_mono_right
@@ -1196,7 +1196,7 @@ lemma set_smul_eq_iSup
 
 中文:
 引理 set_smul_eq_iSup
-  条件: [SMulCommClass S R M] (s : Set S) (N : Submodule R M)
+  条件: [标量交换类 S R M] (s : 集合 S) (N : 子模 R M)
   证明: by
   refine Eq.trans (congrArg sInf ?_) csInf_Ici
   simp_rw [← Set.Ici_def, iSup_le_iff, @forall_comm M]
@@ -1283,7 +1283,7 @@ lemma empty_set_smul
 
 中文:
 引理 empty_set_smul
-  结论: (∅ : Set S) • N = ⊥
+  结论: (∅ : 集合 S) • N = ⊥
   证明: by
   ext
   fconstructor
@@ -1310,7 +1310,7 @@ lemma set_smul_bot
 
 中文:
 引理 set_smul_bot
-  结论: s • (⊥ : Submodule R M) = ⊥
+  结论: s • (⊥ : 子模 R M) = ⊥
   证明: eq_bot_iff.mpr fun x hx => by induction x, hx using set_smul_inductionOn <;> aesop
 -/
 @[simp] lemma set_smul_bot : s • (⊥ : Submodule R M) = ⊥ :=
@@ -1332,8 +1332,8 @@ lemma singleton_set_smul
 
 中文:
 引理 singleton_set_smul
-  条件: [SMulCommClass S R M] (r : S)
-  结论: ({r} : Set S) • N = r • N
+  条件: [标量交换类 S R M] (r : S)
+  结论: ({r} : 集合 S) • N = r • N
   证明: by
   apply set_smul_eq_of_le
   · rintro _ m rfl hm; exact ⟨m, hm, rfl⟩
@@ -1370,7 +1370,7 @@ lemma mem_singleton_set_smul
 
 中文:
 引理 mem_singleton_set_smul
-  条件: [SMulCommClass R S M] (r : S) (x : M)
+  条件: [标量交换类 R S M] (r : S) (x : M)
   证明: by
   fconstructor
   · intro hx
@@ -1417,7 +1417,7 @@ lemma smul_inductionOn_pointwise
 
 中文:
 引理 smul_inductionOn_pointwise
-  结论: [SMulCommClass S R M] {a : S} {p : (x : M) -> x in a • N -> 命题}
+  结论: [标量交换类 S R M] {a : S} {p : (x : M) -> x in a • N -> 命题}
   证明: by
   simp_all only [← Submodule.singleton_set_smul]
   let p' (x : M) (hx : x in ({a} : Set S) • N) : Prop :=
@@ -1458,7 +1458,7 @@ lemma sup_set_smul
 
 中文:
 引理 sup_set_smul
-  条件: (s t : Set S)
+  条件: (s t : 集合 S)
   证明: set_smul_eq_of_le _ _ _
     (by rintro _ _ (hr | hr) hn
         · exact Submodule.mem_sup_left (mem_set_smul_of_mem_mem hr hn)

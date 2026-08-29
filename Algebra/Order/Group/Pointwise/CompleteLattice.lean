@@ -42,7 +42,7 @@ lemma csSup_one
 
 中文:
 引理 csSup_one
-  结论: sSup (1 : Set M) = 1
+  结论: sSup (1 : 集合 M) = 1
   证明: csSup_singleton _
 -/
 @[to_additive (attr := simp)] lemma csSup_one : sSup (1 : Set M) = 1 := csSup_singleton _
@@ -56,7 +56,7 @@ lemma csInf_one
 
 中文:
 引理 csInf_one
-  结论: sInf (1 : Set M) = 1
+  结论: sInf (1 : 集合 M) = 1
   证明: csInf_singleton _
 -/
 @[to_additive (attr := simp)] lemma csInf_one : sInf (1 : Set M) = 1 := csInf_singleton _
@@ -83,7 +83,7 @@ lemma csSup_inv
 
 中文:
 引理 csSup_inv
-  条件: (hs₀ : s.Nonempty) (hs₁ : BddBelow s)
+  条件: (hs₀ : s.非空) (hs₁ : BddBelow s)
   结论: sSup s⁻¹ = (sInf s)⁻¹
   证明: by
   rw [← image_inv_eq_inv]
@@ -113,7 +113,7 @@ lemma csInf_inv
 
 中文:
 引理 csInf_inv
-  条件: (hs₀ : s.Nonempty) (hs₁ : BddAbove s)
+  条件: (hs₀ : s.非空) (hs₁ : BddAbove s)
   结论: sInf s⁻¹ = (sSup s)⁻¹
   证明: by
   rw [← image_inv_eq_inv]
@@ -141,7 +141,7 @@ lemma csSup_mul
 
 中文:
 引理 csSup_mul
-  条件: (hs₀ : s.Nonempty) (hs₁ : BddAbove s) (ht₀ : t.Nonempty) (ht₁ : BddAbove t)
+  条件: (hs₀ : s.非空) (hs₁ : BddAbove s) (ht₀ : t.非空) (ht₁ : BddAbove t)
   证明: csSup_image2_eq_csSup_csSup (fun _ => (OrderIso.mulRight _).to_galoisConnection)
     (fun _ => (OrderIso.mulLeft _).to_galoisConnection) hs₀ hs₁ ht₀ ht₁
 
@@ -168,7 +168,7 @@ lemma csInf_mul
 
 中文:
 引理 csInf_mul
-  条件: (hs₀ : s.Nonempty) (hs₁ : BddBelow s) (ht₀ : t.Nonempty) (ht₁ : BddBelow t)
+  条件: (hs₀ : s.非空) (hs₁ : BddBelow s) (ht₀ : t.非空) (ht₁ : BddBelow t)
   证明: csInf_image2_eq_csInf_csInf (fun _ => (OrderIso.mulRight _).symm.to_galoisConnection)
     (fun _ => (OrderIso.mulLeft _).symm.to_galoisConnection) hs₀ hs₁ ht₀ ht₁
 
@@ -195,7 +195,7 @@ lemma csSup_div
 
 中文:
 引理 csSup_div
-  条件: (hs₀ : s.Nonempty) (hs₁ : BddAbove s) (ht₀ : t.Nonempty) (ht₁ : BddBelow t)
+  条件: (hs₀ : s.非空) (hs₁ : BddAbove s) (ht₀ : t.非空) (ht₁ : BddBelow t)
   证明: by
   rw [div_eq_mul_inv]; rw [csSup_mul hs₀ hs₁ ht₀.inv ht₁.inv]; rw [csSup_inv ht₀ ht₁]; rw [div_eq_mul_inv]
 
@@ -219,7 +219,7 @@ lemma csInf_div
 
 中文:
 引理 csInf_div
-  条件: (hs₀ : s.Nonempty) (hs₁ : BddBelow s) (ht₀ : t.Nonempty) (ht₁ : BddAbove t)
+  条件: (hs₀ : s.非空) (hs₁ : BddBelow s) (ht₀ : t.非空) (ht₁ : BddAbove t)
   证明: by
   rw [div_eq_mul_inv]; rw [csInf_mul hs₀ hs₁ ht₀.inv ht₁.inv]; rw [csInf_inv ht₀ ht₁]; rw [div_eq_mul_inv]
 
@@ -248,7 +248,7 @@ lemma sSup_one
 
 中文:
 引理 sSup_one
-  结论: sSup (1 : Set M) = 1
+  结论: sSup (1 : 集合 M) = 1
   证明: sSup_singleton
 -/
 @[to_additive] lemma sSup_one : sSup (1 : Set M) = 1 := sSup_singleton
@@ -262,7 +262,7 @@ lemma sInf_one
 
 中文:
 引理 sInf_one
-  结论: sInf (1 : Set M) = 1
+  结论: sInf (1 : 集合 M) = 1
   证明: sInf_singleton
 -/
 @[to_additive] lemma sInf_one : sInf (1 : Set M) = 1 := sInf_singleton
@@ -289,7 +289,7 @@ lemma sSup_inv
 
 中文:
 引理 sSup_inv
-  条件: (s : Set M)
+  条件: (s : 集合 M)
   结论: sSup s⁻¹ = (sInf s)⁻¹
   证明: by
   rw [← image_inv_eq_inv]; rw [sSup_image]
@@ -319,7 +319,7 @@ lemma sInf_inv
 
 中文:
 引理 sInf_inv
-  条件: (s : Set M)
+  条件: (s : 集合 M)
   结论: sInf s⁻¹ = (sSup s)⁻¹
   证明: by
   rw [← image_inv_eq_inv]; rw [sInf_image]

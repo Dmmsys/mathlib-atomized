@@ -56,7 +56,7 @@ instance instChartedSpaceQuotient
 
 中文:
 实例 instChartedSpaceQuotient
-  签名: : ChartedSpace H (orbitRel.Quotient G M)
+  签名: : Charted空间 H (orbitRel.商 G M)
   定义体: isQuotientCoveringMap_quotientMk_of_properlyDiscontinuousSMul.isCoveringMap
 .isLocalHomeomorph.chartedSpace Quotient.mk_surjective
 

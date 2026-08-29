@@ -35,7 +35,7 @@ theorem FormallySmooth.iff_injective_lTensor_residueField.{u}
   rw [← IsLocalRing.split_injective_iff_lTensor_residue
 
 中文:
-定理 FormallySmooth.iff_injective_lTensor_residueField.{u}
+定理 形式光滑.iff_injective_lTensor_residueField.{u}
   证明: by
   have : Module.Finite P.Ring P.Cotangent :=
     have : Module.Finite P.Ring P.ker := .of_fg h'
@@ -70,7 +70,7 @@ theorem FormallySmooth.iff_injective_cotangentComplexBaseChange_residueField
   refine .trans ?_ ((AlgebraTensorModule.cancelBaseCha
 
 中文:
-定理 FormallySmooth.iff_injective_cotangentComplexBaseChange_residueField
+定理 形式光滑.iff_injective_cotangentComplexBaseChange_residueField
   证明: by
   let P' : Extension R S := { Ring := P, σ := _, algebraMap_σ := Function.surjInv_eq h₁ }
   rw [Algebra.FormallySmooth.iff_injective_lTensor_residueField P' h₂]
@@ -106,7 +106,7 @@ theorem FormallySmooth.iff_injective_cotangentComplexBaseChange
   rw [FormallySmooth.iff_injective_cotangentComplexBaseChange_resid
 
 中文:
-定理 FormallySmooth.iff_injective_cotangentComplexBaseChange
+定理 形式光滑.iff_injective_cotangentComplexBaseChange
   证明: by
   let f : ResidueField S ->ₐ[S] K := Ideal.Quotient.liftₐ _ (Algebra.ofId _ _) h₃
   let := f.toAlgebra

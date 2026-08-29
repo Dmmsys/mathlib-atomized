@@ -141,7 +141,7 @@ theorem fourier_bilin_convolution_eq
 
 中文:
 定理 fourier_bilin_convolution_eq
-  结论: (B : F₁ ->L[Complex] F₂ ->L[Complex] F₃) {f₁ : E -> F₁} {f₂ : E -> F₂}
+  结论: (B : F₁ ->L[复形] F₂ ->L[复形] F₃) {f₁ : E -> F₁} {f₂ : E -> F₂}
   证明: calc
   _ = ∫ y, ∫ x, 𝐞 (-inner Real (y + x) ξ) • B (f₁ x) (f₂ y) :=
     fourier_bilin_convolution_eq_integral B hf₁ hf₂ _
@@ -175,7 +175,7 @@ theorem fourier_smul_convolution_eq
 
 中文:
 定理 fourier_smul_convolution_eq
-  结论: {f₁ : E -> Complex} {f₂ : E -> F₁}
+  结论: {f₁ : E -> 复形} {f₂ : E -> F₁}
   证明: fourier_bilin_convolution_eq (lsmul Complex Complex) hf₁ hf₂ ξ
 
 Depends on / 依赖: fourier_bilin_convolution_eq
@@ -329,7 +329,7 @@ theorem fourier_convolution_apply
 
 中文:
 定理 fourier_convolution_apply
-  条件: (B : F₁ ->L[Complex] F₂ ->L[Complex] F₃) (f : 𝓢(E, F₁)) (g : 𝓢(E, F₂)) (x : E)
+  条件: (B : F₁ ->L[复形] F₂ ->L[复形] F₃) (f : 𝓢(E, F₁)) (g : 𝓢(E, F₂)) (x : E)
   证明: by
   simp [fourier_convolution, fourier_coe,
     Real.fourier_bilin_convolution_eq B f.integrable g.integrable]
@@ -360,7 +360,7 @@ theorem convolution_apply
 
 中文:
 定理 convolution_apply
-  条件: (B : F₁ ->L[Complex] F₂ ->L[Complex] F₃) (f : 𝓢(E, F₁)) (g : 𝓢(E, F₂)) (x : E)
+  条件: (B : F₁ ->L[复形] F₂ ->L[复形] F₃) (f : 𝓢(E, F₁)) (g : 𝓢(E, F₂)) (x : E)
   证明: calc
   _ = 𝓕⁻ (𝓕 (convolution B f g)) x := by simp
   _ = 𝓕⁻ (fun y => 𝓕 (f ⋆[B] g) y) x := by

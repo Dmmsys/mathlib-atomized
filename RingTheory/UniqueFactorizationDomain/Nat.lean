@@ -84,7 +84,7 @@ instance instUniqueFactorizationMonoid
 
 中文:
 实例 instUniqueFactorizationMonoid
-  签名: : UniqueFactorizationMonoid 自然数 where
+  签名: : 唯一分解幺半群 自然数 where
   定义体: Nat.irreducible_iff_prime
 
 Depends on / 依赖: Nat.irreducible_iff_prime, irreducible_iff_prime
@@ -131,7 +131,7 @@ lemma factors_multiset_prod_of_irreducible
 
 中文:
 引理 factors_multiset_prod_of_irreducible
-  条件: {s : Multiset 自然数} (h : 对任意 x : 自然数, x in s -> Irreducible x)
+  条件: {s : Multiset 自然数} (h : 对任意 x : 自然数, x in s -> 不可约 x)
   证明: by
   rw [← Multiset.rel_eq]; rw [← associated_eq_eq]
   apply UniqueFactorizationMonoid.factors_unique irreducible_of_normalized_factor h

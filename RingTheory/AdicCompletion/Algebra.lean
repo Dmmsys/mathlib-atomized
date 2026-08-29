@@ -103,7 +103,7 @@ theorem transitionMap_map_mul
 
 中文:
 定理 transitionMap_map_mul
-  条件: {m n : 自然数} (hmn : m <= n) (x y : R ⧸ (I ^ n • ⊤ : Ideal R))
+  条件: {m n : 自然数} (hmn : m <= n) (x y : R ⧸ (I ^ n • ⊤ : 理想 R))
   证明: Quotient.inductionOn₂' x y (fun _ _ => rfl)
 
 @[local simp]
@@ -125,7 +125,7 @@ theorem transitionMap_map_pow
 
 中文:
 定理 transitionMap_map_pow
-  条件: {m n a : 自然数} (hmn : m <= n) (x : R ⧸ (I ^ n • ⊤ : Ideal R))
+  条件: {m n a : 自然数} (hmn : m <= n) (x : R ⧸ (I ^ n • ⊤ : 理想 R))
   证明: Quotient.inductionOn' x (fun _ => rfl)
 
 Depends on / 依赖: Quotient, Quotient.inductionOn, inductionOn
@@ -164,7 +164,7 @@ definition subalgebra
 
 中文:
 定义 subalgebra
-  签名: : Subalgebra R (对任意 n, R ⧸ (I ^ n • ⊤ : Ideal R))
+  签名: : 子代数 R (对任意 n, R ⧸ (I ^ n • ⊤ : 理想 R))
   定义体: Submodule.toSubalgebra (submodule I R) (fun _ => by simp [transitionMap_map_one I])
     (fun x y hx hy m n hmn => by simp [hx hmn, hy hmn, transitionMap_map_mul I hmn])
 
@@ -184,7 +184,7 @@ definition subring
 
 中文:
 定义 subring
-  签名: : Subring (对任意 n, R ⧸ (I ^ n • ⊤ : Ideal R))
+  签名: : 子环 (对任意 n, R ⧸ (I ^ n • ⊤ : 理想 R))
   定义体: Subalgebra.toSubring (subalgebra I)
 
 Depends on / 依赖: Subalgebra, Subalgebra.toSubring, subalgebra, toSubring
@@ -203,7 +203,7 @@ instance :
 
 中文:
 实例 :
-  签名: Mul (AdicCompletion I R)
+  签名: 乘法 (AdicCompletion I R)
   定义体: ⟨x.val * y.val, fun hmn => by
     simp [x.property, y.property, transitionMap_map_mul I hmn]⟩
 
@@ -223,7 +223,7 @@ instance :
 
 中文:
 实例 :
-  签名: One (AdicCompletion I R)
+  签名: 幺 (AdicCompletion I R)
   定义体: ⟨1, by simp [transitionMap_map_one I]⟩
 
 Depends on / 依赖: transitionMap_map_one
@@ -241,7 +241,7 @@ instance :
 
 中文:
 实例 :
-  签名: 自然数Cast (AdicCompletion I R)
+  签名: 自然数嵌入 (AdicCompletion I R)
   定义体: ⟨n, fun _ => rfl⟩
 -/
 instance : NatCast (AdicCompletion I R) where
@@ -257,7 +257,7 @@ instance :
 
 中文:
 实例 :
-  签名: 整数Cast (AdicCompletion I R)
+  签名: 整数嵌入 (AdicCompletion I R)
   定义体: ⟨n, fun _ => rfl⟩
 -/
 instance : IntCast (AdicCompletion I R) where
@@ -273,7 +273,7 @@ instance :
 
 中文:
 实例 :
-  签名: Pow (AdicCompletion I R) 自然数
+  签名: 幂 (AdicCompletion I R) 自然数
   定义体: ⟨x.val ^ n, fun hmn => by simp [x.property, transitionMap_map_pow I hmn]⟩
 
 Depends on / 依赖: property, transitionMap_map_pow, x.property, x.val
@@ -294,7 +294,7 @@ instance :
 
 中文:
 实例 :
-  签名: CommRing (AdicCompletion I R)
+  签名: 交换环 (AdicCompletion I R)
   定义体: let f : AdicCompletion I R -> forall n, R ⧸ (I ^ n • ⊤ : Ideal R) := Subtype.val
   Subtype.val_injective.commRing f rfl rfl
     (fun _ _ => rfl) (fun _ _ => rfl) (fun _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl)
@@ -323,8 +323,8 @@ map_one' := Subtype.ext map_one _
 map_mul' 
 
 中文:
-实例 [Algebra
-  签名: S R] : Algebra S (AdicCompletion I R) where
+实例 [代数
+  签名: S R] : 代数 S (AdicCompletion I R) where
   定义体: { toFun r := ⟨algebraMap S (forall n, R ⧸ (I ^ n • ⊤ : Ideal R)) r, fun hmn => by
       simp only [Pi.algebraMap_apply,
         IsScalarTower.algebraMap_apply S R (R ⧸ (I ^ _ • ⊤ : Ideal R)),
@@ -361,7 +361,7 @@ theorem algebraMap_apply
 
 中文:
 定理 algebraMap_apply
-  条件: [Algebra S R] (s : S)
+  条件: [代数 S R] (s : S)
   证明: rfl
 
 @[simp]
@@ -519,7 +519,7 @@ theorem surjective_evalₐ
 中文:
 定理 surjective_evalₐ
   条件: (n : 自然数)
-  结论: Function.Surjective (evalₐ I n)
+  结论: 函数.满射 (evalₐ I n)
   证明: by
   simp only [evalₐ, smul_eq_mul, Ideal.quotientEquivAlgOfEq_coe_eq_factorₐ,
     AlgHom.coe_comp]
@@ -677,7 +677,7 @@ lemma evalOneₐ_surjective
 
 中文:
 引理 evalOneₐ_surjective
-  结论: Function.Surjective (evalOneₐ I)
+  结论: 函数.满射 (evalOneₐ I)
   证明: by
   dsimp [evalOneₐ]
   exact (Ideal.Quotient.factor_surjective (show I ^ 1 <= I by simp)).comp
@@ -704,7 +704,7 @@ definition AdicCauchySequence.subalgebra
 
 中文:
 定义 AdicCauchySequence.subalgebra
-  签名: : Subalgebra R (自然数 -> R)
+  签名: : 子代数 R (自然数 -> R)
   定义体: Submodule.toSubalgebra (AdicCauchySequence.submodule I R)
     (fun {m n} _ => by simp)
     (fun x y hx hy {m n} hmn => by
@@ -730,7 +730,7 @@ definition AdicCauchySequence.subring
 
 中文:
 定义 AdicCauchySequence.subring
-  签名: : Subring (自然数 -> R)
+  签名: : 子环 (自然数 -> R)
   定义体: Subalgebra.toSubring (AdicCauchySequence.subalgebra I)
 
 Depends on / 依赖: AdicCauchySequence, AdicCauchySequence.subalgebra, Subalgebra, Subalgebra.toSubring, subalgebra, toSubring
@@ -748,7 +748,7 @@ instance :
 
 中文:
 实例 :
-  签名: Mul (AdicCauchySequence I R)
+  签名: 乘法 (AdicCauchySequence I R)
   定义体: ⟨x.val * y.val, fun hmn => SModEq.mul (x.property hmn) (y.property hmn)⟩
 
 Depends on / 依赖: SModEq, SModEq.mul, property, x.property, x.val, y.property, y.val
@@ -766,7 +766,7 @@ instance :
 
 中文:
 实例 :
-  签名: One (AdicCauchySequence I R)
+  签名: 幺 (AdicCauchySequence I R)
   定义体: ⟨1, fun _ => rfl⟩
 -/
 instance : One (AdicCauchySequence I R) where
@@ -782,7 +782,7 @@ instance :
 
 中文:
 实例 :
-  签名: 自然数Cast (AdicCauchySequence I R)
+  签名: 自然数嵌入 (AdicCauchySequence I R)
   定义体: ⟨n, fun _ => rfl⟩
 -/
 instance : NatCast (AdicCauchySequence I R) where
@@ -798,7 +798,7 @@ instance :
 
 中文:
 实例 :
-  签名: 整数Cast (AdicCauchySequence I R)
+  签名: 整数嵌入 (AdicCauchySequence I R)
   定义体: ⟨n, fun _ => rfl⟩
 -/
 instance : IntCast (AdicCauchySequence I R) where
@@ -814,7 +814,7 @@ instance :
 
 中文:
 实例 :
-  签名: Pow (AdicCauchySequence I R) 自然数
+  签名: 幂 (AdicCauchySequence I R) 自然数
   定义体: ⟨x.val ^ n, fun hmn => SModEq.pow n (x.property hmn)⟩
 
 Depends on / 依赖: SModEq, SModEq.pow, property, x.property, x.val
@@ -835,7 +835,7 @@ instance :
 
 中文:
 实例 :
-  签名: CommRing (AdicCauchySequence I R)
+  签名: 交换环 (AdicCauchySequence I R)
   定义体: let f : AdicCauchySequence I R -> (Nat -> R) := Subtype.val
   Subtype.val_injective.commRing f rfl rfl
     (fun _ _ => rfl) (fun _ _ => rfl) (fun _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl)
@@ -865,7 +865,7 @@ smul_def' r x := Subtype.ext Al
 
 中文:
 实例 :
-  签名: Algebra R (AdicCauchySequence I R)
+  签名: 代数 R (AdicCauchySequence I R)
   定义体: { toFun r := ⟨algebraMap R (forall _, R) r, fun _ => rfl⟩
 map_one' := Subtype.ext map_one _
 map_mul' x y := Subtype.ext map_mul _ x y
@@ -981,7 +981,7 @@ theorem Ideal.mk_eq_mk
   exact (r.property hmn).symm
 
 中文:
-定理 Ideal.mk_eq_mk
+定理 理想.mk_eq_mk
   条件: {m n : 自然数} (hmn : m <= n) (r : AdicCauchySequence I R)
   证明: by
   have h : I ^ m = I ^ m • ⊤ := by simp
@@ -1033,7 +1033,7 @@ instance :
 
 中文:
 实例 :
-  签名: SMul (R ⧸ (I • ⊤ : Ideal R)) (M ⧸ (I • ⊤ : Submodule R M))
+  签名: 标量乘法 (R ⧸ (I • ⊤ : 理想 R)) (M ⧸ (I • ⊤ : 子模 R M))
   定义体: Quotient.liftOn r (· • x) fun b₁ b₂ h => by
       induction x using Quotient.inductionOn'
       have h : b₁ - b₂ in (I : Submodule R R) := by
@@ -1104,7 +1104,7 @@ instance :
 
 中文:
 实例 :
-  签名: Module (R ⧸ (I • ⊤ : Ideal R)) (M ⧸ (I • ⊤ : Submodule R M))
+  签名: 模 (R ⧸ (I • ⊤ : 理想 R)) (M ⧸ (I • ⊤ : 子模 R M))
   定义体: Function.Surjective.moduleLeft (Ideal.Quotient.mk (I • ⊤ : Ideal R))
     Ideal.Quotient.mk_surjective (fun _ _ => rfl)
 
@@ -1128,7 +1128,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsScalarTower R (R ⧸ (I • ⊤ : Ideal R)) (M ⧸ (I • ⊤ : Submodule R M))
+  签名: 标量塔 R (R ⧸ (I • ⊤ : 理想 R)) (M ⧸ (I • ⊤ : 子模 R M))
   定义体: by
     induction s, x using Quotient.inductionOn₂' with | _ s x
     simp only [Submodule.Quotient.mk''_eq_mk]
@@ -1161,7 +1161,7 @@ instance smul
 
 中文:
 实例 smul
-  签名: : SMul (AdicCompletion I R) (AdicCompletion I M) where
+  签名: : 标量乘法 (AdicCompletion I R) (AdicCompletion I M) where
   定义体: {
     val := fun n => eval I R n r • eval I M n x
     property := fun {m n} hmn => by
@@ -1218,7 +1218,7 @@ instance module
 
 中文:
 实例 module
-  签名: : Module (AdicCompletion I R) (AdicCompletion I M) where
+  签名: : 模 (AdicCompletion I R) (AdicCompletion I M) where
   定义体: by
     ext n
     simp only [smul_eval, val_one, one_smul]
@@ -1256,7 +1256,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsScalarTower R (AdicCompletion I R) (AdicCompletion I M)
+  签名: 标量塔 R (AdicCompletion I R) (AdicCompletion I M)
   定义体: by
     ext n
     rw [smul_eval]; rw [val_smul_apply]; rw [val_smul_apply]; rw [smul_eval]; rw [smul_assoc]
@@ -1685,7 +1685,7 @@ definition kerProj
 
 中文:
 定义 kerProj
-  签名: {f : S ->ₐ[R] A} (hf : Function.Surjective f)
+  签名: {f : S ->ₐ[R] A} (hf : 函数.满射 f)
   定义体: (Ideal.quotientKerAlgEquivOfSurjective hf).toAlgHom.comp
     (AdicCompletion.evalOneₐ <| RingHom.ker f).restrictScalars R
 
@@ -1709,7 +1709,7 @@ lemma kerProj_of
 
 中文:
 引理 kerProj_of
-  条件: {f : S ->ₐ[R] A} (hf : Function.Surjective f) (x : S)
+  条件: {f : S ->ₐ[R] A} (hf : 函数.满射 f) (x : S)
   证明: rfl
 -/
 lemma kerProj_of {f : S ->ₐ[R] A} (hf : Function.Surjective f) (x : S) :
@@ -1728,7 +1728,7 @@ lemma kerProj_surjective
 
 中文:
 引理 kerProj_surjective
-  条件: {f : S ->ₐ[R] A} (hf : Function.Surjective f)
+  条件: {f : S ->ₐ[R] A} (hf : 函数.满射 f)
   证明: by
   dsimp [kerProj]
   exact (AlgEquiv.surjective _).comp (evalOneₐ_surjective _)

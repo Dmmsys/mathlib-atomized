@@ -37,7 +37,7 @@ definition getVarsToClear
 
 中文:
 定义 getVarsToClear
-  签名: (preserve : Array FVarId)
+  签名: (preserve : 数组 FVarId)
   定义体: do
   let mut toClear : Array FVarId := #[]
   for decl in ← getLCtx do
@@ -66,7 +66,7 @@ definition clearExcept
 
 中文:
 定义 clearExcept
-  签名: (preserve : Array FVarId) (goal : MVarId)
+  签名: (preserve : 数组 FVarId) (goal : MVarId)
   定义体: do
   let toClear ← getVarsToClear preserve
   goal.tryClearMany toClear

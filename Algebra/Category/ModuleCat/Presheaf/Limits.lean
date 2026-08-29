@@ -50,7 +50,7 @@ definition evaluationJointlyReflectsLimits
 
 中文:
 定义 evaluationJointlyReflectsLimits
-  签名: (c : Cone F)
+  签名: (c : 锥 F)
   定义体: { app := fun X => (hc X).lift ((evaluation R X).mapCone s)
       naturality := fun {X Y} f => by
         apply (isLimitOfPreserves (ModuleCat.restrictScalars (R.map f).hom) (hc Y)).hom_ext
@@ -107,7 +107,7 @@ definition limitPresheafOfModules
 
 中文:
 定义 limitPresheafOfModules
-  签名: : PresheafOfModules R where
+  签名: : 预模层 R where
   定义体: limit (F ⋙ evaluation R X)
   map {_ Y} f := limMap (Functor.whiskerLeft F (restriction R f)) ≫
     (preservesLimitIso (ModuleCat.restrictScalars (R.map f).hom) (F ⋙ evaluation R Y)).inv
@@ -161,7 +161,7 @@ definition limitCone
 
 中文:
 定义 limitCone
-  签名: : Cone F where
+  签名: : 锥 F where
   定义体: limitPresheafOfModules F
   π :=
     { app := fun j =>
@@ -198,7 +198,7 @@ definition isLimitLimitCone
 
 中文:
 定义 isLimitLimitCone
-  签名: : IsLimit (limitCone F)
+  签名: : 是极限 (limitCone F)
   定义体: evaluationJointlyReflectsLimits _ _ (fun _ => limit.isLimit _)
 
 Depends on / 依赖: evaluationJointlyReflectsLimits, isLimit, limit.isLimit
@@ -216,7 +216,7 @@ instance hasLimit
 
 中文:
 实例 hasLimit
-  签名: : HasLimit F
+  签名: : 有极限 F
   定义体: ⟨_, isLimitLimitCone F⟩
 
 Depends on / 依赖: isLimitLimitCone
@@ -287,7 +287,7 @@ instance hasLimitsOfShape
 
 中文:
 实例 hasLimitsOfShape
-  签名: : HasLimitsOfShape J (PresheafOfModules.{v} R) where
+  签名: : 有形状极限 J (预模层.{v} R) where
 -/
 instance hasLimitsOfShape : HasLimitsOfShape J (PresheafOfModules.{v} R) where
 /--
@@ -299,7 +299,7 @@ instance hasLimitsOfSize
 
 中文:
 实例 hasLimitsOfSize
-  签名: : HasLimitsOfSize.{v, v} (PresheafOfModules.{v} R) where
+  签名: : 有LimitsOfSize.{v, v} (预模层.{v} R) where
 -/
 instance hasLimitsOfSize : HasLimitsOfSize.{v, v} (PresheafOfModules.{v} R) where
 
@@ -315,7 +315,7 @@ instance :
 
 中文:
 实例 :
-  签名: PreservesLimitsOfShape J (toPresheaf.{v} R)
+  签名: 保持形状极限 J (toPresheaf.{v} R)
 -/
 instance : PreservesLimitsOfShape J (toPresheaf.{v} R) where
 /--
@@ -327,7 +327,7 @@ instance :
 
 中文:
 实例 :
-  签名: PreservesLimitsOfSize.{v, v} (toPresheaf.{v} R)
+  签名: 保持LimitsOfSize.{v, v} (toPresheaf.{v} R)
 -/
 instance : PreservesLimitsOfSize.{v, v} (toPresheaf.{v} R) where
 
@@ -345,7 +345,7 @@ instance hasFiniteLimits
 
 中文:
 实例 hasFiniteLimits
-  签名: : HasFiniteLimits (PresheafOfModules.{v} R)
+  签名: : 有有限极限 (预模层.{v} R)
   定义体: ⟨fun _ => inferInstance⟩
 -/
 instance hasFiniteLimits : HasFiniteLimits (PresheafOfModules.{v} R) :=

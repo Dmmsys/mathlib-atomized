@@ -52,7 +52,7 @@ lemma charFunDual_eq_of_forall_strongDual_eq_zero
   simp [charFunDual_eq L, integral_complex_ofReal, hμ L, neg_div]
 
 中文:
-引理 charFunDual_eq_of_forall_strongDual_eq_zero
+引理 charFunDual_eq_of_对任意_strongDual_eq_zero
   结论: (hμ : 对任意 L : StrongDual 实数 E, μ[L] = 0)
   证明: by
   simp [charFunDual_eq L, integral_complex_ofReal, hμ L, neg_div]
@@ -80,7 +80,7 @@ lemma map_rotation_eq_self_of_forall_strongDual_eq_zero
   have h1 : (L.comp (.rotation θ)).comp (.inl 
 
 中文:
-引理 map_rotation_eq_self_of_forall_strongDual_eq_zero
+引理 map_rotation_eq_self_of_对任意_strongDual_eq_zero
   证明: by
   refine Measure.ext_of_charFunDual ?_
   ext L
@@ -194,7 +194,7 @@ lemma integrable_exp_sq_of_conv_neg
 
 中文:
 引理 integrable_exp_sq_of_conv_neg
-  结论: (μ : Measure E) [IsGaussian μ] {C C' : 实数}
+  结论: (μ : 测度 E) [是Gaussian μ] {C C' : 实数}
   证明: by
   have h_int : forallᵐ y ∂μ, Integrable (fun x => rexp (C * ‖x - y‖ ^ 2)) μ := by
     rw [integrable_conv_iff (by fun_prop)] at hint
@@ -260,8 +260,8 @@ theorem exists_integrable_exp_sq
       ∧ Integrable (fun x => rexp (C * ‖x‖ ^ 2)) (μ ∗ μ.map (ContinuousLine
 
 中文:
-定理 exists_integrable_exp_sq
-  条件: [CompleteSpace E] (μ : Measure E) [IsGaussian μ]
+定理 存在_integrable_exp_sq
+  条件: [完备空间 E] (μ : 测度 E) [是Gaussian μ]
   证明: by
   -- Since `μ ∗ μ.map (ContinuousLinearEquiv.neg ℝ)` is a centered Gaussian measure, it is invariant
   -- under rotation. We can thus apply a version of Fernique's theorem to it.
@@ -307,7 +307,7 @@ lemma memLp_id
 
 中文:
 引理 memLp_id
-  条件: (μ : Measure E) [IsGaussian μ] (p : 实数>=0∞) (hp : p != ∞)
+  条件: (μ : 测度 E) [是Gaussian μ] (p : 实数>=0∞) (hp : p != ∞)
   结论: MemLp id p μ
   证明: by
   suffices MemLp (fun x => ‖x‖ ^ 2) (p / 2) μ by
@@ -352,7 +352,7 @@ lemma integrable_id
 
 中文:
 引理 integrable_id
-  结论: 整数egrable id μ
+  结论: 可积 id μ
   证明: memLp_one_iff_integrable.1 memLp_id μ 1 (by norm_num)
 
 @[to_fun memLp_two_fun_id]
@@ -448,8 +448,8 @@ lemma nullSingletonClass
 
 中文:
 引理 nullSingletonClass
-  条件: (h : 对任意 x, μ != Measure.dirac x)
-  结论: NullSingletonClass μ where
+  条件: (h : 对任意 x, μ != 测度.dirac x)
+  结论: NullSingleton类 μ where
   证明: by
     obtain ⟨L, hL⟩ : exists L : StrongDual Real E, Var[L; μ] != 0 := by
       contrapose! h

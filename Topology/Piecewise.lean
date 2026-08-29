@@ -93,7 +93,7 @@ theorem ContinuousOn.if'
 
 中文:
 定理 ContinuousOn.if'
-  结论: {s : Set α} {p : α -> 命题} {f g : α -> β} [对任意 a, Decidable (p a)]
+  结论: {s : 集合 α} {p : α -> 命题} {f g : α -> β} [对任意 a, 可判定 (p a)]
   证明: by
   intro x hx
   by_cases hx' : x in frontier { a | p a }
@@ -141,7 +141,7 @@ theorem ContinuousOn.piecewise'
 
 中文:
 定理 ContinuousOn.piecewise'
-  结论: [对任意 a, Decidable (a in t)]
+  结论: [对任意 a, 可判定 (a in t)]
   证明: hf.if' hpf hpg hg
 
 Depends on / 依赖: hf.if
@@ -171,7 +171,7 @@ theorem ContinuousOn.if
 
 中文:
 定理 ContinuousOn.if
-  结论: {p : α -> 命题} [对任意 a, Decidable (p a)]
+  结论: {p : α -> 命题} [对任意 a, 可判定 (p a)]
   证明: by
   apply ContinuousOn.if'
   · rintro a ha
@@ -213,7 +213,7 @@ theorem ContinuousOn.piecewise
 
 中文:
 定理 ContinuousOn.piecewise
-  结论: [对任意 a, Decidable (a in t)]
+  结论: [对任意 a, 可判定 (a in t)]
   证明: hf.if ht hg
 
 Depends on / 依赖: hf.if
@@ -235,7 +235,7 @@ theorem continuous_if'
 
 中文:
 定理 continuous_if'
-  结论: {p : α -> 命题} [对任意 a, Decidable (p a)]
+  结论: {p : α -> 命题} [对任意 a, 可判定 (p a)]
   证明: by
   rw [← continuousOn_univ]
   apply ContinuousOn.if' <;> simpa
@@ -262,7 +262,7 @@ theorem continuous_if
 
 中文:
 定理 continuous_if
-  结论: {p : α -> 命题} [对任意 a, Decidable (p a)]
+  结论: {p : α -> 命题} [对任意 a, 可判定 (p a)]
   证明: by
   rw [← continuousOn_univ]
   apply ContinuousOn.if <;> simpa
@@ -285,8 +285,8 @@ theorem Continuous.if
   proof: continuous_if hp hf.continuousOn hg.continuousOn
 
 中文:
-定理 Continuous.if
-  结论: {p : α -> 命题} [对任意 a, Decidable (p a)]
+定理 连续.if
+  结论: {p : α -> 命题} [对任意 a, 可判定 (p a)]
   证明: continuous_if hp hf.continuousOn hg.continuousOn
 
 Depends on / 依赖: continuousOn, continuous_if, hf.continuousOn, hg.continuousOn
@@ -308,7 +308,7 @@ theorem continuous_if_const
 
 中文:
 定理 continuous_if_const
-  结论: (p : 命题) [Decidable p] (hf : p -> Continuous f)
+  结论: (p : 命题) [可判定 p] (hf : p -> 连续 f)
   证明: by
   split_ifs with h
   exacts [hf h, hg h]
@@ -329,8 +329,8 @@ theorem Continuous.if_const
   proof: continuous_if_const p (fun _ => hf) fun _ => hg
 
 中文:
-定理 Continuous.if_const
-  结论: (p : 命题) [Decidable p] (hf : Continuous f)
+定理 连续.if_const
+  结论: (p : 命题) [可判定 p] (hf : 连续 f)
   证明: continuous_if_const p (fun _ => hf) fun _ => hg
 
 Depends on / 依赖: continuous_if_const
@@ -349,7 +349,7 @@ theorem continuous_piecewise
 
 中文:
 定理 continuous_piecewise
-  结论: [对任意 a, Decidable (a in s)]
+  结论: [对任意 a, 可判定 (a in s)]
   证明: continuous_if hs hf hg
 
 Depends on / 依赖: continuous_if
@@ -368,8 +368,8 @@ theorem Continuous.piecewise
   proof: hf.if hs hg
 
 中文:
-定理 Continuous.piecewise
-  结论: [对任意 a, Decidable (a in s)]
+定理 连续.piecewise
+  结论: [对任意 a, 可判定 (a in s)]
   证明: hf.if hs hg
 
 Depends on / 依赖: hf.if
@@ -394,8 +394,8 @@ theorem IsOpen.ite'
     by_cases hx : x in t <;> simp [hx]
 
 中文:
-定理 IsOpen.ite'
-  结论: (hs : IsOpen s) (hs' : IsOpen s')
+定理 是开集.ite'
+  结论: (hs : 是开集 s) (hs' : 是开集 s')
   证明: by
   classical
     simp only [isOpen_iff_continuous_mem, Set.ite] at *
@@ -424,8 +424,8 @@ theorem IsOpen.ite
   proof: hs.ite' hs' fun x hx => by simpa [hx] using Set.ext_iff.1 ht x
 
 中文:
-定理 IsOpen.ite
-  结论: (hs : IsOpen s) (hs' : IsOpen s')
+定理 是开集.ite
+  结论: (hs : 是开集 s) (hs' : 是开集 s')
   证明: hs.ite' hs' fun x hx => by simpa [hx] using Set.ext_iff.1 ht x
 
 Depends on / 依赖: Set.ext_iff, ext_iff, hs.ite
@@ -489,7 +489,7 @@ theorem continuousOn_piecewise_ite'
 
 中文:
 定理 continuousOn_piecewise_ite'
-  结论: [对任意 x, Decidable (x in t)]
+  结论: [对任意 x, 可判定 (x in t)]
   证明: by
   apply ContinuousOn.piecewise
   · rwa [ite_inter_of_inter_eq _ H]
@@ -517,7 +517,7 @@ theorem continuousOn_piecewise_ite
 
 中文:
 定理 continuousOn_piecewise_ite
-  结论: [对任意 x, Decidable (x in t)]
+  结论: [对任意 x, 可判定 (x in t)]
   证明: continuousOn_piecewise_ite' (h.mono inter_subset_left) (h'.mono inter_subset_left) H Heq
 
 Depends on / 依赖: continuousOn_piecewise_ite, h.mono, inter_subset_left

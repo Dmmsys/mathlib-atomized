@@ -43,9 +43,9 @@ class AddGrpObj
     - right_neg((X)) : lift (𝟙 X) neg ≫ add = toUnit _ ≫ zero  [default: by cat_disch]
 
 中文:
-类 AddGrpObj
+类 加法GrpObj
   参数: (X : C)
-  继承: AddMonObj X
+  继承: 加法MonObj X
   公理与运算 (3 个):
     - neg : X ⟶ X
     - left_neg((X)) : lift neg (𝟙 X) ≫ add = toUnit _ ≫ zero  [默认: by cat_disch]
@@ -137,11 +137,11 @@ structure AddGrp
     - [addGrp : AddGrpObj X]
 
 中文:
-结构 AddGrp
+结构 加法群
   参数: where
   公理与运算 (2 个):
     - X : C
-    - [addGrp : AddGrpObj X]
+    - [addGrp : 加法GrpObj X]
 -/
 structure AddGrp where
   /-- The underlying object in the ambient monoidal category -/
@@ -162,7 +162,7 @@ structure Grp
     - [grp : GrpObj X]
 
 中文:
-结构 Grp
+结构 群
   参数: where
   公理与运算 (2 个):
     - X : C
@@ -190,7 +190,7 @@ abbreviation toMon
 
 中文:
 缩写 toMon
-  签名: (A : Grp C)
+  签名: (A : 群 C)
   定义体: ⟨A.X⟩
 -/
 abbrev toMon (A : Grp C) : Mon C := ⟨A.X⟩
@@ -210,7 +210,7 @@ definition trivial
 
 中文:
 定义 trivial
-  签名: : Grp C
+  签名: : 群 C
   定义体: { Mon.trivial C with grp := GrpObj.instTensorUnit }
 
 @[to_additive]
@@ -232,7 +232,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (Grp C)
+  签名: 可居 (群 C)
   定义体: trivial C
 
 @[to_additive]
@@ -253,7 +253,7 @@ instance :
 
 中文:
 实例 :
-  签名: Category (Grp C)
+  签名: 范畴 (群 C)
   定义体: inferInstanceAs (Category (InducedCategory _ Grp.toMon))
 
 @[to_additive (attr := simp)]
@@ -277,8 +277,8 @@ theorem id_hom_hom
 
 中文:
 定理 id_hom_hom
-  条件: (A : Grp C)
-  结论: Mon.Hom.hom (InducedCategory.Hom.hom (𝟙 A)) = 𝟙 A.X
+  条件: (A : 群 C)
+  结论: 幺半群.态射.hom (InducedCategory.态射.hom (𝟙 A)) = 𝟙 A.X
   证明: rfl
 
 @[to_additive (attr := simp, reassoc)]
@@ -299,7 +299,7 @@ theorem comp_hom_hom
 
 中文:
 定理 comp_hom_hom
-  条件: {R S T : Grp C} (f : R ⟶ S) (g : S ⟶ T)
+  条件: {R S T : 群 C} (f : R ⟶ S) (g : S ⟶ T)
   证明: rfl
 
 @[to_additive (attr := ext)]
@@ -320,7 +320,7 @@ theorem hom_ext
 
 中文:
 定理 hom_ext
-  条件: {A B : Grp C} (f g : A ⟶ B) (h : f.hom.hom = g.hom.hom)
+  条件: {A B : 群 C} (f g : A ⟶ B) (h : f.hom.hom = g.hom.hom)
   结论: f = g
   证明: InducedCategory.hom_ext (Mon.Hom.ext h)
 
@@ -341,7 +341,7 @@ definition homMk'
 
 中文:
 定义 homMk'
-  签名: {A B : Grp C} (f : A.toMon ⟶ B.toMon)
+  签名: {A B : 群 C} (f : A.toMon ⟶ B.toMon)
   定义体: f
 -/
 def homMk' {A B : Grp C} (f : A.toMon ⟶ B.toMon) : A ⟶ B where
@@ -362,7 +362,7 @@ definition homMk
 
 中文:
 定义 homMk
-  签名: {A B : Grp C} (f : A.X ⟶ B.X) [IsMonHom f]
+  签名: {A B : 群 C} (f : A.X ⟶ B.X) [是幺半群态射 f]
   定义体: homMk' (.mk f)
 -/
 def homMk {A B : Grp C} (f : A.X ⟶ B.X) [IsMonHom f] : A ⟶ B :=
@@ -383,7 +383,7 @@ definition ofHom
 
 中文:
 定义 ofHom
-  签名: {A B : C} [GrpObj A] [GrpObj B] (f : A ⟶ B) [IsMonHom f]
+  签名: {A B : C} [GrpObj A] [GrpObj B] (f : A ⟶ B) [是幺半群态射 f]
   定义体: Grp.homMk f
 
 Depends on / 依赖: Grp.homMk
@@ -406,7 +406,7 @@ definition homMk''
 
 中文:
 定义 homMk''
-  签名: {A B : Grp C} (f : A.X ⟶ B.X)
+  签名: {A B : 群 C} (f : A.X ⟶ B.X)
   定义体: haveI : IsMonHom f := ⟨one_f, mul_f⟩
   homMk f
 
@@ -433,7 +433,7 @@ lemma id'
 
 中文:
 引理 id'
-  条件: (A : Grp C)
+  条件: (A : 群 C)
   证明: rfl
 
 @[to_additive (attr := simp, reassoc)]
@@ -452,7 +452,7 @@ lemma comp'
 
 中文:
 引理 comp'
-  条件: {A₁ A₂ A₃ : Grp C} (f : A₁ ⟶ A₂) (g : A₂ ⟶ A₃)
+  条件: {A₁ A₂ A₃ : 群 C} (f : A₁ ⟶ A₂) (g : A₂ ⟶ A₃)
   证明: rfl
 -/
 lemma comp' {A₁ A₂ A₃ : Grp C} (f : A₁ ⟶ A₂) (g : A₂ ⟶ A₃) :
@@ -510,7 +510,7 @@ theorem lift_inv_comp_right
 
 中文:
 定理 lift_inv_comp_right
-  条件: [GrpObj A] [GrpObj B] (f : A ⟶ B) [IsMonHom f]
+  条件: [GrpObj A] [GrpObj B] (f : A ⟶ B) [是幺半群态射 f]
   证明: by
   have := right_inv A =≫ f
   rwa [assoc, IsMonHom.mul_hom, assoc, IsMonHom.one_hom, lift_map_assoc, id_comp] at this
@@ -568,7 +568,7 @@ theorem lift_inv_comp_left
 
 中文:
 定理 lift_inv_comp_left
-  条件: [GrpObj A] [GrpObj B] (f : A ⟶ B) [IsMonHom f]
+  条件: [GrpObj A] [GrpObj B] (f : A ⟶ B) [是幺半群态射 f]
   证明: by
   have := left_inv A =≫ f
   rwa [assoc, IsMonHom.mul_hom, assoc, IsMonHom.one_hom, lift_map_assoc, id_comp] at this
@@ -753,8 +753,8 @@ abbreviation _root_.CategoryTheory.AddGrpObj.ofIso
   right_neg := by simp +instances [AddMonObj.ofIso]
 
 中文:
-缩写 _root_.CategoryTheory.AddGrpObj.ofIso
-  签名: {G' X : C} [AddGrpObj G'] (e : G' ≅ X)
+缩写 _root_.范畴论.加法GrpObj.ofIso
+  签名: {G' X : C} [加法GrpObj G'] (e : G' ≅ X)
   定义体: AddMonObj.ofIso e
   neg := e.inv ≫ AddGrpObj.neg ≫ e.hom
   left_neg := by simp +instances [AddMonObj.ofIso]
@@ -819,7 +819,7 @@ theorem inv_inv
 中文:
 定理 inv_inv
   条件: (A : C) [GrpObj A]
-  结论: CategoryTheory.inv ι = ι[A]
+  结论: 范畴论.inv ι = ι[A]
   证明: by
   rw [eq_comm]; rw [← CategoryTheory.inv_comp_eq_id]; rw [IsIso.inv_inv]; rw [inv_comp_inv]
 
@@ -846,7 +846,7 @@ theorem mul_inv
 
 中文:
 定理 mul_inv
-  条件: [BraidedCategory C] (A : C) [GrpObj A]
+  条件: [辫范畴 C] (A : C) [GrpObj A]
   证明: by
   apply lift_left_mul_ext μ
   nth_rw 2 [← Category.comp_id μ]
@@ -878,7 +878,7 @@ theorem tensorHom_inv_inv_mul
 
 中文:
 定理 tensorHom_inv_inv_mul
-  条件: [BraidedCategory C] (A : C) [GrpObj A]
+  条件: [辫范畴 C] (A : C) [GrpObj A]
   证明: by
   rw [mul_inv A]; rw [SymmetricCategory.symmetry_assoc]
 
@@ -901,7 +901,7 @@ lemma mul_inv_rev
 
 中文:
 引理 mul_inv_rev
-  条件: [BraidedCategory C] (G : C) [GrpObj G]
+  条件: [辫范畴 C] (G : C) [GrpObj G]
   证明: by simp [tensorHom_inv_inv_mul]
 
 Depends on / 依赖: tensorHom_inv_inv_mul
@@ -956,7 +956,7 @@ lemma mulRight_one
 中文:
 引理 mulRight_one
   条件: (A : C) [GrpObj A]
-  结论: mulRight η[A] = Iso.refl A
+  结论: mulRight η[A] = 同构.refl A
   证明: by
   ext; simp
 -/
@@ -1057,7 +1057,7 @@ theorem inv_hom
 
 中文:
 定理 inv_hom
-  条件: [GrpObj A] [GrpObj B] (f : A ⟶ B) [IsMonHom f]
+  条件: [GrpObj A] [GrpObj B] (f : A ⟶ B) [是幺半群态射 f]
   结论: ι ≫ f = f ≫ ι
   证明: by
   suffices lift (lift f (ι ≫ f)) f =
@@ -1155,7 +1155,7 @@ definition ofInvertible
 
 中文:
 定义 ofInvertible
-  签名: (G : C) [MonObj G] (h : 对任意 X (f : X ⟶ G), Invertible f)
+  签名: (G : C) [MonObj G] (h : 对任意 X (f : X ⟶ G), 可逆 f)
   定义体: Yoneda.fullyFaithful.preimage
     ⟨fun X => ↾fun f => (h X.unop f).invOf, fun X Y f => by
       ext g
@@ -1219,7 +1219,7 @@ definition forget₂Mon
 
 中文:
 定义 forget₂Mon
-  签名: : Grp C ⥤ Mon C
+  签名: : 群 C ⥤ 幺半群 C
   定义体: inducedFunctor Grp.toMon
 
 Depends on / 依赖: Grp.toMon, inducedFunctor
@@ -1241,7 +1241,7 @@ definition fullyFaithfulForget₂Mon
 
 中文:
 定义 fullyFaithfulForget₂Mon
-  签名: : (forget₂Mon C).FullyFaithful
+  签名: : (forget₂Mon C).满忠实
   定义体: fullyFaithfulInducedFunctor _
 
 Depends on / 依赖: fullyFaithfulInducedFunctor
@@ -1259,7 +1259,7 @@ instance :
 
 中文:
 实例 :
-  签名: (forget₂Mon C).Full
+  签名: (forget₂Mon C).满
   定义体: InducedCategory.full _
 -/
 @[to_additive] instance : (forget₂Mon C).Full := InducedCategory.full _
@@ -1273,7 +1273,7 @@ instance :
 
 中文:
 实例 :
-  签名: (forget₂Mon C).Faithful
+  签名: (forget₂Mon C).忠实
   定义体: InducedCategory.faithful _
 -/
 @[to_additive] instance : (forget₂Mon C).Faithful := InducedCategory.faithful _
@@ -1294,7 +1294,7 @@ theorem forget₂Mon_obj_one
 
 中文:
 定理 forget₂Mon_obj_one
-  条件: (A : Grp C)
+  条件: (A : 群 C)
   结论: η[((forget₂Mon C).obj A).X] = η[A.X]
   证明: rfl
 
@@ -1317,7 +1317,7 @@ theorem forget₂Mon_obj_mul
 
 中文:
 定理 forget₂Mon_obj_mul
-  条件: (A : Grp C)
+  条件: (A : 群 C)
   结论: μ[((forget₂Mon C).obj A).X] = μ[A.X]
   证明: rfl
 
@@ -1337,7 +1337,7 @@ theorem forget₂Mon_map_hom
 
 中文:
 定理 forget₂Mon_map_hom
-  条件: {A B : Grp C} (f : A ⟶ B)
+  条件: {A B : 群 C} (f : A ⟶ B)
   证明: rfl
 -/
 theorem forget₂Mon_map_hom {A B : Grp C} (f : A ⟶ B) :
@@ -1361,7 +1361,7 @@ definition forget
 
 中文:
 定义 forget
-  签名: : Grp C ⥤ C
+  签名: : 群 C ⥤ C
   定义体: forget₂Mon C ⋙ Mon.forget C
 
 @[to_additive]
@@ -1381,7 +1381,7 @@ instance :
 
 中文:
 实例 :
-  签名: (forget C).Faithful
+  签名: (forget C).忠实
 -/
 instance : (forget C).Faithful where
 
@@ -1398,7 +1398,7 @@ theorem forget₂Mon_comp_forget
 
 中文:
 定理 forget₂Mon_comp_forget
-  结论: forget₂Mon C ⋙ Mon.forget C = forget C
+  结论: forget₂Mon C ⋙ 幺半群.forget C = forget C
   证明: rfl
 
 @[to_additive]
@@ -1426,7 +1426,7 @@ definition mkIso'
 
 中文:
 定义 mkIso'
-  签名: {G H : C} (e : G ≅ H) [GrpObj G] [GrpObj H] [IsMonHom e.hom]
+  签名: {G H : C} (e : G ≅ H) [GrpObj G] [GrpObj H] [是幺半群态射 e.hom]
   定义体: (fullyFaithfulForget₂Mon C).preimageIso (Mon.mkIso' e)
 
 Depends on / 依赖: Mon.mkIso, preimageIso
@@ -1453,7 +1453,7 @@ abbreviation mkIso
 
 中文:
 缩写 mkIso
-  签名: {G H : Grp C} (e : G.X ≅ H.X) (one_f : η[G.X] ≫ e.hom = η[H.X] := by cat_disch)
+  签名: {G H : 群 C} (e : G.X ≅ H.X) (one_f : η[G.X] ≫ e.hom = η[H.X] := by cat_disch)
   定义体: have : IsMonHom e.hom := ⟨one_f, mul_f⟩
   mkIso' e
 
@@ -1479,7 +1479,7 @@ instance uniqueHomFromTrivial
 
 中文:
 实例 uniqueHomFromTrivial
-  签名: (A : Grp C)
+  签名: (A : 群 C)
   定义体: (show _ ≃ (Mon.trivial C ⟶ A.toMon) from InducedCategory.homEquiv).unique
 
 @[to_additive]
@@ -1500,7 +1500,7 @@ instance uniqueHomToTrivial
 
 中文:
 实例 uniqueHomToTrivial
-  签名: (A : Grp C)
+  签名: (A : 群 C)
   定义体: (show _ ≃ (A.toMon ⟶ Mon.trivial C) from InducedCategory.homEquiv).unique
 
 Depends on / 依赖: A.toMon, InducedCategory, InducedCategory.homEquiv, Mon.trivial, homEquiv, unique
@@ -1523,7 +1523,7 @@ lemma isZero_trivial
 
 中文:
 引理 isZero_trivial
-  结论: IsZero (trivial C) where
+  结论: 是零 (trivial C) where
   证明: nonempty_unique (trivial C ⟶ A)
   unique_from A := nonempty_unique (A ⟶ trivial C)
 
@@ -1548,7 +1548,7 @@ instance :
 
 中文:
 实例 :
-  签名: HasZeroObject (Grp C)
+  签名: 有ZeroObject (群 C)
   定义体: ⟨Grp.trivial C, isZero_trivial C⟩
 
 @[to_additive]
@@ -1576,7 +1576,7 @@ lemma zero_hom
 
 中文:
 引理 zero_hom
-  条件: (G H : Grp C)
+  条件: (G H : 群 C)
   结论: (0 : G ⟶ H).hom = 0
   证明: rfl
 
@@ -1594,7 +1594,7 @@ instance :
 
 中文:
 实例 :
-  签名: HasZeroMorphisms (Grp C)
+  签名: 有ZeroMorphisms (群 C)
 -/
 noncomputable instance : HasZeroMorphisms (Grp C) where
 
@@ -1619,7 +1619,7 @@ instance instMonoidalCategoryStruct
 
 中文:
 实例 instMonoidalCategoryStruct
-  签名: : MonoidalCategoryStruct (Grp C) where
+  签名: : 幺半群范畴结构 (群 C) where
   定义体: ⟨G.X otimes H.X⟩
   tensorHom f g := homMk' (tensorHom (C := Mon C) f.hom g.hom)
   whiskerRight f G := homMk' (whiskerRight (C := Mon C) f.hom G.toMon)
@@ -1654,7 +1654,7 @@ lemma tensorUnit_X
 
 中文:
 引理 tensorUnit_X
-  结论: (𝟙_ (Grp C)).X = 𝟙_ C
+  结论: (𝟙_ (群 C)).X = 𝟙_ C
   证明: rfl
 
 @[to_additive (attr := simp)]
@@ -1673,7 +1673,7 @@ lemma tensorUnit_one
 
 中文:
 引理 tensorUnit_one
-  结论: η[(𝟙_ (Grp C)).X] = η[𝟙_ C]
+  结论: η[(𝟙_ (群 C)).X] = η[𝟙_ C]
   证明: rfl
 @[to_additive (attr := simp)]
 -/
@@ -1691,7 +1691,7 @@ lemma tensorUnit_mul
 
 中文:
 引理 tensorUnit_mul
-  结论: μ[(𝟙_ (Grp C)).X] = μ[𝟙_ C]
+  结论: μ[(𝟙_ (群 C)).X] = μ[𝟙_ C]
   证明: rfl
 
 @[to_additive (attr := simp)]
@@ -1711,7 +1711,7 @@ lemma tensorObj_one
 
 中文:
 引理 tensorObj_one
-  条件: (G H : Grp C)
+  条件: (G H : 群 C)
   结论: η[(G otimes H).X] = η[G.X otimes H.X]
   证明: rfl
 @[to_additive (attr := simp)]
@@ -1731,7 +1731,7 @@ lemma tensorObj_mul
 
 中文:
 引理 tensorObj_mul
-  条件: (G H : Grp C)
+  条件: (G H : 群 C)
   结论: μ[(G otimes H).X] = μ[G.X otimes H.X]
   证明: rfl
 
@@ -1752,7 +1752,7 @@ lemma whiskerLeft_hom_hom
 
 中文:
 引理 whiskerLeft_hom_hom
-  条件: {G H : Grp C} (f : G ⟶ H) (I : Grp C)
+  条件: {G H : 群 C} (f : G ⟶ H) (I : 群 C)
   证明: rfl
 
 @[to_additive (attr := simp)]
@@ -1774,7 +1774,7 @@ lemma whiskerRight_hom_hom
 
 中文:
 引理 whiskerRight_hom_hom
-  条件: (G : Grp C) {H I : Grp C} (f : H ⟶ I)
+  条件: (G : 群 C) {H I : 群 C} (f : H ⟶ I)
   证明: rfl
 
 
@@ -1797,7 +1797,7 @@ lemma leftUnitor_hom_hom_hom
 
 中文:
 引理 leftUnitor_hom_hom_hom
-  条件: (G : Grp C)
+  条件: (G : 群 C)
   结论: (fun_ G).hom.hom.hom = (fun_ G.X).hom
   证明: rfl
 @[to_additive (attr := simp)]
@@ -1816,7 +1816,7 @@ lemma leftUnitor_inv_hom_hom
 
 中文:
 引理 leftUnitor_inv_hom_hom
-  条件: (G : Grp C)
+  条件: (G : 群 C)
   结论: (fun_ G).inv.hom.hom = (fun_ G.X).inv
   证明: rfl
 @[to_additive (attr := simp)]
@@ -1835,7 +1835,7 @@ lemma rightUnitor_hom_hom_hom
 
 中文:
 引理 rightUnitor_hom_hom_hom
-  条件: (G : Grp C)
+  条件: (G : 群 C)
   结论: (ρ_ G).hom.hom.hom = (ρ_ G.X).hom
   证明: rfl
 @[to_additive (attr := simp)]
@@ -1854,7 +1854,7 @@ lemma rightUnitor_inv_hom_hom
 
 中文:
 引理 rightUnitor_inv_hom_hom
-  条件: (G : Grp C)
+  条件: (G : 群 C)
   结论: (ρ_ G).inv.hom.hom = (ρ_ G.X).inv
   证明: rfl
 @[to_additive (attr := simp)]
@@ -1872,7 +1872,7 @@ lemma associator_hom_hom_hom
 
 中文:
 引理 associator_hom_hom_hom
-  条件: (G H I : Grp C)
+  条件: (G H I : 群 C)
   证明: rfl
 @[to_additive (attr := simp)]
 -/
@@ -1891,7 +1891,7 @@ lemma associator_inv_hom_hom
 
 中文:
 引理 associator_inv_hom_hom
-  条件: (G H I : Grp C)
+  条件: (G H I : 群 C)
   证明: rfl
 
 @[to_additive]
@@ -1911,7 +1911,7 @@ instance instMonoidalCategory
 
 中文:
 实例 instMonoidalCategory
-  签名: : MonoidalCategory (Grp C) where
+  签名: : 幺半群范畴 (群 C) where
   定义体: by intros; ext; simp [tensorHom_def]
   triangle _ _ := by ext; exact triangle _ _
 
@@ -1939,7 +1939,7 @@ instance instCartesianMonoidalCategory
 
 中文:
 实例 instCartesianMonoidalCategory
-  签名: : CartesianMonoidalCategory (Grp C) where
+  签名: : CartesianMonoidal范畴 (群 C) where
   定义体: .ofUniqueHom (fun G => homMk' (toUnit G.toMon)) fun G f => by ext; exact toUnit_unique ..
   fst G H := homMk' (fst G.toMon H.toMon)
   snd G H := homMk' (snd G.toMon H.toMon)
@@ -1992,7 +1992,7 @@ lemma fst_hom_hom
 
 中文:
 引理 fst_hom_hom
-  条件: (G H : Grp C)
+  条件: (G H : 群 C)
   结论: (fst G H).hom.hom = fst G.X H.X
   证明: rfl
 @[to_additive (attr := simp)]
@@ -2010,7 +2010,7 @@ lemma snd_hom_hom
 
 中文:
 引理 snd_hom_hom
-  条件: (G H : Grp C)
+  条件: (G H : 群 C)
   结论: (snd G H).hom.hom = snd G.X H.X
   证明: rfl
 -/
@@ -2031,7 +2031,7 @@ instance :
 
 中文:
 实例 :
-  签名: (forget₂Mon C).Monoidal
+  签名: (forget₂Mon C).幺半群
   定义体: 𝟙 _
   «μ» G H := 𝟙 _
   «η» := 𝟙 _
@@ -2059,7 +2059,7 @@ instance instBraidedCategory
 
 中文:
 实例 instBraidedCategory
-  签名: : BraidedCategory (Grp C)
+  签名: : 辫范畴 (群 C)
   定义体: .ofFaithful (forget₂Mon C) fun G H => Grp.mkIso (β_ G.X H.X)
 
 @[to_additive (attr := simp)]
@@ -2082,7 +2082,7 @@ lemma braiding_hom_hom_hom
 
 中文:
 引理 braiding_hom_hom_hom
-  条件: (G H : Grp C)
+  条件: (G H : 群 C)
   结论: (β_ G H).hom.hom.hom = (β_ G.X H.X).hom
   证明: rfl
 @[to_additive (attr := simp)]
@@ -2100,7 +2100,7 @@ lemma braiding_inv_hom_hom
 
 中文:
 引理 braiding_inv_hom_hom
-  条件: (G H : Grp C)
+  条件: (G H : 群 C)
   结论: (β_ G H).inv.hom.hom = (β_ G.X H.X).inv
   证明: rfl
 -/
@@ -2203,7 +2203,7 @@ definition mapGrp
 
 中文:
 定义 mapGrp
-  签名: : Grp C ⥤ Grp D where
+  签名: : 群 C ⥤ 群 D where
   定义体: .mk (F.obj A.X)
   map f := Grp.homMk' (F.mapMon.map f.hom)
 
@@ -2226,8 +2226,8 @@ instance Faithful.mapGrp
       (F.mapMon.map_injective ((Grp.forget₂Mon _).congr_map hfg))
 
 中文:
-实例 Faithful.mapGrp
-  签名: [F.Faithful]
+实例 忠实.mapGrp
+  签名: [F.忠实]
   定义体: (Grp.forget₂Mon _).map_injective
       (F.mapMon.map_injective ((Grp.forget₂Mon _).congr_map hfg))
 -/
@@ -2250,8 +2250,8 @@ definition FullyFaithful.mapGrp
   body: Grp.homMk' (hF.mapMon.preimage f.hom)
 
 中文:
-定义 FullyFaithful.mapGrp
-  签名: (hF : F.FullyFaithful)
+定义 满忠实.mapGrp
+  签名: (hF : F.满忠实)
   定义体: Grp.homMk' (hF.mapMon.preimage f.hom)
 -/
 protected def FullyFaithful.mapGrp (hF : F.FullyFaithful) : F.mapGrp.FullyFaithful where
@@ -2270,8 +2270,8 @@ instance Full.mapGrp
 @[to_additive (attr := simp)]
 
 中文:
-实例 Full.mapGrp
-  签名: [F.Full] [F.Faithful]
+实例 满.mapGrp
+  签名: [F.满] [F.忠实]
   定义体: ((FullyFaithful.ofFullyFaithful F).mapGrp).full
 
 @[to_additive (attr := simp)]
@@ -2292,7 +2292,7 @@ theorem mapGrp_id_one
 
 中文:
 定理 mapGrp_id_one
-  条件: (A : Grp C)
+  条件: (A : 群 C)
   证明: rfl
 
 @[to_additive (attr := simp)]
@@ -2314,7 +2314,7 @@ theorem mapGrp_id_mul
 
 中文:
 定理 mapGrp_id_mul
-  条件: (A : Grp C)
+  条件: (A : 群 C)
   证明: rfl
 
 @[to_additive (attr := simp, reassoc)]
@@ -2336,7 +2336,7 @@ theorem comp_mapGrp_one
 
 中文:
 定理 comp_mapGrp_one
-  条件: (A : Grp C)
+  条件: (A : 群 C)
   证明: rfl
 
 @[to_additive (attr := simp, reassoc)]
@@ -2356,7 +2356,7 @@ theorem comp_mapGrp_mul
 
 中文:
 定理 comp_mapGrp_mul
-  条件: (A : Grp C)
+  条件: (A : 群 C)
   证明: rfl
 -/
 theorem comp_mapGrp_mul (A : Grp C) :
@@ -2377,7 +2377,7 @@ definition mapGrpIdIso
 
 中文:
 定义 mapGrpIdIso
-  签名: : mapGrp (𝟭 C) ≅ 𝟭 (Grp C)
+  签名: : mapGrp (𝟭 C) ≅ 𝟭 (群 C)
   定义体: NatIso.ofComponents fun X => Grp.mkIso (.refl _)
 
 Depends on / 依赖: Grp.mkIso, NatIso, NatIso.ofComponents, ofComponents
@@ -2421,7 +2421,7 @@ definition mapGrpNatTrans
   body: Grp.homMk' ((mapMonNatTrans f).app X.toMon)
 
 中文:
-定义 mapGrpNatTrans
+定义 mapGrp自然数Trans
   签名: (f : F ⟶ F')
   定义体: Grp.homMk' ((mapMonNatTrans f).app X.toMon)
 
@@ -2444,7 +2444,7 @@ definition mapGrpNatIso
   body: NatIso.ofComponents fun X => Grp.mkIso (e.app _)
 
 中文:
-定义 mapGrpNatIso
+定义 mapGrp自然数Iso
   签名: (e : F ≅ F')
   定义体: NatIso.ofComponents fun X => Grp.mkIso (e.app _)
 
@@ -2470,7 +2470,7 @@ definition mapGrpFunctor
 
 中文:
 定义 mapGrpFunctor
-  签名: : (C ⥤ₗ D) ⥤ Grp C ⥤ Grp D where
+  签名: : (C ⥤ₗ D) ⥤ 群 C ⥤ 群 D where
   定义体: F.1.mapGrp
   map {F G} α := { app A := Grp.homMk'' (α.hom.app A.X) }
 
@@ -2497,8 +2497,8 @@ right_inv := hF.map_injective by
     simp [OplaxMonoidal.η_of_cartesianMonoidalCategory]
 
 中文:
-缩写 FullyFaithful.grpObj
-  签名: (hF : F.FullyFaithful) (X : C) [GrpObj (F.obj X)]
+缩写 满忠实.grpObj
+  签名: (hF : F.满忠实) (X : C) [GrpObj (F.obj X)]
   定义体: hF.monObj X
   inv := hF.preimage ι[F.obj X]
 left_inv := hF.map_injective by
@@ -2539,7 +2539,7 @@ lemma essImage_mapGrp
 
 中文:
 引理 essImage_mapGrp
-  条件: [F.Full] [F.Faithful] {G : Grp D}
+  条件: [F.满] [F.忠实] {G : 群 D}
   证明: by rintro ⟨H, ⟨e⟩⟩; exact ⟨H.X, ⟨(Grp.forget _).mapIso e⟩⟩
   mpr := by
     rintro ⟨H, ⟨e⟩⟩
@@ -2580,7 +2580,7 @@ instance mapGrp.instMonoidal
 
 中文:
 实例 mapGrp.instMonoidal
-  签名: : F.mapGrp.Monoidal
+  签名: : F.mapGrp.幺半群
   定义体: Functor.CoreMonoidal.toMonoidal
   { εIso := (Grp.fullyFaithfulForget₂Mon _).preimageIso (εIso F.mapMon)
     μIso X Y := (Grp.fullyFaithfulForget₂Mon _).preimageIso (μIso F.mapMon X.toMon Y.toMon)
@@ -2615,7 +2615,7 @@ instance mapGrp.instBraided
 
 中文:
 实例 mapGrp.instBraided
-  签名: : F.mapGrp.Braided where
+  签名: : F.mapGrp.辫 where
   定义体: (Grp.forget₂Mon _).map_injective (Braided.braided X.toMon Y.toMon)
 
 Depends on / 依赖: Braided, Braided.braided, Grp.forget, X.toMon, Y.toMon, braided, map_injective
@@ -2682,7 +2682,7 @@ definition mapGrp
 
 中文:
 定义 mapGrp
-  签名: : Grp C ≌ Grp D where
+  签名: : 群 C ≌ 群 D where
   定义体: e.functor.mapGrp
   inverse := e.inverse.mapGrp
   unitIso := mapGrpIdIso.symm ≪≫ mapGrpNatIso e.unitIso ≪≫ mapGrpCompIso

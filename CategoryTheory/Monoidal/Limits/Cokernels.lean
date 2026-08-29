@@ -45,7 +45,7 @@ abbreviation tensor
 
 中文:
 缩写 tensor
-  签名: : CokernelCofork (coprod.desc (f₁ ▷ Y₂) (Y₁ ◁ f₂))
+  签名: : 余核余叉 (coprod.desc (f₁ ▷ Y₂) (Y₁ ◁ f₂))
   定义体: CokernelCofork.ofπ (c₁.π otimesₘ c₂.π) (by
     ext
     · simp [tensorHom_def, ← comp_whiskerRight_assoc, coprod.inl_desc]

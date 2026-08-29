@@ -49,10 +49,10 @@ class GrothendieckTopology.HasSheafCompose
     - isSheaf((P : Cᵒᵖ ⥤ A) (hP : Presheaf.IsSheaf J P)) : Presheaf.IsSheaf J (P ⋙ F)
 
 中文:
-类 GrothendieckTopology.HasSheafCompose
+类 Grothendieck拓扑.有SheafCompose
   参数: : 命题 where
   公理与运算 (1 个):
-    - isSheaf((P : Cᵒᵖ ⥤ A) (hP : Presheaf.IsSheaf J P)) : Presheaf.IsSheaf J (P ⋙ F)
+    - isSheaf((P : Cᵒᵖ ⥤ A) (hP : 预层.是层 J P)) : 预层.是层 J (P ⋙ F)
 -/
 class GrothendieckTopology.HasSheafCompose : Prop where
   /-- For every sheaf `P`, `P ⋙ F` is a sheaf. -/
@@ -74,7 +74,7 @@ definition sheafCompose
 
 中文:
 定义 sheafCompose
-  签名: : Sheaf J A ⥤ Sheaf J B
+  签名: : 层 J A ⥤ 层 J B
   定义体: ObjectProperty.lift _
     (sheafToPresheaf _ _ ⋙ (Functor.whiskeringRight _ _ _).obj F)
       (fun P => GrothendieckTopology.HasSheafCompose.isSheaf _ P.property)
@@ -95,8 +95,8 @@ instance [F.Faithful]
   body: show (sheafToPresheaf _ _ ⋙ (whiskeringRight Cᵒᵖ A B).obj F).Faithful from inferInstance
 
 中文:
-实例 [F.Faithful]
-  签名: : (sheafCompose J F ⋙ sheafToPresheaf _ _).Faithful
+实例 [F.忠实]
+  签名: : (sheafCompose J F ⋙ sheafToPresheaf _ _).忠实
   定义体: show (sheafToPresheaf _ _ ⋙ (whiskeringRight Cᵒᵖ A B).obj F).Faithful from inferInstance
 
 Depends on / 依赖: Faithful, sheafToPresheaf, whiskeringRight
@@ -113,8 +113,8 @@ instance [F.Faithful]
   body: show (sheafToPresheaf _ _ ⋙ (whiskeringRight Cᵒᵖ A B).obj F).Full from inferInstance
 
 中文:
-实例 [F.Faithful]
-  签名: [F.Full]
+实例 [F.忠实]
+  签名: [F.满]
   定义体: show (sheafToPresheaf _ _ ⋙ (whiskeringRight Cᵒᵖ A B).obj F).Full from inferInstance
 
 Depends on / 依赖: sheafToPresheaf, whiskeringRight
@@ -133,7 +133,7 @@ definition fullyFaithfulSheafComposeCompSheafToPresheaf
 
 中文:
 定义 fullyFaithfulSheafComposeCompSheafToPresheaf
-  签名: (hF : F.FullyFaithful)
+  签名: (hF : F.满忠实)
   定义体: (fullyFaithfulSheafToPresheaf J A).comp (hF.whiskeringRight Cᵒᵖ)
 
 Depends on / 依赖: fullyFaithfulSheafToPresheaf, hF.whiskeringRight, whiskeringRight
@@ -151,8 +151,8 @@ instance [F.Faithful]
   body: Functor.Faithful.of_comp (sheafCompose J F) (sheafToPresheaf _ _)
 
 中文:
-实例 [F.Faithful]
-  签名: : (sheafCompose J F).Faithful
+实例 [F.忠实]
+  签名: : (sheafCompose J F).忠实
   定义体: Functor.Faithful.of_comp (sheafCompose J F) (sheafToPresheaf _ _)
 
 Depends on / 依赖: Faithful, Functor, Functor.Faithful.of_comp, of_comp, sheafCompose, sheafToPresheaf
@@ -169,8 +169,8 @@ instance [F.Full]
   body: Functor.Full.of_comp_faithful (sheafCompose J F) (sheafToPresheaf _ _)
 
 中文:
-实例 [F.Full]
-  签名: [F.Faithful]
+实例 [F.满]
+  签名: [F.忠实]
   定义体: Functor.Full.of_comp_faithful (sheafCompose J F) (sheafToPresheaf _ _)
 
 Depends on / 依赖: Functor, Functor.Full.of_comp_faithful, of_comp_faithful, sheafCompose, sheafToPresheaf
@@ -189,7 +189,7 @@ definition fullyFaithfulSheafCompose
 
 中文:
 定义 fullyFaithfulSheafCompose
-  签名: (hF : F.FullyFaithful)
+  签名: (hF : F.满忠实)
   定义体: (fullyFaithfulSheafComposeCompSheafToPresheaf J hF).ofCompFaithful
 
 Depends on / 依赖: fullyFaithfulSheafComposeCompSheafToPresheaf, ofCompFaithful
@@ -210,8 +210,8 @@ instance [F.ReflectsIsomorphisms]
     infer_instance
 
 中文:
-实例 [F.ReflectsIsomorphisms]
-  签名: : (sheafCompose J F).ReflectsIsomorphisms where
+实例 [F.反映同构]
+  签名: : (sheafCompose J F).反映同构 where
   定义体: by
     rw [← isIso_iff_of_reflects_iso _ (sheafToPresheaf _ _)]; rw [← isIso_iff_of_reflects_iso _ ((whiskeringRight Cᵒᵖ A B).obj F)]
     change IsIso ((sheafToPresheaf _ _).map ((sheafCompose J F).map f))
@@ -385,7 +385,7 @@ instance hasSheafCompose_of_preservesLimitsOfSize
 
 中文:
 实例 hasSheafCompose_of_preservesLimitsOfSize
-  签名: [PreservesLimitsOfSize.{v₁, max u₁ v₁} F]
+  签名: [保持LimitsOfSize.{v₁, 最大值 u₁ v₁} F]
   定义体: Presheaf.isSheaf_comp_of_isSheaf J _ F hP
 
 Depends on / 依赖: Presheaf, Presheaf.isSheaf_comp_of_isSheaf, isSheaf_comp_of_isSheaf
@@ -408,7 +408,7 @@ lemma Sheaf.isSeparated
     ((sheafCompose J (forget A)).obj F).2).isSeparated S hS).ext (fun _ _ hf => h _ _ hf)
 
 中文:
-引理 Sheaf.isSeparated
+引理 层.isSeparated
   结论: {FA : A -> A -> 类型} {CA : A -> 类型}
   证明: by
   rintro X S hS x y h
@@ -433,7 +433,7 @@ lemma Presheaf.IsSheaf.isSeparated
   proof: Sheaf.isSeparated ⟨F, hF⟩
 
 中文:
-引理 Presheaf.IsSheaf.isSeparated
+引理 预层.是层.isSeparated
   结论: {F : Cᵒᵖ ⥤ A} {FA : A -> A -> 类型} {CA : A -> 类型}
   证明: Sheaf.isSeparated ⟨F, hF⟩
 

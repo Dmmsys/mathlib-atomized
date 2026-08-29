@@ -46,7 +46,7 @@ theorem contraction_of_isPowMul_of_boundedWrt
 
 中文:
 定理 contraction_of_isPowMul_of_boundedWrt
-  结论: {F : 类型} {α : outParam (类型)} [Ring α]
+  结论: {F : 类型} {α : outParam (类型)} [环 α]
   证明: by
   obtain ⟨C, hC0, hC⟩ := hf
   have hlim : Tendsto (fun n : Nat => C ^ (1 / (n : Real)) * nα x) atTop (𝓝 (nα x)) := by
@@ -87,7 +87,7 @@ theorem contraction_of_isPowMul
 
 中文:
 定理 contraction_of_isPowMul
-  结论: {α β : 类型} [SeminormedRing α] [SeminormedRing β]
+  结论: {α β : 类型} [Seminormed环 α] [Seminormed环 β]
   证明: contraction_of_isPowMul_of_boundedWrt (SeminormedRing.toRingSeminorm α) hβ hf x
 
 Depends on / 依赖: SeminormedRing, SeminormedRing.toRingSeminorm, contraction_of_isPowMul_of_boundedWrt, toRingSeminorm
@@ -113,7 +113,7 @@ theorem eq_seminorms
 
 中文:
 定理 eq_seminorms
-  结论: {F : 类型} {α : outParam (类型)} [Ring α] [FunLike F α 实数]
+  结论: {F : 类型} {α : outParam (类型)} [环 α] [函数状 F α 实数]
   证明: by
   obtain ⟨r, hr0, hr⟩ := hfg
   obtain ⟨s, hs0, hs⟩ := hgf
@@ -156,7 +156,7 @@ theorem eq_of_powMul_faithful
 
 中文:
 定理 eq_of_powMul_faithful
-  结论: (f₁ : AlgebraNorm R S) (hf₁_pm : IsPowMul f₁) (f₂ : AlgebraNorm R S)
+  结论: (f₁ : 代数范数 R S) (hf₁_pm : IsPowMul f₁) (f₂ : 代数范数 R S)
   证明: by
   ext x
   set g₁ : AlgebraNorm R R[(x : S)] := AlgebraNorm.restriction _ f₁

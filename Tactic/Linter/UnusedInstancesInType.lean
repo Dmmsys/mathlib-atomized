@@ -51,13 +51,13 @@ structure Parameter
     - appearsInTypeProof : Bool
 
 中文:
-结构 Parameter
+结构 参数
   参数: where
   公理与运算 (4 个):
-    - fvar? : Option Expr
-    - type? : Option Expr
+    - fvar? : 选项类型 Expr
+    - type? : 选项类型 Expr
     - idx : 自然数
-    - appearsInTypeProof : 布尔
+    - appearsInTypeProof : 布尔值
 -/
 structure Parameter where
   /- TODO: include syntax references to the binders here, and use the "real" fvars created during
@@ -90,7 +90,7 @@ instance :
 
 中文:
 实例 :
-  签名: ToMessageData Parameter
+  签名: ToMessageData 参数
   定义体: Id.run do
     let mut msg := if let some type := param.type? then
       m!"[{type}] (#{param.idx + 1})"
@@ -212,7 +212,7 @@ definition _root_.Lean.Expr.collectUnnecessaryInstanceBinderIdxsWhere
 
 中文:
 定义 _root_.Lean.Expr.collectUnnecessaryInstanceBinderIdxsWhere
-  签名: (p : Expr -> 布尔)
+  签名: (p : Expr -> 布尔值)
   定义体: do
 .run {} let (instances, fvarIdSet) ← go e 0 #[]
   return instances.filterMap fun i => if fvarIdSet.contains i.fvarId then none else some i.idx

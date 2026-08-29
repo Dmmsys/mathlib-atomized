@@ -55,7 +55,7 @@ theorem exists_eq_const_mul_intervalIntegral_of_ae_nonneg
     exact ⟨c, by rwa [uIcc_comm], by 
 
 中文:
-定理 exists_eq_const_mul_intervalIntegral_of_ae_nonneg
+定理 存在_eq_const_mul_interval整数egral_of_ae_nonneg
   证明: by
   by_cases h : a = b
   · subst h
@@ -105,7 +105,7 @@ theorem exists_eq_const_mul_intervalIntegral_of_nonneg
   exact exists_eq_const_mul_intervalIntegral_of_ae_nonneg hf hg hg0_ae
 
 中文:
-定理 exists_eq_const_mul_intervalIntegral_of_nonneg
+定理 存在_eq_const_mul_interval整数egral_of_nonneg
   证明: by
   have hg0_ae : forallᵐ x ∂(μ.restrict (Ι a b)), 0 <= g x := by
     rw [ae_restrict_iff' measurableSet_uIoc]

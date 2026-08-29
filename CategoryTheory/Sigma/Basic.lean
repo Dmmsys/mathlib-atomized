@@ -36,10 +36,10 @@ inductive SigmaHom
     - mk: forall {i : I} {X Y : C i}, (X ⟶ Y) -> SigmaHom ⟨i, X⟩ ⟨i, Y⟩
 
 中文:
-归纳类型 SigmaHom
-  参数: : (Σ i, C i) -> (Σ i, C i) -> Type max w₁ v₁ u₁
+归纳类型 依赖和类型态射
+  参数: : (Σ i, C i) -> (Σ i, C i) -> 类型 最大值 w₁ v₁ u₁
   构造子 (1 个):
-    - mk: 对任意 {i : I} {X Y : C i}, (X ⟶ Y) -> SigmaHom ⟨i, X⟩ ⟨i, Y⟩
+    - mk: 对任意 {i : I} {X Y : C i}, (X ⟶ Y) -> 依赖和类型态射 ⟨i, X⟩ ⟨i, Y⟩
 -/
 inductive SigmaHom : (Σ i, C i) -> (Σ i, C i) -> Type max w₁ v₁ u₁
   | mk : forall {i : I} {X Y : C i}, (X ⟶ Y) -> SigmaHom ⟨i, X⟩ ⟨i, Y⟩
@@ -55,7 +55,7 @@ definition id
 
 中文:
 定义 id
-  签名: : 对任意 X : Σ i, C i, SigmaHom X X
+  签名: : 对任意 X : Σ i, C i, 依赖和类型态射 X X
 -/
 def id : forall X : Σ i, C i, SigmaHom X X
   | ⟨_, _⟩ => mk (𝟙 _)
@@ -72,7 +72,7 @@ definition comp
 
 中文:
 定义 comp
-  签名: : 对任意 {X Y Z : Σ i, C i}, SigmaHom X Y -> SigmaHom Y Z -> SigmaHom X Z
+  签名: : 对任意 {X Y Z : Σ i, C i}, 依赖和类型态射 X Y -> 依赖和类型态射 Y Z -> 依赖和类型态射 X Z
 -/
 def comp : forall {X Y Z : Σ i, C i}, SigmaHom X Y -> SigmaHom Y Z -> SigmaHom X Z
   | _, _, _, mk f, mk g => mk (f ≫ g)
@@ -180,7 +180,7 @@ instance sigma
 
 中文:
 实例 sigma
-  签名: : Category (Σ i, C i) where
+  签名: : 范畴 (Σ i, C i) where
   定义体: SigmaHom.id_comp
   comp_id := SigmaHom.comp_id
   assoc := SigmaHom.assoc
@@ -370,7 +370,7 @@ lemma desc_map_mk
 中文:
 引理 desc_map_mk
   条件: {i : I} (X Y : C i) (f : X ⟶ Y)
-  结论: (desc F).map (SigmaHom.mk f) = (F i).map f
+  结论: (desc F).map (依赖和类型态射.mk f) = (F i).map f
   证明: rfl
 -/
 lemma desc_map_mk {i : I} (X Y : C i) (f : X ⟶ Y) : (desc F).map (SigmaHom.mk f) = (F i).map f :=
@@ -577,7 +577,7 @@ lemma map_obj
 中文:
 引理 map_obj
   条件: (j : J) (X : C (g j))
-  结论: (Sigma.map C g).obj ⟨j, X⟩ = ⟨g j, X⟩
+  结论: (依赖和类型.map C g).obj ⟨j, X⟩ = ⟨g j, X⟩
   证明: rfl
 
 @[simp]

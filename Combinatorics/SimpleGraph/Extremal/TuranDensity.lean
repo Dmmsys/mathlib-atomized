@@ -61,7 +61,7 @@ lemma antitoneOn_extremalNumber_div_choose_two
 
 中文:
 引理 antitoneOn_extremalNumber_div_choose_two
-  条件: (H : SimpleGraph W)
+  条件: (H : 简单图 W)
   证明: by
   apply antitoneOn_nat_Ici_of_succ_le
   intro n hn
@@ -108,7 +108,7 @@ definition turanDensity
 
 中文:
 定义 turanDensity
-  签名: (H : SimpleGraph W)
+  签名: (H : 简单图 W)
   定义体: limUnder atTop fun n => (extremalNumber n H / n.choose 2 : Real)
 
 Depends on / 依赖: extremalNumber, limUnder, n.choose
@@ -133,7 +133,7 @@ theorem isGLB_turanDensity
 
 中文:
 定理 isGLB_turanDensity
-  条件: (H : SimpleGraph W)
+  条件: (H : 简单图 W)
   证明: by
   have h_bdd : BddBelow { (extremalNumber n H / n.choose 2 : Real) | n in Set.Ici 2 } := by
     refine ⟨0, fun x ⟨_, _, hx⟩ => ?_⟩
@@ -168,7 +168,7 @@ theorem turanDensity_eq_csInf
 
 中文:
 定理 turanDensity_eq_csInf
-  条件: (H : SimpleGraph W)
+  条件: (H : 简单图 W)
   证明: have h := isGLB_turanDensity H
   (h.csInf_eq h.nonempty).symm
 
@@ -192,7 +192,7 @@ theorem tendsto_turanDensity
 
 中文:
 定理 tendsto_turanDensity
-  条件: (H : SimpleGraph W)
+  条件: (H : 简单图 W)
   证明: by
   have h_tendsto := Real.tendsto_atTop_csInf_of_antitoneOn_bddBelow_nat_Ici
     (antitoneOn_extremalNumber_div_choose_two H) (isGLB_turanDensity H).bddBelow
@@ -222,7 +222,7 @@ theorem isEquivalent_extremalNumber
 
 中文:
 定理 isEquivalent_extremalNumber
-  条件: {H : SimpleGraph W} (h : turanDensity H != 0)
+  条件: {H : 简单图 W} (h : turanDensity H != 0)
   证明: by
   have hπ := tendsto_turanDensity H
   apply Tendsto.const_mul (1 / turanDensity H : Real) at hπ
@@ -263,7 +263,7 @@ apply lt_of_lt_of_le lt_add_of_pos_right (turanDensity H) hε_pos
 
 中文:
 定理 eventually_isContained_of_card_edgeFinset
-  条件: (H : SimpleGraph W) {ε : 实数} (hε_pos : 0 < ε)
+  条件: (H : 简单图 W) {ε : 实数} (hε_pos : 0 < ε)
   证明: by
   have hπ := (turanDensity_eq_csInf H).ge
   rw [eventually_atTop]
@@ -311,7 +311,7 @@ Nat.find eventually_atTop.mp eventually_isContained_of_card_edgeFinset H h
 
 中文:
 缩写 turanDensityConst
-  签名: (H : SimpleGraph W) (ε : 实数)
+  签名: (H : 简单图 W) (ε : 实数)
   定义体: if h : ε > 0 then
 Nat.find eventually_atTop.mp eventually_isContained_of_card_edgeFinset H h
   else 0
@@ -337,7 +337,7 @@ apply Nat.find_spec eventually_atTop.mp eventually_isContained_of_card_edgeFinse
 
 中文:
 定理 isContained_of_card_edgeFinset
-  结论: (H : SimpleGraph W) {ε : 实数} (hε_pos : 0 < ε)
+  结论: (H : 简单图 W) {ε : 实数} (hε_pos : 0 < ε)
   证明: by
   classical
   rw [(G.overFinIso rfl).card_edgeFinset_eq]; rw [isContained_congr Iso.refl (G.overFinIso rfl)]

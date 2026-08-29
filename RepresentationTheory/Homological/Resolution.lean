@@ -99,7 +99,7 @@ definition classifyingSpaceUniversalCover
 
 中文:
 定义 classifyingSpaceUniversalCover
-  签名: [Monoid G]
+  签名: [幺半群 G]
   定义体: Action.ofMulAction G (Fin (n.unop.len + 1) -> G)
   map f :=
     { hom := ↾fun x => x ∘ f.unop.toOrderHom
@@ -138,7 +138,7 @@ definition cechNerveTerminalFromIso
 
 中文:
 定义 cechNerveTerminalFromIso
-  签名: : cechNerveTerminalFrom (Action.ofMulAction G (G)) ≅
+  签名: : cechNerveTerminalFrom (作用.ofMulAction G (G)) ≅
   定义体: NatIso.ofComponents (fun _ => limit.isoLimitCone (Action.ofMulActionLimitCone _ _)) fun f => by
     refine IsLimit.hom_ext (Action.ofMulActionLimitCone.{u, 0} G fun _ => G).2 fun j => ?_
     dsimp only [cechNerveTerminalFrom, Pi.lift]
@@ -275,7 +275,7 @@ definition compForgetAugmented.toModule
 
 中文:
 定义 compForgetAugmented.toModule
-  签名: : SimplicialObject.Augmented (ModuleCat.{u} k)
+  签名: : SimplicialObject.Augmented (模范畴.{u} k)
   定义体: ((SimplicialObject.Augmented.whiskering _ _).obj (ModuleCat.monoidAlgebraFree k)).obj
     (compForgetAugmented G)
 
@@ -319,7 +319,7 @@ definition Rep.standardComplex
 
 中文:
 定义 Rep.standardComplex
-  签名: [Monoid G]
+  签名: [幺半群 G]
   定义体: (AlgebraicTopology.alternatingFaceMapComplex (Rep k G)).obj
     (classifyingSpaceUniversalCover G ⋙ linearization k G)
 
@@ -374,7 +374,7 @@ theorem d_of
 
 中文:
 定理 d_of
-  条件: {n : 自然数} (c : Fin (n + 1) -> G)
+  条件: {n : 自然数} (c : 有限集 (n + 1) -> G)
   证明: by
   simp [d]
 -/
@@ -394,7 +394,7 @@ lemma d_single
 
 中文:
 引理 d_single
-  条件: {n : 自然数} (c : Fin (n + 1) -> G) (r : k)
+  条件: {n : 自然数} (c : 有限集 (n + 1) -> G) (r : k)
   证明: by
   rw [← mul_one r]; rw [← smul_eq_mul]; rw [← MonoidAlgebra.smul_single]; rw [map_smul]; rw [d_of]
   simp [Finset.smul_sum]
@@ -438,7 +438,7 @@ exact inferInstanceAs Projective (Rep.diagonal k G (n + 1))
 
 中文:
 实例 x_projective
-  签名: (G : 类型u) [Group G] (n : 自然数)
+  签名: (G : 类型u) [群 G] (n : 自然数)
   定义体: by
 exact inferInstanceAs Projective (Rep.diagonal k G (n + 1))
 
@@ -497,7 +497,7 @@ lemma d_apply
 
 中文:
 引理 d_apply
-  条件: {n : 自然数} (f : k[Fin (n + 1 + 1) -> G])
+  条件: {n : 自然数} (f : k[有限集 (n + 1 + 1) -> G])
   证明: by
   rw [← Representation.IntertwiningMap.toLinearMap_apply]; rw [d_eq]; rfl
 
@@ -601,7 +601,7 @@ fun _ => MonoidAlgebra.lhom_ext' fun _ => LinearMap.ext_ring by simp⟩
 
 中文:
 定义 ε
-  签名: : Rep.ofMulAction k G (Fin 1 -> G) ⟶ Rep.trivial k G k
+  签名: : Rep.ofMulAction k G (有限集 1 -> G) ⟶ Rep.trivial k G k
   定义体: ofHom
   ⟨(Finsupp.linearCombination _ fun _ => (1 : k)) ∘ₗ (MonoidAlgebra.coeffLinearEquiv k).toLinearMap,
 fun _ => MonoidAlgebra.lhom_ext' fun _ => LinearMap.ext_ring by simp⟩
@@ -761,7 +761,7 @@ instance :
 
 中文:
 实例 :
-  签名: QuasiIso (εToSingle₀ k G)
+  签名: 拟同构 (εToSingle₀ k G)
   定义体: by
   rw [← HomologicalComplex.quasiIso_map_iff_of_preservesHomology _ (forget₂ _ (ModuleCat.{u} k))]
   apply quasiIso_forget₂_εToSingle₀
@@ -790,7 +790,7 @@ definition standardResolution
 
 中文:
 定义 standardResolution
-  签名: : ProjectiveResolution (Rep.trivial k G k) where
+  签名: : 投射消解 (Rep.trivial k G k) where
   定义体: standardComplex k G
   π := εToSingle₀ k G
 
@@ -948,7 +948,7 @@ abbreviation barComplex
 
 中文:
 缩写 barComplex
-  签名: : ChainComplex (Rep k G) 自然数
+  签名: : 链复形 (Rep k G) 自然数
   定义体: ChainComplex.of (fun n => free k G (Fin n -> G)) (fun n => d k G n) fun m => by
     have key : (d k G (m + 1) ≫ d k G m) ≫ (diagonalSuccIsoFree k G m).inv = 0 := by
       rw [Category.assoc]; rw [d_comp_diagonalSuccIsoFree_inv_eq]; rw [← Category.assoc]; rw [d_comp_diagonalSuccIsoFree_inv_eq]; rw [C
@@ -1020,7 +1020,7 @@ definition barResolution
 
 中文:
 定义 barResolution
-  签名: : ProjectiveResolution (Rep.trivial k G k) where
+  签名: : 投射消解 (Rep.trivial k G k) where
   定义体: barComplex k G
   projective n := (inferInstance : Projective (free k G (Fin n -> G)))
   π := (isoStandardComplex k G).hom ≫ standardComplex.εToSingle₀ k G

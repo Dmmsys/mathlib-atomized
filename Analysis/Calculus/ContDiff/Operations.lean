@@ -223,7 +223,7 @@ theorem contDiff_pi
 
 中文:
 定理 contDiff_pi
-  结论: ContDiff 𝕜 n Φ ↔ 对任意 i, ContDiff 𝕜 n fun x => Φ x i
+  结论: 连续可微 𝕜 n Φ ↔ 对任意 i, 连续可微 𝕜 n fun x => Φ x i
   证明: by
   simp only [← contDiffOn_univ, contDiffOn_pi]
 
@@ -248,8 +248,8 @@ theorem contDiff_pi'
 
 中文:
 定理 contDiff_pi'
-  条件: (hΦ : 对任意 i, ContDiff 𝕜 n fun x => Φ x i)
-  结论: ContDiff 𝕜 n Φ
+  条件: (hΦ : 对任意 i, 连续可微 𝕜 n fun x => Φ x i)
+  结论: 连续可微 𝕜 n Φ
   证明: contDiff_pi.2 hΦ
 
 @[fun_prop]
@@ -381,7 +381,7 @@ theorem contDiff_apply
 中文:
 定理 contDiff_apply
   条件: (i : ι)
-  结论: ContDiff 𝕜 n fun f : ι -> E => f i
+  结论: 连续可微 𝕜 n fun f : ι -> E => f i
   证明: contDiff_pi.mp contDiff_id i
 
 @[fun_prop]
@@ -428,7 +428,7 @@ theorem contDiffOn_apply
 
 中文:
 定理 contDiffOn_apply
-  条件: (i : ι) (s : Set (ι -> E))
+  条件: (i : ι) (s : 集合 (ι -> E))
   结论: ContDiffOn 𝕜 n (fun f : ι -> E => f i) s
   证明: (contDiff_apply 𝕜 E i).contDiffOn
 
@@ -449,7 +449,7 @@ theorem contDiff_apply_apply
 中文:
 定理 contDiff_apply_apply
   条件: (i : ι) (j : ι')
-  结论: ContDiff 𝕜 n fun f : ι -> ι' -> E => f i j
+  结论: 连续可微 𝕜 n fun f : ι -> ι' -> E => f i j
   证明: contDiff_pi.mp (contDiff_apply 𝕜 (ι' -> E) i) j
 
 Depends on / 依赖: contDiff_apply, contDiff_pi, contDiff_pi.mp
@@ -474,8 +474,8 @@ theorem HasFTaylorSeriesUpToOn.add
     (ContinuousLinearMap.fst 𝕜 F F + .snd 𝕜 F F) (hf.prodMk hg)
 
 中文:
-定理 HasFTaylorSeriesUpToOn.add
-  结论: {n : 自然数∞ω} {q g} (hf : HasFTaylorSeriesUpToOn n f p s)
+定理 有FTaylorSeriesUpToOn.add
+  结论: {n : 自然数∞ω} {q g} (hf : 有FTaylorSeriesUpToOn n f p s)
   证明: by
   exact HasFTaylorSeriesUpToOn.continuousLinearMap_comp
     (ContinuousLinearMap.fst 𝕜 F F + .snd 𝕜 F F) (hf.prodMk hg)
@@ -499,7 +499,7 @@ theorem contDiff_add
 
 中文:
 定理 contDiff_add
-  结论: ContDiff 𝕜 n fun p : F × F => p.1 + p.2
+  结论: 连续可微 𝕜 n fun p : F × F => p.1 + p.2
   证明: (IsBoundedLinearMap.fst.add IsBoundedLinearMap.snd).contDiff
 
 Depends on / 依赖: IsBoundedLinearMap, IsBoundedLinearMap.fst.add, IsBoundedLinearMap.snd, contDiff
@@ -520,7 +520,7 @@ theorem ContDiffWithinAt.add
 
 中文:
 定理 ContDiffWithinAt.add
-  结论: {s : Set E} {f g : E -> F} (hf : ContDiffWithinAt 𝕜 n f s x)
+  结论: {s : 集合 E} {f g : E -> F} (hf : ContDiffWithinAt 𝕜 n f s x)
   证明: contDiff_add.contDiffWithinAt.comp x (hf.prodMk hg) subset_preimage_univ
 
 Depends on / 依赖: contDiffWithinAt, contDiff_add, contDiff_add.contDiffWithinAt.comp, hf.prodMk, prodMk, subset_preimage_univ
@@ -563,8 +563,8 @@ theorem ContDiff.add
   proof: contDiff_add.comp (hf.prodMk hg)
 
 中文:
-定理 ContDiff.add
-  条件: {f g : E -> F} (hf : ContDiff 𝕜 n f) (hg : ContDiff 𝕜 n g)
+定理 连续可微.add
+  条件: {f g : E -> F} (hf : 连续可微 𝕜 n f) (hg : 连续可微 𝕜 n g)
   证明: contDiff_add.comp (hf.prodMk hg)
 
 Depends on / 依赖: contDiff_add, contDiff_add.comp, hf.prodMk, prodMk
@@ -586,7 +586,7 @@ theorem ContDiffOn.add
 
 中文:
 定理 ContDiffOn.add
-  结论: {s : Set E} {f g : E -> F} (hf : ContDiffOn 𝕜 n f s)
+  结论: {s : 集合 E} {f g : E -> F} (hf : ContDiffOn 𝕜 n f s)
   证明: fun x hx =>
   (hf x hx).add (hg x hx)
 -/
@@ -677,7 +677,7 @@ theorem iteratedFDeriv_add
 
 中文:
 定理 iteratedFDeriv_add
-  结论: {i : 自然数} {f g : E -> F} (hf : ContDiff 𝕜 i f)
+  结论: {i : 自然数} {f g : E -> F} (hf : 连续可微 𝕜 i f)
   证明: funext fun _ => iteratedFDeriv_add_apply (ContDiff.contDiffAt hf) (ContDiff.contDiffAt hg)
 -/
 @[to_fun] theorem iteratedFDeriv_add {i : Nat} {f g : E -> F} (hf : ContDiff 𝕜 i f)
@@ -703,7 +703,7 @@ theorem contDiff_neg
 
 中文:
 定理 contDiff_neg
-  结论: ContDiff 𝕜 n fun p : F => -p
+  结论: 连续可微 𝕜 n fun p : F => -p
   证明: IsBoundedLinearMap.id.neg.contDiff
 
 Depends on / 依赖: IsBoundedLinearMap, IsBoundedLinearMap.id.neg.contDiff, contDiff
@@ -724,7 +724,7 @@ theorem ContDiffWithinAt.neg
 
 中文:
 定理 ContDiffWithinAt.neg
-  条件: {s : Set E} {f : E -> F} (hf : ContDiffWithinAt 𝕜 n f s x)
+  条件: {s : 集合 E} {f : E -> F} (hf : ContDiffWithinAt 𝕜 n f s x)
   证明: contDiff_neg.contDiffWithinAt.comp x hf subset_preimage_univ
 
 Depends on / 依赖: contDiffWithinAt, contDiff_neg, contDiff_neg.contDiffWithinAt.comp, subset_preimage_univ
@@ -765,9 +765,9 @@ theorem ContDiff.neg
   proof: contDiff_neg.comp hf
 
 中文:
-定理 ContDiff.neg
-  条件: {f : E -> F} (hf : ContDiff 𝕜 n f)
-  结论: ContDiff 𝕜 n fun x => -f x
+定理 连续可微.neg
+  条件: {f : E -> F} (hf : 连续可微 𝕜 n f)
+  结论: 连续可微 𝕜 n fun x => -f x
   证明: contDiff_neg.comp hf
 
 Depends on / 依赖: contDiff_neg, contDiff_neg.comp
@@ -787,7 +787,7 @@ theorem ContDiffOn.neg
 
 中文:
 定理 ContDiffOn.neg
-  条件: {s : Set E} {f : E -> F} (hf : ContDiffOn 𝕜 n f s)
+  条件: {s : 集合 E} {f : E -> F} (hf : ContDiffOn 𝕜 n f s)
   证明: fun x hx => (hf x hx).neg
 -/
 theorem ContDiffOn.neg {s : Set E} {f : E -> F} (hf : ContDiffOn 𝕜 n f s) :
@@ -905,7 +905,7 @@ theorem ContDiffWithinAt.sub
 
 中文:
 定理 ContDiffWithinAt.sub
-  结论: {s : Set E} {f g : E -> F} (hf : ContDiffWithinAt 𝕜 n f s x)
+  结论: {s : 集合 E} {f g : E -> F} (hf : ContDiffWithinAt 𝕜 n f s x)
   证明: by
   simpa only [sub_eq_add_neg] using hf.add hg.neg
 
@@ -948,7 +948,7 @@ theorem ContDiffOn.sub
 
 中文:
 定理 ContDiffOn.sub
-  结论: {s : Set E} {f g : E -> F} (hf : ContDiffOn 𝕜 n f s)
+  结论: {s : 集合 E} {f g : E -> F} (hf : ContDiffOn 𝕜 n f s)
   证明: by
   simpa only [sub_eq_add_neg] using hf.add hg.neg
 
@@ -969,8 +969,8 @@ theorem ContDiff.sub
   proof: by simpa only [sub_eq_add_neg] using hf.add hg.neg
 
 中文:
-定理 ContDiff.sub
-  条件: {f g : E -> F} (hf : ContDiff 𝕜 n f) (hg : ContDiff 𝕜 n g)
+定理 连续可微.sub
+  条件: {f g : E -> F} (hf : 连续可微 𝕜 n f) (hg : 连续可微 𝕜 n g)
   证明: by simpa only [sub_eq_add_neg] using hf.add hg.neg
 
 Depends on / 依赖: hf.add, hg.neg, sub_eq_add_neg
@@ -1037,7 +1037,7 @@ theorem iteratedFDeriv_sub
 
 中文:
 定理 iteratedFDeriv_sub
-  结论: {i : 自然数} {f g : E -> F} (hf : ContDiff 𝕜 i f)
+  结论: {i : 自然数} {f g : E -> F} (hf : 连续可微 𝕜 i f)
   证明: funext fun _ => iteratedFDeriv_sub_apply (ContDiff.contDiffAt hf) (ContDiff.contDiffAt hg)
 -/
 @[to_fun] theorem iteratedFDeriv_sub {i : Nat} {f g : E -> F} (hf : ContDiff 𝕜 i f)
@@ -1066,8 +1066,8 @@ theorem ContDiffWithinAt.sum
 @[fun_prop]
 
 中文:
-定理 ContDiffWithinAt.sum
-  结论: {ι : 类型} {f : ι -> E -> F} {s : Finset ι} {t : Set E} {x : E}
+定理 ContDiffWithinAt.求和
+  结论: {ι : 类型} {f : ι -> E -> F} {s : 有限集 ι} {t : 集合 E} {x : E}
   证明: by
   classical
   induction s using Finset.induction_on with
@@ -1105,8 +1105,8 @@ theorem ContDiffAt.sum
 @[fun_prop]
 
 中文:
-定理 ContDiffAt.sum
-  结论: {ι : 类型} {f : ι -> E -> F} {s : Finset ι} {x : E}
+定理 ContDiffAt.求和
+  结论: {ι : 类型} {f : ι -> E -> F} {s : 有限集 ι} {x : E}
   证明: by
   rw [← contDiffWithinAt_univ] at *; exact ContDiffWithinAt.sum h
 
@@ -1132,8 +1132,8 @@ theorem ContDiffOn.sum
 @[fun_prop]
 
 中文:
-定理 ContDiffOn.sum
-  结论: {ι : 类型} {f : ι -> E -> F} {s : Finset ι} {t : Set E}
+定理 ContDiffOn.求和
+  结论: {ι : 类型} {f : ι -> E -> F} {s : 有限集 ι} {t : 集合 E}
   证明: fun x hx =>
   ContDiffWithinAt.sum fun i hi => h i hi x hx
 
@@ -1155,8 +1155,8 @@ theorem ContDiff.sum
   simp only [← contDiffOn_univ] at *; exact ContDiffOn.sum h
 
 中文:
-定理 ContDiff.sum
-  结论: {ι : 类型} {f : ι -> E -> F} {s : Finset ι}
+定理 连续可微.求和
+  结论: {ι : 类型} {f : ι -> E -> F} {s : 有限集 ι}
   证明: by
   simp only [← contDiffOn_univ] at *; exact ContDiffOn.sum h
 
@@ -1183,7 +1183,7 @@ theorem iteratedFDerivWithin_sum_apply
 
 中文:
 定理 iteratedFDerivWithin_sum_apply
-  结论: {ι : 类型} {f : ι -> E -> F} {u : Finset ι} {i : 自然数} {x : E}
+  结论: {ι : 类型} {f : ι -> E -> F} {u : 有限集 ι} {i : 自然数} {x : E}
   证明: by
   rw [(by aesop : (∑ j in u]; rw [f j) = (fun x => ∑ j in u]; rw [f j x))]
   induction u using Finset.cons_induction with
@@ -1219,7 +1219,7 @@ theorem iteratedFDerivWithin_fun_sum_apply
 
 中文:
 定理 iteratedFDerivWithin_fun_sum_apply
-  结论: {ι : 类型} {f : ι -> E -> F} {u : Finset ι} {i : 自然数}
+  结论: {ι : 类型} {f : ι -> E -> F} {u : 有限集 ι} {i : 自然数}
   证明: by
   convert! iteratedFDerivWithin_sum_apply hs hx h
   rw [Finset.sum_apply]
@@ -1246,7 +1246,7 @@ theorem iteratedFDeriv_sum_apply
 
 中文:
 定理 iteratedFDeriv_sum_apply
-  结论: {ι : 类型} {f : ι -> E -> F} {u : Finset ι} {n : 自然数} {x : E}
+  结论: {ι : 类型} {f : ι -> E -> F} {u : 有限集 ι} {n : 自然数} {x : E}
   证明: by
   simp only [← iteratedFDerivWithin_univ]
   apply iteratedFDerivWithin_sum_apply uniqueDiffOn_univ (Set.mem_univ x)
@@ -1273,7 +1273,7 @@ theorem iteratedFDeriv_fun_sum_apply
 
 中文:
 定理 iteratedFDeriv_fun_sum_apply
-  结论: {ι : 类型} {f : ι -> E -> F} {u : Finset ι} {n : 自然数} {x : E}
+  结论: {ι : 类型} {f : ι -> E -> F} {u : 有限集 ι} {n : 自然数} {x : E}
   证明: by
   convert! iteratedFDeriv_sum_apply h
   rw [Finset.sum_apply]
@@ -1297,7 +1297,7 @@ theorem iteratedFDeriv_sum
 
 中文:
 定理 iteratedFDeriv_sum
-  结论: {ι : 类型} {f : ι -> E -> F} {u : Finset ι} {i : 自然数}
+  结论: {ι : 类型} {f : ι -> E -> F} {u : 有限集 ι} {i : 自然数}
   证明: funext fun x => by simpa [iteratedFDerivWithin_univ] using
     iteratedFDerivWithin_fun_sum_apply uniqueDiffOn_univ (mem_univ x) (h · · |>.contDiffWithinAt)
 
@@ -1328,7 +1328,7 @@ theorem contDiff_mul
 
 中文:
 定理 contDiff_mul
-  结论: ContDiff 𝕜 n fun p : 𝔸 × 𝔸 => p.1 * p.2
+  结论: 连续可微 𝕜 n fun p : 𝔸 × 𝔸 => p.1 * p.2
   证明: (ContinuousLinearMap.mul 𝕜 𝔸).isBoundedBilinearMap.contDiff
 
 Depends on / 依赖: ContinuousLinearMap, ContinuousLinearMap.mul, contDiff, isBoundedBilinearMap, isBoundedBilinearMap.contDiff
@@ -1349,7 +1349,7 @@ theorem ContDiffWithinAt.mul
 
 中文:
 定理 ContDiffWithinAt.mul
-  结论: {s : Set E} {f g : E -> 𝔸} (hf : ContDiffWithinAt 𝕜 n f s x)
+  结论: {s : 集合 E} {f g : E -> 𝔸} (hf : ContDiffWithinAt 𝕜 n f s x)
   证明: contDiff_mul.comp_contDiffWithinAt (hf.prodMk hg)
 
 Depends on / 依赖: comp_contDiffWithinAt, contDiff_mul, contDiff_mul.comp_contDiffWithinAt, hf.prodMk, prodMk
@@ -1395,8 +1395,8 @@ theorem ContDiff.mul
 @[fun_prop]
 
 中文:
-定理 ContDiff.mul
-  条件: {f g : E -> 𝔸} (hf : ContDiff 𝕜 n f) (hg : ContDiff 𝕜 n g)
+定理 连续可微.mul
+  条件: {f g : E -> 𝔸} (hf : 连续可微 𝕜 n f) (hg : 连续可微 𝕜 n g)
   证明: contDiff_mul.comp (hf.prodMk hg)
 
 @[fun_prop]
@@ -1421,7 +1421,7 @@ theorem contDiffWithinAt_prod'
 
 中文:
 定理 contDiffWithinAt_prod'
-  结论: {t : Finset ι} {f : ι -> E -> 𝔸'}
+  结论: {t : 有限集 ι} {f : ι -> E -> 𝔸'}
   证明: Finset.prod_induction f (fun f => ContDiffWithinAt 𝕜 n f s x) (fun _ _ => ContDiffWithinAt.mul)
     (contDiffWithinAt_const (c := 1)) h
 
@@ -1448,7 +1448,7 @@ theorem contDiffWithinAt_prod
 
 中文:
 定理 contDiffWithinAt_prod
-  结论: {t : Finset ι} {f : ι -> E -> 𝔸'}
+  结论: {t : 有限集 ι} {f : ι -> E -> 𝔸'}
   证明: by
   simpa only [← Finset.prod_apply] using contDiffWithinAt_prod' h
 
@@ -1474,7 +1474,7 @@ theorem contDiffAt_prod'
 
 中文:
 定理 contDiffAt_prod'
-  条件: {t : Finset ι} {f : ι -> E -> 𝔸'} (h : 对任意 i in t, ContDiffAt 𝕜 n (f i) x)
+  条件: {t : 有限集 ι} {f : ι -> E -> 𝔸'} (h : 对任意 i in t, ContDiffAt 𝕜 n (f i) x)
   证明: contDiffWithinAt_prod' h
 
 @[fun_prop]
@@ -1498,7 +1498,7 @@ theorem contDiffAt_prod
 
 中文:
 定理 contDiffAt_prod
-  条件: {t : Finset ι} {f : ι -> E -> 𝔸'} (h : 对任意 i in t, ContDiffAt 𝕜 n (f i) x)
+  条件: {t : 有限集 ι} {f : ι -> E -> 𝔸'} (h : 对任意 i in t, ContDiffAt 𝕜 n (f i) x)
   证明: contDiffWithinAt_prod h
 
 @[fun_prop]
@@ -1522,7 +1522,7 @@ theorem contDiffOn_prod'
 
 中文:
 定理 contDiffOn_prod'
-  条件: {t : Finset ι} {f : ι -> E -> 𝔸'} (h : 对任意 i in t, ContDiffOn 𝕜 n (f i) s)
+  条件: {t : 有限集 ι} {f : ι -> E -> 𝔸'} (h : 对任意 i in t, ContDiffOn 𝕜 n (f i) s)
   证明: fun x hx => contDiffWithinAt_prod' fun i hi => h i hi x hx
 
 @[fun_prop]
@@ -1546,7 +1546,7 @@ theorem contDiffOn_prod
 
 中文:
 定理 contDiffOn_prod
-  条件: {t : Finset ι} {f : ι -> E -> 𝔸'} (h : 对任意 i in t, ContDiffOn 𝕜 n (f i) s)
+  条件: {t : 有限集 ι} {f : ι -> E -> 𝔸'} (h : 对任意 i in t, ContDiffOn 𝕜 n (f i) s)
   证明: fun x hx =>
   contDiffWithinAt_prod fun i hi => h i hi x hx
 
@@ -1569,7 +1569,7 @@ theorem contDiff_prod'
 
 中文:
 定理 contDiff_prod'
-  条件: {t : Finset ι} {f : ι -> E -> 𝔸'} (h : 对任意 i in t, ContDiff 𝕜 n (f i))
+  条件: {t : 有限集 ι} {f : ι -> E -> 𝔸'} (h : 对任意 i in t, 连续可微 𝕜 n (f i))
   证明: contDiff_iff_contDiffAt.mpr fun _ => contDiffAt_prod' fun i hi => (h i hi).contDiffAt
 
 @[fun_prop]
@@ -1593,7 +1593,7 @@ theorem contDiff_prod
 
 中文:
 定理 contDiff_prod
-  条件: {t : Finset ι} {f : ι -> E -> 𝔸'} (h : 对任意 i in t, ContDiff 𝕜 n (f i))
+  条件: {t : 有限集 ι} {f : ι -> E -> 𝔸'} (h : 对任意 i in t, 连续可微 𝕜 n (f i))
   证明: contDiff_iff_contDiffAt.mpr fun _ => contDiffAt_prod fun i hi => (h i hi).contDiffAt
 
 @[fun_prop]
@@ -1614,9 +1614,9 @@ theorem ContDiff.pow
   statement: forall m : Nat, ContDiff 𝕜 n fun x => f x ^ m
 
 中文:
-定理 ContDiff.pow
-  条件: {f : E -> 𝔸} (hf : ContDiff 𝕜 n f)
-  结论: 对任意 m : 自然数, ContDiff 𝕜 n fun x => f x ^ m
+定理 连续可微.pow
+  条件: {f : E -> 𝔸} (hf : 连续可微 𝕜 n f)
+  结论: 对任意 m : 自然数, 连续可微 𝕜 n fun x => f x ^ m
 -/
 theorem ContDiff.pow {f : E -> 𝔸} (hf : ContDiff 𝕜 n f) : forall m : Nat, ContDiff 𝕜 n fun x => f x ^ m
   | 0 => by simpa using contDiff_const
@@ -1756,8 +1756,8 @@ theorem ContDiff.div_const
   proof: by simpa only [div_eq_mul_inv] using hf.mul contDiff_const
 
 中文:
-定理 ContDiff.div_const
-  条件: {f : E -> 𝕜'} {n} (hf : ContDiff 𝕜 n f) (c : 𝕜')
+定理 连续可微.div_const
+  条件: {f : E -> 𝕜'} {n} (hf : 连续可微 𝕜 n f) (c : 𝕜')
   证明: by simpa only [div_eq_mul_inv] using hf.mul contDiff_const
 
 Depends on / 依赖: contDiff_const, div_eq_mul_inv, hf.mul
@@ -1787,7 +1787,7 @@ theorem contDiff_smul
 
 中文:
 定理 contDiff_smul
-  结论: ContDiff 𝕜 n fun p : 𝕜' × F => p.1 • p.2
+  结论: 连续可微 𝕜 n fun p : 𝕜' × F => p.1 • p.2
   证明: isBoundedBilinearMap_smul.contDiff
 
 Depends on / 依赖: contDiff, isBoundedBilinearMap_smul, isBoundedBilinearMap_smul.contDiff
@@ -1808,7 +1808,7 @@ theorem ContDiffWithinAt.smul
 
 中文:
 定理 ContDiffWithinAt.smul
-  结论: {s : Set E} {f : E -> 𝕜'} {g : E -> F} (hf : ContDiffWithinAt 𝕜 n f s x)
+  结论: {s : 集合 E} {f : E -> 𝕜'} {g : E -> F} (hf : ContDiffWithinAt 𝕜 n f s x)
   证明: contDiff_smul.contDiffWithinAt.comp x (hf.prodMk hg) subset_preimage_univ
 
 Depends on / 依赖: contDiffWithinAt, contDiff_smul, contDiff_smul.contDiffWithinAt.comp, hf.prodMk, prodMk, subset_preimage_univ
@@ -1851,8 +1851,8 @@ theorem ContDiff.smul
   proof: contDiff_smul.comp (hf.prodMk hg)
 
 中文:
-定理 ContDiff.smul
-  条件: {f : E -> 𝕜'} {g : E -> F} (hf : ContDiff 𝕜 n f) (hg : ContDiff 𝕜 n g)
+定理 连续可微.smul
+  条件: {f : E -> 𝕜'} {g : E -> F} (hf : 连续可微 𝕜 n f) (hg : 连续可微 𝕜 n g)
   证明: contDiff_smul.comp (hf.prodMk hg)
 
 Depends on / 依赖: contDiff_smul, contDiff_smul.comp, hf.prodMk, prodMk
@@ -1874,7 +1874,7 @@ theorem ContDiffOn.smul
 
 中文:
 定理 ContDiffOn.smul
-  结论: {s : Set E} {f : E -> 𝕜'} {g : E -> F} (hf : ContDiffOn 𝕜 n f s)
+  结论: {s : 集合 E} {f : E -> 𝕜'} {g : E -> F} (hf : ContDiffOn 𝕜 n f s)
   证明: fun x hx =>
   (hf x hx).smul (hg x hx)
 -/
@@ -1909,7 +1909,7 @@ theorem contDiff_const_smul
 中文:
 定理 contDiff_const_smul
   条件: (c : R)
-  结论: ContDiff 𝕜 n fun p : F => c • p
+  结论: 连续可微 𝕜 n fun p : F => c • p
   证明: (c • ContinuousLinearMap.id 𝕜 F).contDiff
 
 Depends on / 依赖: ContinuousLinearMap, ContinuousLinearMap.id, contDiff
@@ -1931,7 +1931,7 @@ theorem contDiff_smul_const
 中文:
 定理 contDiff_smul_const
   条件: (v : F)
-  结论: ContDiff 𝕜 n fun a : A => a • v
+  结论: 连续可微 𝕜 n fun a : A => a • v
   证明: ((ContinuousLinearMap.id 𝕜 A).smulRight v).contDiff
 
 Depends on / 依赖: ContinuousLinearMap, ContinuousLinearMap.id, contDiff, smulRight
@@ -1952,7 +1952,7 @@ theorem ContDiffWithinAt.const_smul
 
 中文:
 定理 ContDiffWithinAt.const_smul
-  结论: {s : Set E} {f : E -> F} {x : E} (c : R)
+  结论: {s : 集合 E} {f : E -> F} {x : E} (c : R)
   证明: (contDiff_const_smul c).contDiffAt.comp_contDiffWithinAt x hf
 
 Depends on / 依赖: comp_contDiffWithinAt, contDiffAt, contDiffAt.comp_contDiffWithinAt, contDiff_const_smul
@@ -1974,7 +1974,7 @@ theorem ContDiffWithinAt.smul_const
 
 中文:
 定理 ContDiffWithinAt.smul_const
-  结论: {s : Set E} {f : E -> A} {x : E}
+  结论: {s : 集合 E} {f : E -> A} {x : E}
   证明: (contDiff_smul_const v).contDiffAt.comp_contDiffWithinAt x hf
 
 Depends on / 依赖: comp_contDiffWithinAt, contDiffAt, contDiffAt.comp_contDiffWithinAt, contDiff_smul_const
@@ -2042,8 +2042,8 @@ theorem ContDiff.const_smul
   proof: (contDiff_const_smul c).comp hf
 
 中文:
-定理 ContDiff.const_smul
-  条件: {f : E -> F} (c : R) (hf : ContDiff 𝕜 n f)
+定理 连续可微.const_smul
+  条件: {f : E -> F} (c : R) (hf : 连续可微 𝕜 n f)
   证明: (contDiff_const_smul c).comp hf
 
 Depends on / 依赖: contDiff_const_smul
@@ -2063,8 +2063,8 @@ theorem ContDiff.smul_const
   proof: (contDiff_smul_const v).comp hf
 
 中文:
-定理 ContDiff.smul_const
-  条件: {f : E -> A} (hf : ContDiff 𝕜 n f) (v : F)
+定理 连续可微.smul_const
+  条件: {f : E -> A} (hf : 连续可微 𝕜 n f) (v : F)
   证明: (contDiff_smul_const v).comp hf
 
 Depends on / 依赖: contDiff_smul_const
@@ -2085,7 +2085,7 @@ theorem ContDiffOn.const_smul
 
 中文:
 定理 ContDiffOn.const_smul
-  条件: {s : Set E} {f : E -> F} (c : R) (hf : ContDiffOn 𝕜 n f s)
+  条件: {s : 集合 E} {f : E -> F} (c : R) (hf : ContDiffOn 𝕜 n f s)
   证明: fun x hx => (hf x hx).const_smul c
 
 Depends on / 依赖: const_smul
@@ -2105,7 +2105,7 @@ theorem ContDiffOn.smul_const
 
 中文:
 定理 ContDiffOn.smul_const
-  条件: {s : Set E} {f : E -> A} (hf : ContDiffOn 𝕜 n f s) (v : F)
+  条件: {s : 集合 E} {f : E -> A} (hf : ContDiffOn 𝕜 n f s) (v : F)
   证明: fun x hx => (hf x hx).smul_const v
 
 Depends on / 依赖: smul_const
@@ -2233,7 +2233,7 @@ theorem iteratedFDeriv_comp_const_smul
 
 中文:
 定理 iteratedFDeriv_comp_const_smul
-  条件: (a : 𝕜) (hf : ContDiff 𝕜 i f)
+  条件: (a : 𝕜) (hf : 连续可微 𝕜 i f)
   证明: by
   induction i with
   | zero => ext; simp
@@ -2286,7 +2286,7 @@ theorem ContDiffWithinAt.prodMap'
 
 中文:
 定理 ContDiffWithinAt.prodMap'
-  结论: {s : Set E} {t : Set E'} {f : E -> F} {g : E' -> F'} {p : E × E'}
+  结论: {s : 集合 E} {t : 集合 E'} {f : E -> F} {g : E' -> F'} {p : E × E'}
   证明: (hf.comp p contDiffWithinAt_fst (prod_subset_preimage_fst _ _)).prodMk
     (hg.comp p contDiffWithinAt_snd (prod_subset_preimage_snd _ _))
 
@@ -2311,7 +2311,7 @@ theorem ContDiffWithinAt.prodMap
 
 中文:
 定理 ContDiffWithinAt.prodMap
-  结论: {s : Set E} {t : Set E'} {f : E -> F} {g : E' -> F'} {x : E} {y : E'}
+  结论: {s : 集合 E} {t : 集合 E'} {f : E -> F} {g : E' -> F'} {x : E} {y : E'}
   证明: ContDiffWithinAt.prodMap' hf hg
 
 Depends on / 依赖: ContDiffWithinAt, ContDiffWithinAt.prodMap, prodMap
@@ -2334,7 +2334,7 @@ theorem ContDiffOn.prodMap
 
 中文:
 定理 ContDiffOn.prodMap
-  结论: {E' : 类型} [NormedAddCommGroup E'] [NormedSpace 𝕜 E'] {F' : 类型}
+  结论: {E' : 类型} [赋范交换加群 E'] [赋范空间 𝕜 E'] {F' : 类型}
   证明: (hf.comp contDiffOn_fst (prod_subset_preimage_fst _ _)).prodMk
     (hg.comp contDiffOn_snd (prod_subset_preimage_snd _ _))
 
@@ -2410,8 +2410,8 @@ theorem ContDiff.prodMap
 @[fun_prop]
 
 中文:
-定理 ContDiff.prodMap
-  条件: {f : E -> F} {g : E' -> F'} (hf : ContDiff 𝕜 n f) (hg : ContDiff 𝕜 n g)
+定理 连续可微.prodMap
+  条件: {f : E -> F} {g : E' -> F'} (hf : 连续可微 𝕜 n f) (hg : 连续可微 𝕜 n g)
   证明: by
   rw [contDiff_iff_contDiffAt] at *
   exact fun ⟨x, y⟩ => (hf x).prodMap (hg y)
@@ -2440,7 +2440,7 @@ theorem contDiff_prodMk_left
 中文:
 定理 contDiff_prodMk_left
   条件: (f₀ : F)
-  结论: ContDiff 𝕜 n fun e : E => (e, f₀)
+  结论: 连续可微 𝕜 n fun e : E => (e, f₀)
   证明: contDiff_id.prodMk contDiff_const
 
 @[fun_prop]
@@ -2463,7 +2463,7 @@ theorem contDiff_prodMk_right
 中文:
 定理 contDiff_prodMk_right
   条件: (e₀ : E)
-  结论: ContDiff 𝕜 n fun f : F => (e₀, f)
+  结论: 连续可微 𝕜 n fun f : F => (e₀, f)
   证明: contDiff_const.prodMk contDiff_id
 
 Depends on / 依赖: contDiff_const, contDiff_const.prodMk, contDiff_id, prodMk
@@ -2500,7 +2500,7 @@ theorem contDiffAt_ringInverse
 
 中文:
 定理 contDiffAt_ringInverse
-  条件: [HasSummableGeomSeries R] (x : Rˣ)
+  条件: [有SummableGeomSeries R] (x : Rˣ)
   证明: by
   have := AnalyticOnNhd.contDiffOn (analyticOnNhd_inverse (𝕜 := 𝕜) (A := R)) (n := n)
     Units.isOpen.uniqueDiffOn x x.isUnit
@@ -2532,7 +2532,7 @@ theorem contDiffAt_inv
 中文:
 定理 contDiffAt_inv
   条件: {x : 𝕜'} (hx : x != 0) {n}
-  结论: ContDiffAt 𝕜 n Inv.inv x
+  结论: ContDiffAt 𝕜 n 取逆.inv x
   证明: by
   simpa only [Ring.inverse_eq_inv'] using! contDiffAt_ringInverse 𝕜 (Units.mk0 x hx)
 
@@ -2557,7 +2557,7 @@ theorem contDiffOn_inv
 中文:
 定理 contDiffOn_inv
   条件: {n}
-  结论: ContDiffOn 𝕜 n (Inv.inv : 𝕜' -> 𝕜') {0}ᶜ
+  结论: ContDiffOn 𝕜 n (取逆.inv : 𝕜' -> 𝕜') {0}ᶜ
   证明: fun _ hx =>
   (contDiffAt_inv 𝕜 hx).contDiffWithinAt
 -/
@@ -2639,8 +2639,8 @@ theorem ContDiff.inv
   rw [contDiff_iff_contDiffAt]; exact fun x => hf.contDiffAt.inv (h x)
 
 中文:
-定理 ContDiff.inv
-  条件: {f : E -> 𝕜'} (hf : ContDiff 𝕜 n f) (h : 对任意 x, f x != 0)
+定理 连续可微.inv
+  条件: {f : E -> 𝕜'} (hf : 连续可微 𝕜 n f) (h : 对任意 x, f x != 0)
   证明: by
   rw [contDiff_iff_contDiffAt]; exact fun x => hf.contDiffAt.inv (h x)
 
@@ -2732,8 +2732,8 @@ theorem ContDiff.div
   exact fun x => (hf x).div (hg x) (h0 x)
 
 中文:
-定理 ContDiff.div
-  结论: {f g : E -> 𝕜} {n} (hf : ContDiff 𝕜 n f) (hg : ContDiff 𝕜 n g)
+定理 连续可微.div
+  结论: {f g : E -> 𝕜} {n} (hf : 连续可微 𝕜 n f) (hg : 连续可微 𝕜 n g)
   证明: by
   simp only [contDiff_iff_contDiffAt] at *
   exact fun x => (hf x).div (hg x) (h0 x)
@@ -2772,7 +2772,7 @@ theorem contDiffAt_map_inverse
 
 中文:
 定理 contDiffAt_map_inverse
-  条件: [CompleteSpace E] (e : E ≃L[𝕜] F)
+  条件: [完备空间 E] (e : E ≃L[𝕜] F)
   证明: by
   nontriviality E
   -- first, we use the lemma `inverse_eq_ringInverse` to rewrite in terms of `Ring.inverse` in the
@@ -2811,8 +2811,8 @@ theorem ContinuousLinearMap.IsInvertible.contDiffAt_map_inverse
   exact _root_.contDiffAt_map_inverse M
 
 中文:
-定理 ContinuousLinearMap.IsInvertible.contDiffAt_map_inverse
-  结论: [CompleteSpace E] {e : E ->L[𝕜] F}
+定理 连续线性映射.IsInvertible.contDiffAt_map_inverse
+  结论: [完备空间 E] {e : E ->L[𝕜] F}
   证明: by
   rcases he with ⟨M, rfl⟩
   exact _root_.contDiffAt_map_inverse M
@@ -2850,7 +2850,7 @@ theorem OpenPartialHomeomorph.contDiffAt_symm
 
 中文:
 定理 OpenPartialHomeomorph.contDiffAt_symm
-  结论: [CompleteSpace E] (f : OpenPartialHomeomorph E F)
+  结论: [完备空间 E] (f : OpenPartialHomeomorph E F)
   证明: by
   match n with
   | ω =>
@@ -2928,8 +2928,8 @@ theorem Homeomorph.contDiff_symm
     f.toOpenPartialHomeomorph.contDiffAt_symm (mem_univ x) (hf₀' _) hf.contDiffAt
 
 中文:
-定理 Homeomorph.contDiff_symm
-  结论: [CompleteSpace E] (f : E ≃ₜ F) {f₀' : E -> E ≃L[𝕜] F}
+定理 同胚.contDiff_symm
+  结论: [完备空间 E] (f : E ≃ₜ F) {f₀' : E -> E ≃L[𝕜] F}
   证明: contDiff_iff_contDiffAt.2 fun x =>
     f.toOpenPartialHomeomorph.contDiffAt_symm (mem_univ x) (hf₀' _) hf.contDiffAt
 
@@ -2951,7 +2951,7 @@ theorem OpenPartialHomeomorph.contDiffAt_symm_deriv
 
 中文:
 定理 OpenPartialHomeomorph.contDiffAt_symm_deriv
-  结论: [CompleteSpace 𝕜]
+  结论: [完备空间 𝕜]
   证明: f.contDiffAt_symm ha (hf₀'.hasFDerivAt_equiv h₀) hf
 
 Depends on / 依赖: contDiffAt_symm, f.contDiffAt_symm, hasFDerivAt_equiv
@@ -2972,8 +2972,8 @@ theorem Homeomorph.contDiff_symm_deriv
     f.toOpenPartialHomeomorph.contDiffAt_symm_deriv (h₀ _) (mem_univ x) (hf' _) hf.contDiffAt
 
 中文:
-定理 Homeomorph.contDiff_symm_deriv
-  结论: [CompleteSpace 𝕜] (f : 𝕜 ≃ₜ 𝕜) {f' : 𝕜 -> 𝕜}
+定理 同胚.contDiff_symm_deriv
+  结论: [完备空间 𝕜] (f : 𝕜 ≃ₜ 𝕜) {f' : 𝕜 -> 𝕜}
   证明: contDiff_iff_contDiffAt.2 fun x =>
     f.toOpenPartialHomeomorph.contDiffAt_symm_deriv (h₀ _) (mem_univ x) (hf' _) hf.contDiffAt
 
@@ -3101,7 +3101,7 @@ theorem HasFTaylorSeriesUpToOn.restrictScalars
   cont m hm := ContinuousMultilinearMap.continuous_restrictScalars.comp_continuousOn (h.cont m hm)
 
 中文:
-定理 HasFTaylorSeriesUpToOn.restrictScalars
+定理 有FTaylorSeriesUpToOn.restrictScalars
   结论: {n : 自然数∞ω}
   证明: h.zero_eq x hx
   fderivWithin m hm x hx :=
@@ -3211,9 +3211,9 @@ theorem ContDiff.restrict_scalars
   proof: contDiff_iff_contDiffAt.2 fun _ => h.contDiffAt.restrict_scalars _
 
 中文:
-定理 ContDiff.restrict_scalars
-  条件: (h : ContDiff 𝕜' n f)
-  结论: ContDiff 𝕜 n f
+定理 连续可微.restrict_scalars
+  条件: (h : 连续可微 𝕜' n f)
+  结论: 连续可微 𝕜 n f
   证明: contDiff_iff_contDiffAt.2 fun _ => h.contDiffAt.restrict_scalars _
 
 Depends on / 依赖: contDiffAt, contDiff_iff_contDiffAt, h.contDiffAt.restrict_scalars, restrict_scalars

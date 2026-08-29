@@ -151,8 +151,8 @@ lemma Continuous.invFun
   proof: he
 
 中文:
-引理 Continuous.invFun
-  结论: {α β : 类型} [TopologicalSpace α] [TopologicalSpace β]
+引理 连续.invFun
+  结论: {α β : 类型} [拓扑空间 α] [拓扑空间 β]
   证明: he
 -/
 lemma Continuous.invFun {α β : Type*} [TopologicalSpace α] [TopologicalSpace β]
@@ -190,14 +190,14 @@ structure ModelWithCorners
     - continuous_invFun : Continuous invFun  [default: by fun_prop]
 
 中文:
-结构 ModelWithCorners
+结构 带角模型
   参数: (𝕜 : 类型) [NontriviallyNormedField 𝕜] (E : 类型)
   公理与运算 (5 个):
     - source_eq : source = univ
-    - convex_range' : if h : IsRCLikeNormedField 𝕜 then letI  [默认: h.rclike 𝕜 letI : NormedSpace Real E := NormedSpace.restrict]
-    - nonempty_interior' : (interior (range toPartialEquiv)).Nonempty
-    - continuous_toFun : Continuous toFun  [默认: by fun_prop]
-    - continuous_invFun : Continuous invFun  [默认: by fun_prop]
+    - convex_range' : if h : 是RCLikeNormedField 𝕜 then letI  [默认: h.rclike 𝕜 letI : NormedSpace Real E := NormedSpace.restrict]
+    - nonempty_interior' : (interior (range toPartialEquiv)).非空
+    - continuous_toFun : 连续 toFun  [默认: by fun_prop]
+    - continuous_invFun : 连续 invFun  [默认: by fun_prop]
 
 Depends on / 依赖: h.rclike, rclike
 -/
@@ -228,7 +228,7 @@ lemma ModelWithCorners.range_eq_target
   rw [← I.image_source_eq_target]; rw [I.source_eq]; rw [image_univ.symm]
 
 中文:
-引理 ModelWithCorners.range_eq_target
+引理 带角模型.range_eq_target
   结论: {𝕜 E H : 类型} [NontriviallyNormedField 𝕜]
   证明: by
   rw [← I.image_source_eq_target]; rw [I.source_eq]; rw [image_univ.symm]
@@ -258,7 +258,7 @@ definition ModelWithCorners.ofTargetUniv
   nonempt
 
 中文:
-定义 ModelWithCorners.ofTargetUniv
+定义 带角模型.ofTargetUniv
   签名: (𝕜 : 类型) [NontriviallyNormedField 𝕜]
   定义体: φ
   source_eq := hsource
@@ -335,7 +335,7 @@ definition toFun'
 
 中文:
 定义 toFun'
-  签名: (e : ModelWithCorners 𝕜 E H)
+  签名: (e : 带角模型 𝕜 E H)
   定义体: e.toFun
 -/
 @[coe] def toFun' (e : ModelWithCorners 𝕜 E H) : H -> E := e.toFun
@@ -350,7 +350,7 @@ instance :
 
 中文:
 实例 :
-  签名: CoeFun (ModelWithCorners 𝕜 E H) fun _ => H -> E
+  签名: CoeFun (带角模型 𝕜 E H) fun _ => H -> E
   定义体: ⟨toFun'⟩
 -/
 instance : CoeFun (ModelWithCorners 𝕜 E H) fun _ => H -> E := ⟨toFun'⟩
@@ -365,7 +365,7 @@ definition symm
 
 中文:
 定义 symm
-  签名: : PartialEquiv E H
+  签名: : 部分等价 E H
   定义体: I.toPartialEquiv.symm
 -/
 protected def symm : PartialEquiv E H :=
@@ -381,7 +381,7 @@ definition Simps.apply
 
 中文:
 定义 Simps.apply
-  签名: (𝕜 : 类型) [NontriviallyNormedField 𝕜] (E : 类型) [NormedAddCommGroup E]
+  签名: (𝕜 : 类型) [NontriviallyNormedField 𝕜] (E : 类型) [赋范交换加群 E]
   定义体: I
 -/
 def Simps.apply (𝕜 : Type*) [NontriviallyNormedField 𝕜] (E : Type*) [NormedAddCommGroup E]
@@ -400,7 +400,7 @@ initialize_simps_projections ModelWithCorners (toFun -> apply, invFun -> symm_ap
 
 中文:
 定义 Simps.symm_apply
-  签名: (𝕜 : 类型) [NontriviallyNormedField 𝕜] (E : 类型) [NormedAddCommGroup E]
+  签名: (𝕜 : 类型) [NontriviallyNormedField 𝕜] (E : 类型) [赋范交换加群 E]
   定义体: I.symm
 
 initialize_simps_projections ModelWithCorners (toFun -> apply, invFun -> symm_apply)
@@ -446,7 +446,7 @@ theorem mk_coe
 
 中文:
 定理 mk_coe
-  条件: (e : PartialEquiv H E) (a b c d d')
+  条件: (e : 部分等价 H E) (a b c d d')
   证明: rfl
 
 @[simp, mfld_simps]
@@ -489,7 +489,7 @@ theorem mk_symm
 
 中文:
 定理 mk_symm
-  条件: (e : PartialEquiv H E) (a b c d d')
+  条件: (e : 部分等价 H E) (a b c d d')
   证明: rfl
 
 @[fun_prop]
@@ -509,7 +509,7 @@ theorem continuous
 
 中文:
 定理 continuous
-  结论: Continuous I
+  结论: 连续 I
   证明: I.continuous_toFun
 -/
 protected theorem continuous : Continuous I :=
@@ -566,7 +566,7 @@ theorem continuous_symm
 
 中文:
 定理 continuous_symm
-  结论: Continuous I.symm
+  结论: 连续 I.symm
   证明: I.continuous_invFun
 
 Depends on / 依赖: I.continuous_invFun, continuous_invFun
@@ -672,7 +672,7 @@ theorem nonempty_interior
 
 中文:
 定理 nonempty_interior
-  结论: (interior (range I)).Nonempty
+  结论: (interior (range I)).非空
   证明: I.nonempty_interior'
 
 Depends on / 依赖: I.nonempty_interior, nonempty_interior
@@ -691,7 +691,7 @@ theorem range_eq_univ_of_not_isRCLikeNormedField
 
 中文:
 定理 range_eq_univ_of_not_isRCLikeNormedField
-  条件: (h : ¬ IsRCLikeNormedField 𝕜)
+  条件: (h : ¬ 是RCLikeNormedField 𝕜)
   证明: by
   simpa [h] using I.convex_range'
 
@@ -718,8 +718,8 @@ lemma _root_.Convex.convex_isRCLikeNormedField
   · rw [← @algebraMap_smul (R := Real) (A :
 
 中文:
-引理 _root_.Convex.convex_isRCLikeNormedField
-  结论: [NormedSpace 实数 E] [h : IsRCLikeNormedField 𝕜]
+引理 _root_.凸.convex_isRCLikeNormedField
+  结论: [赋范空间 实数 E] [h : 是RCLikeNormedField 𝕜]
   证明: h.rclike
     letI := NormedSpace.restrictScalars Real 𝕜 E
     Convex Real s := by
@@ -804,8 +804,8 @@ theorem convex_range
 
 中文:
 定理 convex_range
-  条件: [NormedSpace 实数 E]
-  结论: Convex 实数 (range I)
+  条件: [赋范空间 实数 E]
+  结论: 凸 实数 (range I)
   证明: by
   by_cases h : IsRCLikeNormedField 𝕜
   · let : RCLike 𝕜 := h.rclike
@@ -934,7 +934,7 @@ theorem leftInverse
 
 中文:
 定理 leftInverse
-  结论: LeftInverse I.symm I
+  结论: 左逆 I.symm I
   证明: I.left_inv
 -/
 protected theorem leftInverse : LeftInverse I.symm I :=
@@ -952,7 +952,7 @@ theorem injective
 
 中文:
 定理 injective
-  结论: Injective I
+  结论: 单射 I
   证明: I.leftInverse.injective
 
 @[simp, mfld_simps]
@@ -1031,7 +1031,7 @@ theorem preimage_image
 
 中文:
 定理 preimage_image
-  条件: (s : Set H)
+  条件: (s : 集合 H)
   结论: I ⁻¹' I '' s = s
   证明: I.injective.preimage_image s
 
@@ -1054,7 +1054,7 @@ theorem image_eq
 
 中文:
 定理 image_eq
-  条件: (s : Set H)
+  条件: (s : 集合 H)
   结论: I '' s = I.symm ⁻¹' s inter range I
   证明: by
   refine (I.toPartialEquiv.image_eq_target_inter_inv_preimage ?_).trans ?_
@@ -1076,7 +1076,7 @@ theorem isClosedEmbedding
 
 中文:
 定理 isClosedEmbedding
-  结论: IsClosedEmbedding I
+  结论: 是闭嵌入 I
   证明: I.leftInverse.isClosedEmbedding I.continuous_symm I.continuous
 
 Depends on / 依赖: I.continuous, I.continuous_symm, I.leftInverse.isClosedEmbedding, continuous, continuous_symm, isClosedEmbedding, leftInverse
@@ -1094,7 +1094,7 @@ theorem isClosed_range
 
 中文:
 定理 isClosed_range
-  结论: IsClosed (range I)
+  结论: 是闭集 (range I)
   证明: I.isClosedEmbedding.isClosed_range
 
 Depends on / 依赖: I.isClosedEmbedding.isClosed_range, isClosedEmbedding, isClosed_range
@@ -1152,7 +1152,7 @@ theorem map_nhdsWithin_eq
 
 中文:
 定理 map_nhdsWithin_eq
-  条件: (s : Set H) (x : H)
+  条件: (s : 集合 H) (x : H)
   结论: map I (𝓝[s] x) = 𝓝[I '' s] I x
   证明: I.isClosedEmbedding.isEmbedding.map_nhdsWithin_eq s x
 
@@ -1172,7 +1172,7 @@ theorem image_mem_nhdsWithin
 
 中文:
 定理 image_mem_nhdsWithin
-  条件: {x : H} {s : Set H} (hs : s in 𝓝 x)
+  条件: {x : H} {s : 集合 H} (hs : s in 𝓝 x)
   结论: I '' s in 𝓝[range I] I x
   证明: I.map_nhds_eq x ▸ image_mem_map hs
 
@@ -1193,7 +1193,7 @@ theorem symm_map_nhdsWithin_image
 
 中文:
 定理 symm_map_nhdsWithin_image
-  条件: {x : H} {s : Set H}
+  条件: {x : H} {s : 集合 H}
   结论: map I.symm (𝓝[I '' s] I x) = 𝓝[s] x
   证明: by
   rw [← I.map_nhdsWithin_eq]; rw [map_map]; rw [I.symm_comp_self]; rw [map_id]
@@ -1237,7 +1237,7 @@ theorem uniqueDiffOn_preimage
 
 中文:
 定理 uniqueDiffOn_preimage
-  条件: {s : Set H} (hs : IsOpen s)
+  条件: {s : 集合 H} (hs : 是开集 s)
   证明: by
   rw [inter_comm]
   exact I.uniqueDiffOn.inter (hs.preimage I.continuous_invFun)
@@ -1259,7 +1259,7 @@ theorem uniqueDiffOn_preimage_source
 
 中文:
 定理 uniqueDiffOn_preimage_source
-  结论: {β : 类型} [TopologicalSpace β]
+  结论: {β : 类型} [拓扑空间 β]
   证明: I.uniqueDiffOn_preimage e.open_source
 
 Depends on / 依赖: I.uniqueDiffOn_preimage, e.open_source, open_source, uniqueDiffOn_preimage
@@ -1304,7 +1304,7 @@ theorem symm_continuousWithinAt_comp_right_iff
 
 中文:
 定理 symm_continuousWithinAt_comp_right_iff
-  结论: {X} [TopologicalSpace X] {f : H -> X} {s : Set H}
+  结论: {X} [拓扑空间 X] {f : H -> X} {s : 集合 H}
   证明: by
   refine ⟨fun h => ?_, fun h => ?_⟩
   · have := h.comp I.continuousWithinAt (mapsTo_preimage _ _)
@@ -1342,7 +1342,7 @@ theorem locallyCompactSpace
 
 中文:
 定理 locallyCompactSpace
-  条件: [LocallyCompactSpace E] (I : ModelWithCorners 𝕜 E H)
+  条件: [局部紧空间 E] (I : 带角模型 𝕜 E H)
   证明: by
   have : forall x : H, (𝓝 x).HasBasis (fun s => s in 𝓝 (I x) ∧ IsCompact s)
       fun s => I.symm '' (s inter range I) := fun x => by
@@ -1376,7 +1376,7 @@ include I in
 
 中文:
 定理 secondCountableTopology
-  条件: [SecondCountableTopology E] (I : ModelWithCorners 𝕜 E H)
+  条件: [第二可数拓扑 E] (I : 带角模型 𝕜 E H)
   证明: I.isClosedEmbedding.isEmbedding.secondCountableTopology
 
 include I in
@@ -1399,8 +1399,8 @@ theorem t1Space
 
 中文:
 定理 t1Space
-  条件: (M : 类型) [TopologicalSpace M] [ChartedSpace H M]
-  结论: T1Space M
+  条件: (M : 类型) [拓扑空间 M] [Charted空间 H M]
+  结论: T1空间 M
   证明: by
   have : T2Space H := I.isClosedEmbedding.toIsEmbedding.t2Space
   exact ChartedSpace.t1Space H M
@@ -1429,7 +1429,7 @@ theorem modelWithCornersSelf_partialEquiv
 
 中文:
 定理 modelWithCornersSelf_partialEquiv
-  结论: 𝓘(𝕜, E).toPartialEquiv = PartialEquiv.refl E
+  结论: 𝓘(𝕜, E).toPartialEquiv = 部分等价.refl E
   证明: rfl
 
 @[simp, mfld_simps]
@@ -1504,7 +1504,7 @@ definition ModelWithCorners.prod
       have : range (fun (x : 
 
 中文:
-定义 ModelWithCorners.prod
+定义 带角模型.乘积
   签名: {𝕜 : 类型u} [NontriviallyNormedField 𝕜] {E : 类型v}
   定义体: { I.toPartialEquiv.prod I'.toPartialEquiv with
     toFun := fun x => (I x.1, I' x.2)
@@ -1556,8 +1556,8 @@ definition ModelWithCorners.pi
       exact convex_pi f
 
 中文:
-定义 ModelWithCorners.pi
-  签名: {𝕜 : 类型u} [NontriviallyNormedField 𝕜] {ι : 类型v} [Fintype ι]
+定义 带角模型.pi
+  签名: {𝕜 : 类型u} [NontriviallyNormedField 𝕜] {ι : 类型v} [有限类型 ι]
   定义体: PartialEquiv.pi fun i => (I i).toPartialEquiv
   source_eq := by simp only [pi_univ, mfld_simps]
   convex_range' := by
@@ -1597,7 +1597,7 @@ abbreviation ModelWithCorners.tangent
   body: I.prod 𝓘(𝕜, E)
 
 中文:
-缩写 ModelWithCorners.tangent
+缩写 带角模型.tangent
   签名: {𝕜 : 类型u} [NontriviallyNormedField 𝕜] {E : 类型v}
   定义体: I.prod 𝓘(𝕜, E)
 
@@ -1648,7 +1648,7 @@ theorem modelWithCorners_prod_coe
 
 中文:
 定理 modelWithCorners_prod_coe
-  条件: (I : ModelWithCorners 𝕜 E H) (I' : ModelWithCorners 𝕜 E' H')
+  条件: (I : 带角模型 𝕜 E H) (I' : 带角模型 𝕜 E' H')
   证明: rfl
 
 @[simp, mfld_simps]
@@ -1668,7 +1668,7 @@ theorem modelWithCorners_prod_coe_symm
 
 中文:
 定理 modelWithCorners_prod_coe_symm
-  结论: (I : ModelWithCorners 𝕜 E H)
+  结论: (I : 带角模型 𝕜 E H)
   证明: rfl
 -/
 theorem modelWithCorners_prod_coe_symm (I : ModelWithCorners 𝕜 E H)
@@ -1686,7 +1686,7 @@ theorem modelWithCornersSelf_prod
 
 中文:
 定理 modelWithCornersSelf_prod
-  结论: 𝓘(𝕜, E × F) = 𝓘(𝕜, E).prod 𝓘(𝕜, F)
+  结论: 𝓘(𝕜, E × F) = 𝓘(𝕜, E).乘积 𝓘(𝕜, F)
   证明: by ext1 <;> simp
 -/
 theorem modelWithCornersSelf_prod : 𝓘(𝕜, E × F) = 𝓘(𝕜, E).prod 𝓘(𝕜, F) := by ext1 <;> simp
@@ -1701,8 +1701,8 @@ theorem ModelWithCorners.range_prod
   simp_rw [← ModelWithCorners.target_eq]; rfl
 
 中文:
-定理 ModelWithCorners.range_prod
-  结论: range (I.prod J) = range I ×ˢ range J
+定理 带角模型.range_prod
+  结论: range (I.乘积 J) = range I ×ˢ range J
   证明: by
   simp_rw [← ModelWithCorners.target_eq]; rfl
 
@@ -1725,7 +1725,7 @@ class ModelWithCorners.Boundaryless
     - range_eq_univ : range I = univ
 
 中文:
-类 ModelWithCorners.Boundaryless
+类 带角模型.无边界
   参数: {𝕜 : 类型} [NontriviallyNormedField 𝕜] {E : 类型}
   公理与运算 (1 个):
     - range_eq_univ : range I = univ
@@ -1744,7 +1744,7 @@ theorem ModelWithCorners.range_eq_univ
   proof: ModelWithCorners.Boundaryless.range_eq_univ
 
 中文:
-定理 ModelWithCorners.range_eq_univ
+定理 带角模型.range_eq_univ
   结论: {𝕜 : 类型} [NontriviallyNormedField 𝕜] {E : 类型}
   证明: ModelWithCorners.Boundaryless.range_eq_univ
 
@@ -1768,7 +1768,7 @@ definition ModelWithCorners.toHomeomorph
 right_inv _ := I.right_inv I.range_eq_univ.symm ▸ mem_univ _
 
 中文:
-定义 ModelWithCorners.toHomeomorph
+定义 带角模型.toHomeomorph
   签名: {𝕜 : 类型} [NontriviallyNormedField 𝕜] {E : 类型}
   定义体: I
   left_inv := I.left_inv
@@ -1810,7 +1810,7 @@ instance ModelWithCorners.range_eq_univ_prod
   rw [Set.range_prodMap]; rw [ModelWithCorners.Boundaryless.range_eq_univ]; rw [ModelWithCorners.Boundaryless.range_eq_univ]; rw [univ_prod_univ]
 
 中文:
-实例 ModelWithCorners.range_eq_univ_prod
+实例 带角模型.range_eq_univ_prod
   签名: {𝕜 : 类型u} [NontriviallyNormedField 𝕜] {E : 类型v}
   定义体: by
   constructor
@@ -2081,7 +2081,7 @@ theorem ofSet_mem_contDiffGroupoid
 
 中文:
 定理 ofSet_mem_contDiffGroupoid
-  条件: {s : Set H} (hs : IsOpen s)
+  条件: {s : 集合 H} (hs : 是开集 s)
   证明: by
   rw [contDiffGroupoid]; rw [mem_groupoid_of_pregroupoid]
   suffices h : ContDiffOn 𝕜 n (I ∘ I.symm) (I.symm ⁻¹' s inter range I) by
@@ -2144,7 +2144,7 @@ theorem contDiffGroupoid_prod
 
 中文:
 定理 contDiffGroupoid_prod
-  结论: {I : ModelWithCorners 𝕜 E H} {I' : ModelWithCorners 𝕜 E' H'}
+  结论: {I : 带角模型 𝕜 E H} {I' : 带角模型 𝕜 E' H'}
   证明: by
   obtain ⟨he, he_symm⟩ := he
   obtain ⟨he', he'_symm⟩ := he'
@@ -2222,9 +2222,9 @@ class IsManifold
   (no additional axioms)
 
 中文:
-类 IsManifold
+类 是流形
   参数: {𝕜 : 类型} [NontriviallyNormedField 𝕜] {E : 类型}
-  继承: HasGroupoid M (contDiffGroupoid n I)
+  继承: 有群胚 M (contDiffGroupoid n I)
   (无附加公理)
 -/
 class IsManifold {𝕜 : Type*} [NontriviallyNormedField 𝕜] {E : Type*}
@@ -2242,7 +2242,7 @@ theorem IsManifold.mk'
   proof: { gr with }
 
 中文:
-定理 IsManifold.mk'
+定理 是流形.mk'
   结论: {𝕜 : 类型} [NontriviallyNormedField 𝕜] {E : 类型}
   证明: { gr with }
 -/
@@ -2352,7 +2352,7 @@ class _root_.ENat.LEInfty
     - out : m <= ∞
 
 中文:
-类 _root_.ENat.LEInfty
+类 _root_.E自然数.LEInfty
   参数: (m : 自然数∞ω)
   公理与运算 (1 个):
     - out : m <= ∞
@@ -2426,7 +2426,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsManifold I 0 M
+  签名: 是流形 I 0 M
   定义体: by
   suffices HasGroupoid M (contDiffGroupoid 0 I) from mk' I 0 M
   constructor
@@ -2452,7 +2452,7 @@ instance [IsManifold
   body: IsManifold.of_le one_le_two
 
 中文:
-实例 [IsManifold
+实例 [是流形
   签名: I 2 M] :
   定义体: IsManifold.of_le one_le_two
 
@@ -2471,8 +2471,8 @@ instance [IsManifold
   body: IsManifold.of_le (n := 3) (by norm_cast)
 
 中文:
-实例 [IsManifold
-  签名: I 3 M] : IsManifold I 2 M
+实例 [是流形
+  签名: I 3 M] : 是流形 I 2 M
   定义体: IsManifold.of_le (n := 3) (by norm_cast)
 
 Depends on / 依赖: IsManifold, IsManifold.of_le, of_le
@@ -2526,7 +2526,7 @@ theorem subset_maximalAtlas
 
 中文:
 定理 subset_maximalAtlas
-  条件: [IsManifold I n M]
+  条件: [是流形 I n M]
   结论: atlas H M subseteq maximalAtlas I n M
   证明: StructureGroupoid.subset_maximalAtlas _
 
@@ -2545,7 +2545,7 @@ theorem chart_mem_maximalAtlas
 
 中文:
 定理 chart_mem_maximalAtlas
-  条件: [IsManifold I n M] (x : M)
+  条件: [是流形 I n M] (x : M)
   证明: StructureGroupoid.chart_mem_maximalAtlas _ x
 
 Depends on / 依赖: StructureGroupoid, StructureGroupoid.chart_mem_maximalAtlas, chart_mem_maximalAtlas
@@ -2610,7 +2610,7 @@ instance empty
 
 中文:
 实例 empty
-  签名: [IsEmpty M]
+  签名: [是空 M]
   定义体: by
   apply isManifold_of_contDiffOn
   intro e e' _ _ x hx
@@ -2651,7 +2651,7 @@ theorem of_discreteTopology
 
 中文:
 定理 of_discreteTopology
-  条件: [DiscreteTopology M] [Unique E]
+  条件: [离散拓扑 M] [唯一 E]
   证明: by
   apply isManifold_of_contDiffOn _ _ _ (fun _ _ _ _ => contDiff_of_subsingleton.contDiffOn)
 
@@ -2678,8 +2678,8 @@ instance prod
     exact contDiffGroupoid_prod h1 h2
 
 中文:
-实例 prod
-  签名: {𝕜 : 类型} [NontriviallyNormedField 𝕜] {E : 类型} [NormedAddCommGroup E]
+实例 乘积
+  签名: {𝕜 : 类型} [NontriviallyNormedField 𝕜] {E : 类型} [赋范交换加群 E]
   定义体: by
     rintro f g ⟨f1, hf1, f2, hf2, rfl⟩ ⟨g1, hg1, g2, hg2, rfl⟩
     rw [OpenPartialHomeomorph.prod_symm]; rw [OpenPartialHomeomorph.prod_trans]
@@ -2724,7 +2724,7 @@ lemma mem_maximalAtlas_prod
 
 中文:
 引理 mem_maximalAtlas_prod
-  结论: [IsManifold I n M] [IsManifold I' n M']
+  结论: [是流形 I n M] [是流形 I' n M']
   证明: by
   simp only [mem_maximalAtlas_iff]
   rintro e'' ⟨f, hf, f', hf', rfl⟩
@@ -2766,7 +2766,7 @@ instance disjointUnion
 
 中文:
 实例 disjointUnion
-  签名: : IsManifold I n (M oplus M') where
+  签名: : 是流形 I n (M oplus M') where
   定义体: by
     obtain (h | h) := isEmpty_or_nonempty H
     · exact ContDiffGroupoid.mem_of_source_eq_empty _ (eq_empty_of_isEmpty _)
@@ -2833,7 +2833,7 @@ theorem Topology.IsOpenEmbedding.isManifold_singleton
   proof: (h.toOpenPartialHomeomorph f).isManifold_singleton (by simp)
 
 中文:
-定理 Topology.IsOpenEmbedding.isManifold_singleton
+定理 拓扑.是开嵌入.isManifold_singleton
   结论: {𝕜 E H : 类型}
   证明: (h.toOpenPartialHomeomorph f).isManifold_singleton (by simp)
 
@@ -2865,7 +2865,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsManifold I n s
+  签名: 是流形 I n s
   定义体: { s.instHasGroupoid (contDiffGroupoid n I) with }
 
 Depends on / 依赖: contDiffGroupoid, instHasGroupoid, s.instHasGroupoid
@@ -2945,7 +2945,7 @@ definition NormedSpace.fromTangentSpace
   map_smul' := by simp
 
 中文:
-定义 NormedSpace.fromTangentSpace
+定义 赋范空间.fromTangentSpace
   签名: (v : E)
   定义体: v
   invFun v := v
@@ -2968,7 +2968,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (TangentSpace I x)
+  签名: 可居 (TangentSpace I x)
   定义体: ⟨0⟩
 -/
 instance : Inhabited (TangentSpace I x) := ⟨0⟩
@@ -2986,7 +2986,7 @@ abbreviation TangentBundle
   body: Bundle.TotalSpace E (TangentSpace I : M -> Type _)
 
 中文:
-缩写 TangentBundle
+缩写 切丛
   定义体: Bundle.TotalSpace E (TangentSpace I : M -> Type _)
 
 Depends on / 依赖: Bundle, Bundle.TotalSpace, TangentSpace, TotalSpace

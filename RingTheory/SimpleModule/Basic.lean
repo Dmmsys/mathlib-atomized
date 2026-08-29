@@ -65,7 +65,7 @@ class IsSimpleModule
   (no additional axioms)
 
 中文:
-类 IsSimpleModule
+类 是单模
   参数: extends
   (无附加公理)
 -/
@@ -81,7 +81,7 @@ class IsSemisimpleModule
   (no additional axioms)
 
 中文:
-类 IsSemisimpleModule
+类 是半单模
   参数: extends
   (无附加公理)
 -/
@@ -96,8 +96,8 @@ instance [IsSimpleModule
   signature: R M] : IsSemisimpleModule R M where
 
 中文:
-实例 [IsSimpleModule
-  签名: R M] : IsSemisimpleModule R M where
+实例 [是单模
+  签名: R M] : 是半单模 R M where
 -/
 instance [IsSimpleModule R M] : IsSemisimpleModule R M where
 
@@ -133,7 +133,7 @@ theorem RingEquiv.isSemisimpleRing
     (Submodule.orderIsoMapComap e.toSemilinearEquiv).complementedLattice
 
 中文:
-定理 RingEquiv.isSemisimpleRing
+定理 环等价.isSemisimpleRing
   条件: (e : R ≃+* S) [IsSemisimpleRing R]
   结论: IsSemisimpleRing S where
   证明: have := RingHomInvPair.of_ringEquiv e; have := this.symm
@@ -156,7 +156,7 @@ theorem RingEquiv.isSemisimpleRing_iff
   proof: ⟨fun _ => e.isSemisimpleRing, fun _ => e.symm.isSemisimpleRing⟩
 
 中文:
-定理 RingEquiv.isSemisimpleRing_iff
+定理 环等价.isSemisimpleRing_iff
   条件: (e : R ≃+* S)
   结论: IsSemisimpleRing R ↔ IsSemisimpleRing S
   证明: ⟨fun _ => e.isSemisimpleRing, fun _ => e.symm.isSemisimpleRing⟩
@@ -180,9 +180,9 @@ theorem IsSimpleModule.nontrivial
       simp [Submodule.mem_bot, Submodule.mem_top, h x]⟩⟩
 
 中文:
-定理 IsSimpleModule.nontrivial
-  条件: [IsSimpleModule R M]
-  结论: Nontrivial M
+定理 是单模.nontrivial
+  条件: [是单模 R M]
+  结论: 非平凡 M
   证明: ⟨⟨0, by
       have h : (⊥ : Submodule R M) != ⊤ := bot_ne_top
       contrapose! h
@@ -210,8 +210,8 @@ theorem LinearMap.isSimpleModule_iff_of_bijective
   simp_rw [isSimpleModule_iff, (Submodule.orderIsoMapComapOfBijective l hl).isSimpleOrder_iff]
 
 中文:
-定理 LinearMap.isSimpleModule_iff_of_bijective
-  结论: [Module S N] {σ : R ->+* S} [RingHomSurjective σ]
+定理 线性映射.isSimpleModule_iff_of_bijective
+  结论: [模 S N] {σ : R ->+* S} [RingHomSurjective σ]
   证明: by
   simp_rw [isSimpleModule_iff, (Submodule.orderIsoMapComapOfBijective l hl).isSimpleOrder_iff]
 
@@ -253,9 +253,9 @@ theorem IsSimpleModule.congr
   proof: (Submodule.orderIsoMapComap e).isSimpleOrder
 
 中文:
-定理 IsSimpleModule.congr
-  条件: (e : M ≃ₗ[R] N) [IsSimpleModule R N]
-  结论: IsSimpleModule R M where
+定理 是单模.congr
+  条件: (e : M ≃ₗ[R] N) [是单模 R N]
+  结论: 是单模 R M where
   证明: (Submodule.orderIsoMapComap e).isSimpleOrder
 
 Depends on / 依赖: Submodule, Submodule.orderIsoMapComap, isSimpleOrder, orderIsoMapComap
@@ -273,9 +273,9 @@ theorem LinearEquiv.isSimpleModule_iff
   proof: ⟨(·.congr e.symm), (·.congr e)⟩
 
 中文:
-定理 LinearEquiv.isSimpleModule_iff
+定理 线性等价.isSimpleModule_iff
   条件: (e : M ≃ₗ[R] N)
-  结论: IsSimpleModule R M ↔ IsSimpleModule R N
+  结论: 是单模 R M ↔ 是单模 R N
   证明: ⟨(·.congr e.symm), (·.congr e)⟩
 
 Depends on / 依赖: e.symm
@@ -295,7 +295,7 @@ theorem isSimpleModule_iff_isAtom
 
 中文:
 定理 isSimpleModule_iff_isAtom
-  结论: IsSimpleModule R m ↔ IsAtom m
+  结论: 是单模 R m ↔ IsAtom m
   证明: by
   rw [← Set.isSimpleOrder_Iic_iff_isAtom]; rw [isSimpleModule_iff]
   exact m.mapIic.isSimpleOrder_iff
@@ -318,7 +318,7 @@ theorem isSimpleModule_iff_isCoatom
 
 中文:
 定理 isSimpleModule_iff_isCoatom
-  结论: IsSimpleModule R (M ⧸ m) ↔ IsCoatom m
+  结论: 是单模 R (M ⧸ m) ↔ IsCoatom m
   证明: by
   rw [← Set.isSimpleOrder_Ici_iff_isCoatom]; rw [isSimpleModule_iff]
   exact (Submodule.comapMkQRelIso m).isSimpleOrder_iff
@@ -342,7 +342,7 @@ theorem covBy_iff_quot_is_simple
 
 中文:
 定理 covBy_iff_quot_is_simple
-  条件: {A B : Submodule R M} (hAB : A <= B)
+  条件: {A B : 子模 R M} (hAB : A <= B)
   证明: by
   set f : Submodule R B ≃o Set.Iic B := B.mapIic with hf
   rw [covBy_iff_coatom_Iic hAB]; rw [isSimpleModule_iff_isCoatom]; rw [← OrderIso.isCoatom_iff f]; rw [hf]
@@ -370,7 +370,7 @@ theorem isAtom
 
 中文:
 定理 isAtom
-  条件: [IsSimpleModule R m]
+  条件: [是单模 R m]
   结论: IsAtom m
   证明: isSimpleModule_iff_isAtom.1 ‹_›
 
@@ -394,7 +394,7 @@ theorem span_singleton_eq_top
 中文:
 定理 span_singleton_eq_top
   条件: {m : M} (hm : m != 0)
-  结论: Submodule.span R {m} = ⊤
+  结论: 子模.span R {m} = ⊤
   证明: (eq_bot_or_eq_top _).resolve_left fun h => hm (h.le <| Submodule.mem_span_singleton_self m)
 
 Depends on / 依赖: Submodule, Submodule.mem_span_singleton_self, eq_bot_or_eq_top, h.le, mem_span_singleton_self, resolve_left
@@ -466,7 +466,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsNoetherian R M
+  签名: 是Noether R M
   定义体: isNoetherian_iff'.mpr inferInstance
 
 Depends on / 依赖: DiscreteTopology, DiscreteTopology.eq_bot, bot_le, eq_bot, isNoetherian_iff
@@ -521,8 +521,8 @@ theorem IsSimpleModule.annihilator_isMaximal
   rwa [e.annihilator_eq, I.annihilator_quotient]
 
 中文:
-定理 IsSimpleModule.annihilator_isMaximal
-  结论: {R} [CommRing R] [Module R M]
+定理 是单模.annihilator_isMaximal
+  结论: {R} [交换环 R] [模 R M]
   证明: by
   have ⟨I, max, ⟨e⟩⟩ := isSimpleModule_iff_quot_maximal.mp simple
   rwa [e.annihilator_eq, I.annihilator_quotient]
@@ -548,7 +548,7 @@ top_unique fun z _ => by obtain ⟨y, rfl⟩ := h x hx0 z; exact m.smul_mem _ hx
 
 中文:
 定理 isSimpleModule_iff_toSpanSingleton_surjective
-  结论: IsSimpleModule R M ↔
+  结论: 是单模 R M ↔
   证明: ⟨h.nontrivial, fun _ => h.toSpanSingleton_surjective⟩
   mpr := fun ⟨_, h⟩ => (isSimpleModule_iff R M).mpr
     ⟨fun m => or_iff_not_imp_left.mpr fun ne_bot =>
@@ -603,7 +603,7 @@ theorem IsSemisimpleModule.of_sSup_simples_eq_top
   proof: complementedLattice_of_sSup_atoms_eq_top (by simp_rw [← h, isSimpleModule_iff_isAtom])
 
 中文:
-定理 IsSemisimpleModule.of_sSup_simples_eq_top
+定理 是半单模.of_sSup_simples_eq_top
   证明: complementedLattice_of_sSup_atoms_eq_top (by simp_rw [← h, isSimpleModule_iff_isAtom])
 
 Depends on / 依赖: complementedLattice_of_sSup_atoms_eq_top, isSimpleModule_iff_isAtom, simp_rw
@@ -632,7 +632,7 @@ theorem of_isComplemented_domain
 中文:
 定理 of_isComplemented_domain
   条件: (h : IsComplemented m)
-  结论: Module.Finite R₀ (m ->ₗ[R] P)
+  结论: 模.有限 R₀ (m ->ₗ[R] P)
   证明: .of_surjective (.lcomp R₀ P ..) (LinearMap.surjective_comp_subtype_of_isComplemented h)
 
 Depends on / 依赖: LinearMap, LinearMap.surjective_comp_subtype_of_isComplemented, of_surjective, surjective_comp_subtype_of_isComplemented
@@ -649,8 +649,8 @@ instance [IsSemisimpleModule
   body: .of_isComplemented_domain _ _ (exists_isCompl m)
 
 中文:
-实例 [IsSemisimpleModule
-  签名: R M] : Module.Finite R₀ (m ->ₗ[R] P)
+实例 [是半单模
+  签名: R M] : 模.有限 R₀ (m ->ₗ[R] P)
   定义体: .of_isComplemented_domain _ _ (exists_isCompl m)
 
 Depends on / 依赖: exists_isCompl, of_isComplemented_domain
@@ -677,7 +677,7 @@ theorem of_isComplemented_codomain
 中文:
 定理 of_isComplemented_codomain
   条件: (h : IsComplemented m)
-  结论: Module.Finite R₀ (P ->ₗ[R] m)
+  结论: 模.有限 R₀ (P ->ₗ[R] m)
   证明: .of_surjective (.compRight ..) (LinearMap.surjective_comp_projectionOnto h.choose_spec)
 
 Depends on / 依赖: LinearMap, LinearMap.surjective_comp_projectionOnto, choose_spec, compRight, continuous_quotient_mk, h.choose_spec, of_surjective, surjective_comp_projectionOnto, uCompactlyGeneratedSpace_of_coinduced
@@ -694,8 +694,8 @@ instance [IsSemisimpleModule
   body: .of_isComplemented_codomain _ _ (exists_isCompl m)
 
 中文:
-实例 [IsSemisimpleModule
-  签名: R M] : Module.Finite R₀ (P ->ₗ[R] m)
+实例 [是半单模
+  签名: R M] : 模.有限 R₀ (P ->ₗ[R] m)
   定义体: .of_isComplemented_codomain _ _ (exists_isCompl m)
 
 Depends on / 依赖: exists_isCompl, of_isComplemented_codomain
@@ -722,8 +722,8 @@ theorem eq_bot_or_exists_simple_le
   exact .congr (m.equivMapOfInjective _ N.subtype_inject
 
 中文:
-定理 eq_bot_or_exists_simple_le
-  条件: (N : Submodule R M) [IsSemisimpleModule R N]
+定理 eq_bot_or_存在_simple_le
+  条件: (N : 子模 R M) [是半单模 R N]
   证明: by
   rw [← N.subsingleton_iff_eq_bot]; rw [← Submodule.subsingleton_iff R]; rw [← subsingleton_iff_bot_eq_top]
   refine (eq_bot_or_exists_atom_le _).imp .symm fun ⟨m, h, _⟩ => ⟨_, N.map_subtype_le m, ?_⟩
@@ -750,8 +750,8 @@ theorem exists_submodule_linearEquiv_quotient
   proof: have ⟨P, compl⟩ := exists_isCompl N; ⟨P, ⟨(N.quotientEquivOfIsCompl P compl).symm⟩⟩
 
 中文:
-定理 exists_submodule_linearEquiv_quotient
-  条件: (N : Submodule R M)
+定理 存在_submodule_linearEquiv_quotient
+  条件: (N : 子模 R M)
   证明: have ⟨P, compl⟩ := exists_isCompl N; ⟨P, ⟨(N.quotientEquivOfIsCompl P compl).symm⟩⟩
 
 Depends on / 依赖: Filter, Filter.Tendsto, Filter.atTop, IsClosed, IsClosed.mem_of_tend, N.quotientEquivOfIsCompl, Nat.cofinite_eq_atTop, OnePoint, OnePoint.some, SequentialSpace, SequentialSpace.isClosed_of_seq, Tendsto, UCompactlyGeneratedSpace, ULift.down, ULift.up, coclosedCompact_eq_cocompact, cocompact_eq_cofinite, cofinite_eq_atTop, continuousMapMkNat, exists_isCompl
@@ -769,8 +769,8 @@ theorem exists_quotient_linearEquiv_submodule
   proof: have ⟨P, compl⟩ := exists_isCompl N; ⟨P, ⟨(P.quotientEquivOfIsCompl N compl.symm).symm⟩⟩
 
 中文:
-定理 exists_quotient_linearEquiv_submodule
-  条件: (N : Submodule R M)
+定理 存在_quotient_linearEquiv_submodule
+  条件: (N : 子模 R M)
   证明: have ⟨P, compl⟩ := exists_isCompl N; ⟨P, ⟨(P.quotientEquivOfIsCompl N compl.symm).symm⟩⟩
 
 Depends on / 依赖: P.quotientEquivOfIsCompl, compl.symm, exists_isCompl, quotientEquivOfIsCompl
@@ -790,7 +790,7 @@ theorem extension_property
 
 中文:
 定理 extension_property
-  结论: {P} [AddCommGroup P] [Module R P] (f : N ->ₗ[R] M)
+  结论: {P} [加法交换群 P] [模 R P] (f : N ->ₗ[R] M)
   证明: have ⟨m, compl⟩ := exists_isCompl (LinearMap.range f)
   ⟨g ∘ₗ f.linearProjOfIsCompl _ hf compl, by ext; simp⟩
 
@@ -817,7 +817,7 @@ theorem lifting_property
 
 中文:
 定理 lifting_property
-  结论: {P} [AddCommGroup P] [Module R P] (f : M ->ₗ[R] N)
+  结论: {P} [加法交换群 P] [模 R P] (f : M ->ₗ[R] N)
   证明: by
   have ⟨m, compl⟩ := exists_isCompl (LinearMap.ker f)
   let e := (Submodule.quotientEquivOfIsCompl _ m compl).symm ≪≫ₗ f.quotKerEquivOfSurjective hf
@@ -848,7 +848,7 @@ theorem sSup_simples_le
 
 中文:
 定理 sSup_simples_le
-  条件: (N : Submodule R M)
+  条件: (N : 子模 R M)
   证明: by
   simpa only [isSimpleModule_iff_isAtom] using sSup_atoms_le_eq _
 
@@ -871,9 +871,9 @@ theorem exists_simple_submodule
   simpa only [isSimpleModule_iff_isAtom] using IsAtomic.exists_atom _
 
 中文:
-定理 exists_simple_submodule
-  条件: [Nontrivial M]
-  结论: 存在 m : Submodule R M, IsSimpleModule R m
+定理 存在_simple_submodule
+  条件: [非平凡 M]
+  结论: 存在 m : 子模 R M, 是单模 R m
   证明: by
   simpa only [isSimpleModule_iff_isAtom] using IsAtomic.exists_atom _
 
@@ -893,7 +893,7 @@ theorem sSup_simples_eq_top
 
 中文:
 定理 sSup_simples_eq_top
-  结论: sSup { m : Submodule R M | IsSimpleModule R m } = ⊤
+  结论: sSup { m : 子模 R M | 是单模 R m } = ⊤
   证明: by
   simpa only [isSimpleModule_iff_isAtom] using sSup_atoms_eq_top
 
@@ -913,7 +913,7 @@ theorem exists_sSupIndep_sSup_simples_eq_top
   exact exists_sSupIndep_of_sSup_atoms_eq_top this
 
 中文:
-定理 exists_sSupIndep_sSup_simples_eq_top
+定理 存在_sSupIndep_sSup_simples_eq_top
   证明: by
   have := sSup_simples_eq_top R M
   simp_rw [isSimpleModule_iff_isAtom] at this ⊢
@@ -939,7 +939,7 @@ theorem annihilator_isRadical
 
 中文:
 定理 annihilator_isRadical
-  条件: (R) [CommRing R] [Module R M] [IsSemisimpleModule R M]
+  条件: (R) [交换环 R] [模 R M] [是半单模 R M]
   证明: by
   rw [← Submodule.annihilator_top]; rw [← sSup_simples_eq_top]; rw [sSup_eq_iSup']; rw [Submodule.annihilator_iSup]
   exact Ideal.isRadical_iInf _ fun i => (i.2.annihilator_isMaximal).isPrime.isRadical
@@ -961,7 +961,7 @@ instance submodule
 
 中文:
 实例 submodule
-  签名: {m : Submodule R M}
+  签名: {m : 子模 R M}
   定义体: m.mapIic.complementedLattice_iff.2 IsModularLattice.complementedLattice_Iic
 
 Depends on / 依赖: IsModularLattice, IsModularLattice.complementedLattice_Iic, complementedLattice_Iic, complementedLattice_iff, m.mapIic.complementedLattice_iff, mapIic
@@ -984,7 +984,7 @@ theorem congr
 中文:
 定理 congr
   条件: (e : N ≃ₗ[R] M)
-  结论: IsSemisimpleModule R N where
+  结论: 是半单模 R N where
   证明: (Submodule.orderIsoMapComap e.symm).complementedLattice
 
 Depends on / 依赖: Submodule, Submodule.orderIsoMapComap, complementedLattice, e.symm, orderIsoMapComap
@@ -1003,8 +1003,8 @@ theorem of_injective
 
 中文:
 定理 of_injective
-  条件: (f : N ->ₗ[R] M) (hf : Function.Injective f)
-  结论: IsSemisimpleModule R N
+  条件: (f : N ->ₗ[R] M) (hf : 函数.单射 f)
+  结论: 是半单模 R N
   证明: congr (Submodule.topEquiv.symm.trans <| Submodule.equivMapOfInjective f hf _)
 
 Depends on / 依赖: CompactlyGeneratedSpace, CompactlyGeneratedSpace.isClosed, Continuous, Sigma.mk, Submodule, Submodule.equivMapOfInjective, Submodule.topEquiv.symm.trans, ULift.down, compactlyGeneratedSpace_of_isClosed, continuous_sigmaMk, continuous_sigmaMk.comp, continuous_uliftDown, continuous_uliftUp, equivMapOfInjective, hf.comp, isClosed, isClosed_sigma_iff, preimage, topEquiv
@@ -1023,7 +1023,7 @@ instance quotient
 
 中文:
 实例 quotient
-  签名: : IsSemisimpleModule R (M ⧸ m)
+  签名: : 是半单模 R (M ⧸ m)
   定义体: have ⟨_, ⟨e⟩⟩ := exists_submodule_linearEquiv_quotient m
   .congr e.symm
 
@@ -1052,7 +1052,7 @@ theorem range
 中文:
 定理 range
   条件: (f : M ->ₗ[R] N)
-  结论: IsSemisimpleModule R (range f)
+  结论: 是半单模 R (range f)
   证明: congr (quotKerEquivRange _).symm
 -/
 protected theorem range (f : M ->ₗ[R] N) : IsSemisimpleModule R (range f) :=
@@ -1069,8 +1069,8 @@ theorem of_surjective
 
 中文:
 定理 of_surjective
-  条件: (f : M ->ₗ[R] N) (hf : Function.Surjective f)
-  结论: IsSemisimpleModule R N
+  条件: (f : M ->ₗ[R] N) (hf : 函数.满射 f)
+  结论: 是半单模 R N
   证明: congr (f.quotKerEquivOfSurjective hf).symm
 
 Depends on / 依赖: f.quotKerEquivOfSurjective, quotKerEquivOfSurjective
@@ -1093,7 +1093,7 @@ theorem _root_.LinearMap.isSemisimpleModule_iff_of_bijective
     (Submodule.orderIsoMapComapOfBijective l hl).complementedLattice_iff]
 
 中文:
-定理 _root_.LinearMap.isSemisimpleModule_iff_of_bijective
+定理 _root_.线性映射.isSemisimpleModule_iff_of_bijective
   证明: by
   simp_rw [isSemisimpleModule_iff,
     (Submodule.orderIsoMapComapOfBijective l hl).complementedLattice_iff]
@@ -1127,7 +1127,7 @@ theorem LinearEquiv.isSemisimpleModule_iff
   proof: ⟨(·.congr e.symm), (·.congr e)⟩
 
 中文:
-定理 LinearEquiv.isSemisimpleModule_iff
+定理 线性等价.isSemisimpleModule_iff
   条件: (e : M ≃ₗ[R] N)
   证明: ⟨(·.congr e.symm), (·.congr e)⟩
 
@@ -1167,7 +1167,7 @@ lemma isSemisimpleModule_of_isSemisimpleModule_submodule
 
 中文:
 引理 isSemisimpleModule_of_isSemisimpleModule_submodule
-  结论: {s : Set ι} {p : ι -> Submodule R M}
+  结论: {s : 集合 ι} {p : ι -> 子模 R M}
   证明: by
   simp_rw [isSemisimpleModule_iff] at hp ⊢
   refine complementedLattice_of_complementedLattice_Iic (fun i hi => ?_) hp'
@@ -1197,7 +1197,7 @@ lemma isSemisimpleModule_biSup_of_isSemisimpleModule_submodule
 
 中文:
 引理 isSemisimpleModule_biSup_of_isSemisimpleModule_submodule
-  结论: {s : Set ι} {p : ι -> Submodule R M}
+  结论: {s : 集合 ι} {p : ι -> 子模 R M}
   证明: by
   refine isSemisimpleModule_of_isSemisimpleModule_submodule
     ((comap_equiv_self_of_inj_of_le (injective_subtype _) ?_).isSemisimpleModule_iff.mpr <| hp · ·)
@@ -1224,7 +1224,7 @@ lemma isSemisimpleModule_of_isSemisimpleModule_submodule'
 
 中文:
 引理 isSemisimpleModule_of_isSemisimpleModule_submodule'
-  结论: {p : ι -> Submodule R M}
+  结论: {p : ι -> 子模 R M}
   证明: isSemisimpleModule_of_isSemisimpleModule_submodule (s := Set.univ) (fun i _ => hp i) (by simpa)
 
 Depends on / 依赖: Set.univ, isSemisimpleModule_of_isSemisimpleModule_submodule
@@ -1255,8 +1255,8 @@ exact .symm .trans (.ofInjective _ ind.dfinsupp_lsum_injective) .trans (.ofEq _ 
     by rw [← Submodule.iSup_eq_range_dfinsu
 
 中文:
-定理 IsSemisimpleModule.exists_linearEquiv_dfinsupp
-  条件: [IsSemisimpleModule R M]
+定理 是半单模.存在_linearEquiv_dfinsupp
+  条件: [是半单模 R M]
   证明: by
   have ⟨s, ind, sSup, simple⟩ := IsSemisimpleModule.exists_sSupIndep_sSup_simples_eq_top R M
   refine ⟨s, ?_, ind, SetCoe.forall.mpr simple⟩
@@ -1287,8 +1287,8 @@ theorem isSemisimpleModule_iff_exists_linearEquiv_dfinsupp
   exact ⟨s, e, h.2⟩
 
 中文:
-定理 isSemisimpleModule_iff_exists_linearEquiv_dfinsupp
-  结论: IsSemisimpleModule R M ↔
+定理 isSemisimpleModule_iff_存在_linearEquiv_dfinsupp
+  结论: 是半单模 R M ↔
   证明: by
   refine ⟨fun _ => ?_, fun ⟨s, e, h⟩ => .congr e⟩
   have ⟨s, e, h⟩ := IsSemisimpleModule.exists_linearEquiv_dfinsupp R M
@@ -1315,8 +1315,8 @@ fun S => (S.1.nontrivial_iff_ne_bot).mp IsSimpleModule.nontrivial R S
 ⟨_, _, e.trans DirectSum.lequivCongrLeft R (Finite.equivFin s), fun _ => simple _⟩
 
 中文:
-定理 IsSemisimpleModule.exists_linearEquiv_fin_dfinsupp
-  结论: [IsSemisimpleModule R M]
+定理 是半单模.存在_linearEquiv_fin_dfinsupp
+  结论: [是半单模 R M]
   证明: have ⟨s, e, h, simple⟩ := IsSemisimpleModule.exists_linearEquiv_dfinsupp R M
   have := WellFoundedGT.finite_of_iSupIndep ((sSupIndep_iff _).mp h)
 fun S => (S.1.nontrivial_iff_ne_bot).mp IsSimpleModule.nontrivial R S
@@ -1352,8 +1352,8 @@ theorem IsSemisimpleModule.sup
     (by rintro (_ | _) _ <;> assumption)
 
 中文:
-定理 IsSemisimpleModule.sup
-  结论: {p q : Submodule R M}
+定理 是半单模.上确界
+  结论: {p q : 子模 R M}
   证明: by
   let f : Bool -> Submodule R M := Bool.rec q p
   rw [show p ⊔ q = ⨆ i in Set.univ]; rw [f i by rw [iSup_univ]; rw [iSup_bool_eq]]
@@ -1382,7 +1382,7 @@ theorem IsSemisimpleRing.exists_linearEquiv_ideal_of_isSimpleModule
   ⟨I, ⟨e.trans e'.symm⟩⟩
 
 中文:
-定理 IsSemisimpleRing.exists_linearEquiv_ideal_of_isSimpleModule
+定理 IsSemisimpleRing.存在_linearEquiv_ideal_of_isSimpleModule
   结论: [IsSemisimpleRing R]
   证明: have ⟨J, _, ⟨e⟩⟩ := isSimpleModule_iff_quot_maximal.mp h
   have ⟨I, ⟨e'⟩⟩ := IsSemisimpleModule.exists_submodule_linearEquiv_quotient J
@@ -1427,8 +1427,8 @@ instance IsSemisimpleModule.isCoatomic_submodule
   body: isCoatomic_of_isAtomic_of_complementedLattice_of_isModular
 
 中文:
-实例 IsSemisimpleModule.isCoatomic_submodule
-  签名: [IsSemisimpleModule R M]
+实例 是半单模.isCoatomic_submodule
+  签名: [是半单模 R M]
   定义体: isCoatomic_of_isAtomic_of_complementedLattice_of_isModular
 
 Depends on / 依赖: isCoatomic_of_isAtomic_of_complementedLattice_of_isModular
@@ -1501,8 +1501,8 @@ theorem RingHom.isSemisimpleRing_of_surjective
   infer_instance
 
 中文:
-定理 RingHom.isSemisimpleRing_of_surjective
-  结论: (f : R ->+* S) (hf : Function.Surjective f)
+定理 环态射.isSemisimpleRing_of_surjective
+  结论: (f : R ->+* S) (hf : 函数.满射 f)
   证明: by
   let : Module R S := Module.compHom _ f
   have : RingHomSurjective f := ⟨hf⟩
@@ -1534,7 +1534,7 @@ theorem IsSemisimpleRing.ideal_eq_span_idempotent
 
 中文:
 定理 IsSemisimpleRing.ideal_eq_span_idempotent
-  条件: [IsSemisimpleRing R] (I : Ideal R)
+  条件: [IsSemisimpleRing R] (I : 理想 R)
   证明: by
   obtain ⟨J, h⟩ := exists_isCompl I
   obtain ⟨f, idem, rfl⟩ := I.isIdempotentElemEquiv.symm (I.isComplEquivProj ⟨J, h⟩)
@@ -1560,7 +1560,7 @@ instance [IsSemisimpleRing
 
 中文:
 实例 [IsSemisimpleRing
-  签名: R] : IsPrincipalIdealRing R where
+  签名: R] : 是主理想环 R where
   定义体: have ⟨e, _, he⟩ := IsSemisimpleRing.ideal_eq_span_idempotent I; ⟨e, he⟩
 
 Depends on / 依赖: IsSemisimpleRing, IsSemisimpleRing.ideal_eq_span_idempotent, ideal_eq_span_idempotent
@@ -1582,7 +1582,7 @@ theorem injective_or_eq_zero
 
 中文:
 定理 injective_or_eq_zero
-  条件: [IsSimpleModule R M] (f : M ->ₗ[R] N)
+  条件: [是单模 R M] (f : M ->ₗ[R] N)
   证明: by
   rw [← ker_eq_bot]; rw [← ker_eq_top]
   apply eq_bot_or_eq_top
@@ -1604,7 +1604,7 @@ theorem injective_of_ne_zero
 
 中文:
 定理 injective_of_ne_zero
-  条件: [IsSimpleModule R M] {f : M ->ₗ[R] N} (h : f != 0)
+  条件: [是单模 R M] {f : M ->ₗ[R] N} (h : f != 0)
   证明: f.injective_or_eq_zero.resolve_right h
 
 Depends on / 依赖: f.injective_or_eq_zero.resolve_right, injective_or_eq_zero, resolve_right
@@ -1625,7 +1625,7 @@ theorem surjective_or_eq_zero
 
 中文:
 定理 surjective_or_eq_zero
-  条件: [IsSimpleModule R N] (f : M ->ₗ[R] N)
+  条件: [是单模 R N] (f : M ->ₗ[R] N)
   证明: by
   rw [← range_eq_top]; rw [← range_eq_bot]; rw [or_comm]
   apply eq_bot_or_eq_top
@@ -1647,7 +1647,7 @@ theorem surjective_of_ne_zero
 
 中文:
 定理 surjective_of_ne_zero
-  条件: [IsSimpleModule R N] {f : M ->ₗ[R] N} (h : f != 0)
+  条件: [是单模 R N] {f : M ->ₗ[R] N} (h : f != 0)
   证明: f.surjective_or_eq_zero.resolve_right h
 
 Depends on / 依赖: f.surjective_or_eq_zero.resolve_right, resolve_right, surjective_or_eq_zero
@@ -1666,7 +1666,7 @@ theorem bijective_or_eq_zero
 
 中文:
 定理 bijective_or_eq_zero
-  条件: [IsSimpleModule R M] [IsSimpleModule R N] (f : M ->ₗ[R] N)
+  条件: [是单模 R M] [是单模 R N] (f : M ->ₗ[R] N)
   证明: or_iff_not_imp_right.mpr fun h => ⟨injective_of_ne_zero h, surjective_of_ne_zero h⟩
 
 Depends on / 依赖: injective_of_ne_zero, or_iff_not_imp_right, or_iff_not_imp_right.mpr, surjective_of_ne_zero
@@ -1685,7 +1685,7 @@ theorem bijective_of_ne_zero
 
 中文:
 定理 bijective_of_ne_zero
-  条件: [IsSimpleModule R M] [IsSimpleModule R N] {f : M ->ₗ[R] N} (h : f != 0)
+  条件: [是单模 R M] [是单模 R N] {f : M ->ₗ[R] N} (h : f != 0)
   证明: f.bijective_or_eq_zero.resolve_right h
 
 Depends on / 依赖: bijective_or_eq_zero, f.bijective_or_eq_zero.resolve_right, resolve_right
@@ -1706,7 +1706,7 @@ theorem isCoatom_ker_of_surjective
 
 中文:
 定理 isCoatom_ker_of_surjective
-  结论: [IsSimpleModule R N] {f : M ->ₗ[R] N}
+  结论: [是单模 R N] {f : M ->ₗ[R] N}
   证明: by
   rw [← isSimpleModule_iff_isCoatom]
   exact IsSimpleModule.congr (f.quotKerEquivOfSurjective hf)
@@ -1730,7 +1730,7 @@ theorem linearEquiv_of_ne_zero
 
 中文:
 定理 linearEquiv_of_ne_zero
-  结论: [IsSemisimpleModule R M] [IsSimpleModule R N]
+  结论: [是半单模 R M] [是单模 R N]
   证明: have ⟨m, (_ : IsSimpleModule R m), ne⟩ :=
     exists_ne_zero_of_sSup_eq_top h _ (IsSemisimpleModule.sSup_simples_eq_top ..)
 ⟨m, ⟨.symm .ofBijective _ ((bijective_or_eq_zero _).resolve_right ne)⟩⟩
@@ -1756,7 +1756,7 @@ instance _root_.Module.End.instDivisionRing
   
 
 中文:
-实例 _root_.Module.End.instDivisionRing
+实例 _root_.模.End.instDivisionRing
   定义体: if h : f = 0 then 0 else (LinearEquiv.ofBijective _ <| bijective_of_ne_zero h).symm
   exists_pair_ne := ⟨0, 1, have := IsSimpleModule.nontrivial R M; zero_ne_one⟩
   mul_inv_cancel a a0 := by
@@ -1801,8 +1801,8 @@ Nonempty.some h.rel e ⟨.refl R _⟩ (fun ⟨f⟩ => ⟨f.symm⟩) (fun ⟨f⟩
     fun h => by rw [sup_comm, inf_comm]; exact ⟨
 
 中文:
-定义 Iso.linearEquiv
-  签名: {X Y : Submodule R M × Submodule R M} (h : Iso X Y)
+定义 同构.linearEquiv
+  签名: {X Y : 子模 R M × 子模 R M} (h : 同构 X Y)
   定义体: letI e : Submodule R M × Submodule R M -> Submodule R M × Submodule R M -> Prop :=
 fun X Y => Nonempty (X.2 ⧸ X.1.comap X.2.subtype) ≃ₗ[R] Y.2 ⧸ Y.1.comap Y.2.subtype
 Nonempty.some h.rel e ⟨.refl R _⟩ (fun ⟨f⟩ => ⟨f.symm⟩) (fun ⟨f⟩ ⟨g⟩ => ⟨f.trans g⟩)
@@ -1842,7 +1842,7 @@ theorem jacobson_density
 
 中文:
 定理 jacobson_density
-  条件: (f : End (End R M) M) (s : Finset M)
+  条件: (f : End (End R M) M) (s : 有限集 M)
   证明: let x := Finsupp.equivFunOnFinite.symm (·.1 : s -> M)
   have ⟨_, h⟩ := exists_isCompl (R ∙ x)
   let p := projection _ _ h
@@ -1881,8 +1881,8 @@ theorem Module.Finite.toModuleEnd_moduleEnd_surjective
   | add _ _ _ _ h₁
 
 中文:
-定理 Module.Finite.toModuleEnd_moduleEnd_surjective
-  条件: [Module.Finite (End R M) M]
+定理 模.有限.toModuleEnd_moduleEnd_surjective
+  条件: [模.有限 (End R M) M]
   证明: by
   have ⟨s, hs⟩ := Module.Finite.fg_top (R := End R M) (M := M)
   intro f

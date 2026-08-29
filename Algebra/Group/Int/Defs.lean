@@ -40,7 +40,7 @@ instance instCommMonoid
 
 中文:
 实例 instCommMonoid
-  签名: : CommMonoid 整数 where
+  签名: : 交换幺半群 整数 where
   定义体: Int.mul_comm
   mul_one := Int.mul_one
   one_mul := Int.one_mul
@@ -80,7 +80,7 @@ instance instAddCommGroup
 
 中文:
 实例 instAddCommGroup
-  签名: : AddCommGroup 整数 where
+  签名: : 加法交换群 整数 where
   定义体: Int.add_comm
   add_assoc := Int.add_assoc
   add_zero := Int.add_zero
@@ -126,7 +126,7 @@ instance instIsAddTorsionFree
 
 中文:
 实例 instIsAddTorsionFree
-  签名: : IsAddTorsionFree 整数 where
+  签名: : 是加法无挠 整数 where
   定义体: Int.eq_of_mul_eq_mul_left (by lia)
 
 Depends on / 依赖: Int.eq_of_mul_eq_mul_left, eq_of_mul_eq_mul_left
@@ -154,7 +154,7 @@ instance instAddCommMonoid
 
 中文:
 实例 instAddCommMonoid
-  签名: : AddCommMonoid 整数
+  签名: : 加法交换幺半群 整数
   定义体: by infer_instance
 
 Depends on / 依赖: infer_instance
@@ -170,7 +170,7 @@ instance instAddMonoid
 
 中文:
 实例 instAddMonoid
-  签名: : AddMonoid 整数
+  签名: : 加法幺半群 整数
   定义体: by infer_instance
 
 Depends on / 依赖: infer_instance
@@ -186,7 +186,7 @@ instance instMonoid
 
 中文:
 实例 instMonoid
-  签名: : Monoid 整数
+  签名: : 幺半群 整数
   定义体: by infer_instance
 
 Depends on / 依赖: infer_instance
@@ -202,7 +202,7 @@ instance instCommSemigroup
 
 中文:
 实例 instCommSemigroup
-  签名: : CommSemigroup 整数
+  签名: : 交换半群 整数
   定义体: by infer_instance
 
 Depends on / 依赖: infer_instance
@@ -218,7 +218,7 @@ instance instSemigroup
 
 中文:
 实例 instSemigroup
-  签名: : Semigroup 整数
+  签名: : 半群 整数
   定义体: by infer_instance
 
 Depends on / 依赖: infer_instance
@@ -234,7 +234,7 @@ instance instAddGroup
 
 中文:
 实例 instAddGroup
-  签名: : AddGroup 整数
+  签名: : 加法群 整数
   定义体: by infer_instance
 
 Depends on / 依赖: infer_instance
@@ -250,7 +250,7 @@ instance instAddCommSemigroup
 
 中文:
 实例 instAddCommSemigroup
-  签名: : AddCommSemigroup 整数
+  签名: : 加法交换半群 整数
   定义体: by infer_instance
 
 Depends on / 依赖: infer_instance
@@ -266,7 +266,7 @@ instance instAddSemigroup
 
 中文:
 实例 instAddSemigroup
-  签名: : AddSemigroup 整数
+  签名: : 加法半群 整数
   定义体: by infer_instance
 
 Depends on / 依赖: infer_instance

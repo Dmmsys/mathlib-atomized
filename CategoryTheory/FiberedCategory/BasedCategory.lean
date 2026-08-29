@@ -49,11 +49,11 @@ structure BasedCategory
     - p : obj ⥤ 𝒮
 
 中文:
-结构 BasedCategory
-  参数: (𝒮 : 类型u₁) [Category.{v₁} 𝒮]
+结构 Based范畴
+  参数: (𝒮 : 类型u₁) [范畴.{v₁} 𝒮]
   公理与运算 (3 个):
     - obj : 类型u₂
-    - category : Category.{v₂} obj  [默认: by infer_instance]
+    - category : 范畴.{v₂} obj  [默认: by infer_instance]
     - p : obj ⥤ 𝒮
 
 Depends on / 依赖: infer_instance
@@ -78,8 +78,8 @@ definition BasedCategory.ofFunctor
   p := p
 
 中文:
-定义 BasedCategory.ofFunctor
-  签名: {𝒳 : 类型u₂} [Category.{v₂} 𝒳] (p : 𝒳 ⥤ 𝒮)
+定义 Based范畴.ofFunctor
+  签名: {𝒳 : 类型u₂} [范畴.{v₂} 𝒳] (p : 𝒳 ⥤ 𝒮)
   定义体: 𝒳
   p := p
 -/
@@ -97,8 +97,8 @@ structure BasedFunctor
     - w : toFunctor ⋙ 𝒴.p = 𝒳.p  [default: by cat_disch]
 
 中文:
-结构 BasedFunctor
-  参数: (𝒳 : BasedCategory.{v₂, u₂} 𝒮) (𝒴 : BasedCategory.{v₃, u₃} 𝒮)
+结构 Based函子
+  参数: (𝒳 : Based范畴.{v₂, u₂} 𝒮) (𝒴 : Based范畴.{v₃, u₃} 𝒮)
   公理与运算 (1 个):
     - w : toFunctor ⋙ 𝒴.p = 𝒳.p  [默认: by cat_disch]
 
@@ -127,7 +127,7 @@ definition id
 
 中文:
 定义 id
-  签名: (𝒳 : BasedCategory.{v₂, u₂} 𝒮)
+  签名: (𝒳 : Based范畴.{v₂, u₂} 𝒮)
   定义体: 𝟭 𝒳.obj
 -/
 def id (𝒳 : BasedCategory.{v₂, u₂} 𝒮) : 𝒳 ⥤ᵇ 𝒳 where
@@ -151,7 +151,7 @@ definition comp
 
 中文:
 定义 comp
-  签名: {𝒵 : BasedCategory.{v₄, u₄} 𝒮} (F : 𝒳 ⥤ᵇ 𝒴) (G : 𝒴 ⥤ᵇ 𝒵)
+  签名: {𝒵 : Based范畴.{v₄, u₄} 𝒮} (F : 𝒳 ⥤ᵇ 𝒴) (G : 𝒴 ⥤ᵇ 𝒵)
   定义体: F.toFunctor ⋙ G.toFunctor
   w := by rw [Functor.assoc, G.w, F.w]
 
@@ -223,7 +223,7 @@ lemma comp_assoc
 
 中文:
 引理 comp_assoc
-  结论: {𝒵 : BasedCategory.{v₄, u₄} 𝒮} {𝒜 : BasedCategory.{v₅, u₅} 𝒮} (F : 𝒳 ⥤ᵇ 𝒴)
+  结论: {𝒵 : Based范畴.{v₄, u₄} 𝒮} {𝒜 : Based范畴.{v₅, u₅} 𝒮} (F : 𝒳 ⥤ᵇ 𝒴)
   证明: rfl
 
 @[simp]
@@ -355,9 +355,9 @@ structure BasedNatTrans
     - isHomLift' : forall (a : 𝒳.obj), IsHomLift 𝒴.p (𝟙 (𝒳.p.obj a)) (toNatTrans.app a)  [default: by cat_disch]
 
 中文:
-结构 BasedNatTrans
-  参数: {𝒳 : BasedCategory.{v₂, u₂} 𝒮} {𝒴 : BasedCategory.{v₃, u₃} 𝒮}
-  继承: CategoryTheory.NatTrans F.toFunctor G.toFunctor
+结构 Based自然数Trans
+  参数: {𝒳 : Based范畴.{v₂, u₂} 𝒮} {𝒴 : Based范畴.{v₃, u₃} 𝒮}
+  继承: 范畴论.自然变换 F.toFunctor G.toFunctor
   公理与运算 (1 个):
     - isHomLift' : 对任意 (a : 𝒳.obj), IsHomLift 𝒴.p (𝟙 (𝒳.p.obj a)) (to自然数Trans.app a)  [默认: by cat_disch]
 
@@ -516,7 +516,7 @@ instance homCategory
 
 中文:
 实例 homCategory
-  签名: (𝒳 : BasedCategory.{v₂, u₂} 𝒮) (𝒴 : BasedCategory.{v₃, u₃} 𝒮)
+  签名: (𝒳 : Based范畴.{v₂, u₂} 𝒮) (𝒴 : Based范畴.{v₃, u₃} 𝒮)
   定义体: BasedNatTrans
   id := BasedNatTrans.id
   comp := BasedNatTrans.comp
@@ -564,7 +564,7 @@ definition forgetful
 
 中文:
 定义 forgetful
-  签名: (𝒳 : BasedCategory.{v₂, u₂} 𝒮) (𝒴 : BasedCategory.{v₃, u₃} 𝒮)
+  签名: (𝒳 : Based范畴.{v₂, u₂} 𝒮) (𝒴 : Based范畴.{v₃, u₃} 𝒮)
   定义体: fun F => F.toFunctor
   map := fun α => α.toNatTrans
 
@@ -591,7 +591,7 @@ instance :
 
 中文:
 实例 :
-  签名: (forgetful 𝒳 𝒴).ReflectsIsomorphisms
+  签名: (forgetful 𝒳 𝒴).反映同构
   定义体: by
     constructor
     use {
@@ -659,7 +659,7 @@ definition mkNatIso
       apply IsHomLift.lift_id_inv }
 
 中文:
-定义 mkNatIso
+定义 mk自然数Iso
   签名: (α : F.toFunctor ≅ G.toFunctor)
   定义体: { toNatTrans := α.hom }
   inv := {
@@ -693,9 +693,9 @@ lemma isIso_of_toNatTrans_isIso
   Functor.ReflectsIsomorphisms.reflects (forgetful 𝒳 𝒴) α
 
 中文:
-引理 isIso_of_toNatTrans_isIso
-  条件: (α : F ⟶ G) [IsIso (X := F.toFunctor) α.to自然数Trans]
-  结论: IsIso α
+引理 isIso_of_to自然数Trans_isIso
+  条件: (α : F ⟶ G) [是同构 (X := F.toFunctor) α.to自然数Trans]
+  结论: 是同构 α
   证明: have : IsIso ((forgetful 𝒳 𝒴).map α) := by simp_all
   Functor.ReflectsIsomorphisms.reflects (forgetful 𝒳 𝒴) α
 
@@ -729,7 +729,7 @@ definition whiskerLeft
 
 中文:
 定义 whiskerLeft
-  签名: {𝒵 : BasedCategory.{v₄, u₄} 𝒮} (F : 𝒳 ⥤ᵇ 𝒴) {G H : 𝒴 ⥤ᵇ 𝒵} (α : G ⟶ H)
+  签名: {𝒵 : Based范畴.{v₄, u₄} 𝒮} (F : 𝒳 ⥤ᵇ 𝒴) {G H : 𝒴 ⥤ᵇ 𝒵} (α : G ⟶ H)
   定义体: Functor.whiskerLeft F.toFunctor α.toNatTrans
   isHomLift' := fun a => α.isHomLift (F.w_obj a)
 
@@ -754,7 +754,7 @@ definition whiskerRight
 
 中文:
 定义 whiskerRight
-  签名: {𝒵 : BasedCategory.{v₄, u₄} 𝒮} {F G : 𝒳 ⥤ᵇ 𝒴} (α : F ⟶ G) (H : 𝒴 ⥤ᵇ 𝒵)
+  签名: {𝒵 : Based范畴.{v₄, u₄} 𝒮} {F G : 𝒳 ⥤ᵇ 𝒴} (α : F ⟶ G) (H : 𝒴 ⥤ᵇ 𝒵)
   定义体: Functor.whiskerRight α.toNatTrans H.toFunctor
   isHomLift' := fun _ => BasedFunctor.preserves_isHomLift _ _ _
 
@@ -781,7 +781,7 @@ instance :
 
 中文:
 实例 :
-  签名: Category (BasedCategory.{v₂, u₂} 𝒮)
+  签名: 范畴 (Based范畴.{v₂, u₂} 𝒮)
   定义体: BasedFunctor
   id := id
   comp := comp
@@ -813,7 +813,7 @@ instance bicategory
 
 中文:
 实例 bicategory
-  签名: : Bicategory (BasedCategory.{v₂, u₂} 𝒮) where
+  签名: : 双范畴 (Based范畴.{v₂, u₂} 𝒮) where
   定义体: 𝒳 ⥤ᵇ 𝒴
   id 𝒳 := 𝟭 𝒳
   comp F G := F ⋙ G
@@ -845,7 +845,7 @@ instance :
 
 中文:
 实例 :
-  签名: Bicategory.Strict (BasedCategory.{v₂, u₂} 𝒮)
+  签名: 双范畴.Strict (Based范畴.{v₂, u₂} 𝒮)
 -/
 instance : Bicategory.Strict (BasedCategory.{v₂, u₂} 𝒮) where
 

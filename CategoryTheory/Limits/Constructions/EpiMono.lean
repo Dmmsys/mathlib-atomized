@@ -43,7 +43,7 @@ theorem preserves_mono_of_preservesLimit
 
 中文:
 定理 preserves_mono_of_preservesLimit
-  结论: {X Y : C} (f : X ⟶ Y) [PreservesLimit (cospan f f) F]
+  结论: {X Y : C} (f : X ⟶ Y) [保持极限 (cospan f f) F]
   证明: by
   have := isLimitPullbackConeMapOfIsLimit F _ (PullbackCone.isLimitMkIdId f)
   simp_rw [F.map_id] at this
@@ -74,7 +74,7 @@ theorem reflects_mono_of_reflectsLimit
 
 中文:
 定理 reflects_mono_of_reflectsLimit
-  结论: {X Y : C} (f : X ⟶ Y) [ReflectsLimit (cospan f f) F]
+  结论: {X Y : C} (f : X ⟶ Y) [反映极限 (cospan f f) F]
   证明: by
   have := PullbackCone.isLimitMkIdId (F.map f)
   simp_rw [← F.map_id] at this
@@ -105,7 +105,7 @@ theorem preserves_epi_of_preservesColimit
 
 中文:
 定理 preserves_epi_of_preservesColimit
-  结论: {X Y : C} (f : X ⟶ Y) [PreservesColimit (span f f) F]
+  结论: {X Y : C} (f : X ⟶ Y) [保持余极限 (span f f) F]
   证明: by
   have := isColimitPushoutCoconeMapOfIsColimit F _ (PushoutCocone.isColimitMkIdId f)
   simp_rw [F.map_id] at this
@@ -138,7 +138,7 @@ theorem reflects_epi_of_reflectsColimit
 
 中文:
 定理 reflects_epi_of_reflectsColimit
-  结论: {X Y : C} (f : X ⟶ Y) [ReflectsColimit (span f f) F]
+  结论: {X Y : C} (f : X ⟶ Y) [反映余极限 (span f f) F]
   证明: by
   have := PushoutCocone.isColimitMkIdId (F.map f)
   simp_rw [← F.map_id] at this

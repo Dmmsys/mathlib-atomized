@@ -48,10 +48,10 @@ class PreservesFiniteLimits
     - preservesFiniteLimits : forall (J : Type) [SmallCategory J] [FinCategory J], PreservesLimitsOfShape J F  [default: by infer_instance]
 
 中文:
-类 PreservesFiniteLimits
+类 保持FiniteLimits
   参数: (F : C ⥤ D)
   公理与运算 (1 个):
-    - preservesFiniteLimits : 对任意 (J : Type) [SmallCategory J] [FinCategory J], PreservesLimitsOfShape J F  [默认: by infer_instance]
+    - preservesFiniteLimits : 对任意 (J : 类型) [小范畴 J] [有限范畴 J], 保持形状极限 J F  [默认: by infer_instance]
 
 Depends on / 依赖: infer_instance
 -/
@@ -80,7 +80,7 @@ lemma PreservesLimitsOfSize.preservesFiniteLimits
     exact preservesLimitsOfShape_of_equiv (FinCategory.equivAsType J) F
 
 中文:
-引理 PreservesLimitsOfSize.preservesFiniteLimits
+引理 保持LimitsOfSize.preservesFiniteLimits
   结论: (F : C ⥤ D)
   证明: by
     have := preservesSmallestLimits_of_preservesLimits F
@@ -142,7 +142,7 @@ lemma comp_preservesFiniteLimits
 
 中文:
 引理 comp_preservesFiniteLimits
-  结论: (F : C ⥤ D) (G : D ⥤ E) [PreservesFiniteLimits F]
+  结论: (F : C ⥤ D) (G : D ⥤ E) [保持FiniteLimits F]
   证明: ⟨fun _ _ _ => inferInstance⟩
 -/
 lemma comp_preservesFiniteLimits (F : C ⥤ D) (G : D ⥤ E) [PreservesFiniteLimits F]
@@ -159,7 +159,7 @@ lemma preservesFiniteLimits_of_natIso
 
 中文:
 引理 preservesFiniteLimits_of_natIso
-  条件: {F G : C ⥤ D} (h : F ≅ G) [PreservesFiniteLimits F]
+  条件: {F G : C ⥤ D} (h : F ≅ G) [保持FiniteLimits F]
   证明: preservesLimitsOfShape_of_natIso h
 
 Depends on / 依赖: preservesLimitsOfShape_of_natIso
@@ -178,10 +178,10 @@ class PreservesFiniteProducts
     - preserves : forall n, PreservesLimitsOfShape (Discrete (Fin n)) F
 
 中文:
-类 PreservesFiniteProducts
+类 保持FiniteProducts
   参数: (F : C ⥤ D)
   公理与运算 (1 个):
-    - preserves : 对任意 n, PreservesLimitsOfShape (Discrete (Fin n)) F
+    - preserves : 对任意 n, 保持形状极限 (离散 (有限集 n)) F
 -/
 class PreservesFiniteProducts (F : C ⥤ D) : Prop where
   preserves : forall n, PreservesLimitsOfShape (Discrete (Fin n)) F
@@ -226,7 +226,7 @@ class ReflectsFiniteLimits
 类 ReflectsFiniteLimits
   参数: (F : C ⥤ D)
   公理与运算 (1 个):
-    - reflects : 对任意 (J : Type) [SmallCategory J] [FinCategory J], ReflectsLimitsOfShape J F  [默认: by infer_instance]
+    - reflects : 对任意 (J : 类型) [小范畴 J] [有限范畴 J], 反映形状极限 J F  [默认: by infer_instance]
 
 Depends on / 依赖: infer_instance
 -/
@@ -250,7 +250,7 @@ class ReflectsFiniteProducts
 类 ReflectsFiniteProducts
   参数: (F : C ⥤ D)
   公理与运算 (1 个):
-    - reflects : 对任意 n, ReflectsLimitsOfShape (Discrete (Fin n)) F
+    - reflects : 对任意 n, 反映形状极限 (离散 (有限集 n)) F
 -/
 class ReflectsFiniteProducts (F : C ⥤ D) : Prop where
   reflects : forall n, ReflectsLimitsOfShape (Discrete (Fin n)) F
@@ -404,10 +404,10 @@ class PreservesFiniteColimits
     - preservesFiniteColimits : forall (J : Type) [SmallCategory J] [FinCategory J], PreservesColimitsOfShape J F  [default: by infer_instance]
 
 中文:
-类 PreservesFiniteColimits
+类 保持FiniteColimits
   参数: (F : C ⥤ D)
   公理与运算 (1 个):
-    - preservesFiniteColimits : 对任意 (J : Type) [SmallCategory J] [FinCategory J], PreservesColimitsOfShape J F  [默认: by infer_instance]
+    - preservesFiniteColimits : 对任意 (J : 类型) [小范畴 J] [有限范畴 J], 保持形状余极限 J F  [默认: by infer_instance]
 
 Depends on / 依赖: infer_instance
 -/
@@ -439,7 +439,7 @@ lemma PreservesColimitsOfSize.preservesFiniteColimits
     exact preservesColimitsOfShape_of_equiv (FinCategory.equivAsType J) F
 
 中文:
-引理 PreservesColimitsOfSize.preservesFiniteColimits
+引理 保持余limitsOfSize.preservesFiniteColimits
   结论: (F : C ⥤ D)
   证明: by
     have := preservesSmallestColimits_of_preservesColimits F
@@ -504,7 +504,7 @@ lemma comp_preservesFiniteColimits
 
 中文:
 引理 comp_preservesFiniteColimits
-  结论: (F : C ⥤ D) (G : D ⥤ E) [PreservesFiniteColimits F]
+  结论: (F : C ⥤ D) (G : D ⥤ E) [保持FiniteColimits F]
   证明: ⟨fun _ _ _ => inferInstance⟩
 -/
 lemma comp_preservesFiniteColimits (F : C ⥤ D) (G : D ⥤ E) [PreservesFiniteColimits F]
@@ -521,7 +521,7 @@ lemma preservesFiniteColimits_of_natIso
 
 中文:
 引理 preservesFiniteColimits_of_natIso
-  条件: {F G : C ⥤ D} (h : F ≅ G) [PreservesFiniteColimits F]
+  条件: {F G : C ⥤ D} (h : F ≅ G) [保持FiniteColimits F]
   证明: preservesColimitsOfShape_of_natIso h
 
 Depends on / 依赖: preservesColimitsOfShape_of_natIso
@@ -540,10 +540,10 @@ class PreservesFiniteCoproducts
     - preserves : forall n, PreservesColimitsOfShape (Discrete (Fin n)) F
 
 中文:
-类 PreservesFiniteCoproducts
+类 保持FiniteCoproducts
   参数: (F : C ⥤ D)
   公理与运算 (1 个):
-    - preserves : 对任意 n, PreservesColimitsOfShape (Discrete (Fin n)) F
+    - preserves : 对任意 n, 保持形状余极限 (离散 (有限集 n)) F
 
 Depends on / 依赖: PreservesColimitOfIsReflexivePair, PreservesColimitOfIsReflexivePair.out
 -/
@@ -591,7 +591,7 @@ class ReflectsFiniteColimits
 类 ReflectsFiniteColimits
   参数: (F : C ⥤ D)
   公理与运算 (1 个):
-    - [reflects : 对任意 (J : Type) [SmallCategory J] [FinCategory J], ReflectsColimitsOfShape J F]
+    - [reflects : 对任意 (J : 类型) [小范畴 J] [有限范畴 J], 反映形状余极限 J F]
 -/
 class ReflectsFiniteColimits (F : C ⥤ D) : Prop where
   [reflects : forall (J : Type) [SmallCategory J] [FinCategory J], ReflectsColimitsOfShape J F]
@@ -646,7 +646,7 @@ class ReflectsFiniteCoproducts
 类 ReflectsFiniteCoproducts
   参数: (F : C ⥤ D)
   公理与运算 (1 个):
-    - reflects : 对任意 n, ReflectsColimitsOfShape (Discrete (Fin n)) F
+    - reflects : 对任意 n, 反映形状余极限 (离散 (有限集 n)) F
 -/
 class ReflectsFiniteCoproducts (F : C ⥤ D) : Prop where
   reflects : forall n, ReflectsColimitsOfShape (Discrete (Fin n)) F

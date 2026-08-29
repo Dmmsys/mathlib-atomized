@@ -41,7 +41,7 @@ lemma prod_neg
 
 中文:
 引理 prod_neg
-  条件: [CommMonoid M] [HasDistribNeg M] (f : ι -> M)
+  条件: [交换幺半群 M] [有DistribNeg M] (f : ι -> M)
   证明: by
   simpa using (s.1.map f).prod_map_neg
 
@@ -65,7 +65,7 @@ lemma natCast_card_filter
 
 中文:
 引理 natCast_card_filter
-  条件: (p) [DecidablePred p] (s : Finset ι)
+  条件: (p) [DecidablePred p] (s : 有限集 ι)
   证明: by
   rw [sum_ite]; rw [sum_const_zero]; rw [add_zero]; rw [sum_const]; rw [nsmul_one]
 
@@ -85,7 +85,7 @@ lemma sum_boole
 
 中文:
 引理 sum_boole
-  条件: (p) [DecidablePred p] (s : Finset ι)
+  条件: (p) [DecidablePred p] (s : 有限集 ι)
   证明: (natCast_card_filter _ _).symm
 -/
 @[simp] lemma sum_boole (p) [DecidablePred p] (s : Finset ι) :
@@ -102,7 +102,7 @@ lemma card_eq_sum_ite
 
 中文:
 引理 card_eq_sum_ite
-  条件: {s t : Finset ι} [DecidablePred (· in s)] (hst : s subseteq t)
+  条件: {s t : 有限集 ι} [DecidablePred (· in s)] (hst : s subseteq t)
   证明: by simp [hst]
 -/
 lemma card_eq_sum_ite {s t : Finset ι} [DecidablePred (· in s)] (hst : s subseteq t) :
@@ -123,7 +123,7 @@ lemma sum_mul
 
 中文:
 引理 sum_mul
-  条件: (s : Finset ι) (f : ι -> R) (a : R)
+  条件: (s : 有限集 ι) (f : ι -> R) (a : R)
   证明: map_sum (AddMonoidHom.mulRight a) _ s
 
 Depends on / 依赖: AddMonoidHom, AddMonoidHom.mulRight, map_sum, mulRight
@@ -141,7 +141,7 @@ lemma mul_sum
 
 中文:
 引理 mul_sum
-  条件: (s : Finset ι) (f : ι -> R) (a : R)
+  条件: (s : 有限集 ι) (f : ι -> R) (a : R)
   证明: map_sum (AddMonoidHom.mulLeft a) _ s
 
 Depends on / 依赖: AddMonoidHom, AddMonoidHom.mulLeft, map_sum, mulLeft
@@ -160,7 +160,7 @@ lemma sum_mul_sum
 
 中文:
 引理 sum_mul_sum
-  条件: (s : Finset ι) (t : Finset κ) (f : ι -> R) (g : κ -> R)
+  条件: (s : 有限集 ι) (t : 有限集 κ) (f : ι -> R) (g : κ -> R)
   证明: by
   simp_rw [sum_mul, ← mul_sum]
 
@@ -179,8 +179,8 @@ lemma _root_.Fintype.sum_mul_sum
   proof: Finset.sum_mul_sum _ _ _ _
 
 中文:
-引理 _root_.Fintype.sum_mul_sum
-  条件: [Fintype ι] [Fintype κ] (f : ι -> R) (g : κ -> R)
+引理 _root_.有限类型.sum_mul_sum
+  条件: [有限类型 ι] [有限类型 κ] (f : ι -> R) (g : κ -> R)
   证明: Finset.sum_mul_sum _ _ _ _
 
 Depends on / 依赖: Finset, Finset.sum_mul_sum, sum_mul_sum
@@ -201,7 +201,7 @@ lemma _root_.Commute.sum_right
 
 中文:
 引理 _root_.Commute.sum_right
-  结论: (s : Finset ι) (f : ι -> R) (b : R)
+  结论: (s : 有限集 ι) (f : ι -> R) (b : R)
   证明: (Commute.multiset_sum_right _ _) fun b hb => by
     obtain ⟨i, hi, rfl⟩ := Multiset.mem_map.mp hb
     exact h _ hi
@@ -224,7 +224,7 @@ lemma _root_.Commute.sum_left
 
 中文:
 引理 _root_.Commute.sum_left
-  结论: (s : Finset ι) (f : ι -> R) (b : R)
+  结论: (s : 有限集 ι) (f : ι -> R) (b : R)
   证明: ((Commute.sum_right _ _ _) fun _i hi => (h _ hi).symm).symm
 
 Depends on / 依赖: Commute, Commute.sum_right, sum_right
@@ -296,7 +296,7 @@ lemma sum_mul_boole
 
 中文:
 引理 sum_mul_boole
-  条件: (s : Finset ι) (f : ι -> R) (i : ι)
+  条件: (s : 有限集 ι) (f : ι -> R) (i : ι)
   证明: by simp
 -/
 lemma sum_mul_boole (s : Finset ι) (f : ι -> R) (i : ι) :
@@ -312,7 +312,7 @@ lemma sum_boole_mul
 
 中文:
 引理 sum_boole_mul
-  条件: (s : Finset ι) (f : ι -> R) (i : ι)
+  条件: (s : 有限集 ι) (f : ι -> R) (i : ι)
   证明: by simp
 -/
 lemma sum_boole_mul (s : Finset ι) (f : ι -> R) (i : ι) :
@@ -336,7 +336,7 @@ theorem prod_add_prod_eq
 
 中文:
 定理 prod_add_prod_eq
-  结论: {s : Finset ι} {i : ι} {f g h : ι -> R} (hi : i in s)
+  结论: {s : 有限集 ι} {i : ι} {f g h : ι -> R} (hi : i in s)
   证明: by
   classical
     simp_rw [prod_eq_mul_prod_sdiff_singleton_of_mem hi, ← h1, right_distrib]
@@ -372,7 +372,7 @@ lemma prod_sum
 
 中文:
 引理 prod_sum
-  条件: {κ : ι -> 类型} (s : Finset ι) (t : 对任意 i, Finset (κ i)) (f : 对任意 i, κ i -> R)
+  条件: {κ : ι -> 类型} (s : 有限集 ι) (t : 对任意 i, 有限集 (κ i)) (f : 对任意 i, κ i -> R)
   证明: by
   classical
   induction s using Finset.induction with
@@ -426,7 +426,7 @@ lemma prod_univ_sum
 
 中文:
 引理 prod_univ_sum
-  条件: {κ : ι -> 类型} [Fintype ι] (t : 对任意 i, Finset (κ i)) (f : 对任意 i, κ i -> R)
+  条件: {κ : ι -> 类型} [有限类型 ι] (t : 对任意 i, 有限集 (κ i)) (f : 对任意 i, κ i -> R)
   证明: by
   simp only [prod_attach_univ, prod_sum, Finset.sum_univ_pi]
 
@@ -447,7 +447,7 @@ lemma sum_prod_piFinset
 
 中文:
 引理 sum_prod_piFinset
-  条件: [Fintype ι] (s : Finset κ) (g : ι -> κ -> R)
+  条件: [有限类型 ι] (s : 有限集 κ) (g : ι -> κ -> R)
   证明: by
   rw [← prod_univ_sum]
 
@@ -468,7 +468,7 @@ lemma sum_pow'
 
 中文:
 引理 sum_pow'
-  条件: (s : Finset κ) (f : κ -> R) (n : 自然数)
+  条件: (s : 有限集 κ) (f : κ -> R) (n : 自然数)
   证明: by
   convert! @prod_univ_sum (Fin n) _ _ _ _ _ (fun _i => s) fun _i d => f d; simp
 
@@ -495,7 +495,7 @@ theorem prod_add
 
 中文:
 定理 prod_add
-  条件: (f g : ι -> R) (s : Finset ι)
+  条件: (f g : ι -> R) (s : 有限集 ι)
   证明: by
   classical
   calc
@@ -543,7 +543,7 @@ theorem prod_one_add
 
 中文:
 定理 prod_one_add
-  条件: {f : ι -> R} (s : Finset ι)
+  条件: {f : ι -> R} (s : 有限集 ι)
   证明: by
   classical simp only [add_comm (1 : R), prod_add, prod_const_one, mul_one]
 
@@ -564,7 +564,7 @@ theorem prod_add_one
 
 中文:
 定理 prod_add_one
-  条件: {f : ι -> R} (s : Finset ι)
+  条件: {f : ι -> R} (s : 有限集 ι)
   证明: by
   classical simp only [prod_add, prod_const_one, mul_one]
 
@@ -589,7 +589,7 @@ theorem prod_add_ordered
 
 中文:
 定理 prod_add_ordered
-  条件: [LinearOrder ι] (s : Finset ι) (f g : ι -> R)
+  条件: [线性序 ι] (s : 有限集 ι) (f g : ι -> R)
   证明: by
   refine Finset.induction_on_max s (by simp) ?_
   clear s
@@ -630,7 +630,7 @@ theorem prod_one_add_ordered
 
 中文:
 定理 prod_one_add_ordered
-  条件: [LinearOrder ι] (s : Finset ι) (f : ι -> R)
+  条件: [线性序 ι] (s : 有限集 ι) (f : ι -> R)
   证明: by
   rw [prod_add_ordered]
   simp
@@ -656,7 +656,7 @@ theorem sum_pow_mul_eq_add_pow
 
 中文:
 定理 sum_pow_mul_eq_add_pow
-  条件: (a b : R) (s : Finset ι)
+  条件: (a b : R) (s : 有限集 ι)
   证明: by
   classical
   rw [← prod_const]; rw [prod_add]
@@ -683,8 +683,8 @@ lemma _root_.Fintype.sum_pow_mul_eq_add_pow
 @[norm_cast]
 
 中文:
-引理 _root_.Fintype.sum_pow_mul_eq_add_pow
-  条件: (ι : 类型) [Fintype ι] (a b : R)
+引理 _root_.有限类型.sum_pow_mul_eq_add_pow
+  条件: (ι : 类型) [有限类型 ι] (a b : R)
   证明: Finset.sum_pow_mul_eq_add_pow _ _ _
 
 @[norm_cast]
@@ -707,7 +707,7 @@ theorem prod_natCast
 
 中文:
 定理 prod_natCast
-  条件: (s : Finset ι) (f : ι -> 自然数)
+  条件: (s : 有限集 ι) (f : ι -> 自然数)
   结论: ↑(∏ i in s, f i : 自然数) = ∏ i in s, (f i : R)
   证明: map_prod (Nat.castRingHom R) f s
 
@@ -732,7 +732,7 @@ lemma prod_sub
 
 中文:
 引理 prod_sub
-  条件: [DecidableEq ι] (f g : ι -> R) (s : Finset ι)
+  条件: [DecidableEq ι] (f g : ι -> R) (s : 有限集 ι)
   证明: by
   simp [sub_eq_neg_add, prod_add, prod_neg, mul_right_comm]
 
@@ -755,7 +755,7 @@ lemma prod_sub_ordered
 
 中文:
 引理 prod_sub_ordered
-  条件: [LinearOrder ι] (s : Finset ι) (f g : ι -> R)
+  条件: [线性序 ι] (s : 有限集 ι) (f g : ι -> R)
   证明: by
   simp only [sub_eq_add_neg]
   convert! prod_add_ordered s f fun i => -g i
@@ -783,7 +783,7 @@ theorem prod_one_sub_ordered
 
 中文:
 定理 prod_one_sub_ordered
-  条件: [LinearOrder ι] (s : Finset ι) (f : ι -> R)
+  条件: [线性序 ι] (s : 有限集 ι) (f : ι -> R)
   证明: by
   rw [prod_sub_ordered]
   simp
@@ -849,7 +849,7 @@ lemma sum_pow
 中文:
 引理 sum_pow
   条件: (f : ι -> R) (n : 自然数)
-  结论: (∑ a, f a) ^ n = ∑ p : Fin n -> ι, ∏ i, f (p i)
+  结论: (∑ a, f a) ^ n = ∑ p : 有限集 n -> ι, ∏ i, f (p i)
   证明: by
   simp [sum_pow']
 
@@ -870,7 +870,7 @@ lemma prod_sum
 
 中文:
 引理 prod_sum
-  条件: {κ : ι -> 类型} [对任意 i, Fintype (κ i)] (f : 对任意 i, κ i -> R)
+  条件: {κ : ι -> 类型} [对任意 i, 有限类型 (κ i)] (f : 对任意 i, κ i -> R)
   证明: Finset.prod_univ_sum _ _
 
 Depends on / 依赖: Finset, Finset.prod_univ_sum, prod_univ_sum
@@ -955,8 +955,8 @@ lemma cast_list_sum
 
 中文:
 引理 cast_list_sum
-  条件: [AddMonoidWithOne R] (s : List 自然数)
-  结论: (↑s.sum : R) = (s.map (↑)).sum
+  条件: [加法带幺幺半群 R] (s : 列表 自然数)
+  结论: (↑s.求和 : R) = (s.map (↑)).求和
   证明: map_list_sum (castAddMonoidHom R) _
 
 @[simp, norm_cast]
@@ -980,8 +980,8 @@ lemma cast_list_prod
 
 中文:
 引理 cast_list_prod
-  条件: [Semiring R] (s : List 自然数)
-  结论: (↑s.prod : R) = (s.map (↑)).prod
+  条件: [半环 R] (s : 列表 自然数)
+  结论: (↑s.乘积 : R) = (s.map (↑)).乘积
   证明: map_list_prod (castRingHom R) _
 
 @[simp, norm_cast]
@@ -1004,7 +1004,7 @@ lemma cast_multiset_sum
 
 中文:
 引理 cast_multiset_sum
-  条件: [AddCommMonoidWithOne R] (s : Multiset 自然数)
+  条件: [加法交换带幺幺半群 R] (s : Multiset 自然数)
   证明: map_multiset_sum (castAddMonoidHom R) _
 
 @[simp, norm_cast]
@@ -1029,8 +1029,8 @@ lemma cast_multiset_prod
 
 中文:
 引理 cast_multiset_prod
-  条件: [CommSemiring R] (s : Multiset 自然数)
-  结论: (↑s.prod : R) = (s.map (↑)).prod
+  条件: [交换半环 R] (s : Multiset 自然数)
+  结论: (↑s.乘积 : R) = (s.map (↑)).乘积
   证明: map_multiset_prod (castRingHom R) _
 
 @[simp, norm_cast]
@@ -1053,7 +1053,7 @@ lemma cast_sum
 
 中文:
 引理 cast_sum
-  条件: [AddCommMonoidWithOne R] (s : Finset ι) (f : ι -> 自然数)
+  条件: [加法交换带幺幺半群 R] (s : 有限集 ι) (f : ι -> 自然数)
   证明: map_sum (castAddMonoidHom R) _ _
 
 @[simp, norm_cast]
@@ -1075,7 +1075,7 @@ lemma cast_prod
 
 中文:
 引理 cast_prod
-  条件: [CommSemiring R] (f : ι -> 自然数) (s : Finset ι)
+  条件: [交换半环 R] (f : ι -> 自然数) (s : 有限集 ι)
   证明: map_prod (castRingHom R) _ _
 
 Depends on / 依赖: castRingHom, map_prod
@@ -1139,8 +1139,8 @@ lemma cast_list_sum
 
 中文:
 引理 cast_list_sum
-  条件: [AddGroupWithOne R] (s : List 整数)
-  结论: (↑s.sum : R) = (s.map (↑)).sum
+  条件: [加法带幺群 R] (s : 列表 整数)
+  结论: (↑s.求和 : R) = (s.map (↑)).求和
   证明: map_list_sum (castAddHom R) _
 
 @[simp, norm_cast]
@@ -1164,8 +1164,8 @@ lemma cast_list_prod
 
 中文:
 引理 cast_list_prod
-  条件: [Ring R] (s : List 整数)
-  结论: (↑s.prod : R) = (s.map (↑)).prod
+  条件: [环 R] (s : 列表 整数)
+  结论: (↑s.乘积 : R) = (s.map (↑)).乘积
   证明: map_list_prod (castRingHom R) _
 
 @[simp, norm_cast]
@@ -1188,7 +1188,7 @@ lemma cast_multiset_sum
 
 中文:
 引理 cast_multiset_sum
-  条件: [AddCommGroupWithOne R] (s : Multiset 整数)
+  条件: [加法交换带幺群 R] (s : Multiset 整数)
   证明: map_multiset_sum (castAddHom R) _
 
 @[simp, norm_cast]
@@ -1212,7 +1212,7 @@ lemma cast_multiset_prod
 
 中文:
 引理 cast_multiset_prod
-  条件: {R : 类型} [CommRing R] (s : Multiset 整数)
+  条件: {R : 类型} [交换环 R] (s : Multiset 整数)
   证明: map_multiset_prod (castRingHom R) _
 
 @[simp, norm_cast]
@@ -1236,7 +1236,7 @@ lemma cast_sum
 
 中文:
 引理 cast_sum
-  条件: [AddCommGroupWithOne R] (s : Finset ι) (f : ι -> 整数)
+  条件: [加法交换带幺群 R] (s : 有限集 ι) (f : ι -> 整数)
   证明: map_sum (castAddHom R) _ _
 
 @[simp, norm_cast]
@@ -1258,7 +1258,7 @@ lemma cast_prod
 
 中文:
 引理 cast_prod
-  条件: {R : 类型} [CommRing R] (f : ι -> 整数) (s : Finset ι)
+  条件: {R : 类型} [交换环 R] (f : ι -> 整数) (s : 有限集 ι)
   证明: map_prod (Int.castRingHom R) _ _
 
 Depends on / 依赖: Int.castRingHom, castRingHom, map_prod

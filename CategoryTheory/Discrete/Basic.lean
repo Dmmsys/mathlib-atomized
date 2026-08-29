@@ -57,7 +57,7 @@ structure Discrete
     - as : α
 
 中文:
-结构 Discrete
+结构 离散
   参数: (α : 类型u₁)
   公理与运算 (1 个):
     - as : α
@@ -78,9 +78,9 @@ theorem Discrete.mk_as
   proof: rfl
 
 中文:
-定理 Discrete.mk_as
-  条件: {α : 类型u₁} (X : Discrete α)
-  结论: Discrete.mk X.as = X
+定理 离散.mk_as
+  条件: {α : 类型u₁} (X : 离散 α)
+  结论: 离散.mk X.as = X
   证明: rfl
 -/
 theorem Discrete.mk_as {α : Type u₁} (X : Discrete α) : Discrete.mk X.as = X :=
@@ -125,9 +125,9 @@ lemma Discrete.as_bijective
   proof: discreteEquiv.bijective
 
 中文:
-引理 Discrete.as_bijective
+引理 离散.as_bijective
   条件: {α : 类型}
-  结论: (Discrete.as (α := α)).Bijective
+  结论: (离散.as (α := α)).双射
   证明: discreteEquiv.bijective
 
 Depends on / 依赖: Bijective
@@ -195,8 +195,8 @@ instance [Inhabited
   body: ⟨⟨default⟩⟩
 
 中文:
-实例 [Inhabited
-  签名: α] : Inhabited (Discrete α)
+实例 [可居
+  签名: α] : 可居 (离散 α)
   定义体: ⟨⟨default⟩⟩
 -/
 instance [Inhabited α] : Inhabited (Discrete α) :=
@@ -211,8 +211,8 @@ instance [Subsingleton
   body: ⟨by cat_disch⟩
 
 中文:
-实例 [Subsingleton
-  签名: α] : Subsingleton (Discrete α)
+实例 [子单例
+  签名: α] : 子单例 (离散 α)
   定义体: ⟨by cat_disch⟩
 
 Depends on / 依赖: cat_disch
@@ -230,7 +230,7 @@ instance instSubsingletonDiscreteHom
 
 中文:
 实例 instSubsingletonDiscreteHom
-  签名: (X Y : Discrete α)
+  签名: (X Y : 离散 α)
   定义体: show Subsingleton (ULift (PLift _)) from inferInstance
 
 Depends on / 依赖: Subsingleton
@@ -270,8 +270,8 @@ instance [Unique
   body: Unique.mk' (Discrete α)
 
 中文:
-实例 [Unique
-  签名: α] : Unique (Discrete α)
+实例 [唯一
+  签名: α] : 唯一 (离散 α)
   定义体: Unique.mk' (Discrete α)
 
 Depends on / 依赖: Discrete, Unique, Unique.mk
@@ -290,7 +290,7 @@ theorem eq_of_hom
 
 中文:
 定理 eq_of_hom
-  条件: {X Y : Discrete α} (i : X ⟶ Y)
+  条件: {X Y : 离散 α} (i : X ⟶ Y)
   结论: X.as = Y.as
   证明: i.down.down
 
@@ -309,7 +309,7 @@ abbreviation eqToHom
 
 中文:
 缩写 eqToHom
-  签名: {X Y : Discrete α} (h : X.as = Y.as)
+  签名: {X Y : 离散 α} (h : X.as = Y.as)
   定义体: eqToHom (by cat_disch)
 -/
 protected abbrev eqToHom {X Y : Discrete α} (h : X.as = Y.as) : X ⟶ Y :=
@@ -325,7 +325,7 @@ abbreviation eqToIso
 
 中文:
 缩写 eqToIso
-  签名: {X Y : Discrete α} (h : X.as = Y.as)
+  签名: {X Y : 离散 α} (h : X.as = Y.as)
   定义体: eqToIso (by cat_disch)
 -/
 protected abbrev eqToIso {X Y : Discrete α} (h : X.as = Y.as) : X ≅ Y :=
@@ -385,8 +385,8 @@ theorem id_def
 
 中文:
 定理 id_def
-  条件: (X : Discrete α)
-  结论: ULift.up (PLift.up (Eq.refl X.as)) = 𝟙 X
+  条件: (X : 离散 α)
+  结论: 类型层提升.up (命题层提升.up (相等.refl X.as)) = 𝟙 X
   证明: rfl
 
 @[simp]
@@ -407,7 +407,7 @@ theorem id_def'
 中文:
 定理 id_def'
   条件: (X : α)
-  结论: ULift.up (PLift.up (Eq.refl X)) = 𝟙 (⟨X⟩ : Discrete α)
+  结论: 类型层提升.up (命题层提升.up (相等.refl X)) = 𝟙 (⟨X⟩ : 离散 α)
   证明: rfl
 -/
 theorem id_def' (X : α) : ULift.up (PLift.up (Eq.refl X)) = 𝟙 (⟨X⟩ : Discrete α) :=
@@ -487,7 +487,7 @@ theorem functor_map
 
 中文:
 定理 functor_map
-  条件: {I : 类型u₁} (F : I -> C) {i : Discrete I} (f : i ⟶ i)
+  条件: {I : 类型u₁} (F : I -> C) {i : 离散 I} (f : i ⟶ i)
   证明: by cat_disch
 
 @[simp]
@@ -510,7 +510,7 @@ theorem functor_obj_eq_as
 
 中文:
 定理 functor_obj_eq_as
-  条件: {I : 类型u₁} (F : I -> C) (X : Discrete I)
+  条件: {I : 类型u₁} (F : I -> C) (X : 离散 I)
   证明: rfl
 
 @[simp]
@@ -535,7 +535,7 @@ lemma range_functor
 中文:
 引理 range_functor
   条件: {I : 类型} (X : I -> C)
-  结论: Set.range (Discrete.functor X).obj = Set.range X
+  结论: 集合.range (离散.functor X).obj = 集合.range X
   证明: by
   simp [Discrete.functor, Set.range_comp, Discrete.as_bijective.surjective.range_eq]
 
@@ -560,7 +560,7 @@ lemma functor_ext
 
 中文:
 引理 functor_ext
-  条件: {I : 类型u₁} {G F : Discrete I ⥤ C} (h : (i : I) -> G.obj ⟨i⟩ = F.obj ⟨i⟩)
+  条件: {I : 类型u₁} {G F : 离散 I ⥤ C} (h : (i : I) -> G.obj ⟨i⟩ = F.obj ⟨i⟩)
   证明: by
   fapply Functor.ext
   · intro I; rw [h]
@@ -619,7 +619,7 @@ definition natTrans
 
 中文:
 定义 natTrans
-  签名: {I : 类型u₁} {F G : Discrete I ⥤ C} (f : 对任意 i : Discrete I, F.obj i ⟶ G.obj i)
+  签名: {I : 类型u₁} {F G : 离散 I ⥤ C} (f : 对任意 i : 离散 I, F.obj i ⟶ G.obj i)
   定义体: f
   naturality := fun {X Y} ⟨⟨g⟩⟩ => by
     discrete_cases
@@ -655,7 +655,7 @@ definition natIso
 
 中文:
 定义 natIso
-  签名: {I : 类型u₁} {F G : Discrete I ⥤ C} (f : 对任意 i : Discrete I, F.obj i ≅ G.obj i)
+  签名: {I : 类型u₁} {F G : 离散 I ⥤ C} (f : 对任意 i : 离散 I, F.obj i ≅ G.obj i)
   定义体: NatIso.ofComponents f fun ⟨⟨g⟩⟩ => by
     discrete_cases
     rcases g
@@ -688,7 +688,7 @@ theorem natIso_app
 
 中文:
 定理 natIso_app
-  结论: {I : 类型u₁} {F G : Discrete I ⥤ C} (f : 对任意 i : Discrete I, F.obj i ≅ G.obj i)
+  结论: {I : 类型u₁} {F G : 离散 I ⥤ C} (f : 对任意 i : 离散 I, F.obj i ≅ G.obj i)
   证明: by cat_disch
 
 Depends on / 依赖: cat_disch
@@ -709,7 +709,7 @@ definition natIsoFunctor
 
 中文:
 定义 natIsoFunctor
-  签名: {I : 类型u₁} {F : Discrete I ⥤ C}
+  签名: {I : 类型u₁} {F : 离散 I ⥤ C}
   定义体: natIso fun _ => Iso.refl _
 
 Depends on / 依赖: Iso.refl, natIso
@@ -728,8 +728,8 @@ definition compNatIsoDiscrete
   body: natIso fun _ => Iso.refl _
 
 中文:
-定义 compNatIsoDiscrete
-  签名: {I : 类型u₁} {D : 类型u₃} [Category.{v₃} D] (F : I -> C) (G : C ⥤ D)
+定义 comp自然数IsoDiscrete
+  签名: {I : 类型u₁} {D : 类型u₃} [范畴.{v₃} D] (F : I -> C) (G : C ⥤ D)
   定义体: natIso fun _ => Iso.refl _
 
 Depends on / 依赖: Iso.refl, natIso
@@ -790,7 +790,7 @@ definition equivOfEquivalence
 
 中文:
 定义 equivOfEquivalence
-  签名: {α : 类型u₁} {β : 类型u₂} (h : Discrete α ≌ Discrete β)
+  签名: {α : 类型u₁} {β : 类型u₂} (h : 离散 α ≌ 离散 β)
   定义体: Discrete.as ∘ h.functor.obj ∘ Discrete.mk
   invFun := Discrete.as ∘ h.inverse.obj ∘ Discrete.mk
   left_inv a := by simpa using eq_of_hom (h.unitIso.app (Discrete.mk a)).2
@@ -858,7 +858,7 @@ theorem functor_map_id
 
 中文:
 定理 functor_map_id
-  条件: (F : Discrete J ⥤ C) {j : Discrete J} (f : j ⟶ j)
+  条件: (F : 离散 J ⥤ C) {j : 离散 J} (f : j ⟶ j)
   证明: by
   have h : f = 𝟙 j := by cat_disch
   rw [h]
@@ -887,8 +887,8 @@ lemma Discrete.forall
   simp only [discreteEquiv, Equiv.symm_mk, Equiv.coe_fn_mk]
 
 中文:
-引理 Discrete.forall
-  条件: {α : 类型} {p : Discrete α -> 命题}
+引理 离散.对任意
+  条件: {α : 类型} {p : 离散 α -> 命题}
   证明: by
   rw [iff_iff_eq]; rw [discreteEquiv.forall_congr_left]
   simp only [discreteEquiv, Equiv.symm_mk, Equiv.coe_fn_mk]
@@ -913,8 +913,8 @@ lemma Discrete.exists
   simp [discreteEquiv]
 
 中文:
-引理 Discrete.exists
-  条件: {α : 类型} {p : Discrete α -> 命题}
+引理 离散.存在
+  条件: {α : 类型} {p : 离散 α -> 命题}
   证明: by
   rw [iff_iff_eq]; rw [discreteEquiv.exists_congr_left]
   simp [discreteEquiv]
@@ -948,7 +948,7 @@ definition piEquivalenceFunctorDiscrete
 
 中文:
 定义 piEquivalenceFunctorDiscrete
-  签名: (J : 类型u₂) (C : 类型u₁) [Category.{v₁} C]
+  签名: (J : 类型u₂) (C : 类型u₁) [范畴.{v₁} C]
   定义体: { obj := fun F => Discrete.functor F
       map := fun f => Discrete.natTrans (fun j => f j.as) }
   inverse :=
@@ -991,7 +991,7 @@ definition piEquivalenceFunctorDiscreteCompEvaluationIso
 
 中文:
 定义 piEquivalenceFunctorDiscreteCompEvaluationIso
-  签名: (C : 类型) [Category* C] {J : 类型} (j : J)
+  签名: (C : 类型) [范畴* C] {J : 类型} (j : J)
   定义体: NatIso.ofComponents fun _ => Iso.refl _
 
 Depends on / 依赖: Iso.refl, NatIso, NatIso.ofComponents, ofComponents
@@ -1011,10 +1011,10 @@ class IsDiscrete
     - eq_of_hom({X Y : C} (f : X ⟶ Y)) : X = Y
 
 中文:
-类 IsDiscrete
-  参数: (C : 类型) [Category* C]
+类 是离散
+  参数: (C : 类型) [范畴* C]
   公理与运算 (2 个):
-    - subsingleton((X Y : C)) : Subsingleton (X ⟶ Y)  [默认: by infer_instance]
+    - subsingleton((X Y : C)) : 子单例 (X ⟶ Y)  [默认: by infer_instance]
     - eq_of_hom({X Y : C} (f : X ⟶ Y)) : X = Y
 
 Depends on / 依赖: eq_of_hom, infer_instance
@@ -1034,7 +1034,7 @@ instance Discrete.isDiscrete
   body: by rintro ⟨_⟩ ⟨_⟩ ⟨⟨rfl⟩⟩; rfl
 
 中文:
-实例 Discrete.isDiscrete
+实例 离散.isDiscrete
   签名: (C : 类型)
   定义体: by rintro ⟨_⟩ ⟨_⟩ ⟨⟨rfl⟩⟩; rfl
 -/
@@ -1095,7 +1095,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsDiscrete Cᵒᵖ
+  签名: 是离散 Cᵒᵖ
   定义体: by
     rintro ⟨_⟩ ⟨_⟩ ⟨f⟩
     obtain rfl := obj_ext_of_isDiscrete f

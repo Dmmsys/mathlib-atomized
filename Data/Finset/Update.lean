@@ -35,7 +35,7 @@ definition updateFinset
 
 中文:
 定义 updateFinset
-  签名: (x : 对任意 i, π i) (s : Finset ι) (y : 对任意 i : ↥s, π i) (i : ι)
+  签名: (x : 对任意 i, π i) (s : 有限集 ι) (y : 对任意 i : ↥s, π i) (i : ι)
   定义体: if hi : i in s then y ⟨i, hi⟩ else x i
 -/
 def updateFinset (x : forall i, π i) (s : Finset ι) (y : forall i : ↥s, π i) (i : ι) : π i :=
@@ -159,7 +159,7 @@ theorem _root_.DependsOn.updateFinset
 
 中文:
 定理 _root_.DependsOn.updateFinset
-  结论: {α : 类型} {f : (Π i, π i) -> α} {s : Set ι}
+  结论: {α : 类型} {f : (Π i, π i) -> α} {s : 集合 ι}
   证明: by
   refine fun x₁ x₂ h => hf (fun i hi => ?_)
   simp only [Function.updateFinset]
@@ -188,7 +188,7 @@ theorem _root_.DependsOn.update
 
 中文:
 定理 _root_.DependsOn.update
-  结论: {α : 类型} {f : (Π i, π i) -> α} {s : Finset ι} (hf : DependsOn f s)
+  结论: {α : 类型} {f : (Π i, π i) -> α} {s : 有限集 ι} (hf : DependsOn f s)
   证明: by
   simp_rw [Function.update_eq_updateFinset, erase_eq, coe_sdiff]
   exact hf.updateFinset _
@@ -249,7 +249,7 @@ lemma updateFinset_updateFinset_of_subset
 
 中文:
 引理 updateFinset_updateFinset_of_subset
-  结论: {s t : Finset ι} (hst : s subseteq t)
+  结论: {s t : 有限集 ι} (hst : s subseteq t)
   证明: by
   grind [updateFinset]
 
@@ -272,7 +272,7 @@ lemma restrict_updateFinset_of_subset
 
 中文:
 引理 restrict_updateFinset_of_subset
-  结论: {s t : Finset ι} (hst : s subseteq t) (x : Π i, π i)
+  结论: {s t : 有限集 ι} (hst : s subseteq t) (x : Π i, π i)
   证明: by
   ext i
   simp [updateFinset, dif_pos (hst i.2)]
@@ -298,7 +298,7 @@ lemma restrict_updateFinset
 
 中文:
 引理 restrict_updateFinset
-  条件: {s : Finset ι} (x : Π i, π i) (y : Π i : s, π i)
+  条件: {s : 有限集 ι} (x : Π i, π i) (y : Π i : s, π i)
   证明: by
   rw [restrict_updateFinset_of_subset subset_rfl]
   rfl
@@ -325,7 +325,7 @@ lemma updateFinset_restrict
 
 中文:
 引理 updateFinset_restrict
-  条件: {s : Finset ι} (x : Π i, π i)
+  条件: {s : 有限集 ι} (x : Π i, π i)
   证明: by
   ext i
   simp [updateFinset]
@@ -390,7 +390,7 @@ theorem updateFinset_univ
 
 中文:
 定理 updateFinset_univ
-  条件: [Fintype ι] {y : 对任意 i : Finset.univ, π i}
+  条件: [有限类型 ι] {y : 对任意 i : 有限集.univ, π i}
   证明: by
   simp [updateFinset_def]
 
@@ -411,7 +411,7 @@ theorem updateFinset_univ_apply
 
 中文:
 定理 updateFinset_univ_apply
-  条件: [Fintype ι] {y : 对任意 i : Finset.univ, π i} {i : ι}
+  条件: [有限类型 ι] {y : 对任意 i : 有限集.univ, π i} {i : ι}
   证明: by
   simp [updateFinset_def]
 

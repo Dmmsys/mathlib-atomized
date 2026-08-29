@@ -42,7 +42,7 @@ theorem mul_eq_mul_prime_prod
 
 中文:
 定理 mul_eq_mul_prime_prod
-  结论: {α : 类型} [DecidableEq α] {x y a : R} {s : Finset α} {p : α -> R}
+  结论: {α : 类型} [DecidableEq α] {x y a : R} {s : 有限集 α} {p : α -> R}
   证明: by
   induction s using Finset.induction generalizing x y a with
   | empty => exact ⟨∅, ∅, x, y, by simp [hx]⟩
@@ -88,7 +88,7 @@ theorem mul_eq_mul_prime_pow
 
 中文:
 定理 mul_eq_mul_prime_pow
-  条件: {x y a p : R} {n : 自然数} (hp : Prime p) (hx : x * y = a * p ^ n)
+  条件: {x y a p : R} {n : 自然数} (hp : 素 p) (hx : x * y = a * p ^ n)
   证明: by
   rcases mul_eq_mul_prime_prod (fun _ _ => hp)
     (show x * y = a * (range n).prod fun _ => p by simpa) with
@@ -122,9 +122,9 @@ theorem Prime.neg
   exact ⟨neg_ne_zero.mpr h1, by rwa [IsUnit.neg_iff], by simpa [neg_dvd] using h3⟩
 
 中文:
-定理 Prime.neg
-  条件: {p : α} (hp : Prime p)
-  结论: Prime (-p)
+定理 素.neg
+  条件: {p : α} (hp : 素 p)
+  结论: 素 (-p)
   证明: by
   obtain ⟨h1, h2, h3⟩ := hp
   exact ⟨neg_ne_zero.mpr h1, by rwa [IsUnit.neg_iff], by simpa [neg_dvd] using h3⟩
@@ -148,9 +148,9 @@ theorem Prime.abs
   · exact hp.neg
 
 中文:
-定理 Prime.abs
-  条件: [LinearOrder α] {p : α} (hp : Prime p)
-  结论: Prime (abs p)
+定理 素.abs
+  条件: [线性序 α] {p : α} (hp : 素 p)
+  结论: 素 (abs p)
   证明: by
   obtain h | h := abs_choice p <;> rw [h]
   · exact hp

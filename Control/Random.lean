@@ -44,7 +44,7 @@ abbreviation RandGT
 
 中文:
 缩写 RandGT
-  签名: (g : Type)
+  签名: (g : 类型)
   定义体: StateT (ULift g)
 
 Depends on / 依赖: StateT
@@ -60,7 +60,7 @@ abbreviation RandG
 
 中文:
 缩写 RandG
-  签名: (g : Type)
+  签名: (g : 类型)
   定义体: RandGT g Id
 
 Depends on / 依赖: RandGT
@@ -123,7 +123,7 @@ class Random
     - random([RandomGen g]) : RandGT g m α
 
 中文:
-类 Random
+类 随机
   参数: (m) (α : 类型u)
   公理与运算 (1 个):
     - random([RandomGen g]) : RandGT g m α
@@ -145,9 +145,9 @@ class BoundedRandom
 
 中文:
 类 BoundedRandom
-  参数: (m) (α : 类型u) [Preorder α]
+  参数: (m) (α : 类型u) [预序 α]
   公理与运算 (1 个):
-    - randomR({g : Type} (lo hi : α) (h : lo <= hi) [RandomGen g]) : RandGT g m {a // lo <= a ∧ a <= hi}
+    - randomR({g : 类型} (lo hi : α) (h : lo <= hi) [RandomGen g]) : RandGT g m {a // lo <= a ∧ a <= hi}
 -/
 class BoundedRandom (m) (α : Type u) [Preorder α] where
   /-- Sample a bounded element of this type from the provided generator. -/
@@ -168,7 +168,7 @@ definition next
 
 中文:
 定义 next
-  签名: [RandomGen g] [Monad m]
+  签名: [RandomGen g] [单子 m]
   定义体: do
   let rng := (← get).down
   let (res, new) := RandomGen.next rng
@@ -195,7 +195,7 @@ definition split
 
 中文:
 定义 split
-  签名: {g : Type} [RandomGen g] [Monad m]
+  签名: {g : 类型} [RandomGen g] [单子 m]
   定义体: do
   let rng := (← get).down
   let (r1, r2) := RandomGen.split rng
@@ -220,7 +220,7 @@ pure RandomGen.range rng
 
 中文:
 定义 range
-  签名: {g : Type} [RandomGen g] [Monad m]
+  签名: {g : 类型} [RandomGen g] [单子 m]
   定义体: do
   let rng := (← get).down
 pure RandomGen.range rng
@@ -246,7 +246,7 @@ definition rand
 
 中文:
 定义 rand
-  签名: (α : 类型u) [Random m α] [RandomGen g]
+  签名: (α : 类型u) [随机 m α] [RandomGen g]
   定义体: Random.random
 
 Depends on / 依赖: Random, Random.random, random
@@ -303,7 +303,7 @@ definition randBool
   body: return (← rand (Fin 2)) == 1
 
 中文:
-定义 randBool
+定义 rand布尔
   签名: [RandomGen g]
   定义体: return (← rand (Fin 2)) == 1
 
@@ -322,7 +322,7 @@ instance :
 
 中文:
 实例 :
-  签名: Random m 布尔
+  签名: 随机 m 布尔值
   定义体: randBool
 
 Depends on / 依赖: randBool

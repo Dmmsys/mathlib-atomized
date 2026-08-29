@@ -32,10 +32,10 @@ structure AffineMap
     - isAffineMap_toFun : IsAffineMap R toFun  [default: by fun_prop]
 
 中文:
-结构 AffineMap
+结构 仿射映射
   公理与运算 (2 个):
     - toFun : X -> Y
-    - isAffineMap_toFun : IsAffineMap R toFun  [默认: by fun_prop]
+    - isAffineMap_toFun : 是仿射映射 R toFun  [默认: by fun_prop]
 -/
 protected structure AffineMap
     (X Y : Type*) [ConvexSpace R X] [ConvexSpace R Y] where
@@ -65,7 +65,7 @@ lemma ext
 
 中文:
 引理 ext
-  结论: {X Y : 类型} [ConvexSpace R X] [ConvexSpace R Y]
+  结论: {X Y : 类型} [凸空间 R X] [凸空间 R Y]
   证明: DFunLike.coe_injective h
 
 @[fun_prop]
@@ -108,7 +108,7 @@ definition id
 
 中文:
 定义 id
-  签名: (X : 类型) [ConvexSpace R X]
+  签名: (X : 类型) [凸空间 R X]
   定义体: _root_.id
 
 Depends on / 依赖: _root_, _root_.id
@@ -231,7 +231,7 @@ definition const
 
 中文:
 定义 const
-  签名: {X Y : 类型} [ConvexSpace R X] [ConvexSpace R Y] (y : Y)
+  签名: {X Y : 类型} [凸空间 R X] [凸空间 R Y] (y : Y)
   定义体: y
 -/
 def const {X Y : Type*} [ConvexSpace R X] [ConvexSpace R Y] (y : Y) :

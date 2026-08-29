@@ -63,7 +63,7 @@ scoped[Pointwise] attribute [instance] AddSubmonoid.one
 
 中文:
 定义 one
-  签名: : One (AddSubmonoid R)
+  签名: : 幺 (加法子幺半群 R)
   定义体: ⟨AddMonoidHom.mrange (Nat.castAddMonoidHom R)⟩
 
 scoped[Pointwise] attribute [instance] AddSubmonoid.one
@@ -82,7 +82,7 @@ lemma one_eq_mrange
 
 中文:
 引理 one_eq_mrange
-  结论: (1 : AddSubmonoid R) = AddMonoidHom.mrange (自然数.castAddMonoidHom R)
+  结论: (1 : 加法子幺半群 R) = 加法幺半群态射.mrange (自然数.castAddMonoidHom R)
   证明: rfl
 -/
 lemma one_eq_mrange : (1 : AddSubmonoid R) = AddMonoidHom.mrange (Nat.castAddMonoidHom R) := rfl
@@ -99,7 +99,7 @@ lemma natCast_mem_one
 中文:
 引理 natCast_mem_one
   条件: (n : 自然数)
-  结论: (n : R) in (1 : AddSubmonoid R)
+  结论: (n : R) in (1 : 加法子幺半群 R)
   证明: ⟨_, rfl⟩
 -/
 lemma natCast_mem_one (n : Nat) : (n : R) in (1 : AddSubmonoid R) := ⟨_, rfl⟩
@@ -116,7 +116,7 @@ lemma mem_one
 中文:
 引理 mem_one
   条件: {x : R}
-  结论: x in (1 : AddSubmonoid R) ↔ 存在 n : 自然数, ↑n = x
+  结论: x in (1 : 加法子幺半群 R) ↔ 存在 n : 自然数, ↑n = x
   证明: .rfl
 -/
 @[simp] lemma mem_one {x : R} : x in (1 : AddSubmonoid R) ↔ exists n : Nat, ↑n = x := .rfl
@@ -132,7 +132,7 @@ lemma one_eq_closure
 
 中文:
 引理 one_eq_closure
-  结论: (1 : AddSubmonoid R) = closure {1}
+  结论: (1 : 加法子幺半群 R) = closure {1}
   证明: by
   rw [closure_singleton_eq]; rw [one_eq_mrange]; congr 1; ext; simp
 
@@ -151,7 +151,7 @@ lemma one_eq_closure_one_set
 
 中文:
 引理 one_eq_closure_one_set
-  结论: (1 : AddSubmonoid R) = closure 1
+  结论: (1 : 加法子幺半群 R) = closure 1
   证明: one_eq_closure
 
 Depends on / 依赖: one_eq_closure
@@ -178,7 +178,7 @@ scoped[Pointwise] attribute [instance] AddSubmonoid.smul
 
 中文:
 定义 smul
-  签名: : SMul (AddSubmonoid R) (AddSubmonoid A) where
+  签名: : 标量乘法 (加法子幺半群 R) (加法子幺半群 A) where
   定义体: ⨆ s : M, N.map (DistribSMul.toAddMonoidHom A s.1)
 
 scoped[Pointwise] attribute [instance] AddSubmonoid.smul
@@ -273,8 +273,8 @@ lemma addSubmonoid_smul_bot
 
 中文:
 引理 addSubmonoid_smul_bot
-  条件: (S : AddSubmonoid R)
-  结论: S • (⊥ : AddSubmonoid A) = ⊥
+  条件: (S : 加法子幺半群 R)
+  结论: S • (⊥ : 加法子幺半群 A) = ⊥
   证明: eq_bot_iff.2 smul_le.2 fun m _ n hn => by
     rw [AddSubmonoid.mem_bot] at hn ⊢; rw [hn, smul_zero]
 
@@ -351,7 +351,7 @@ lemma smul_subset_smul
 
 中文:
 引理 smul_subset_smul
-  结论: (↑M : Set R) • (↑N : Set A) subseteq (↑(M • N) : Set A)
+  结论: (↑M : 集合 R) • (↑N : 集合 A) subseteq (↑(M • N) : 集合 A)
   证明: smul_subset_iff.2 fun _i hi _j hj => smul_mem_smul hi hj
 
 Depends on / 依赖: smul_mem_smul, smul_subset_iff
@@ -410,7 +410,7 @@ lemma smul_iSup
 
 中文:
 引理 smul_iSup
-  条件: (T : AddSubmonoid R) (S : ι -> AddSubmonoid A)
+  条件: (T : 加法子幺半群 R) (S : ι -> 加法子幺半群 A)
   结论: (T • ⨆ i, S i) = ⨆ i, T • S i
   证明: le_antisymm (smul_le.mpr fun t ht s hs => iSup_induction _ (motive := (t • · in _)) hs
     (fun i s hs => mem_iSup_of_mem i <| smul_mem_smul ht hs)
@@ -445,7 +445,7 @@ scoped[Pointwise] attribute [instance] AddSubmonoid.mul
 
 中文:
 定义 mul
-  签名: : Mul (AddSubmonoid R)
+  签名: : 乘法 (加法子幺半群 R)
   定义体: ⟨fun M N => ⨆ s : M, N.map (AddMonoidHom.mul s.1)⟩
 
 scoped[Pointwise] attribute [instance] AddSubmonoid.mul
@@ -531,7 +531,7 @@ lemma closure_mul_closure
 
 中文:
 引理 closure_mul_closure
-  条件: (S T : Set R)
+  条件: (S T : 集合 R)
   结论: closure S * closure T = closure (S * T)
   证明: by
   apply le_antisymm
@@ -569,8 +569,8 @@ lemma mul_eq_closure_mul_set
 
 中文:
 引理 mul_eq_closure_mul_set
-  条件: (M N : AddSubmonoid R)
-  结论: M * N = closure (M * N : Set R)
+  条件: (M N : 加法子幺半群 R)
+  结论: M * N = closure (M * N : 集合 R)
   证明: by
   rw [← closure_mul_closure]; rw [closure_eq]; rw [closure_eq]
 
@@ -590,7 +590,7 @@ lemma mul_bot
 
 中文:
 引理 mul_bot
-  条件: (S : AddSubmonoid R)
+  条件: (S : 加法子幺半群 R)
   结论: S * ⊥ = ⊥
   证明: addSubmonoid_smul_bot S
 -/
@@ -609,7 +609,7 @@ lemma bot_mul
 
 中文:
 引理 bot_mul
-  条件: (S : AddSubmonoid R)
+  条件: (S : 加法子幺半群 R)
   结论: ⊥ * S = ⊥
   证明: eq_bot_iff.2 mul_le.2 fun m hm n _ => by rw [AddSubmonoid.mem_bot] at hm ⊢; rw [hm, zero_mul]
 
@@ -684,7 +684,7 @@ lemma mul_subset_mul
 
 中文:
 引理 mul_subset_mul
-  结论: (↑M : Set R) * (↑N : Set R) subseteq (↑(M * N) : Set R)
+  结论: (↑M : 集合 R) * (↑N : 集合 R) subseteq (↑(M * N) : 集合 R)
   证明: smul_subset_smul
 
 Depends on / 依赖: smul_subset_smul
@@ -753,7 +753,7 @@ lemma iSup_mul
 
 中文:
 引理 iSup_mul
-  条件: (S : ι -> AddSubmonoid R) (T : AddSubmonoid R)
+  条件: (S : ι -> 加法子幺半群 R) (T : 加法子幺半群 R)
   结论: (⨆ i, S i) * T = ⨆ i, S i * T
   证明: le_antisymm (mul_le.mpr fun s hs t ht => iSup_induction _ (motive := (· * t in _)) hs
       (fun i s hs => mem_iSup_of_mem i <| mul_mem_mul hs ht) (by simp_rw [zero_mul]; apply zero_mem)
@@ -779,7 +779,7 @@ lemma mul_iSup
 
 中文:
 引理 mul_iSup
-  条件: (T : AddSubmonoid R) (S : ι -> AddSubmonoid R)
+  条件: (T : 加法子幺半群 R) (S : ι -> 加法子幺半群 R)
   结论: (T * ⨆ i, S i) = ⨆ i, T * S i
   证明: smul_iSup T S
 
@@ -837,7 +837,7 @@ definition hasDistribNeg
 
 中文:
 定义 hasDistribNeg
-  签名: : HasDistribNeg (AddSubmonoid R) where
+  签名: : 有DistribNeg (加法子幺半群 R) where
   定义体: by
     refine le_antisymm (mul_le.2 fun m hm n hn => ?_)
       ((AddSubmonoid.neg_le _ _).2 <| mul_le.2 fun m hm n hn => ?_) <;>
@@ -883,7 +883,7 @@ scoped[Pointwise] attribute [instance] AddSubmonoid.mulOneClass
 
 中文:
 定义 mulOneClass
-  签名: : MulOneClass (AddSubmonoid R) where
+  签名: : MulOne类 (加法子幺半群 R) where
   定义体: by rw [one_eq_closure_one_set, ← closure_eq M, closure_mul_closure, one_mul]
   mul_one M := by rw [one_eq_closure_one_set, ← closure_eq M, closure_mul_closure, mul_one]
 
@@ -917,7 +917,7 @@ definition semigroup
 
 中文:
 定义 semigroup
-  签名: : Semigroup (AddSubmonoid R) where
+  签名: : 半群 (加法子幺半群 R) where
   定义体: le_antisymm
       (mul_le.2 fun _mn hmn p hp => AddSubmonoid.mul_induction_on hmn
         (fun m hm n hn => mul_assoc m n p ▸ mul_mem_mul hm <| mul_mem_mul hn hp)
@@ -953,7 +953,7 @@ definition monoid
 
 中文:
 定义 monoid
-  签名: : Monoid (AddSubmonoid R) where
+  签名: : 幺半群 (加法子幺半群 R) where
 -/
 protected def monoid : Monoid (AddSubmonoid R) where
 
@@ -969,7 +969,7 @@ lemma closure_pow
 
 中文:
 引理 closure_pow
-  条件: (s : Set R)
+  条件: (s : 集合 R)
   结论: 对任意 n : 自然数, closure s ^ n = closure (s ^ n)
 -/
 lemma closure_pow (s : Set R) : forall n : Nat, closure s ^ n = closure (s ^ n)
@@ -987,7 +987,7 @@ lemma pow_eq_closure_pow_set
 
 中文:
 引理 pow_eq_closure_pow_set
-  条件: (s : AddSubmonoid R) (n : 自然数)
+  条件: (s : 加法子幺半群 R) (n : 自然数)
   证明: by
   rw [← closure_pow]; rw [closure_eq]
 
@@ -1008,8 +1008,8 @@ lemma pow_subset_pow
 
 中文:
 引理 pow_subset_pow
-  条件: {s : AddSubmonoid R} {n : 自然数}
-  结论: (↑s : Set R) ^ n subseteq ↑(s ^ n)
+  条件: {s : 加法子幺半群 R} {n : 自然数}
+  结论: (↑s : 集合 R) ^ n subseteq ↑(s ^ n)
   证明: (pow_eq_closure_pow_set s n).symm ▸ subset_closure
 
 Depends on / 依赖: pow_eq_closure_pow_set, subset_closure

@@ -143,7 +143,7 @@ theorem toMulBot_strictMono
 
 中文:
 定理 toMulBot_strictMono
-  结论: StrictMono (@toMulBot α _)
+  结论: 严格递增 (@toMulBot α _)
   证明: fun _ _ => id
 
 @[simp]

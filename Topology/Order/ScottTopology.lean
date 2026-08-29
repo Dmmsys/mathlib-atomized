@@ -92,7 +92,7 @@ definition scottHausdorff
 
 中文:
 定义 scottHausdorff
-  签名: (α : 类型) (D : Set (Set α)) [Preorder α]
+  签名: (α : 类型) (D : 集合 (集合 α)) [预序 α]
   定义体: forall ⦃d : Set α⦄, d in D -> d.Nonempty -> DirectedOn (· <= ·) d -> forall ⦃a : α⦄, IsLUB d a ->
     a in u -> exists b in d, Ici b inter d subseteq u
   isOpen_univ := fun d _ ⟨b, hb⟩ _ _ _ _ => ⟨b, hb, (Ici b inter d).subset_univ⟩
@@ -124,10 +124,10 @@ class IsScottHausdorff
     - topology_eq_scottHausdorff : ‹TopologicalSpace α› = scottHausdorff α D
 
 中文:
-类 IsScottHausdorff
-  参数: (α) (D : Set (Set α)) [Preorder α] [TopologicalSpace α]
+类 是ScottHausdorff
+  参数: (α) (D : 集合 (集合 α)) [预序 α] [拓扑空间 α]
   公理与运算 (1 个):
-    - topology_eq_scottHausdorff : ‹TopologicalSpace α› = scottHausdorff α D
+    - topology_eq_scottHausdorff : ‹拓扑空间 α› = scottHausdorff α D
 -/
 class IsScottHausdorff (α) (D : Set (Set α)) [Preorder α] [TopologicalSpace α] : Prop where
   topology_eq_scottHausdorff : ‹TopologicalSpace α› = scottHausdorff α D
@@ -192,7 +192,7 @@ lemma dirSupInaccOn_of_isOpen
 
 中文:
 引理 dirSupInaccOn_of_isOpen
-  条件: (h : IsOpen s)
+  条件: (h : 是开集 s)
   结论: DirSupInaccOn D s
   证明: .of_inter_subset (isOpen_iff.1 h)
 
@@ -212,7 +212,7 @@ lemma dirSupClosedOn_of_isClosed
 
 中文:
 引理 dirSupClosedOn_of_isClosed
-  条件: (h : IsClosed s)
+  条件: (h : 是闭集 s)
   结论: DirSupClosedOn D s
   证明: .of_compl (dirSupInaccOn_of_isOpen h.isOpen_compl)
 
@@ -233,8 +233,8 @@ theorem isOpen_iff_dirSupInaccOn
 
 中文:
 定理 isOpen_iff_dirSupInaccOn
-  条件: (hDL : IsLowerSet D)
-  结论: IsOpen s ↔ DirSupInaccOn D s
+  条件: (hDL : 是下集 D)
+  结论: 是开集 s ↔ DirSupInaccOn D s
   证明: by
   rw [isOpen_iff (D := D)]; rw [dirSupInaccOn_iff_inter_subset hDL]
 
@@ -255,8 +255,8 @@ theorem isClosed_iff_dirSupClosedOn
 
 中文:
 定理 isClosed_iff_dirSupClosedOn
-  条件: (hDL : IsLowerSet D)
-  结论: IsClosed s ↔ DirSupClosedOn D s
+  条件: (hDL : 是下集 D)
+  结论: 是闭集 s ↔ DirSupClosedOn D s
   证明: by
   rw [← isOpen_compl_iff]; rw [isOpen_iff_dirSupInaccOn hDL]; rw [dirSupInaccOn_compl]
 
@@ -276,8 +276,8 @@ theorem isOpen_of_isLowerSet
 
 中文:
 定理 isOpen_of_isLowerSet
-  条件: (hDL : IsLowerSet D) (h : IsLowerSet s)
-  结论: IsOpen s
+  条件: (hDL : 是下集 D) (h : 是下集 s)
+  结论: 是开集 s
   证明: (isOpen_iff_dirSupInaccOn hDL).2 h.dirSupInaccOn
 
 Depends on / 依赖: dirSupInaccOn, h.dirSupInaccOn, isOpen_iff_dirSupInaccOn
@@ -296,8 +296,8 @@ theorem isClosed_of_isUpperSet
 
 中文:
 定理 isClosed_of_isUpperSet
-  条件: (hDL : IsLowerSet D) (h : IsUpperSet s)
-  结论: IsClosed s
+  条件: (hDL : 是下集 D) (h : 是上集 s)
+  结论: 是闭集 s
   证明: (isClosed_iff_dirSupClosedOn hDL).2 h.dirSupClosedOn
 
 Depends on / 依赖: dirSupClosedOn, h.dirSupClosedOn, isClosed_iff_dirSupClosedOn
@@ -322,7 +322,7 @@ theorem isOpen_iff_dirSupInacc
 
 中文:
 定理 isOpen_iff_dirSupInacc
-  结论: IsOpen s ↔ DirSupInacc s
+  结论: 是开集 s ↔ DirSupInacc s
   证明: by
   rw [isOpen_iff_dirSupInaccOn isLowerSet_univ]; rw [dirSupInaccOn_univ]
 
@@ -342,7 +342,7 @@ theorem isClosed_iff_dirSupClosed
 
 中文:
 定理 isClosed_iff_dirSupClosed
-  结论: IsClosed s ↔ DirSupClosed s
+  结论: 是闭集 s ↔ DirSupClosed s
   证明: by
   rw [isClosed_iff_dirSupClosedOn isLowerSet_univ]; rw [dirSupClosedOn_univ]
 
@@ -373,7 +373,7 @@ definition scott
 
 中文:
 定义 scott
-  签名: (α : 类型) (D : Set (Set α)) [Preorder α]
+  签名: (α : 类型) (D : 集合 (集合 α)) [预序 α]
   定义体: upperSet α ⊔ scottHausdorff α D
 
 Depends on / 依赖: scottHausdorff, upperSet
@@ -392,7 +392,7 @@ lemma upperSet_le_scott
 
 中文:
 引理 upperSet_le_scott
-  条件: [Preorder α]
+  条件: [预序 α]
   结论: upperSet α <= scott α univ
   证明: le_sup_left
 
@@ -411,7 +411,7 @@ lemma scottHausdorff_le_scott
 
 中文:
 引理 scottHausdorff_le_scott
-  条件: [Preorder α]
+  条件: [预序 α]
   结论: scottHausdorff α univ <= scott α univ
   证明: le_sup_right
 
@@ -431,10 +431,10 @@ class IsScott
     - topology_eq_scott : ‹TopologicalSpace α› = scott α D
 
 中文:
-类 IsScott
+类 是Scott
   参数: : 命题 where
   公理与运算 (1 个):
-    - topology_eq_scott : ‹TopologicalSpace α› = scott α D
+    - topology_eq_scott : ‹拓扑空间 α› = scott α D
 -/
 class IsScott : Prop where
   topology_eq_scott : ‹TopologicalSpace α› = scott α D
@@ -456,7 +456,7 @@ lemma topology_eq
 
 中文:
 引理 topology_eq
-  条件: [IsScott α D]
+  条件: [是Scott α D]
   结论: ‹_› = scott α D
   证明: topology_eq_scott
 
@@ -476,7 +476,7 @@ lemma isOpen_iff_isUpperSet_and_scottHausdorff_open
 
 中文:
 引理 isOpen_iff_isUpperSet_and_scottHausdorff_open
-  条件: [IsScott α D]
+  条件: [是Scott α D]
   证明: by rw [topology_eq α D]; rfl
 
 Depends on / 依赖: topology_eq
@@ -500,7 +500,7 @@ lemma isOpen_iff_isUpperSet_and_dirSupInaccOn
 
 中文:
 引理 isOpen_iff_isUpperSet_and_dirSupInaccOn
-  条件: [IsScott α D]
+  条件: [是Scott α D]
   证明: by
   rw [isOpen_iff_isUpperSet_and_scottHausdorff_open (D := D)]
   refine and_congr_right fun h =>
@@ -531,7 +531,7 @@ lemma isClosed_iff_isLowerSet_and_dirSupClosed
 
 中文:
 引理 isClosed_iff_isLowerSet_and_dirSupClosed
-  条件: [IsScott α univ]
+  条件: [是Scott α univ]
   证明: by
   rw [← isOpen_compl_iff]; rw [isOpen_iff_isUpperSet_and_dirSupInaccOn (D := univ)]; rw [isUpperSet_compl]; rw [dirSupInaccOn_univ]; rw [dirSupInacc_compl]
 
@@ -553,8 +553,8 @@ lemma isUpperSet_of_isOpen
 
 中文:
 引理 isUpperSet_of_isOpen
-  条件: [IsScott α D]
-  结论: IsOpen s -> IsUpperSet s
+  条件: [是Scott α D]
+  结论: 是开集 s -> 是上集 s
   证明: fun h =>
   (isOpen_iff_isUpperSet_and_scottHausdorff_open (D := D).mp h).left
 -/
@@ -573,8 +573,8 @@ lemma isLowerSet_of_isClosed
 
 中文:
 引理 isLowerSet_of_isClosed
-  条件: [IsScott α univ]
-  结论: IsClosed s -> IsLowerSet s
+  条件: [是Scott α univ]
+  结论: 是闭集 s -> 是下集 s
   证明: fun h =>
   (isClosed_iff_isLowerSet_and_dirSupClosed.mp h).left
 -/
@@ -593,8 +593,8 @@ lemma dirSupClosed_of_isClosed
 
 中文:
 引理 dirSupClosed_of_isClosed
-  条件: [IsScott α univ]
-  结论: IsClosed s -> DirSupClosed s
+  条件: [是Scott α univ]
+  结论: 是闭集 s -> DirSupClosed s
   证明: fun h =>
   (isClosed_iff_isLowerSet_and_dirSupClosed.mp h).right
 -/
@@ -616,7 +616,7 @@ lemma lowerClosure_subset_closure
 
 中文:
 引理 lowerClosure_subset_closure
-  条件: [IsScott α univ]
+  条件: [是Scott α univ]
   结论: ↑(lowerClosure s) subseteq closure s
   证明: by
   convert! closure.mono (@upperSet_le_scott α _)
@@ -641,8 +641,8 @@ instance [IsScott
   body: isClosed_iff_isLowerSet_and_dirSupClosed.2 ⟨isLowerSet_Iic _, dirSupClosed_Iic _⟩
 
 中文:
-实例 [IsScott
-  签名: α univ] : ClosedIicTopology α where
+实例 [是Scott
+  签名: α univ] : ClosedIic拓扑 α where
   定义体: isClosed_iff_isLowerSet_and_dirSupClosed.2 ⟨isLowerSet_Iic _, dirSupClosed_Iic _⟩
 
 Depends on / 依赖: dirSupClosed_Iic, isClosed_iff_isLowerSet_and_dirSupClosed, isLowerSet_Iic
@@ -665,8 +665,8 @@ lemma closure_singleton
 
 中文:
 引理 closure_singleton
-  条件: [IsScott α univ]
-  结论: closure {a} = Iic a
+  条件: [是Scott α univ]
+  结论: closure {a} = 左无界右闭区间 a
   证明: le_antisymm
 (closure_minimal (by rw [singleton_subset_iff, mem_Iic]) isClosed_Iic) by
     rw [← LowerSet.coe_Iic]; rw [← lowerClosure_singleton]
@@ -693,8 +693,8 @@ lemma monotone_of_continuous
 
 中文:
 引理 monotone_of_continuous
-  条件: [IsScott α D] (hf : Continuous f)
-  结论: Monotone f
+  条件: [是Scott α D] (hf : 连续 f)
+  结论: 递增 f
   证明: fun _ b hab => by
   by_contra h
   simpa only [mem_compl_iff, mem_preimage, mem_Iic, le_refl, not_true]
@@ -722,7 +722,7 @@ fun t h₀ hd₁ hd₂ a hd₃ ha => image_inter_nonempty_iff.mp
 
 中文:
 引理 scottContinuousOn_iff_continuous
-  结论: {D : Set (Set α)} [Topology.IsScott α D]
+  结论: {D : 集合 (集合 α)} [拓扑.是Scott α D]
   证明: by
   refine ⟨fun h => continuous_def.2 fun u hu => ?_, ?_⟩
   · rw [isOpen_iff_isUpperSet_and_dirSupInaccOn (D := D)]
@@ -787,7 +787,7 @@ lemma isOpen_iff_Iic_compl_or_univ
 
 中文:
 引理 isOpen_iff_Iic_compl_or_univ
-  条件: [TopologicalSpace α] [Topology.IsScott α univ] (U : Set α)
+  条件: [拓扑空间 α] [拓扑.是Scott α univ] (U : 集合 α)
   证明: by
   constructor
   · intro hU
@@ -864,8 +864,8 @@ instance [TopologicalSpace
     exact IsUpper.topology_eq α
 
 中文:
-实例 [TopologicalSpace
-  签名: α] [IsUpper α] : IsScott α univ where
+实例 [拓扑空间
+  签名: α] [是Upper α] : 是Scott α univ where
   定义体: by
     rw [scott_eq_upper_of_completeLinearOrder]
     exact IsUpper.topology_eq α
@@ -891,7 +891,7 @@ lemma isOpen_iff_scottContinuous_mem
 
 中文:
 引理 isOpen_iff_scottContinuous_mem
-  结论: [Preorder α] {s : Set α} [TopologicalSpace α]
+  结论: [预序 α] {s : 集合 α} [拓扑空间 α]
   证明: by
   rw [← scottContinuousOn_univ]; rw [scottContinuousOn_iff_continuous (fun _ _ _ => by trivial)]
   exact isOpen_iff_continuous_mem
@@ -1062,7 +1062,7 @@ definition rec
 
 中文:
 定义 rec
-  签名: {β : WithScott α -> Sort _}
+  签名: {β : WithScott α -> 类型层 _}
   定义体: fun a => h (ofScott a)
 -/
 protected def rec {β : WithScott α -> Sort _}
@@ -1077,8 +1077,8 @@ instance [Nonempty
   body: ‹Nonempty α›
 
 中文:
-实例 [Nonempty
-  签名: α] : Nonempty (WithScott α)
+实例 [非空
+  签名: α] : 非空 (WithScott α)
   定义体: ‹Nonempty α›
 
 Depends on / 依赖: Nonempty
@@ -1093,8 +1093,8 @@ instance [Inhabited
   body: ‹Inhabited α›
 
 中文:
-实例 [Inhabited
-  签名: α] : Inhabited (WithScott α)
+实例 [可居
+  签名: α] : 可居 (WithScott α)
   定义体: ‹Inhabited α›
 
 Depends on / 依赖: Inhabited
@@ -1113,7 +1113,7 @@ instance :
 
 中文:
 实例 :
-  签名: Preorder (WithScott α)
+  签名: 预序 (WithScott α)
   定义体: ‹Preorder α›
 
 Depends on / 依赖: Preorder
@@ -1132,7 +1132,7 @@ inferInstanceAs TopologicalSpace α
 
 中文:
 实例 :
-  签名: TopologicalSpace (WithScott α)
+  签名: 拓扑空间 (WithScott α)
   定义体: -- fast_instance% scott α univ fails
   letI : TopologicalSpace α := scott α univ
 inferInstanceAs TopologicalSpace α
@@ -1152,7 +1152,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsScott (WithScott α) univ
+  签名: 是Scott (WithScott α) univ
   定义体: ⟨rfl⟩
 -/
 instance : IsScott (WithScott α) univ := ⟨rfl⟩
@@ -1167,7 +1167,7 @@ lemma isOpen_iff_isUpperSet_and_scottHausdorff_open'
 
 中文:
 引理 isOpen_iff_isUpperSet_and_scottHausdorff_open'
-  条件: {u : Set α}
+  条件: {u : 集合 α}
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -1215,8 +1215,8 @@ definition IsScott.withScottHomeomorph
   body: WithScott.ofScott.toHomeomorphOfIsInducing ⟨IsScott.topology_eq α univ ▸ induced_id.symm⟩
 
 中文:
-定义 IsScott.withScottHomeomorph
-  签名: [IsScott α univ]
+定义 是Scott.withScottHomeomorph
+  签名: [是Scott α univ]
   定义体: WithScott.ofScott.toHomeomorphOfIsInducing ⟨IsScott.topology_eq α univ ▸ induced_id.symm⟩
 
 Depends on / 依赖: IsScott, IsScott.topology_eq, WithScott, WithScott.ofScott.toHomeomorphOfIsInducing, induced_id, induced_id.symm, ofScott, toHomeomorphOfIsInducing, topology_eq
@@ -1234,8 +1234,8 @@ lemma IsScott.scottHausdorff_le
   rw [IsScott.topology_eq α univ]; rw [scott]; exact le_sup_right
 
 中文:
-引理 IsScott.scottHausdorff_le
-  条件: [IsScott α univ]
+引理 是Scott.scottHausdorff_le
+  条件: [是Scott α univ]
   证明: by
   rw [IsScott.topology_eq α univ]; rw [scott]; exact le_sup_right
 
@@ -1257,9 +1257,9 @@ lemma IsLower.scottHausdorff_le
   exact scottHausdorff_le_lower
 
 中文:
-引理 IsLower.scottHausdorff_le
-  条件: [IsLower α]
-  结论: scottHausdorff α univ <= ‹TopologicalSpace α›
+引理 是Lower.scottHausdorff_le
+  条件: [是Lower α]
+  结论: scottHausdorff α univ <= ‹拓扑空间 α›
   证明: by
   rw [IsLower.topology_eq α]
   exact scottHausdorff_le_lower

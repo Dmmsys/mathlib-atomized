@@ -99,7 +99,7 @@ theorem hasFDerivAt
 
 中文:
 定理 hasFDerivAt
-  结论: HasFDerivAt iso (iso : E ->L[𝕜] F) x
+  结论: 在点处Fréchet可导 iso (iso : E ->L[𝕜] F) x
   证明: iso.toContinuousLinearMap.hasFDerivAtFilter
 
 @[fun_prop]
@@ -196,7 +196,7 @@ theorem differentiable
 
 中文:
 定理 differentiable
-  结论: Differentiable 𝕜 iso
+  结论: 可微 𝕜 iso
   证明: fun _ => iso.differentiableAt
 
 @[fun_prop]
@@ -234,7 +234,7 @@ theorem comp_differentiableWithinAt_iff
 
 中文:
 定理 comp_differentiableWithinAt_iff
-  条件: {f : G -> E} {s : Set G} {x : G}
+  条件: {f : G -> E} {s : 集合 G} {x : G}
   证明: by
   refine ⟨fun H => ?_, fun H => iso.differentiable.differentiableAt.comp_differentiableWithinAt x H⟩
   have : DifferentiableWithinAt 𝕜 (iso.symm ∘ iso ∘ f) s x :=
@@ -283,7 +283,7 @@ theorem comp_differentiableOn_iff
 
 中文:
 定理 comp_differentiableOn_iff
-  条件: {f : G -> E} {s : Set G}
+  条件: {f : G -> E} {s : 集合 G}
   证明: by
   rw [DifferentiableOn]; rw [DifferentiableOn]
   simp only [iso.comp_differentiableWithinAt_iff]
@@ -309,7 +309,7 @@ theorem comp_differentiable_iff
 中文:
 定理 comp_differentiable_iff
   条件: {f : G -> E}
-  结论: Differentiable 𝕜 (iso ∘ f) ↔ Differentiable 𝕜 f
+  结论: 可微 𝕜 (iso ∘ f) ↔ 可微 𝕜 f
   证明: by
   rw [← differentiableOn_univ]; rw [← differentiableOn_univ]
   exact iso.comp_differentiableOn_iff
@@ -333,7 +333,7 @@ theorem comp_hasFDerivWithinAt_iff
 
 中文:
 定理 comp_hasFDerivWithinAt_iff
-  条件: {f : G -> E} {s : Set G} {x : G} {f' : G ->L[𝕜] E}
+  条件: {f : G -> E} {s : 集合 G} {x : G} {f' : G ->L[𝕜] E}
   证明: by
   refine ⟨fun H => ?_, fun H => iso.hasFDerivAt.comp_hasFDerivWithinAt x H⟩
   simpa [Function.comp_def, ← ContinuousLinearMap.comp_assoc]
@@ -406,7 +406,7 @@ theorem comp_hasFDerivWithinAt_iff'
 
 中文:
 定理 comp_hasFDerivWithinAt_iff'
-  条件: {f : G -> E} {s : Set G} {x : G} {f' : G ->L[𝕜] F}
+  条件: {f : G -> E} {s : 集合 G} {x : G} {f' : G ->L[𝕜] F}
   证明: by
   rw [← iso.comp_hasFDerivWithinAt_iff]; rw [← ContinuousLinearMap.comp_assoc]; rw [iso.coe_comp_coe_symm]; rw [ContinuousLinearMap.id_comp]
 
@@ -452,7 +452,7 @@ theorem comp_fderivWithin
 
 中文:
 定理 comp_fderivWithin
-  条件: {f : G -> E} {s : Set G} {x : G} (hxs : UniqueDiffWithinAt 𝕜 s x)
+  条件: {f : G -> E} {s : 集合 G} {x : G} (hxs : UniqueDiffWithinAt 𝕜 s x)
   证明: by
   by_cases h : DifferentiableWithinAt 𝕜 f s x
   · rw [fderiv_comp_fderivWithin x iso.differentiableAt h hxs, iso.fderiv]
@@ -584,7 +584,7 @@ theorem comp_right_differentiableWithinAt_iff
 
 中文:
 定理 comp_right_differentiableWithinAt_iff
-  条件: {f : F -> G} {s : Set F} {x : E}
+  条件: {f : F -> G} {s : 集合 F} {x : E}
   证明: by
   refine ⟨fun H => ?_, fun H => H.comp x iso.differentiableWithinAt (mapsTo_preimage _ s)⟩
   have : DifferentiableWithinAt 𝕜 ((f ∘ iso) ∘ iso.symm) s (iso x) := by
@@ -643,7 +643,7 @@ theorem comp_right_differentiableOn_iff
 
 中文:
 定理 comp_right_differentiableOn_iff
-  条件: {f : F -> G} {s : Set F}
+  条件: {f : F -> G} {s : 集合 F}
   证明: by
   refine ⟨fun H y hy => ?_, fun H y hy => iso.comp_right_differentiableWithinAt_iff.2 (H _ hy)⟩
   rw [← iso.apply_symm_apply y]; rw [← comp_right_differentiableWithinAt_iff]
@@ -696,7 +696,7 @@ theorem comp_right_hasFDerivWithinAt_iff
 
 中文:
 定理 comp_right_hasFDerivWithinAt_iff
-  条件: {f : F -> G} {s : Set F} {x : E} {f' : F ->L[𝕜] G}
+  条件: {f : F -> G} {s : 集合 F} {x : E} {f' : F ->L[𝕜] G}
   证明: by
   refine ⟨fun H => ?_, fun H => H.comp x iso.hasFDerivWithinAt (mapsTo_preimage _ s)⟩
   rw [← iso.symm_apply_apply x] at H
@@ -754,7 +754,7 @@ theorem comp_right_hasFDerivWithinAt_iff'
 
 中文:
 定理 comp_right_hasFDerivWithinAt_iff'
-  条件: {f : F -> G} {s : Set F} {x : E} {f' : E ->L[𝕜] G}
+  条件: {f : F -> G} {s : 集合 F} {x : E} {f' : E ->L[𝕜] G}
   证明: by
   rw [← iso.comp_right_hasFDerivWithinAt_iff]; rw [ContinuousLinearMap.comp_assoc]; rw [iso.coe_symm_comp_coe]; rw [ContinuousLinearMap.comp_id]
 
@@ -802,7 +802,7 @@ theorem comp_right_fderivWithin
 
 中文:
 定理 comp_right_fderivWithin
-  结论: {f : F -> G} {s : Set F} {x : E}
+  结论: {f : F -> G} {s : 集合 F} {x : E}
   证明: by
   by_cases h : DifferentiableWithinAt 𝕜 f s (iso x)
   · exact (iso.comp_right_hasFDerivWithinAt_iff.2 h.hasFDerivWithinAt).fderivWithin hxs
@@ -912,7 +912,7 @@ theorem hasFDerivAt
 
 中文:
 定理 hasFDerivAt
-  结论: HasFDerivAt iso (iso : E ->L[𝕜] F) x
+  结论: 在点处Fréchet可导 iso (iso : E ->L[𝕜] F) x
   证明: (iso : E ≃L[𝕜] F).hasFDerivAt
 
 @[fun_prop]
@@ -1009,7 +1009,7 @@ theorem differentiable
 
 中文:
 定理 differentiable
-  结论: Differentiable 𝕜 iso
+  结论: 可微 𝕜 iso
   证明: fun _ => iso.differentiableAt
 
 @[fun_prop]
@@ -1043,7 +1043,7 @@ theorem comp_differentiableWithinAt_iff
 
 中文:
 定理 comp_differentiableWithinAt_iff
-  条件: {f : G -> E} {s : Set G} {x : G}
+  条件: {f : G -> E} {s : 集合 G} {x : G}
   证明: (iso : E ≃L[𝕜] F).comp_differentiableWithinAt_iff
 
 Depends on / 依赖: comp_differentiableWithinAt_iff
@@ -1081,7 +1081,7 @@ theorem comp_differentiableOn_iff
 
 中文:
 定理 comp_differentiableOn_iff
-  条件: {f : G -> E} {s : Set G}
+  条件: {f : G -> E} {s : 集合 G}
   证明: (iso : E ≃L[𝕜] F).comp_differentiableOn_iff
 
 Depends on / 依赖: comp_differentiableOn_iff
@@ -1102,7 +1102,7 @@ theorem comp_differentiable_iff
 中文:
 定理 comp_differentiable_iff
   条件: {f : G -> E}
-  结论: Differentiable 𝕜 (iso ∘ f) ↔ Differentiable 𝕜 f
+  结论: 可微 𝕜 (iso ∘ f) ↔ 可微 𝕜 f
   证明: (iso : E ≃L[𝕜] F).comp_differentiable_iff
 
 Depends on / 依赖: comp_differentiable_iff
@@ -1120,7 +1120,7 @@ theorem comp_hasFDerivWithinAt_iff
 
 中文:
 定理 comp_hasFDerivWithinAt_iff
-  条件: {f : G -> E} {s : Set G} {x : G} {f' : G ->L[𝕜] E}
+  条件: {f : G -> E} {s : 集合 G} {x : G} {f' : G ->L[𝕜] E}
   证明: (iso : E ≃L[𝕜] F).comp_hasFDerivWithinAt_iff
 
 Depends on / 依赖: comp_hasFDerivWithinAt_iff
@@ -1177,7 +1177,7 @@ theorem comp_hasFDerivWithinAt_iff'
 
 中文:
 定理 comp_hasFDerivWithinAt_iff'
-  条件: {f : G -> E} {s : Set G} {x : G} {f' : G ->L[𝕜] F}
+  条件: {f : G -> E} {s : 集合 G} {x : G} {f' : G ->L[𝕜] F}
   证明: (iso : E ≃L[𝕜] F).comp_hasFDerivWithinAt_iff'
 
 Depends on / 依赖: comp_hasFDerivWithinAt_iff
@@ -1215,7 +1215,7 @@ theorem comp_fderivWithin
 
 中文:
 定理 comp_fderivWithin
-  条件: {f : G -> E} {s : Set G} {x : G} (hxs : UniqueDiffWithinAt 𝕜 s x)
+  条件: {f : G -> E} {s : 集合 G} {x : G} (hxs : UniqueDiffWithinAt 𝕜 s x)
   证明: (iso : E ≃L[𝕜] F).comp_fderivWithin hxs
 
 Depends on / 依赖: comp_fderivWithin
@@ -1378,8 +1378,8 @@ theorem HasFDerivAt.tendsto_nhdsNE
   simpa only [compl_eq_univ_sdiff] using (hasFDerivWithinAt_univ.2 h).tendsto_nhdsWithin_nhdsNE hf'
 
 中文:
-定理 HasFDerivAt.tendsto_nhdsNE
-  结论: (h : HasFDerivAt f f' x)
+定理 在点处Fréchet可导.tendsto_nhdsNE
+  结论: (h : 在点处Fréchet可导 f f' x)
   证明: by
   simpa only [compl_eq_univ_sdiff] using (hasFDerivWithinAt_univ.2 h).tendsto_nhdsWithin_nhdsNE hf'
 
@@ -1399,8 +1399,8 @@ theorem HasFDerivAt.eventually_ne
   simpa only [compl_eq_univ_sdiff] using (hasFDerivWithinAt_univ.2 h).eventually_ne hf'
 
 中文:
-定理 HasFDerivAt.eventually_ne
-  条件: (h : HasFDerivAt f f' x) (hf' : 存在 C, AntilipschitzWith C f')
+定理 在点处Fréchet可导.eventually_ne
+  条件: (h : 在点处Fréchet可导 f f' x) (hf' : 存在 C, AntilipschitzWith C f')
   证明: by
   simpa only [compl_eq_univ_sdiff] using (hasFDerivWithinAt_univ.2 h).eventually_ne hf'
 
@@ -1420,8 +1420,8 @@ theorem HasFDerivAt.eventually_notMem
   simpa only [compl_eq_univ_sdiff] using (hasFDerivWithinAt_univ.2 h).eventually_notMem hf' t ht
 
 中文:
-定理 HasFDerivAt.eventually_notMem
-  结论: (h : HasFDerivAt f f' x) (hf' : 存在 C, AntilipschitzWith C f')
+定理 在点处Fréchet可导.eventually_notMem
+  结论: (h : 在点处Fréchet可导 f f' x) (hf' : 存在 C, AntilipschitzWith C f')
   证明: by
   simpa only [compl_eq_univ_sdiff] using (hasFDerivWithinAt_univ.2 h).eventually_notMem hf' t ht
 
@@ -1458,7 +1458,7 @@ theorem has_fderiv_at_filter_real_equiv
 
 中文:
 定理 has_fderiv_at_filter_real_equiv
-  条件: {L : Filter E}
+  条件: {L : 滤子 E}
   证明: by
   symm
   rw [tendsto_iff_norm_sub_tendsto_zero]
@@ -1487,8 +1487,8 @@ theorem HasFDerivAt.lim_real
   exact fun b => ⟨b, fun a ha => le_trans ha (le_abs_self _)⟩
 
 中文:
-定理 HasFDerivAt.lim_real
-  条件: (hf : HasFDerivAt f f' x) (v : E)
+定理 在点处Fréchet可导.lim_real
+  条件: (hf : 在点处Fréchet可导 f f' x) (v : E)
   证明: by
   apply hf.lim v
   rw [tendsto_atTop_atTop]
@@ -1595,7 +1595,7 @@ theorem UniqueDiffOn.image
   proof: forall_mem_image.2 fun x hx => (hf' x hx).uniqueDiffWithinAt (hs x hx) (hd x hx)
 
 中文:
-定理 UniqueDiffOn.image
+定理 UniqueDiffOn.像
   结论: {f' : E -> E ->L[𝕜] F} (hs : UniqueDiffOn 𝕜 s)
   证明: forall_mem_image.2 fun x hx => (hf' x hx).uniqueDiffWithinAt (hs x hx) (hd x hx)
 
@@ -1637,7 +1637,7 @@ theorem ContinuousLinearEquiv.uniqueDiffOn_image
 @[simp]
 
 中文:
-定理 ContinuousLinearEquiv.uniqueDiffOn_image
+定理 连续线性等价.uniqueDiffOn_image
   条件: (e : E ≃L[𝕜] F) (h : UniqueDiffOn 𝕜 s)
   证明: h.image (fun _ _ => e.hasFDerivWithinAt) fun _ _ => e.surjective.denseRange
 
@@ -1661,7 +1661,7 @@ theorem ContinuousLinearEquiv.uniqueDiffOn_image_iff
 @[simp]
 
 中文:
-定理 ContinuousLinearEquiv.uniqueDiffOn_image_iff
+定理 连续线性等价.uniqueDiffOn_image_iff
   条件: (e : E ≃L[𝕜] F)
   证明: ⟨fun h => e.symm_image_image s ▸ e.symm.uniqueDiffOn_image h, e.uniqueDiffOn_image⟩
 
@@ -1684,7 +1684,7 @@ theorem ContinuousLinearEquiv.uniqueDiffOn_preimage_iff
   rw [← e.image_symm_eq_preimage]; rw [e.symm.uniqueDiffOn_image_iff]
 
 中文:
-定理 ContinuousLinearEquiv.uniqueDiffOn_preimage_iff
+定理 连续线性等价.uniqueDiffOn_preimage_iff
   条件: (e : F ≃L[𝕜] E)
   证明: by
   rw [← e.image_symm_eq_preimage]; rw [e.symm.uniqueDiffOn_image_iff]
@@ -1905,7 +1905,7 @@ theorem fderivWithin_comp_neg
 
 中文:
 定理 fderivWithin_comp_neg
-  条件: {f : 𝕜 -> F} {s : Set 𝕜} {x : 𝕜}
+  条件: {f : 𝕜 -> F} {s : 集合 𝕜} {x : 𝕜}
   证明: by
   have t1 := fderivWithin_comp_smul_eq_fderivWithin_smul (-1 : 𝕜) (f := f) (s := s) (x := x)
   simp only [neg_smul, one_smul, Set.neg_smul_set] at t1

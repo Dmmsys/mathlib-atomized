@@ -80,7 +80,7 @@ theorem eq_zero
 
 中文:
 定理 eq_zero
-  条件: [HasZeroMorphisms C] (o : HomOrthogonal s) {i j : ι} (w : i != j) (f : s i ⟶ s j)
+  条件: [有ZeroMorphisms C] (o : HomOrthogonal s) {i j : ι} (w : i != j) (f : s i ⟶ s j)
   证明: (o w).elim _ _
 -/
 theorem eq_zero [HasZeroMorphisms C] (o : HomOrthogonal s) {i j : ι} (w : i != j) (f : s i ⟶ s j) :
@@ -118,7 +118,7 @@ definition matrixDecomposition
 
 中文:
 定义 matrixDecomposition
-  签名: (o : HomOrthogonal s) {α β : Type} [Finite α] [Finite β]
+  签名: (o : HomOrthogonal s) {α β : 类型} [有限 α] [有限 β]
   定义体: eqToHom
         (by
           rcases k with ⟨k, ⟨⟩⟩
@@ -191,7 +191,7 @@ definition matrixDecompositionAddEquiv
 
 中文:
 定义 matrixDecompositionAddEquiv
-  签名: (o : HomOrthogonal s) {α β : Type} [Finite α]
+  签名: (o : HomOrthogonal s) {α β : 类型} [有限 α]
   定义体: { o.matrixDecomposition with
     map_add' := fun w z => by
       ext
@@ -230,7 +230,7 @@ theorem matrixDecomposition_id
 
 中文:
 定理 matrixDecomposition_id
-  条件: (o : HomOrthogonal s) {α : Type} [Finite α] {f : α -> ι} (i : ι)
+  条件: (o : HomOrthogonal s) {α : 类型} [有限 α] {f : α -> ι} (i : ι)
   证明: by
   ext ⟨b, ⟨⟩⟩ ⟨a, j_property⟩
   simp only [Set.mem_preimage, Set.mem_singleton_iff] at j_property
@@ -272,7 +272,7 @@ theorem matrixDecomposition_comp
 
 中文:
 定理 matrixDecomposition_comp
-  结论: (o : HomOrthogonal s) {α β γ : Type} [Finite α] [Fintype β]
+  结论: (o : HomOrthogonal s) {α β γ : 类型} [有限 α] [有限类型 β]
   证明: by
   ext ⟨c, ⟨⟩⟩ ⟨a, j_property⟩
   simp only [Set.mem_preimage, Set.mem_singleton_iff] at j_property
@@ -326,7 +326,7 @@ definition matrixDecompositionLinearEquiv
 
 中文:
 定义 matrixDecompositionLinearEquiv
-  签名: (o : HomOrthogonal s) {α β : Type} [Finite α]
+  签名: (o : HomOrthogonal s) {α β : 类型} [有限 α]
   定义体: { o.matrixDecompositionAddEquiv with
     map_smul' := fun w z => by
       ext
@@ -374,7 +374,7 @@ theorem equiv_of_iso
 
 中文:
 定理 equiv_of_iso
-  结论: (o : HomOrthogonal s) {α β : Type} [Finite α] [Finite β] {f : α -> ι}
+  结论: (o : HomOrthogonal s) {α β : 类型} [有限 α] [有限 β] {f : α -> ι}
   证明: by
   classical
   refine ⟨Equiv.ofPreimageEquiv ?_, fun a => Equiv.ofPreimageEquiv_map _ _⟩

@@ -53,8 +53,8 @@ structure CommShift₂Setup
     - hε((m n : M)) : ε m n = (z (0, n) (m, 0))⁻¹ * z (m, 0) (0, n)  [default: by aesop]
 
 中文:
-结构 CommShift₂Setup
-  参数: (M : 类型) [AddCommMonoid M] [HasShift D M]
+结构 交换Shift₂Setup
+  参数: (M : 类型) [加法交换幺半群 M] [有Shift D M]
   公理与运算 (4 个):
     - z_zero₁((m₁ m₂ : M)) : z (0, m₁) (0, m₂) = 1  [默认: by aesop]
     - z_zero₂((m₁ m₂ : M)) : z (m₁, 0) (m₂, 0) = 1  [默认: by aesop]
@@ -89,8 +89,8 @@ definition CommShift₂Setup.int
   commShift _ _ := ⟨by cat_dis
 
 中文:
-定义 CommShift₂Setup.int
-  签名: [Preadditive D] [HasShift D 整数]
+定义 交换Shift₂Setup.int
+  签名: [预加性 D] [有Shift D 整数]
   定义体: (-1) ^ (m.1 * n.2)
   assoc _ _ _ := by
     dsimp
@@ -129,13 +129,13 @@ class CommShift₂
     - comm((G h) (X₁ : C₁) (X₂ : C₂) (m n : M)) : ((G.obj (X₁⟦m⟧)).commShiftIso n).hom.app X₂ ≫ (((G.flip.obj X₂).commShiftIso m).hom.app X₁)⟦n⟧' = ((G.flip.obj (X₂⟦n⟧)).commShiftIso m).hom.app X₁ ≫ (((G.obj X₁).commShiftIso n).hom.app X₂)⟦m⟧' ≫ (shiftComm ((G.obj X₁).obj X₂) m n).inv ≫ (h.ε m n).val.app _
 
 中文:
-类 CommShift₂
-  参数: {M : 类型} [AddCommMonoid M] [HasShift C₁ M] [HasShift C₂ M] [HasShift D M]
+类 交换Shift₂
+  参数: {M : 类型} [加法交换幺半群 M] [有Shift C₁ M] [有Shift C₂ M] [有Shift D M]
   公理与运算 (5 个):
-    - commShiftObj((X₁ : C₁)) : (G.obj X₁).CommShift M  [默认: by infer_instance]
-    - commShift_map({X₁ Y₁ : C₁} (f : X₁ ⟶ Y₁)) : 自然数Trans.CommShift (G.map f) M  [默认: by infer_instance]
-    - commShiftFlipObj((X₂ : C₂)) : (G.flip.obj X₂).CommShift M  [默认: by infer_instance]
-    - commShift_flip_map({X₂ Y₂ : C₂} (g : X₂ ⟶ Y₂)) : 自然数Trans.CommShift (G.flip.map g) M  [默认: by infer_instance]
+    - commShiftObj((X₁ : C₁)) : (G.obj X₁).交换Shift M  [默认: by infer_instance]
+    - commShift_map({X₁ Y₁ : C₁} (f : X₁ ⟶ Y₁)) : 自然变换.交换Shift (G.map f) M  [默认: by infer_instance]
+    - commShiftFlipObj((X₂ : C₂)) : (G.flip.obj X₂).交换Shift M  [默认: by infer_instance]
+    - commShift_flip_map({X₂ Y₂ : C₂} (g : X₂ ⟶ Y₂)) : 自然变换.交换Shift (G.flip.map g) M  [默认: by infer_instance]
     - comm((G h) (X₁ : C₁) (X₂ : C₂) (m n : M)) : ((G.obj (X₁⟦m⟧)).commShiftIso n).hom.app X₂ ≫ (((G.flip.obj X₂).commShiftIso m).hom.app X₁)⟦n⟧' = ((G.flip.obj (X₂⟦n⟧)).commShiftIso m).hom.app X₁ ≫ (((G.obj X₁).commShiftIso n).hom.app X₂)⟦m⟧' ≫ (shiftComm ((G.obj X₁).obj X₂) m n).inv ≫ (h.ε m n).val.app _
 
 Depends on / 依赖: CommShift, G.flip.map, G.flip.obj, G.map, G.obj, NatTrans, NatTrans.CommShift, commShiftFlipObj, commShiftIso, commShift_flip_map, commShift_map, hom.app, infer_instance
@@ -168,8 +168,8 @@ abbreviation CommShift₂Int
   body: G.CommShift₂ .int
 
 中文:
-缩写 CommShift₂Int
-  签名: [HasShift C₁ 整数] [HasShift C₂ 整数] [HasShift D 整数] [Preadditive D]
+缩写 CommShift₂整数
+  签名: [有Shift C₁ 整数] [有Shift C₂ 整数] [有Shift D 整数] [预加性 D]
   定义体: G.CommShift₂ .int
 
 Depends on / 依赖: G.CommShift
@@ -199,7 +199,7 @@ instance precomp₁
 
 中文:
 实例 precomp₁
-  签名: {M : 类型} [AddCommMonoid M] [HasShift C₁ M] [HasShift C₁' M]
+  签名: {M : 类型} [加法交换幺半群 M] [有Shift C₁ M] [有Shift C₁' M]
   定义体: inferInstanceAs ((G.obj (F.obj X₁')).CommShift M)
   commShift_map {X₁' Y₁' : C₁'} (f : X₁' ⟶ Y₁') := by dsimp; infer_instance
   commShiftFlipObj (X₂ : C₂) := CommShift.comp F (G.flip.obj X₂)
@@ -240,7 +240,7 @@ instance precomp₂
 
 中文:
 实例 precomp₂
-  签名: {M : 类型} [AddCommMonoid M] [HasShift C₁ M] [HasShift C₂' M]
+  签名: {M : 类型} [加法交换幺半群 M] [有Shift C₁ M] [有Shift C₂' M]
   定义体: CommShift.comp F (G.obj X₁)
   commShift_map {X₁ Y₁ : C₁} (f : X₁ ⟶ Y₁) := by dsimp; infer_instance
   commShiftFlipObj (X₂' : C₂') := inferInstanceAs ((G.flip.obj (F.obj X₂')).CommShift M)
@@ -293,11 +293,11 @@ class CommShift₂
     - commShift_flipApp((X₂ : C₂)) : NatTrans.CommShift (τ.flipApp X₂) M  [default: by infer_instance]
 
 中文:
-类 CommShift₂
+类 交换Shift₂
   参数: : 命题 where
   公理与运算 (2 个):
-    - commShift_app((X₁ : C₁)) : 自然数Trans.CommShift (τ.app X₁) M  [默认: by infer_instance]
-    - commShift_flipApp((X₂ : C₂)) : 自然数Trans.CommShift (τ.flipApp X₂) M  [默认: by infer_instance]
+    - commShift_app((X₁ : C₁)) : 自然变换.交换Shift (τ.app X₁) M  [默认: by infer_instance]
+    - commShift_flipApp((X₂ : C₂)) : 自然变换.交换Shift (τ.flipApp X₂) M  [默认: by infer_instance]
 
 Depends on / 依赖: CommShift, NatTrans, NatTrans.CommShift, commShift_flipApp, flipApp, infer_instance
 -/
@@ -323,7 +323,7 @@ instance :
 
 中文:
 实例 :
-  签名: CommShift₂ (𝟙 G₁) h
+  签名: 交换Shift₂ (𝟙 G₁) h
   定义体: by dsimp; infer_instance
   commShift_flipApp _ := by
     simp only [flipApp, flipFunctor_obj, Functor.map_id, id_app]
@@ -351,8 +351,8 @@ instance [CommShift₂
     infer_instance
 
 中文:
-实例 [CommShift₂
-  签名: τ h] [CommShift₂ τ' h] : CommShift₂ (τ ≫ τ') h where
+实例 [交换Shift₂
+  签名: τ h] [交换Shift₂ τ' h] : 交换Shift₂ (τ ≫ τ') h where
   定义体: by dsimp; infer_instance
   commShift_flipApp _ := by
     simp only [flipApp, flipFunctor_obj, Functor.map_comp, comp_app]
@@ -379,8 +379,8 @@ abbreviation CommShift₂Int
   body: NatTrans.CommShift₂ τ .int
 
 中文:
-缩写 CommShift₂Int
-  签名: [HasShift C₁ 整数] [HasShift C₂ 整数] [HasShift D 整数] [Preadditive D]
+缩写 CommShift₂整数
+  签名: [有Shift C₁ 整数] [有Shift C₂ 整数] [有Shift D 整数] [预加性 D]
   定义体: NatTrans.CommShift₂ τ .int
 
 Depends on / 依赖: NatTrans, NatTrans.CommShift

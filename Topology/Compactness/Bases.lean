@@ -36,7 +36,7 @@ lemma eq_finite_iUnion_of_isTopologicalBasis_of_isCompact_open
 
 中文:
 引理 eq_finite_iUnion_of_isTopologicalBasis_of_isCompact_open
-  结论: (b : ι -> Set X)
+  结论: (b : ι -> 集合 X)
   证明: by
   obtain ⟨Y, f, e, hf⟩ := hb.open_eq_iUnion hUo
   choose f' hf' using hf
@@ -87,7 +87,7 @@ lemma eq_sUnion_finset_of_isTopologicalBasis_of_isCompact_open
 
 中文:
 引理 eq_sUnion_finset_of_isTopologicalBasis_of_isCompact_open
-  结论: (b : Set (Set X))
+  结论: (b : 集合 (集合 X))
   证明: by
   have hb' : b = range (fun i => i : b -> Set X) := by simp
   rw [hb'] at hb
@@ -126,7 +126,7 @@ theorem isCompact_open_iff_eq_finite_iUnion_of_isTopologicalBasis
 
 中文:
 定理 isCompact_open_iff_eq_finite_iUnion_of_isTopologicalBasis
-  结论: (b : ι -> Set X)
+  结论: (b : ι -> 集合 X)
   证明: by
   constructor
   · exact fun ⟨h₁, h₂⟩ => eq_finite_iUnion_of_isTopologicalBasis_of_isCompact_open _ hb U h₁ h₂

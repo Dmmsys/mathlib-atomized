@@ -107,7 +107,7 @@ theorem coe_projIci
 中文:
 定理 coe_projIci
   条件: (a x : α)
-  结论: (projIci a x : α) = max a x
+  结论: (projIci a x : α) = 最大值 a x
   证明: rfl
 
 @[norm_cast]
@@ -129,7 +129,7 @@ theorem coe_projIic
 中文:
 定理 coe_projIic
   条件: (b x : α)
-  结论: (projIic b x : α) = min b x
+  结论: (projIic b x : α) = 最小值 b x
   证明: rfl
 
 @[norm_cast]
@@ -149,7 +149,7 @@ theorem coe_projIcc
 中文:
 定理 coe_projIcc
   条件: (a b : α) (h : a <= b) (x : α)
-  结论: (projIcc a b h x : α) = max a (min b x)
+  结论: (projIcc a b h x : α) = 最大值 a (最小值 b x)
   证明: rfl
 -/
 theorem coe_projIcc (a b : α) (h : a <= b) (x : α) : (projIcc a b h x : α) = max a (min b x) := rfl
@@ -420,7 +420,7 @@ theorem projIci_of_mem
 
 中文:
 定理 projIci_of_mem
-  条件: (hx : x in Ici a)
+  条件: (hx : x in 左闭右无界区间 a)
   结论: projIci a x = ⟨x, hx⟩
   证明: by simpa [projIci]
 
@@ -440,7 +440,7 @@ theorem projIic_of_mem
 
 中文:
 定理 projIic_of_mem
-  条件: (hx : x in Iic b)
+  条件: (hx : x in 左无界右闭区间 b)
   结论: projIic b x = ⟨x, hx⟩
   证明: by simpa [projIic]
 
@@ -462,7 +462,7 @@ theorem projIcc_of_mem
 
 中文:
 定理 projIcc_of_mem
-  条件: (hx : x in Icc a b)
+  条件: (hx : x in 闭区间 a b)
   结论: projIcc a b h x = ⟨x, hx⟩
   证明: by
   simp [projIcc, hx.1, hx.2]
@@ -488,7 +488,7 @@ theorem projIci_coe
 
 中文:
 定理 projIci_coe
-  条件: (x : Ici a)
+  条件: (x : 左闭右无界区间 a)
   结论: projIci a x = x
   证明: by cases x; apply projIci_of_mem
 
@@ -512,7 +512,7 @@ theorem projIic_coe
 
 中文:
 定理 projIic_coe
-  条件: (x : Iic b)
+  条件: (x : 左无界右闭区间 b)
   结论: projIic b x = x
   证明: by cases x; apply projIic_of_mem
 
@@ -536,7 +536,7 @@ theorem projIcc_val
 
 中文:
 定理 projIcc_val
-  条件: (x : Icc a b)
+  条件: (x : 闭区间 a b)
   结论: projIcc a b h x = x
   证明: by
   cases x
@@ -558,7 +558,7 @@ theorem projIci_surjOn
 
 中文:
 定理 projIci_surjOn
-  结论: SurjOn (projIci a) (Ici a) univ
+  结论: 满射限制 (projIci a) (左闭右无界区间 a) univ
   证明: fun x _ => ⟨x, x.2, projIci_coe x⟩
 
 Depends on / 依赖: projIci_coe
@@ -575,7 +575,7 @@ theorem projIic_surjOn
 
 中文:
 定理 projIic_surjOn
-  结论: SurjOn (projIic b) (Iic b) univ
+  结论: 满射限制 (projIic b) (左无界右闭区间 b) univ
   证明: fun x _ => ⟨x, x.2, projIic_coe x⟩
 
 Depends on / 依赖: projIic_coe
@@ -593,7 +593,7 @@ theorem projIcc_surjOn
 
 中文:
 定理 projIcc_surjOn
-  结论: SurjOn (projIcc a b h) (Icc a b) univ
+  结论: 满射限制 (projIcc a b h) (闭区间 a b) univ
   证明: fun x _ =>
   ⟨x, x.2, projIcc_val h x⟩
 -/
@@ -610,7 +610,7 @@ theorem projIci_surjective
 
 中文:
 定理 projIci_surjective
-  结论: Surjective (projIci a)
+  结论: 满射 (projIci a)
   证明: fun x => ⟨x, projIci_coe x⟩
 
 Depends on / 依赖: projIci_coe
@@ -627,7 +627,7 @@ theorem projIic_surjective
 
 中文:
 定理 projIic_surjective
-  结论: Surjective (projIic b)
+  结论: 满射 (projIic b)
   证明: fun x => ⟨x, projIic_coe x⟩
 
 Depends on / 依赖: projIic_coe
@@ -646,7 +646,7 @@ theorem projIcc_surjective
 
 中文:
 定理 projIcc_surjective
-  结论: Surjective (projIcc a b h)
+  结论: 满射 (projIcc a b h)
   证明: fun x => ⟨x, projIcc_val h x⟩
 
 @[simp]
@@ -728,7 +728,7 @@ theorem monotone_projIci
 
 中文:
 定理 monotone_projIci
-  结论: Monotone (projIci a)
+  结论: 递增 (projIci a)
   证明: fun _ _ => max_le_max le_rfl
 
 Depends on / 依赖: le_rfl, max_le_max
@@ -745,7 +745,7 @@ theorem monotone_projIic
 
 中文:
 定理 monotone_projIic
-  结论: Monotone (projIic a)
+  结论: 递增 (projIic a)
   证明: fun _ _ => min_le_min le_rfl
 
 Depends on / 依赖: le_rfl, min_le_min
@@ -763,7 +763,7 @@ max_le_max le_rfl min_le_min le_rfl hxy
 
 中文:
 定理 monotone_projIcc
-  结论: Monotone (projIcc a b h)
+  结论: 递增 (projIcc a b h)
   证明: fun _ _ hxy =>
 max_le_max le_rfl min_le_min le_rfl hxy
 -/
@@ -781,7 +781,7 @@ theorem strictMonoOn_projIci
 
 中文:
 定理 strictMonoOn_projIci
-  结论: StrictMonoOn (projIci a) (Ici a)
+  结论: StrictMonoOn (projIci a) (左闭右无界区间 a)
   证明: fun x hx y hy hxy => by
   simpa only [projIci_of_mem, hx, hy]
 
@@ -801,7 +801,7 @@ theorem strictMonoOn_projIic
 
 中文:
 定理 strictMonoOn_projIic
-  结论: StrictMonoOn (projIic b) (Iic b)
+  结论: StrictMonoOn (projIic b) (左无界右闭区间 b)
   证明: fun x hx y hy hxy => by
   simpa only [projIic_of_mem, hx, hy]
 
@@ -821,7 +821,7 @@ theorem strictMonoOn_projIcc
 
 中文:
 定理 strictMonoOn_projIcc
-  结论: StrictMonoOn (projIcc a b h) (Icc a b)
+  结论: StrictMonoOn (projIcc a b h) (闭区间 a b)
   证明: fun x hx y hy hxy => by
   simpa only [projIcc_of_mem, hx, hy]
 
@@ -840,7 +840,7 @@ definition IciExtend
 
 中文:
 定义 IciExtend
-  签名: (f : Ici a -> β)
+  签名: (f : 左闭右无界区间 a -> β)
   定义体: f ∘ projIci a
 
 Depends on / 依赖: projIci
@@ -858,7 +858,7 @@ definition IicExtend
 
 中文:
 定义 IicExtend
-  签名: (f : Iic b -> β)
+  签名: (f : 左无界右闭区间 b -> β)
   定义体: f ∘ projIic b
 
 Depends on / 依赖: projIic
@@ -876,7 +876,7 @@ definition IccExtend
 
 中文:
 定义 IccExtend
-  签名: {a b : α} (h : a <= b) (f : Icc a b -> β)
+  签名: {a b : α} (h : a <= b) (f : 闭区间 a b -> β)
   定义体: f ∘ projIcc a b h
 
 Depends on / 依赖: projIcc
@@ -895,8 +895,8 @@ theorem IciExtend_apply
 
 中文:
 定理 IciExtend_apply
-  条件: (f : Ici a -> β) (x : α)
-  结论: IciExtend f x = f ⟨max a x, le_max_left _ _⟩
+  条件: (f : 左闭右无界区间 a -> β) (x : α)
+  结论: IciExtend f x = f ⟨最大值 a x, le_max_left _ _⟩
   证明: rfl
 -/
 theorem IciExtend_apply (f : Ici a -> β) (x : α) : IciExtend f x = f ⟨max a x, le_max_left _ _⟩ :=
@@ -913,8 +913,8 @@ theorem IicExtend_apply
 
 中文:
 定理 IicExtend_apply
-  条件: (f : Iic b -> β) (x : α)
-  结论: IicExtend f x = f ⟨min b x, min_le_left _ _⟩
+  条件: (f : 左无界右闭区间 b -> β) (x : α)
+  结论: IicExtend f x = f ⟨最小值 b x, min_le_left _ _⟩
   证明: rfl
 -/
 theorem IicExtend_apply (f : Iic b -> β) (x : α) : IicExtend f x = f ⟨min b x, min_le_left _ _⟩ :=
@@ -932,7 +932,7 @@ theorem IccExtend_apply
 
 中文:
 定理 IccExtend_apply
-  条件: (h : a <= b) (f : Icc a b -> β) (x : α)
+  条件: (h : a <= b) (f : 闭区间 a b -> β) (x : α)
   证明: rfl
 
 @[simp]
@@ -955,7 +955,7 @@ theorem range_IciExtend
 
 中文:
 定理 range_IciExtend
-  条件: (f : Ici a -> β)
+  条件: (f : 左闭右无界区间 a -> β)
   结论: range (IciExtend f) = range f
   证明: by
   simp only [IciExtend, range_comp f, range_projIci, image_univ]
@@ -982,7 +982,7 @@ theorem range_IicExtend
 
 中文:
 定理 range_IicExtend
-  条件: (f : Iic b -> β)
+  条件: (f : 左无界右闭区间 b -> β)
   结论: range (IicExtend f) = range f
   证明: by
   simp only [IicExtend, range_comp f, range_projIic, image_univ]
@@ -1007,7 +1007,7 @@ theorem IccExtend_range
 
 中文:
 定理 IccExtend_range
-  条件: (f : Icc a b -> β)
+  条件: (f : 闭区间 a b -> β)
   结论: range (IccExtend h f) = range f
   证明: by
   simp only [IccExtend, range_comp f, range_projIcc, image_univ]
@@ -1028,7 +1028,7 @@ theorem IciExtend_of_le
 
 中文:
 定理 IciExtend_of_le
-  条件: (f : Ici a -> β) (hx : x <= a)
+  条件: (f : 左闭右无界区间 a -> β) (hx : x <= a)
   结论: IciExtend f x = f ⟨a, le_rfl⟩
   证明: congr_arg f projIci_of_le hx
 
@@ -1048,7 +1048,7 @@ theorem IicExtend_of_le
 
 中文:
 定理 IicExtend_of_le
-  条件: (f : Iic b -> β) (hx : b <= x)
+  条件: (f : 左无界右闭区间 b -> β) (hx : b <= x)
   结论: IicExtend f x = f ⟨b, le_rfl⟩
   证明: congr_arg f projIic_of_le hx
 
@@ -1067,7 +1067,7 @@ theorem IccExtend_of_le_left
 
 中文:
 定理 IccExtend_of_le_left
-  条件: (f : Icc a b -> β) (hx : x <= a)
+  条件: (f : 闭区间 a b -> β) (hx : x <= a)
   证明: congr_arg f projIcc_of_le_left h hx
 
 Depends on / 依赖: congr_arg, projIcc_of_le_left
@@ -1088,7 +1088,7 @@ theorem IccExtend_of_right_le
 
 中文:
 定理 IccExtend_of_right_le
-  条件: (f : Icc a b -> β) (hx : b <= x)
+  条件: (f : 闭区间 a b -> β) (hx : b <= x)
   证明: congr_arg f projIcc_of_right_le h hx
 
 @[simp]
@@ -1113,7 +1113,7 @@ theorem IciExtend_self
 
 中文:
 定理 IciExtend_self
-  条件: (f : Ici a -> β)
+  条件: (f : 左闭右无界区间 a -> β)
   结论: IciExtend f a = f ⟨a, le_rfl⟩
   证明: IciExtend_of_le f le_rfl
 
@@ -1138,7 +1138,7 @@ theorem IicExtend_self
 
 中文:
 定理 IicExtend_self
-  条件: (f : Iic b -> β)
+  条件: (f : 左无界右闭区间 b -> β)
   结论: IicExtend f b = f ⟨b, le_rfl⟩
   证明: IicExtend_of_le f le_rfl
 
@@ -1163,7 +1163,7 @@ theorem IccExtend_left
 
 中文:
 定理 IccExtend_left
-  条件: (f : Icc a b -> β)
+  条件: (f : 闭区间 a b -> β)
   结论: IccExtend h f a = f ⟨a, left_mem_Icc.2 h⟩
   证明: IccExtend_of_le_left h f le_rfl
 
@@ -1186,7 +1186,7 @@ theorem IccExtend_right
 
 中文:
 定理 IccExtend_right
-  条件: (f : Icc a b -> β)
+  条件: (f : 闭区间 a b -> β)
   结论: IccExtend h f b = f ⟨b, right_mem_Icc.2 h⟩
   证明: IccExtend_of_right_le h f le_rfl
 
@@ -1206,7 +1206,7 @@ theorem IciExtend_of_mem
 
 中文:
 定理 IciExtend_of_mem
-  条件: (f : Ici a -> β) (hx : x in Ici a)
+  条件: (f : 左闭右无界区间 a -> β) (hx : x in 左闭右无界区间 a)
   结论: IciExtend f x = f ⟨x, hx⟩
   证明: congr_arg f projIci_of_mem hx
 
@@ -1226,7 +1226,7 @@ theorem IicExtend_of_mem
 
 中文:
 定理 IicExtend_of_mem
-  条件: (f : Iic b -> β) (hx : x in Iic b)
+  条件: (f : 左无界右闭区间 b -> β) (hx : x in 左无界右闭区间 b)
   结论: IicExtend f x = f ⟨x, hx⟩
   证明: congr_arg f projIic_of_mem hx
 
@@ -1248,7 +1248,7 @@ theorem IccExtend_of_mem
 
 中文:
 定理 IccExtend_of_mem
-  条件: (f : Icc a b -> β) (hx : x in Icc a b)
+  条件: (f : 闭区间 a b -> β) (hx : x in 闭区间 a b)
   结论: IccExtend h f x = f ⟨x, hx⟩
   证明: congr_arg f projIcc_of_mem h hx
 
@@ -1273,7 +1273,7 @@ theorem IciExtend_coe
 
 中文:
 定理 IciExtend_coe
-  条件: (f : Ici a -> β) (x : Ici a)
+  条件: (f : 左闭右无界区间 a -> β) (x : 左闭右无界区间 a)
   结论: IciExtend f x = f x
   证明: congr_arg f projIci_coe x
 
@@ -1298,7 +1298,7 @@ theorem IicExtend_coe
 
 中文:
 定理 IicExtend_coe
-  条件: (f : Iic b -> β) (x : Iic b)
+  条件: (f : 左无界右闭区间 b -> β) (x : 左无界右闭区间 b)
   结论: IicExtend f x = f x
   证明: congr_arg f projIic_coe x
 
@@ -1321,7 +1321,7 @@ theorem IccExtend_val
 
 中文:
 定理 IccExtend_val
-  条件: (f : Icc a b -> β) (x : Icc a b)
+  条件: (f : 闭区间 a b -> β) (x : 闭区间 a b)
   结论: IccExtend h f x = f x
   证明: congr_arg f projIcc_val h x
 
@@ -1385,9 +1385,9 @@ theorem Monotone.IciExtend
   proof: hf.comp monotone_projIci
 
 中文:
-定理 Monotone.IciExtend
-  条件: {f : Ici a -> β} (hf : Monotone f)
-  结论: Monotone (IciExtend f)
+定理 递增.IciExtend
+  条件: {f : 左闭右无界区间 a -> β} (hf : 递增 f)
+  结论: 递增 (IciExtend f)
   证明: hf.comp monotone_projIci
 -/
 protected theorem Monotone.IciExtend {f : Ici a -> β} (hf : Monotone f) : Monotone (IciExtend f) :=
@@ -1403,9 +1403,9 @@ theorem Monotone.IicExtend
   proof: hf.comp monotone_projIic
 
 中文:
-定理 Monotone.IicExtend
-  条件: {f : Iic b -> β} (hf : Monotone f)
-  结论: Monotone (IicExtend f)
+定理 递增.IicExtend
+  条件: {f : 左无界右闭区间 b -> β} (hf : 递增 f)
+  结论: 递增 (IicExtend f)
   证明: hf.comp monotone_projIic
 -/
 protected theorem Monotone.IicExtend {f : Iic b -> β} (hf : Monotone f) : Monotone (IicExtend f) :=
@@ -1421,9 +1421,9 @@ theorem Monotone.IccExtend
   proof: hf.comp monotone_projIcc h
 
 中文:
-定理 Monotone.IccExtend
-  条件: (hf : Monotone f)
-  结论: Monotone (IccExtend h f)
+定理 递增.IccExtend
+  条件: (hf : 递增 f)
+  结论: 递增 (IccExtend h f)
   证明: hf.comp monotone_projIcc h
 -/
 protected theorem Monotone.IccExtend (hf : Monotone f) : Monotone (IccExtend h f) :=
@@ -1438,8 +1438,8 @@ theorem StrictMono.strictMonoOn_IciExtend
   proof: hf.comp_strictMonoOn strictMonoOn_projIci
 
 中文:
-定理 StrictMono.strictMonoOn_IciExtend
-  条件: {f : Ici a -> β} (hf : StrictMono f)
+定理 严格递增.strictMonoOn_IciExtend
+  条件: {f : 左闭右无界区间 a -> β} (hf : 严格递增 f)
   证明: hf.comp_strictMonoOn strictMonoOn_projIci
 
 Depends on / 依赖: comp_strictMonoOn, hf.comp_strictMonoOn, strictMonoOn_projIci
@@ -1457,8 +1457,8 @@ theorem StrictMono.strictMonoOn_IicExtend
   proof: hf.comp_strictMonoOn strictMonoOn_projIic
 
 中文:
-定理 StrictMono.strictMonoOn_IicExtend
-  条件: {f : Iic b -> β} (hf : StrictMono f)
+定理 严格递增.strictMonoOn_IicExtend
+  条件: {f : 左无界右闭区间 b -> β} (hf : 严格递增 f)
   证明: hf.comp_strictMonoOn strictMonoOn_projIic
 
 Depends on / 依赖: comp_strictMonoOn, hf.comp_strictMonoOn, strictMonoOn_projIic
@@ -1476,8 +1476,8 @@ theorem StrictMono.strictMonoOn_IccExtend
   proof: hf.comp_strictMonoOn (strictMonoOn_projIcc h)
 
 中文:
-定理 StrictMono.strictMonoOn_IccExtend
-  条件: (hf : StrictMono f)
+定理 严格递增.strictMonoOn_IccExtend
+  条件: (hf : 严格递增 f)
   证明: hf.comp_strictMonoOn (strictMonoOn_projIcc h)
 
 Depends on / 依赖: comp_strictMonoOn, hf.comp_strictMonoOn, strictMonoOn_projIcc
@@ -1495,8 +1495,8 @@ theorem Set.OrdConnected.IciExtend
   proof: ⟨fun _ hx _ hy _ hz => hs.out hx hy ⟨max_le_max le_rfl hz.1, max_le_max le_rfl hz.2⟩⟩
 
 中文:
-定理 Set.OrdConnected.IciExtend
-  条件: {s : Set (Ici a)} (hs : s.OrdConnected)
+定理 集合.序连通.IciExtend
+  条件: {s : 集合 (左闭右无界区间 a)} (hs : s.序连通)
   证明: ⟨fun _ hx _ hy _ hz => hs.out hx hy ⟨max_le_max le_rfl hz.1, max_le_max le_rfl hz.2⟩⟩
 -/
 protected theorem Set.OrdConnected.IciExtend {s : Set (Ici a)} (hs : s.OrdConnected) :
@@ -1512,8 +1512,8 @@ theorem Set.OrdConnected.IicExtend
   proof: ⟨fun _ hx _ hy _ hz => hs.out hx hy ⟨min_le_min le_rfl hz.1, min_le_min le_rfl hz.2⟩⟩
 
 中文:
-定理 Set.OrdConnected.IicExtend
-  条件: {s : Set (Iic b)} (hs : s.OrdConnected)
+定理 集合.序连通.IicExtend
+  条件: {s : 集合 (左无界右闭区间 b)} (hs : s.序连通)
   证明: ⟨fun _ hx _ hy _ hz => hs.out hx hy ⟨min_le_min le_rfl hz.1, min_le_min le_rfl hz.2⟩⟩
 -/
 protected theorem Set.OrdConnected.IicExtend {s : Set (Iic b)} (hs : s.OrdConnected) :
@@ -1532,8 +1532,8 @@ theorem Set.OrdConnected.domRestrict
 alias Set.OrdConnected.restrict := Set.OrdConnected.domRestrict
 
 中文:
-定理 Set.OrdConnected.domRestrict
-  条件: (hs : s.OrdConnected)
+定理 集合.序连通.domRestrict
+  条件: (hs : s.序连通)
   证明: ⟨fun _ hx _ hy _ hz => hs.out hx hy hz⟩
 
 @[deprecated (since := "2026-07-19")]

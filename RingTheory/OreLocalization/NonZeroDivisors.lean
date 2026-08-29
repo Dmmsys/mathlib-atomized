@@ -32,7 +32,7 @@ theorem nontrivial_of_nonZeroDivisorsLeft
 
 中文:
 定理 nontrivial_of_nonZeroDivisorsLeft
-  条件: [Nontrivial R] (hS : S <= nonZeroDivisorsLeft R)
+  条件: [非平凡 R] (hS : S <= nonZeroDivisorsLeft R)
   证明: nontrivial_iff.mpr (fun e => one_ne_zero <| hS e 1 (zero_mul _))
 
 Depends on / 依赖: nontrivial_iff, nontrivial_iff.mpr, one_ne_zero, zero_mul
@@ -51,7 +51,7 @@ theorem nontrivial_of_nonZeroDivisorsRight
 
 中文:
 定理 nontrivial_of_nonZeroDivisorsRight
-  条件: [Nontrivial R] (hS : S <= nonZeroDivisorsRight R)
+  条件: [非平凡 R] (hS : S <= nonZeroDivisorsRight R)
   证明: nontrivial_iff.mpr (fun e => one_ne_zero <| hS e 1 (mul_zero _))
 
 Depends on / 依赖: mul_zero, nontrivial_iff, nontrivial_iff.mpr, one_ne_zero
@@ -70,7 +70,7 @@ theorem nontrivial_of_nonZeroDivisors
 
 中文:
 定理 nontrivial_of_nonZeroDivisors
-  条件: [Nontrivial R] (hS : S <= R⁰)
+  条件: [非平凡 R] (hS : S <= R⁰)
   证明: nontrivial_of_nonZeroDivisorsLeft (hS.trans inf_le_left)
 
 Depends on / 依赖: hS.trans, inf_le_left, nontrivial_of_nonZeroDivisorsLeft
@@ -91,7 +91,7 @@ instance nontrivial
 
 中文:
 实例 nontrivial
-  签名: : Nontrivial R[R⁰⁻¹]
+  签名: : 非平凡 R[R⁰⁻¹]
   定义体: nontrivial_of_nonZeroDivisors (refl R⁰)
 
 Depends on / 依赖: nontrivial_of_nonZeroDivisors
@@ -164,7 +164,7 @@ instance inv'
 
 中文:
 实例 inv'
-  签名: : Inv R[R⁰⁻¹]
+  签名: : 取逆 R[R⁰⁻¹]
   定义体: ⟨OreLocalization.inv⟩
 
 Depends on / 依赖: OreLocalization, OreLocalization.inv
@@ -264,7 +264,7 @@ instance :
 
 中文:
 实例 :
-  签名: GroupWithZero R[R⁰⁻¹]
+  签名: 带零群 R[R⁰⁻¹]
   定义体: OreLocalization.inv_zero
   mul_inv_cancel := OreLocalization.mul_inv_cancel
 
@@ -289,7 +289,7 @@ instance :
 
 中文:
 实例 :
-  签名: CommGroupWithZero R[R⁰⁻¹]
+  签名: 带零交换群 R[R⁰⁻¹]
 -/
 noncomputable instance : CommGroupWithZero R[R⁰⁻¹] where
 

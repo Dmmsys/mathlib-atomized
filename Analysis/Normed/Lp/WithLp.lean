@@ -139,7 +139,7 @@ instance instNontrivial
 
 中文:
 实例 instNontrivial
-  签名: [Nontrivial V]
+  签名: [非平凡 V]
   定义体: (WithLp.equiv p V).nontrivial
 
 Depends on / 依赖: WithLp, WithLp.equiv, nontrivial
@@ -155,7 +155,7 @@ instance instUnique
 
 中文:
 实例 instUnique
-  签名: [Unique V]
+  签名: [唯一 V]
   定义体: (WithLp.equiv p V).unique
 
 Depends on / 依赖: WithLp, WithLp.equiv, unique
@@ -189,7 +189,7 @@ instance instAddCommGroup
 
 中文:
 实例 instAddCommGroup
-  签名: [AddCommGroup V]
+  签名: [加法交换群 V]
   定义体: (WithLp.equiv p V).addCommGroup
 
 Depends on / 依赖: Monoid, MulAction, WithLp, WithLp.equiv, addCommGroup, fast_instance, instMulAction, instSMul, instance, mulAction, to_additive
@@ -206,7 +206,7 @@ instance instSMul
 
 中文:
 实例 instSMul
-  签名: [SMul K V]
+  签名: [标量乘法 K V]
   定义体: (WithLp.equiv p V).smul K
 -/
 @[to_additive] instance instSMul [SMul K V] : SMul K (WithLp p V) :=
@@ -221,7 +221,7 @@ instance instMulAction
 
 中文:
 实例 instMulAction
-  签名: [Monoid K] [MulAction K V]
+  签名: [幺半群 K] [乘法作用 K V]
   定义体: fast_instance% (WithLp.equiv p V).mulAction K
 -/
 @[to_additive] instance instMulAction [Monoid K] [MulAction K V] : MulAction K (WithLp p V) :=
@@ -236,7 +236,7 @@ instance instDistribMulAction
 
 中文:
 实例 instDistribMulAction
-  签名: [Monoid K] [AddCommGroup V] [DistribMulAction K V]
+  签名: [幺半群 K] [加法交换群 V] [分配乘法作用 K V]
   定义体: fast_instance% (WithLp.equiv p V).distribMulAction K
 
 Depends on / 依赖: WithLp, WithLp.equiv, distribMulAction, fast_instance
@@ -253,7 +253,7 @@ instance instModule
 
 中文:
 实例 instModule
-  签名: [Semiring K] [AddCommGroup V] [Module K V]
+  签名: [半环 K] [加法交换群 V] [模 K V]
   定义体: fast_instance% (WithLp.equiv p V).module K
 
 Depends on / 依赖: WithLp, WithLp.equiv, fast_instance, module
@@ -326,7 +326,7 @@ lemma ofLp_surjective
 
 中文:
 引理 ofLp_surjective
-  结论: Function.Surjective (@ofLp p V)
+  结论: 函数.满射 (@ofLp p V)
   证明: Function.RightInverse.surjective ofLp_toLp _
 
 Depends on / 依赖: Function, Function.RightInverse.surjective, RightInverse, ofLp_toLp, surjective
@@ -344,7 +344,7 @@ lemma toLp_surjective
 
 中文:
 引理 toLp_surjective
-  结论: Function.Surjective (@toLp p V)
+  结论: 函数.满射 (@toLp p V)
   证明: Function.RightInverse.surjective toLp_ofLp _
 
 Depends on / 依赖: Function, Function.RightInverse.surjective, RightInverse, surjective, toLp_ofLp
@@ -362,7 +362,7 @@ lemma ofLp_injective
 
 中文:
 引理 ofLp_injective
-  结论: Function.Injective (@ofLp p V)
+  结论: 函数.单射 (@ofLp p V)
   证明: Function.LeftInverse.injective toLp_ofLp _
 
 Depends on / 依赖: Function, Function.LeftInverse.injective, LeftInverse, injective, toLp_ofLp
@@ -380,7 +380,7 @@ lemma toLp_injective
 
 中文:
 引理 toLp_injective
-  结论: Function.Injective (@toLp p V)
+  结论: 函数.单射 (@toLp p V)
   证明: Function.LeftInverse.injective ofLp_toLp _
 
 Depends on / 依赖: Function, Function.LeftInverse.injective, LeftInverse, injective, ofLp_toLp
@@ -398,7 +398,7 @@ lemma ofLp_bijective
 
 中文:
 引理 ofLp_bijective
-  结论: Function.Bijective (@ofLp p V)
+  结论: 函数.双射 (@ofLp p V)
   证明: ⟨ofLp_injective p, ofLp_surjective p⟩
 
 Depends on / 依赖: ofLp_injective, ofLp_surjective
@@ -416,7 +416,7 @@ lemma toLp_bijective
 
 中文:
 引理 toLp_bijective
-  结论: Function.Bijective (@toLp p V)
+  结论: 函数.双射 (@toLp p V)
   证明: ⟨toLp_injective p, toLp_surjective p⟩
 
 Depends on / 依赖: toLp_injective, toLp_surjective
@@ -536,7 +536,7 @@ theorem congr_refl
 
 中文:
 定理 congr_refl
-  结论: WithLp.congr p (Equiv.refl V) = Equiv.refl _
+  结论: WithLp.congr p (等价.refl V) = 等价.refl _
   证明: rfl
 
 @[simp]
@@ -757,7 +757,7 @@ lemma toLp_smul
 
 中文:
 引理 toLp_smul
-  条件: [SMul K V] (c : K) (x : V)
+  条件: [标量乘法 K V] (c : K) (x : V)
   结论: toLp p (c • x) = c • (toLp p x)
   证明: rfl
 -/
@@ -775,7 +775,7 @@ lemma ofLp_smul
 
 中文:
 引理 ofLp_smul
-  条件: [SMul K V] (c : K) (x : WithLp p V)
+  条件: [标量乘法 K V] (c : K) (x : WithLp p V)
   结论: ofLp (c • x) = c • ofLp x
   证明: rfl
 
@@ -796,7 +796,7 @@ instance instIsScalarTower
 
 中文:
 实例 instIsScalarTower
-  签名: [SMul K K'] [SMul K V] [SMul K' V] [IsScalarTower K K' V]
+  签名: [标量乘法 K K'] [标量乘法 K V] [标量乘法 K' V] [标量塔 K K' V]
   定义体: (WithLp.equiv p V).isScalarTower K K'
 
 @[to_additive]
@@ -818,7 +818,7 @@ instance instSMulCommClass
 
 中文:
 实例 instSMulCommClass
-  签名: [SMul K V] [SMul K' V] [SMulCommClass K K' V]
+  签名: [标量乘法 K V] [标量乘法 K' V] [标量交换类 K K' V]
   定义体: (WithLp.equiv p V).smulCommClass K K'
 
 Depends on / 依赖: WithLp, WithLp.equiv, smulCommClass
@@ -843,7 +843,7 @@ definition addEquiv
 
 中文:
 定义 addEquiv
-  签名: [AddCommGroup V]
+  签名: [加法交换群 V]
   定义体: ofLp
   invFun := toLp p
   map_add' := ofLp_add p
@@ -864,7 +864,7 @@ lemma coe_addEquiv
 
 中文:
 引理 coe_addEquiv
-  条件: [AddCommGroup V]
+  条件: [加法交换群 V]
   结论: ⇑(WithLp.addEquiv p V) = ofLp
   证明: rfl
 -/
@@ -883,7 +883,7 @@ lemma coe_symm_addEquiv
 
 中文:
 引理 coe_symm_addEquiv
-  条件: [AddCommGroup V]
+  条件: [加法交换群 V]
   结论: ⇑(WithLp.addEquiv p V).symm = toLp p
   证明: rfl
 
@@ -904,7 +904,7 @@ lemma ofLp_sum
 
 中文:
 引理 ofLp_sum
-  条件: [AddCommGroup V] {ι : 类型} (s : Finset ι) (f : ι -> WithLp p V)
+  条件: [加法交换群 V] {ι : 类型} (s : 有限集 ι) (f : ι -> WithLp p V)
   证明: map_sum (WithLp.addEquiv _ _) _ _
 
 @[simp]
@@ -928,7 +928,7 @@ lemma toLp_sum
 
 中文:
 引理 toLp_sum
-  条件: [AddCommGroup V] {ι : 类型} (s : Finset ι) (f : ι -> V)
+  条件: [加法交换群 V] {ι : 类型} (s : 有限集 ι) (f : ι -> V)
   证明: map_sum (WithLp.addEquiv _ _).symm _ _
 
 @[simp]
@@ -952,7 +952,7 @@ lemma ofLp_listSum
 
 中文:
 引理 ofLp_listSum
-  条件: [AddCommGroup V] (l : List (WithLp p V))
+  条件: [加法交换群 V] (l : 列表 (WithLp p V))
   证明: map_list_sum (WithLp.addEquiv _ _) _
 
 @[simp]
@@ -976,7 +976,7 @@ lemma toLp_listSum
 
 中文:
 引理 toLp_listSum
-  条件: [AddCommGroup V] (l : List V)
+  条件: [加法交换群 V] (l : 列表 V)
   证明: map_list_sum (WithLp.addEquiv _ _).symm _
 
 @[simp]
@@ -1000,7 +1000,7 @@ lemma ofLp_multisetSum
 
 中文:
 引理 ofLp_multisetSum
-  条件: [AddCommGroup V] (s : Multiset (WithLp p V))
+  条件: [加法交换群 V] (s : Multiset (WithLp p V))
   证明: map_multiset_sum (WithLp.addEquiv _ _) _
 
 @[simp]
@@ -1022,7 +1022,7 @@ lemma toLp_multisetSum
 
 中文:
 引理 toLp_multisetSum
-  条件: [AddCommGroup V] (s : Multiset V)
+  条件: [加法交换群 V] (s : Multiset V)
   证明: map_multiset_sum (WithLp.addEquiv _ _).symm _
 
 Depends on / 依赖: WithLp, WithLp.addEquiv, addEquiv, map_multiset_sum
@@ -1044,7 +1044,7 @@ definition linearEquiv
 
 中文:
 定义 linearEquiv
-  签名: [Semiring K] [AddCommGroup V] [Module K V]
+  签名: [半环 K] [加法交换群 V] [模 K V]
   定义体: WithLp.addEquiv p V
   map_smul' _ _ := rfl
 -/
@@ -1062,7 +1062,7 @@ lemma coe_linearEquiv
 
 中文:
 引理 coe_linearEquiv
-  条件: [Semiring K] [AddCommGroup V] [Module K V]
+  条件: [半环 K] [加法交换群 V] [模 K V]
   证明: rfl
 -/
 lemma coe_linearEquiv [Semiring K] [AddCommGroup V] [Module K V] :
@@ -1080,7 +1080,7 @@ lemma coe_symm_linearEquiv
 
 中文:
 引理 coe_symm_linearEquiv
-  条件: [Semiring K] [AddCommGroup V] [Module K V]
+  条件: [半环 K] [加法交换群 V] [模 K V]
   证明: rfl
 
 @[simp]
@@ -1099,7 +1099,7 @@ lemma toAddEquiv_linearEquiv
 
 中文:
 引理 toAddEquiv_linearEquiv
-  条件: [Semiring K] [AddCommGroup V] [Module K V]
+  条件: [半环 K] [加法交换群 V] [模 K V]
   证明: rfl
 -/
 lemma toAddEquiv_linearEquiv [Semiring K] [AddCommGroup V] [Module K V] :
@@ -1194,7 +1194,7 @@ theorem withLpMap_id
 
 中文:
 定理 withLpMap_id
-  结论: withLpMap p (LinearMap.id (R := K) (M := V)) = LinearMap.id
+  结论: withLpMap p (线性映射.id (R := K) (M := V)) = 线性映射.id
   证明: rfl
 
 @[simp]

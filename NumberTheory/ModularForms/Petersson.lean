@@ -39,7 +39,7 @@ definition petersson
 
 中文:
 定义 petersson
-  签名: (k : 整数) (f f' : ℍ -> Complex) (τ : ℍ)
+  签名: (k : 整数) (f f' : ℍ -> 复形) (τ : ℍ)
   定义体: conj (f τ) * f' τ * τ.im ^ k
 
 @[fun_prop]
@@ -60,7 +60,7 @@ lemma petersson_continuous
 
 中文:
 引理 petersson_continuous
-  条件: (k : 整数) {f f' : ℍ -> Complex} (hf : Continuous f) (hf' : Continuous f')
+  条件: (k : 整数) {f f' : ℍ -> 复形} (hf : 连续 f) (hf' : 连续 f')
   证明: by
   unfold petersson
   fun_prop (disch := simp [im_ne_zero _])
@@ -89,7 +89,7 @@ lemma petersson_slash
 
 中文:
 引理 petersson_slash
-  条件: (k : 整数) (f f' : ℍ -> Complex) (g : GL (Fin 2) 实数) (τ : ℍ)
+  条件: (k : 整数) (f f' : ℍ -> 复形) (g : GL (有限集 2) 实数) (τ : ℍ)
   证明: by
   set D := |g.det.val|
   have hD : (D : Complex) != 0 := mod_cast abs_ne_zero.mpr g.det_ne_zero
@@ -133,7 +133,7 @@ lemma petersson_slash_SL
 
 中文:
 引理 petersson_slash_SL
-  条件: (k : 整数) (f f' : ℍ -> Complex) (g : SL(2, 整数)) (τ : ℍ)
+  条件: (k : 整数) (f f' : ℍ -> 复形) (g : SL(2, 整数)) (τ : ℍ)
   证明: by
   -- need to disable a simp lemma as it works against `Matrix.SpecialLinearGroup.det_coe`
   simp [σ, ModularForm.SL_slash, petersson_slash,
@@ -156,7 +156,7 @@ lemma petersson_symm
 
 中文:
 引理 petersson_symm
-  条件: (k : 整数) (f f' : ℍ -> Complex) (τ : ℍ)
+  条件: (k : 整数) (f f' : ℍ -> 复形) (τ : ℍ)
   证明: by
   simp [petersson, mul_comm]
 
@@ -177,7 +177,7 @@ lemma petersson_norm_symm
 
 中文:
 引理 petersson_norm_symm
-  条件: (k : 整数) (f f' : ℍ -> Complex) (τ : ℍ)
+  条件: (k : 整数) (f f' : ℍ -> 复形) (τ : ℍ)
   证明: by
   simp [petersson_symm k f]
 
@@ -204,8 +204,8 @@ lemma SlashInvariantFormClass.norm_petersson_smul
     Subgroup.HasDetPlusMinusOne.abs_det hg, Complex.ofReal_one, one_zpow, one_mul, norm_σ]
 
 中文:
-引理 SlashInvariantFormClass.norm_petersson_smul
-  结论: {k g τ} {Γ : Subgroup (GL (Fin 2) 实数)}
+引理 斜不变形式类.norm_petersson_smul
+  结论: {k g τ} {Γ : 子群 (GL (有限集 2) 实数)}
   证明: by
   conv_rhs => rw [← slash_action_eq f _ hg, ← slash_action_eq f' _ hg, petersson_slash,
     Subgroup.HasDetPlusMinusOne.abs_det hg, Complex.ofReal_one, one_zpow, one_mul, norm_σ]
@@ -230,8 +230,8 @@ lemma SlashInvariantFormClass.petersson_smul
     using (petersson_slash k f f' g τ).symm
 
 中文:
-引理 SlashInvariantFormClass.petersson_smul
-  结论: {k g τ} {Γ : Subgroup (GL (Fin 2) 实数)} [Γ.HasDetOne]
+引理 斜不变形式类.petersson_smul
+  结论: {k g τ} {Γ : 子群 (GL (有限集 2) 实数)} [Γ.有DetOne]
   证明: by
   simpa [SlashInvariantFormClass.slash_action_eq _ _ hg, Subgroup.HasDetOne.det_eq hg, σ]
     using (petersson_slash k f f' g τ).symm
@@ -337,7 +337,7 @@ refine ha'.trans_tendsto (Real.tendsto_exp_atBot.comp ?_).comp tendsto_comap
 
 中文:
 引理 of_exp_decay
-  结论: {E : 类型} [NormedAddCommGroup E] {f : ℍ -> E}
+  结论: {E : 类型} [赋范交换加群 E] {f : ℍ -> E}
   证明: by
   obtain ⟨a, ha, ha'⟩ := hf
 refine ha'.trans_tendsto (Real.tendsto_exp_atBot.comp ?_).comp tendsto_comap

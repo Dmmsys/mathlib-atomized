@@ -72,12 +72,12 @@ structure Embedding
     - rel({i₁ i₂ : ι} (h : c.Rel i₁ i₂)) : c'.Rel (f i₁) (f i₂)
 
 中文:
-结构 Embedding
+结构 嵌入
   参数: where
   公理与运算 (3 个):
     - f : ι -> ι'
-    - injective_f : Function.Injective f
-    - rel({i₁ i₂ : ι} (h : c.Rel i₁ i₂)) : c'.Rel (f i₁) (f i₂)
+    - injective_f : 函数.单射 f
+    - rel({i₁ i₂ : ι} (h : c.关系 i₁ i₂)) : c'.关系 (f i₁) (f i₂)
 -/
 structure Embedding where
   /-- the map between the underlying types of indices -/
@@ -104,7 +104,7 @@ definition op
 
 中文:
 定义 op
-  签名: : Embedding c.symm c'.symm where
+  签名: : 嵌入 c.symm c'.symm where
   定义体: e.f
   injective_f := e.injective_f
   rel h := e.rel h
@@ -124,10 +124,10 @@ class IsRelIff
     - rel'((i₁ i₂ : ι) (h : c'.Rel (e.f i₁) (e.f i₂))) : c.Rel i₁ i₂
 
 中文:
-类 IsRelIff
+类 是RelIff
   参数: : 命题 where
   公理与运算 (1 个):
-    - rel'((i₁ i₂ : ι) (h : c'.Rel (e.f i₁) (e.f i₂))) : c.Rel i₁ i₂
+    - rel'((i₁ i₂ : ι) (h : c'.关系 (e.f i₁) (e.f i₂))) : c.关系 i₁ i₂
 -/
 class IsRelIff : Prop where
   rel' (i₁ i₂ : ι) (h : c'.Rel (e.f i₁) (e.f i₂)) : c.Rel i₁ i₂
@@ -146,8 +146,8 @@ lemma rel_iff
 
 中文:
 引理 rel_iff
-  条件: [e.IsRelIff] (i₁ i₂ : ι)
-  结论: c'.Rel (e.f i₁) (e.f i₂) ↔ c.Rel i₁ i₂
+  条件: [e.是RelIff] (i₁ i₂ : ι)
+  结论: c'.关系 (e.f i₁) (e.f i₂) ↔ c.关系 i₁ i₂
   证明: by
   constructor
   · apply IsRelIff.rel'
@@ -169,8 +169,8 @@ instance [e.IsRelIff]
   body: (e.rel_iff i₂ i₁).1 h
 
 中文:
-实例 [e.IsRelIff]
-  签名: : e.op.IsRelIff where
+实例 [e.是RelIff]
+  签名: : e.op.是RelIff where
   定义体: (e.rel_iff i₂ i₁).1 h
 
 Depends on / 依赖: e.rel_iff, rel_iff
@@ -199,7 +199,7 @@ definition mk'
 
 中文:
 定义 mk'
-  签名: : Embedding c c' where
+  签名: : 嵌入 c c' where
   定义体: f
   injective_f := hf
   rel h := (iff _ _).1 h
@@ -219,7 +219,7 @@ instance :
 
 中文:
 实例 :
-  签名: (mk' c c' f hf iff).IsRelIff
+  签名: (mk' c c' f hf iff).是RelIff
   定义体: (iff _ _).2 h
 -/
 instance : (mk' c c' f hf iff).IsRelIff where
@@ -238,11 +238,11 @@ class IsTruncGE
     - mem_next({j : ι} {k' : ι'} (h : c'.Rel (e.f j) k')) : exists k, e.f k = k'
 
 中文:
-类 IsTruncGE
-  参数: : 命题 extends e.IsRelIff where
-  继承: e.IsRelIff
+类 是TruncGE
+  参数: : 命题 extends e.是RelIff where
+  继承: e.是RelIff
   公理与运算 (1 个):
-    - mem_next({j : ι} {k' : ι'} (h : c'.Rel (e.f j) k')) : 存在 k, e.f k = k'
+    - mem_next({j : ι} {k' : ι'} (h : c'.关系 (e.f j) k')) : 存在 k, e.f k = k'
 -/
 class IsTruncGE : Prop extends e.IsRelIff where
   mem_next {j : ι} {k' : ι'} (h : c'.Rel (e.f j) k') :
@@ -259,7 +259,7 @@ lemma mem_next
 
 中文:
 引理 mem_next
-  条件: [e.IsTruncGE] {j : ι} {k' : ι'} (h : c'.Rel (e.f j) k')
+  条件: [e.是TruncGE] {j : ι} {k' : ι'} (h : c'.关系 (e.f j) k')
   结论: 存在 k, e.f k = k'
   证明: IsTruncGE.mem_next h
 
@@ -279,11 +279,11 @@ class IsTruncLE
     - mem_prev({i' : ι'} {j : ι} (h : c'.Rel i' (e.f j))) : exists i, e.f i = i'
 
 中文:
-类 IsTruncLE
-  参数: : 命题 extends e.IsRelIff where
-  继承: e.IsRelIff
+类 是TruncLE
+  参数: : 命题 extends e.是RelIff where
+  继承: e.是RelIff
   公理与运算 (1 个):
-    - mem_prev({i' : ι'} {j : ι} (h : c'.Rel i' (e.f j))) : 存在 i, e.f i = i'
+    - mem_prev({i' : ι'} {j : ι} (h : c'.关系 i' (e.f j))) : 存在 i, e.f i = i'
 -/
 class IsTruncLE : Prop extends e.IsRelIff where
   mem_prev {i' : ι'} {j : ι} (h : c'.Rel i' (e.f j)) :
@@ -300,7 +300,7 @@ lemma mem_prev
 
 中文:
 引理 mem_prev
-  条件: [e.IsTruncLE] {i' : ι'} {j : ι} (h : c'.Rel i' (e.f j))
+  条件: [e.是TruncLE] {i' : ι'} {j : ι} (h : c'.关系 i' (e.f j))
   结论: 存在 i, e.f i = i'
   证明: IsTruncLE.mem_prev h
 
@@ -318,8 +318,8 @@ instance [e.IsTruncGE]
   body: e.mem_next h
 
 中文:
-实例 [e.IsTruncGE]
-  签名: : e.op.IsTruncLE where
+实例 [e.是TruncGE]
+  签名: : e.op.是TruncLE where
   定义体: e.mem_next h
 
 Depends on / 依赖: e.mem_next, mem_next
@@ -336,8 +336,8 @@ instance [e.IsTruncLE]
   body: e.mem_prev h
 
 中文:
-实例 [e.IsTruncLE]
-  签名: : e.op.IsTruncGE where
+实例 [e.是TruncLE]
+  签名: : e.op.是TruncGE where
   定义体: e.mem_prev h
 
 Depends on / 依赖: e.mem_prev, mem_prev
@@ -498,7 +498,7 @@ definition embeddingUp'Add
     (by dsimp; simp_rw [add_right_comm _ b a, add_right_cancel_iff, implies_true])
 
 中文:
-定义 embeddingUp'Add
+定义 embeddingUp'加法
   签名: (a b : A)
   定义体: Embedding.mk' _ _ (· + b)
     (fun _ _ h => by simpa using h)
@@ -531,7 +531,7 @@ definition embeddingDown'Add
     (by dsimp; simp_rw [add_right_comm _ b a, add_right_cancel_iff, implies_true])
 
 中文:
-定义 embeddingDown'Add
+定义 embeddingDown'加法
   签名: (a b : A)
   定义体: Embedding.mk' _ _ (· + b)
     (fun _ _ h => by simpa using h)
@@ -567,8 +567,8 @@ definition embeddingUpNat
     (by dsimp; lia)
 
 中文:
-定义 embeddingUpNat
-  签名: : Embedding (up 自然数) (up 整数)
+定义 embeddingUp自然数
+  签名: : 嵌入 (up 自然数) (up 整数)
   定义体: Embedding.mk' _ _ (fun n => n)
     (fun _ _ h => by simpa using h)
     (by dsimp; lia)
@@ -591,7 +591,7 @@ instance :
 
 中文:
 实例 :
-  签名: embeddingUp自然数.IsRelIff
+  签名: embeddingUp自然数.是RelIff
   定义体: by dsimp [embeddingUpNat]; infer_instance
 
 Depends on / 依赖: embeddingUpNat, infer_instance
@@ -608,7 +608,7 @@ instance :
 
 中文:
 实例 :
-  签名: embeddingUp自然数.IsTruncGE
+  签名: embeddingUp自然数.是TruncGE
   定义体: ⟨j + 1, h⟩
 -/
 instance : embeddingUpNat.IsTruncGE where
@@ -628,8 +628,8 @@ definition embeddingDownNat
     (by dsimp; lia)
 
 中文:
-定义 embeddingDownNat
-  签名: : Embedding (down 自然数) (up 整数)
+定义 embeddingDown自然数
+  签名: : 嵌入 (down 自然数) (up 整数)
   定义体: Embedding.mk' _ _ (fun n => -n)
     (fun _ _ h => by simpa using h)
     (by dsimp; lia)
@@ -652,7 +652,7 @@ instance :
 
 中文:
 实例 :
-  签名: embeddingDown自然数.IsRelIff
+  签名: embeddingDown自然数.是RelIff
   定义体: by dsimp [embeddingDownNat]; infer_instance
 
 Depends on / 依赖: embeddingDownNat, infer_instance
@@ -670,7 +670,7 @@ instance :
 
 中文:
 实例 :
-  签名: embeddingDown自然数.IsTruncLE
+  签名: embeddingDown自然数.是TruncLE
   定义体: ⟨j + 1, by dsimp at h ⊢; lia⟩
 -/
 instance : embeddingDownNat.IsTruncLE where
@@ -692,8 +692,8 @@ definition embeddingUpIntGE
     (by dsimp; lia)
 
 中文:
-定义 embeddingUpIntGE
-  签名: : Embedding (up 自然数) (up 整数)
+定义 embeddingUp整数GE
+  签名: : 嵌入 (up 自然数) (up 整数)
   定义体: Embedding.mk' _ _ (fun n => p + n)
     (fun _ _ h => by dsimp at h; lia)
     (by dsimp; lia)
@@ -716,7 +716,7 @@ instance :
 
 中文:
 实例 :
-  签名: (embeddingUp整数GE p).IsRelIff
+  签名: (embeddingUp整数GE p).是RelIff
   定义体: by dsimp [embeddingUpIntGE]; infer_instance
 
 Depends on / 依赖: embeddingUpIntGE, infer_instance
@@ -734,7 +734,7 @@ instance :
 
 中文:
 实例 :
-  签名: (embeddingUp整数GE p).IsTruncGE
+  签名: (embeddingUp整数GE p).是TruncGE
   定义体: ⟨j + 1, by dsimp at h ⊢; lia⟩
 -/
 instance : (embeddingUpIntGE p).IsTruncGE where
@@ -754,8 +754,8 @@ definition embeddingUpIntLE
     (by dsimp; lia)
 
 中文:
-定义 embeddingUpIntLE
-  签名: : Embedding (down 自然数) (up 整数)
+定义 embeddingUp整数LE
+  签名: : 嵌入 (down 自然数) (up 整数)
   定义体: Embedding.mk' _ _ (fun n => p - n)
     (fun _ _ h => by dsimp at h; lia)
     (by dsimp; lia)
@@ -778,7 +778,7 @@ instance :
 
 中文:
 实例 :
-  签名: (embeddingUp整数LE p).IsRelIff
+  签名: (embeddingUp整数LE p).是RelIff
   定义体: by dsimp [embeddingUpIntLE]; infer_instance
 
 Depends on / 依赖: embeddingUpIntLE, infer_instance
@@ -796,7 +796,7 @@ instance :
 
 中文:
 实例 :
-  签名: (embeddingUp整数LE p).IsTruncLE
+  签名: (embeddingUp整数LE p).是TruncLE
   定义体: ⟨k + 1, by dsimp at h ⊢; lia⟩
 -/
 instance : (embeddingUpIntLE p).IsTruncLE where
@@ -819,7 +819,7 @@ lemma notMem_range_embeddingUpIntLE_iff
     lia
 
 中文:
-引理 notMem_range_embeddingUpIntLE_iff
+引理 notMem_range_embeddingUp整数LE_iff
   条件: (n : 整数)
   证明: by
   constructor
@@ -859,7 +859,7 @@ lemma notMem_range_embeddingUpIntGE_iff
     lia
 
 中文:
-引理 notMem_range_embeddingUpIntGE_iff
+引理 notMem_range_embeddingUp整数GE_iff
   条件: (n : 整数)
   证明: by
   constructor

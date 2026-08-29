@@ -53,7 +53,7 @@ lemma smul_set_prod
 
 中文:
 引理 smul_set_prod
-  条件: {M α : 类型} [SMul M α] [SMul M β] (c : M) (s : Set α) (t : Set β)
+  条件: {M α : 类型} [标量乘法 M α] [标量乘法 M β] (c : M) (s : 集合 α) (t : 集合 β)
   证明: prodMap_image_prod (c • ·) (c • ·) s t
 
 @[to_additive]
@@ -77,7 +77,7 @@ lemma smul_set_pi
 
 中文:
 引理 smul_set_pi
-  结论: {G ι : 类型} {α : ι -> 类型} [Group G] [对任意 i, MulAction G (α i)]
+  结论: {G ι : 类型} {α : ι -> 类型} [群 G] [对任意 i, 乘法作用 G (α i)]
   证明: smul_set_pi_of_surjective c I s fun _ _ => (MulAction.bijective c).surjective
 
 @[to_additive]
@@ -101,7 +101,7 @@ lemma smul_set_pi_of_isUnit
 
 中文:
 引理 smul_set_pi_of_isUnit
-  结论: {M ι : 类型} {α : ι -> 类型} [Monoid M] [对任意 i, MulAction M (α i)]
+  结论: {M ι : 类型} {α : ι -> 类型} [幺半群 M] [对任意 i, 乘法作用 M (α i)]
   证明: by
   lift c to Mˣ using hc
   exact smul_set_pi c I s
@@ -193,7 +193,7 @@ theorem iUnion_op_smul_set
 
 中文:
 定理 iUnion_op_smul_set
-  条件: (s t : Set α)
+  条件: (s t : 集合 α)
   结论: ⋃ a in t, MulOpposite.op a • s = s * t
   证明: iUnion_image_right _
 
@@ -258,7 +258,7 @@ lemma pair_mul
 
 中文:
 引理 pair_mul
-  条件: (a b : α) (s : Set α)
+  条件: (a b : α) (s : 集合 α)
   结论: {a, b} * s = a • s union b • s
   证明: by
   rw [insert_eq]; rw [union_mul]; rw [singleton_mul]; rw [singleton_mul]; rfl
@@ -279,7 +279,7 @@ lemma mul_pair
 
 中文:
 引理 mul_pair
-  条件: (s : Set α) (a b : α)
+  条件: (s : 集合 α) (a b : α)
   结论: s * {a, b} = s <• a union s <• b
   证明: by
   rw [insert_eq]; rw [mul_union]; rw [mul_singleton]; rw [mul_singleton]; rfl
@@ -297,7 +297,7 @@ lemma range_mul
 
 中文:
 引理 range_mul
-  条件: {ι : Sort*} (a : α) (f : ι -> α)
+  条件: {ι : 类型层*} (a : α) (f : ι -> α)
   证明: range_smul a f
 -/
 @[to_additive] lemma range_mul {ι : Sort*} (a : α) (f : ι -> α) :
@@ -316,7 +316,7 @@ lemma image_smul_distrib
 
 中文:
 引理 image_smul_distrib
-  结论: [Mul α] [Mul β] [FunLike F α β] [MulHomClass F α β]
+  结论: [乘法 α] [乘法 β] [函数状 F α β] [乘法态射类 F α β]
   证明: image_comm map_mul _ _
 
 Depends on / 依赖: image_comm, map_mul
@@ -338,7 +338,7 @@ lemma image_op_smul_distrib
 
 中文:
 引理 image_op_smul_distrib
-  结论: [Mul α] [Mul β] [FunLike F α β] [MulHomClass F α β]
+  结论: [乘法 α] [乘法 β] [函数状 F α β] [乘法态射类 F α β]
   证明: image_comm fun _ => map_mul ..
 
 Depends on / 依赖: image_comm, map_mul
@@ -360,7 +360,7 @@ lemma op_smul_set_mul_eq_mul_smul_set
 
 中文:
 引理 op_smul_set_mul_eq_mul_smul_set
-  条件: (a : α) (s : Set α) (t : Set α)
+  条件: (a : α) (s : 集合 α) (t : 集合 α)
   证明: op_smul_set_smul_eq_smul_smul_set _ _ _ fun _ _ _ => mul_assoc _ _ _
 
 Depends on / 依赖: mul_assoc, op_smul_set_smul_eq_smul_smul_set
@@ -408,7 +408,7 @@ instance smulCommClass_set
 
 中文:
 实例 smulCommClass_set
-  签名: [SMul α γ] [SMul β γ] [SMulCommClass α β γ]
+  签名: [标量乘法 α γ] [标量乘法 β γ] [标量交换类 α β γ]
   定义体: ⟨fun _ _ => Commute.set_image smul_comm _ _⟩
 
 @[to_additive]
@@ -432,7 +432,7 @@ instance smulCommClass_set'
 
 中文:
 实例 smulCommClass_set'
-  签名: [SMul α γ] [SMul β γ] [SMulCommClass α β γ]
+  签名: [标量乘法 α γ] [标量乘法 β γ] [标量交换类 α β γ]
   定义体: ⟨fun _ _ _ => image_image2_distrib_right smul_comm _⟩
 
 @[to_additive]
@@ -457,7 +457,7 @@ instance smulCommClass_set''
 
 中文:
 实例 smulCommClass_set''
-  签名: [SMul α γ] [SMul β γ] [SMulCommClass α β γ]
+  签名: [标量乘法 α γ] [标量乘法 β γ] [标量交换类 α β γ]
   定义体: haveI := SMulCommClass.symm α β γ
   SMulCommClass.symm _ _ _
 
@@ -483,7 +483,7 @@ instance smulCommClass
 
 中文:
 实例 smulCommClass
-  签名: [SMul α γ] [SMul β γ] [SMulCommClass α β γ]
+  签名: [标量乘法 α γ] [标量乘法 β γ] [标量交换类 α β γ]
   定义体: ⟨fun _ _ _ => image2_left_comm smul_comm⟩
 
 @[to_additive]
@@ -507,7 +507,7 @@ instance isScalarTower
 
 中文:
 实例 isScalarTower
-  签名: [SMul α β] [SMul α γ] [SMul β γ] [IsScalarTower α β γ]
+  签名: [标量乘法 α β] [标量乘法 α γ] [标量乘法 β γ] [标量塔 α β γ]
   定义体: by simp only [← image_smul, image_image, smul_assoc]
 
 @[to_additive]
@@ -531,7 +531,7 @@ instance isScalarTower'
 
 中文:
 实例 isScalarTower'
-  签名: [SMul α β] [SMul α γ] [SMul β γ] [IsScalarTower α β γ]
+  签名: [标量乘法 α β] [标量乘法 α γ] [标量乘法 β γ] [标量塔 α β γ]
   定义体: ⟨fun _ _ _ => image2_image_left_comm smul_assoc _⟩
 
 @[to_additive]
@@ -555,7 +555,7 @@ instance isScalarTower''
 
 中文:
 实例 isScalarTower''
-  签名: [SMul α β] [SMul α γ] [SMul β γ] [IsScalarTower α β γ]
+  签名: [标量乘法 α β] [标量乘法 α γ] [标量乘法 β γ] [标量塔 α β γ]
   定义体: image2_assoc smul_assoc
 
 @[to_additive]
@@ -577,7 +577,7 @@ instance isCentralScalar
 
 中文:
 实例 isCentralScalar
-  签名: [SMul α β] [SMul αᵐᵒᵖ β] [IsCentralScalar α β]
+  签名: [标量乘法 α β] [标量乘法 αᵐᵒᵖ β] [中心标量 α β]
   定义体: ⟨fun _ S => (congr_arg fun f => f '' S) funext fun _ => op_smul_eq_smul _ _⟩
 
 Depends on / 依赖: congr_arg, op_smul_eq_smul
@@ -602,7 +602,7 @@ one_smul s := image2_singleton_left.trans by simp_rw [one_smul, image_id']
 
 中文:
 定义 noncomputable
-  签名: def mulAction [Monoid α] [MulAction α β]
+  签名: def mulAction [幺半群 α] [乘法作用 α β]
   定义体: image2_assoc mul_smul
 one_smul s := image2_singleton_left.trans by simp_rw [one_smul, image_id']
 -/
@@ -626,7 +626,7 @@ scoped[Pointwise] attribute [instance] Set.mulActionSet Set.addActionSet Set.mul
 
 中文:
 定义 mulActionSet
-  签名: [Monoid α] [MulAction α β]
+  签名: [幺半群 α] [乘法作用 α β]
   定义体: by simp only [← image_smul, image_image, ← mul_smul]
   one_smul _ := by simp only [← image_smul, one_smul, image_id']
 
@@ -728,7 +728,7 @@ lemma mem_smul_set_inv
 
 中文:
 引理 mem_smul_set_inv
-  条件: {s : Set α}
+  条件: {s : 集合 α}
   结论: a in b • s⁻¹ ↔ b in a • s
   证明: by
   simp [mem_smul_set_iff_inv_smul_mem]
@@ -754,7 +754,7 @@ theorem preimage_smul
 
 中文:
 定理 preimage_smul
-  条件: (a : α) (t : Set β)
+  条件: (a : α) (t : 集合 β)
   结论: (fun x => a • x) ⁻¹' t = a⁻¹ • t
   证明: ((MulAction.toPerm a).image_symm_eq_preimage _).symm
 
@@ -779,7 +779,7 @@ theorem preimage_smul_inv
 
 中文:
 定理 preimage_smul_inv
-  条件: (a : α) (t : Set β)
+  条件: (a : α) (t : 集合 β)
   结论: (fun x => a⁻¹ • x) ⁻¹' t = a • t
   证明: preimage_smul (toUnits a)⁻¹ t
 
@@ -907,8 +907,8 @@ theorem smul_set_iInter
 @[to_additive]
 
 中文:
-定理 smul_set_iInter
-  结论: {ι : Sort*}
+定理 smul_set_i整数er
+  结论: {ι : 类型层*}
   证明: image_iInter (MulAction.bijective a) t
 
 @[to_additive]
@@ -975,7 +975,7 @@ theorem smul_set_univ
 
 中文:
 定理 smul_set_univ
-  结论: a • (univ : Set β) = univ
+  结论: a • (univ : 集合 β) = univ
   证明: image_univ_of_surjective MulAction.surjective a
 
 @[to_additive (attr := simp)]
@@ -1025,8 +1025,8 @@ theorem smul_univ
 
 中文:
 定理 smul_univ
-  条件: {s : Set α} (hs : s.Nonempty)
-  结论: s • (univ : Set β) = univ
+  条件: {s : 集合 α} (hs : s.非空)
+  结论: s • (univ : 集合 β) = univ
   证明: let ⟨a, ha⟩ := hs
   eq_univ_of_forall fun b => ⟨a, ha, a⁻¹ • b, trivial, smul_inv_smul _ _⟩
 
@@ -1082,7 +1082,7 @@ theorem smul_inter_nonempty_iff
 
 中文:
 定理 smul_inter_nonempty_iff
-  条件: {s t : Set α} {x : α}
+  条件: {s t : 集合 α} {x : α}
   证明: by
   constructor
   · rintro ⟨a, h, ha⟩
@@ -1118,7 +1118,7 @@ theorem smul_inter_nonempty_iff'
 
 中文:
 定理 smul_inter_nonempty_iff'
-  条件: {s t : Set α} {x : α}
+  条件: {s t : 集合 α} {x : α}
   证明: by
   simp_rw [smul_inter_nonempty_iff, div_eq_mul_inv]
 
@@ -1150,7 +1150,7 @@ theorem op_smul_inter_nonempty_iff
 
 中文:
 定理 op_smul_inter_nonempty_iff
-  条件: {s t : Set α} {x : αᵐᵒᵖ}
+  条件: {s t : 集合 α} {x : αᵐᵒᵖ}
   证明: by
   constructor
   · rintro ⟨a, h, ha⟩
@@ -1217,8 +1217,8 @@ alias iUnion_vadd_eq_setOf_exists := iUnion_vadd_eq_ofPred_exists
 @[to_additiv
 
 中文:
-定理 iUnion_smul_eq_ofPred_exists
-  条件: {s : Set β}
+定理 iUnion_smul_eq_ofPred_存在
+  条件: {s : 集合 β}
   结论: ⋃ g : α, g • s = { a | 存在 g : α, g • a in s }
   证明: by
   simp_rw [← iUnion_ofPred, ← iUnion_inv_smul, ← preimage_smul, preimage]
@@ -1257,7 +1257,7 @@ lemma inv_smul_set_distrib
 
 中文:
 引理 inv_smul_set_distrib
-  条件: (a : α) (s : Set α)
+  条件: (a : α) (s : 集合 α)
   结论: (a • s)⁻¹ = op a⁻¹ • s⁻¹
   证明: by
   ext; simp [mem_smul_set_iff_inv_smul_mem]
@@ -1284,7 +1284,7 @@ lemma inv_op_smul_set_distrib
 
 中文:
 引理 inv_op_smul_set_distrib
-  条件: (a : α) (s : Set α)
+  条件: (a : α) (s : 集合 α)
   结论: (op a • s)⁻¹ = a⁻¹ • s⁻¹
   证明: by
   ext; simp [mem_smul_set_iff_inv_smul_mem]
@@ -1417,8 +1417,8 @@ lemma exists_smul_inter_smul_subset_smul_inv_mul_inter_inv_mul
     _ = z • ((s⁻¹ * s) inter (t⁻¹ * t)) := by
 
 中文:
-引理 exists_smul_inter_smul_subset_smul_inv_mul_inter_inv_mul
-  条件: (s t : Set α) (a b : α)
+引理 存在_smul_inter_smul_subset_smul_inv_mul_inter_inv_mul
+  条件: (s t : 集合 α) (a b : α)
   证明: by
   obtain hAB | ⟨z, hzA, hzB⟩ := (a • s inter b • t).eq_empty_or_nonempty
   · exact ⟨1, by simp [hAB]⟩
@@ -1456,7 +1456,7 @@ lemma mem_invOf_smul_set
 
 中文:
 引理 mem_invOf_smul_set
-  条件: [Invertible a]
+  条件: [可逆 a]
   结论: b in ⅟a • s ↔ a • b in s
   证明: mem_inv_smul_set_iff (a := unitOfInvertible a)
 -/
@@ -1484,7 +1484,7 @@ lemma smul_graphOn
 
 中文:
 引理 smul_graphOn
-  条件: (x : α × β) (s : Set α) (f : F)
+  条件: (x : α × β) (s : 集合 α) (f : F)
   证明: by
   ext ⟨a, b⟩
   simp [mem_smul_set_iff_inv_smul_mem, inv_mul_eq_iff_eq_mul, mul_left_comm _ _⁻¹,
@@ -1536,7 +1536,7 @@ lemma smul_div_smul_comm
 
 中文:
 引理 smul_div_smul_comm
-  条件: (a : α) (s : Set α) (b : α) (t : Set α)
+  条件: (a : α) (s : 集合 α) (b : α) (t : 集合 α)
   证明: by
   simp_rw [← image_smul, smul_eq_mul, ← singleton_mul, mul_div_mul_comm _ s,
     singleton_div_singleton]

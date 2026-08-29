@@ -35,7 +35,7 @@ instance instMeasurableSpace
 
 中文:
 实例 instMeasurableSpace
-  签名: [DiscreteMeasurableSpace A] [Finite A]
+  签名: [DiscreteMeasurable空间 A] [有限 A]
   定义体: ⊤
 -/
 instance instMeasurableSpace [DiscreteMeasurableSpace A] [Finite A] :
@@ -52,7 +52,7 @@ instance instDiscreteMeasurableSpace
 
 中文:
 实例 instDiscreteMeasurableSpace
-  签名: [DiscreteMeasurableSpace A] [Finite A]
+  签名: [DiscreteMeasurable空间 A] [有限 A]
   定义体: ⟨fun _ => trivial⟩
 -/
 instance instDiscreteMeasurableSpace [DiscreteMeasurableSpace A] [Finite A] :

@@ -44,9 +44,9 @@ theorem Int.card_ideal_quot
   simp [← Submodule.cardQuot_apply, ← Ideal.absNorm_apply]
 
 中文:
-定理 Int.card_ideal_quot
+定理 整数.card_ideal_quot
   条件: (n : 自然数)
-  结论: 自然数.card (整数 ⧸ (Ideal.span {(n : 整数)})) = n
+  结论: 自然数.card (整数 ⧸ (理想.span {(n : 整数)})) = n
   证明: by
   simp [← Submodule.cardQuot_apply, ← Ideal.absNorm_apply]
 
@@ -65,8 +65,8 @@ instance Int.ideal_span_isMaximal_of_prime
     (Int.quotientSpanNatEquivZMod p).toMulEquiv.isField (Field.toIsField _)
 
 中文:
-实例 Int.ideal_span_isMaximal_of_prime
-  签名: (p : 自然数) [Fact (自然数.Prime p)]
+实例 整数.ideal_span_isMaximal_of_prime
+  签名: (p : 自然数) [Fact (自然数.素 p)]
   定义体: Ideal.Quotient.maximal_of_isField _
     (Int.quotientSpanNatEquivZMod p).toMulEquiv.isField (Field.toIsField _)
 
@@ -90,9 +90,9 @@ refine ringChar.eq_iff.mpr (charP_iff _ _).mpr fun x => ?_
   rw [Ideal.Quotient.eq_zero_iff_mem]; rw [← Int.cast_natCast]; rw [Ideal.mem_span_singleton]; rw [Int.cast_natCast]; rw [Int.natCast_dvd_natCast]
 
 中文:
-定理 Int.ringChar_idealQuot
+定理 整数.ringChar_idealQuot
   条件: (n : 自然数)
-  结论: ringChar (整数 ⧸ Ideal.span {(n : 整数)}) = n
+  结论: ringChar (整数 ⧸ 理想.span {(n : 整数)}) = n
   证明: by
 refine ringChar.eq_iff.mpr (charP_iff _ _).mpr fun x => ?_
   change Ideal.Quotient.mk (Ideal.span {(n : Int)}) x = 0 ↔ _
@@ -126,7 +126,7 @@ instance liesOver_span_absNorm
 
 中文:
 实例 liesOver_span_absNorm
-  签名: (I : Ideal R)
+  签名: (I : 理想 R)
   定义体: by
   rw [liesOver_iff]; rw [under_def]; rw [Int.ideal_span_absNorm_eq_self]
 
@@ -236,7 +236,7 @@ theorem absNorm_under_dvd_absNorm
 
 中文:
 定理 absNorm_under_dvd_absNorm
-  结论: {S : 类型} [CommRing S] [IsDedekindDomain S] [Module.Free 整数 S]
+  结论: {S : 类型} [交换环 S] [是Dedekind整环 S] [模.自由 整数 S]
   证明: by
   cases finite_or_infinite (S ⧸ I)
   · have : Fintype (S ⧸ I) := Fintype.ofFinite (S ⧸ I)
@@ -272,8 +272,8 @@ refine ringChar.eq_iff.mpr (charP_iff _ _).mpr fun x => ?_
   rw [Quotient.eq_zero_iff_mem]; rw [← Int.cast_natCast]; rw [cast_mem_ideal_iff]; rw [natCast_dvd_natCast]
 
 中文:
-定理 _root_.Ideal.ringChar_quot
-  条件: {S : 类型} [CommRing S] (I : Ideal S)
+定理 _root_.理想.ringChar_quot
+  条件: {S : 类型} [交换环 S] (I : 理想 S)
   证明: by
 refine ringChar.eq_iff.mpr (charP_iff _ _).mpr fun x => ?_
   change Ideal.Quotient.mk I x = 0 ↔ _
@@ -310,8 +310,8 @@ theorem Nat.absNorm_under_prime
     exact eq_bot_of_comap_eq_bot this
 
 中文:
-定理 Nat.absNorm_under_prime
-  条件: (P : Ideal R) [P.IsPrime] [NeZero P]
+定理 自然数.absNorm_under_prime
+  条件: (P : 理想 R) [P.是素] [NeZero P]
   证明: by
   rw [Nat.prime_iff_prime_int]; rw [← span_singleton_prime]; rw [Int.ideal_span_absNorm_eq_self]
   · infer_instance

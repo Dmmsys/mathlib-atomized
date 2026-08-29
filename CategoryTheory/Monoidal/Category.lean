@@ -99,8 +99,8 @@ class MonoidalCategoryStruct
     - rightUnitor : forall X : C, tensorObj X tensorUnit ≅ X
 
 中文:
-类 MonoidalCategoryStruct
-  参数: (C : 类型u) [𝒞 : Category.{v} C]
+类 幺半群范畴结构
+  参数: (C : 类型u) [𝒞 : 范畴.{v} C]
   公理与运算 (8 个):
     - tensorObj : C -> C -> C
     - whiskerLeft((X : C) {Y₁ Y₂ : C} (f : Y₁ ⟶ Y₂)) : tensorObj X Y₁ ⟶ tensorObj X Y₂
@@ -179,7 +179,7 @@ definition Pentagon
 
 中文:
 定义 Pentagon
-  签名: {C : 类型u} [Category.{v} C] [MonoidalCategoryStruct C]
+  签名: {C : 类型u} [范畴.{v} C] [幺半群范畴结构 C]
   定义体: (α_ Y₁ Y₂ Y₃).hom ▷ Y₄ ≫ (α_ Y₁ (Y₂ otimes Y₃) Y₄).hom ≫ Y₁ ◁ (α_ Y₂ Y₃ Y₄).hom =
     (α_ (Y₁ otimes Y₂) Y₃ Y₄).hom ≫ (α_ Y₁ Y₂ (Y₃ otimes Y₄)).hom
 
@@ -223,9 +223,9 @@ class MonoidalCategory
     - triangle : forall X Y : C, (α_ X (𝟙_ _) Y).hom ≫ X ◁ (fun_ Y).hom = (ρ_ X).hom ▷ Y  [default: by cat_disch]
 
 中文:
-类 MonoidalCategory
-  参数: (C : 类型u) [𝒞 : Category.{v} C]
-  继承: MonoidalCategoryStruct C
+类 幺半群范畴
+  参数: (C : 类型u) [𝒞 : 范畴.{v} C]
+  继承: 幺半群范畴结构 C
   公理与运算 (10 个):
     - tensorHom_def({X₁ Y₁ X₂ Y₂ : C} (f : X₁ ⟶ Y₁) (g : X₂ ⟶ Y₂)) : f otimesₘ g = (f ▷ X₂) ≫ (Y₁ ◁ g)  [默认: by cat_disch]
     - id_tensorHom_id : 对任意 X₁ X₂ : C, 𝟙 X₁ otimesₘ 𝟙 X₂ = 𝟙 (X₁ otimes X₂)  [默认: by cat_disch]
@@ -316,7 +316,7 @@ abbreviation ofTensorHom
 
 中文:
 缩写 ofTensorHom
-  签名: {C : 类型u} [Category.{v} C] [MonoidalCategoryStruct C]
+  签名: {C : 类型u} [范畴.{v} C] [幺半群范畴结构 C]
   定义体: by intros; simp [← id_tensorHom, ← tensorHom_id, tensorHom_comp_tensorHom]
   whiskerLeft_id := by intros; simp [← id_tensorHom, ← id_tensorHom_id]
   id_whiskerRight := by intros; simp [← tensorHom_id, id_tensorHom_id]
@@ -925,7 +925,7 @@ theorem whiskerLeft_hom_inv'
 
 中文:
 定理 whiskerLeft_hom_inv'
-  条件: (X : C) {Y Z : C} (f : Y ⟶ Z) [IsIso f]
+  条件: (X : C) {Y Z : C} (f : Y ⟶ Z) [是同构 f]
   证明: by
   rw [← whiskerLeft_comp]; rw [IsIso.hom_inv_id]; rw [whiskerLeft_id]
 
@@ -951,7 +951,7 @@ theorem hom_inv_whiskerRight'
 
 中文:
 定理 hom_inv_whiskerRight'
-  条件: {X Y : C} (f : X ⟶ Y) [IsIso f] (Z : C)
+  条件: {X Y : C} (f : X ⟶ Y) [是同构 f] (Z : C)
   证明: by
   rw [← comp_whiskerRight]; rw [IsIso.hom_inv_id]; rw [id_whiskerRight]
 
@@ -977,7 +977,7 @@ theorem whiskerLeft_inv_hom'
 
 中文:
 定理 whiskerLeft_inv_hom'
-  条件: (X : C) {Y Z : C} (f : Y ⟶ Z) [IsIso f]
+  条件: (X : C) {Y Z : C} (f : Y ⟶ Z) [是同构 f]
   证明: by
   rw [← whiskerLeft_comp]; rw [IsIso.inv_hom_id]; rw [whiskerLeft_id]
 
@@ -1001,7 +1001,7 @@ theorem inv_hom_whiskerRight'
 
 中文:
 定理 inv_hom_whiskerRight'
-  条件: {X Y : C} (f : X ⟶ Y) [IsIso f] (Z : C)
+  条件: {X Y : C} (f : X ⟶ Y) [是同构 f] (Z : C)
   证明: by
   rw [← comp_whiskerRight]; rw [IsIso.inv_hom_id]; rw [id_whiskerRight]
 
@@ -1046,7 +1046,7 @@ instance whiskerLeft_isIso
 
 中文:
 实例 whiskerLeft_isIso
-  签名: (X : C) {Y Z : C} (f : Y ⟶ Z) [IsIso f]
+  签名: (X : C) {Y Z : C} (f : Y ⟶ Z) [是同构 f]
   定义体: (whiskerLeftIso X (asIso f)).isIso_hom
 
 @[simp, push]
@@ -1070,7 +1070,7 @@ theorem inv_whiskerLeft
 
 中文:
 定理 inv_whiskerLeft
-  条件: (X : C) {Y Z : C} (f : Y ⟶ Z) [IsIso f]
+  条件: (X : C) {Y Z : C} (f : Y ⟶ Z) [是同构 f]
   证明: by
   cat_disch
 
@@ -1182,7 +1182,7 @@ instance whiskerRight_isIso
 
 中文:
 实例 whiskerRight_isIso
-  签名: {X Y : C} (f : X ⟶ Y) (Z : C) [IsIso f]
+  签名: {X Y : C} (f : X ⟶ Y) (Z : C) [是同构 f]
   定义体: (whiskerRightIso (asIso f) Z).isIso_hom
 
 @[simp, push]
@@ -1206,7 +1206,7 @@ theorem inv_whiskerRight
 
 中文:
 定理 inv_whiskerRight
-  条件: {X Y : C} (f : X ⟶ Y) (Z : C) [IsIso f]
+  条件: {X Y : C} (f : X ⟶ Y) (Z : C) [是同构 f]
   证明: by
   cat_disch
 
@@ -1374,7 +1374,7 @@ instance tensor_isIso
 
 中文:
 实例 tensor_isIso
-  签名: {W X Y Z : C} (f : W ⟶ X) [IsIso f] (g : Y ⟶ Z) [IsIso g]
+  签名: {W X Y Z : C} (f : W ⟶ X) [是同构 f] (g : Y ⟶ Z) [是同构 g]
   定义体: (asIso f otimesᵢ asIso g).isIso_hom
 
 @[simp, push]
@@ -1396,7 +1396,7 @@ theorem inv_tensor
 
 中文:
 定理 inv_tensor
-  条件: {W X Y Z : C} (f : W ⟶ X) [IsIso f] (g : Y ⟶ Z) [IsIso g]
+  条件: {W X Y Z : C} (f : W ⟶ X) [是同构 f] (g : Y ⟶ Z) [是同构 g]
   证明: by
   simp [tensorHom_def, whisker_exchange]
 
@@ -1419,7 +1419,7 @@ theorem whiskerLeft_dite
 
 中文:
 定理 whiskerLeft_dite
-  结论: {P : 命题} [Decidable P]
+  结论: {P : 命题} [可判定 P]
   证明: by
   split_ifs <;> rfl
 
@@ -1441,7 +1441,7 @@ theorem dite_whiskerRight
 
 中文:
 定理 dite_whiskerRight
-  结论: {P : 命题} [Decidable P]
+  结论: {P : 命题} [可判定 P]
   证明: by
   split_ifs <;> rfl
 
@@ -1462,7 +1462,7 @@ theorem tensor_dite
 
 中文:
 定理 tensor_dite
-  结论: {P : 命题} [Decidable P] {W X Y Z : C} (f : W ⟶ X) (g : P -> (Y ⟶ Z))
+  结论: {P : 命题} [可判定 P] {W X Y Z : C} (f : W ⟶ X) (g : P -> (Y ⟶ Z))
   证明: by split_ifs <;> rfl
 
 Depends on / 依赖: split_ifs
@@ -1483,7 +1483,7 @@ theorem dite_tensor
 
 中文:
 定理 dite_tensor
-  结论: {P : 命题} [Decidable P] {W X Y Z : C} (f : W ⟶ X) (g : P -> (Y ⟶ Z))
+  结论: {P : 命题} [可判定 P] {W X Y Z : C} (f : W ⟶ X) (g : P -> (Y ⟶ Z))
   证明: by split_ifs <;> rfl
 
 @[simp]
@@ -2581,7 +2581,7 @@ theorem hom_inv_id_tensor'
 
 中文:
 定理 hom_inv_id_tensor'
-  条件: {V W X Y Z : C} (f : V ⟶ W) [IsIso f] (g : X ⟶ Y) (h : Y ⟶ Z)
+  条件: {V W X Y Z : C} (f : V ⟶ W) [是同构 f] (g : X ⟶ Y) (h : Y ⟶ Z)
   证明: by simp
 
 @[reassoc]
@@ -2602,7 +2602,7 @@ theorem inv_hom_id_tensor'
 
 中文:
 定理 inv_hom_id_tensor'
-  条件: {V W X Y Z : C} (f : V ⟶ W) [IsIso f] (g : X ⟶ Y) (h : Y ⟶ Z)
+  条件: {V W X Y Z : C} (f : V ⟶ W) [是同构 f] (g : X ⟶ Y) (h : Y ⟶ Z)
   证明: by simp
 
 @[reassoc]
@@ -2623,7 +2623,7 @@ theorem tensor_hom_inv_id'
 
 中文:
 定理 tensor_hom_inv_id'
-  条件: {V W X Y Z : C} (f : V ⟶ W) [IsIso f] (g : X ⟶ Y) (h : Y ⟶ Z)
+  条件: {V W X Y Z : C} (f : V ⟶ W) [是同构 f] (g : X ⟶ Y) (h : Y ⟶ Z)
   证明: by simp
 
 @[reassoc]
@@ -2644,7 +2644,7 @@ theorem tensor_inv_hom_id'
 
 中文:
 定理 tensor_inv_hom_id'
-  条件: {V W X Y Z : C} (f : V ⟶ W) [IsIso f] (g : X ⟶ Y) (h : Y ⟶ Z)
+  条件: {V W X Y Z : C} (f : V ⟶ W) [是同构 f] (g : X ⟶ Y) (h : Y ⟶ Z)
   证明: by simp
 
 @[reassoc]
@@ -3062,7 +3062,7 @@ definition associatorNatIso
   body: NatIso.ofComponents (fun _ => MonoidalCategory.associator _ _ _)
 
 中文:
-定义 associatorNatIso
+定义 associator自然数Iso
   签名: : leftAssocTensor C ≅ rightAssocTensor C
   定义体: NatIso.ofComponents (fun _ => MonoidalCategory.associator _ _ _)
 
@@ -3083,7 +3083,7 @@ definition leftUnitorNatIso
   body: NatIso.ofComponents MonoidalCategory.leftUnitor
 
 中文:
-定义 leftUnitorNatIso
+定义 leftUnitor自然数Iso
   签名: : tensorUnitLeft C ≅ 𝟭 C
   定义体: NatIso.ofComponents MonoidalCategory.leftUnitor
 
@@ -3104,7 +3104,7 @@ definition rightUnitorNatIso
   body: NatIso.ofComponents MonoidalCategory.rightUnitor
 
 中文:
-定义 rightUnitorNatIso
+定义 rightUnitor自然数Iso
   签名: : tensorUnitRight C ≅ 𝟭 C
   定义体: NatIso.ofComponents MonoidalCategory.rightUnitor
 
@@ -3127,7 +3127,7 @@ definition curriedAssociatorNatIso
     (fun X₃ => α_ X₁ X₂ X₃)))
 
 中文:
-定义 curriedAssociatorNatIso
+定义 curriedAssociator自然数Iso
   签名: :
   定义体: NatIso.ofComponents (fun X₁ => NatIso.ofComponents (fun X₂ => NatIso.ofComponents
     (fun X₃ => α_ X₁ X₂ X₃)))
@@ -3237,7 +3237,7 @@ instance :
 
 中文:
 实例 :
-  签名: (tensoringLeft C).Faithful
+  签名: (tensoringLeft C).忠实
   定义体: by
     injections h
     replace h := congr_fun h (𝟙_ C)
@@ -3282,7 +3282,7 @@ instance :
 
 中文:
 实例 :
-  签名: (tensoringRight C).Faithful
+  签名: (tensoringRight C).忠实
   定义体: by
     injections h
     replace h := congr_fun h (𝟙_ C)
@@ -3392,7 +3392,7 @@ instance prodMonoidal
 
 中文:
 实例 prodMonoidal
-  签名: : MonoidalCategory (C₁ × C₂) where
+  签名: : 幺半群范畴 (C₁ × C₂) where
   定义体: (X.1 otimes Y.1, X.2 otimes Y.2)
   tensorHom f g := (f.1 otimesₘ g.1) ×ₘ f.2 otimesₘ g.2
   whiskerLeft X _ _ f := whiskerLeft X.1 f.1 ×ₘ whiskerLeft X.2 f.2
@@ -3517,7 +3517,7 @@ abbreviation MonoidalCategory.fullSubcategory
   leftUnitor X 
 
 中文:
-缩写 MonoidalCategory.fullSubcategory
+缩写 幺半群范畴.fullSubcategory
   定义体: ⟨X.1 otimes Y.1, tensorObj X.1 Y.1 X.2 Y.2⟩
   whiskerLeft X _ _ f := homMk (X.obj ◁ f.hom)
   whiskerRight f X := homMk (f.hom ▷ X.obj)

@@ -69,7 +69,7 @@ instance :
 
 中文:
 实例 :
-  签名: EnrichedCategory Cat (CatEnriched C)
+  签名: Enriched范畴 Cat (CatEnriched C)
   定义体: inferInstanceAs (EnrichedCategory Cat C)
 
 Depends on / 依赖: EnrichedCategory
@@ -230,7 +230,7 @@ instance :
 
 中文:
 实例 :
-  签名: Category (CatEnriched C)
+  签名: 范畴 (CatEnriched C)
   定义体: congrArg (·.toFunctor.obj f) (e_id_comp (V := Cat) X Y)
   comp_id {X Y} f := congrArg (·.toFunctor.obj f) (e_comp_id (V := Cat) X Y)
   assoc {X Y Z W} f g h := congrArg (·.toFunctor.obj (f, g, h)) (e_assoc (V := Cat) X Y Z W)
@@ -256,7 +256,7 @@ instance :
 
 中文:
 实例 :
-  签名: EnrichedOrdinaryCategory Cat (CatEnriched C)
+  签名: EnrichedOrdinary范畴 Cat (CatEnriched C)
   定义体: ((Cat.Hom.equivFunctor _ _).trans Cat.fromChosenTerminalEquiv).symm
   homEquiv_comp _ _ :=
     ((Cat.Hom.equivFunctor _ _).trans Cat.fromChosenTerminalEquiv).symm_apply_eq.mpr rfl
@@ -427,7 +427,7 @@ instance :
 
 中文:
 实例 :
-  签名: Bicategory (CatEnriched C)
+  签名: 双范畴 (CatEnriched C)
   定义体: inferInstance
   whiskerLeft {_ _ _} f {_ _} η := hComp (𝟙 f) η
   whiskerRight η h := hComp η (𝟙 h)
@@ -467,7 +467,7 @@ instance :
 
 中文:
 实例 :
-  签名: Bicategory.Strict (CatEnriched C)
+  签名: 双范畴.Strict (CatEnriched C)
 -/
 instance : Bicategory.Strict (CatEnriched C) where
 
@@ -505,7 +505,7 @@ instance :
 
 中文:
 实例 :
-  签名: Category (CatEnrichedOrdinary C)
+  签名: 范畴 (CatEnrichedOrdinary C)
   定义体: inferInstanceAs (Category C)
 
 Depends on / 依赖: Category
@@ -522,7 +522,7 @@ instance :
 
 中文:
 实例 :
-  签名: EnrichedCategory Cat (CatEnrichedOrdinary C)
+  签名: Enriched范畴 Cat (CatEnrichedOrdinary C)
   定义体: inferInstanceAs (EnrichedCategory Cat C)
 
 Depends on / 依赖: EnrichedCategory
@@ -539,7 +539,7 @@ instance :
 
 中文:
 实例 :
-  签名: EnrichedOrdinaryCategory Cat (CatEnrichedOrdinary C)
+  签名: EnrichedOrdinary范畴 Cat (CatEnrichedOrdinary C)
   定义体: inferInstanceAs (EnrichedOrdinaryCategory Cat C)
 
 Depends on / 依赖: EnrichedOrdinaryCategory
@@ -650,7 +650,7 @@ structure Hom
   (no additional axioms)
 
 中文:
-结构 Hom
+结构 态射
   参数: {X Y : CatEnrichedOrdinary C} (f g : X ⟶ Y)
   (无附加公理)
 -/
@@ -670,7 +670,7 @@ definition Hom.base
   body: α.base'
 
 中文:
-定义 Hom.base
+定义 态射.base
   签名: {X Y : CatEnrichedOrdinary C} {f g : X ⟶ Y} (α : f ⟶ g)
   定义体: α.base'
 -/
@@ -686,7 +686,7 @@ definition Hom.mk
   body: .mk' α
 
 中文:
-定义 Hom.mk
+定义 态射.mk
   签名: {X Y : CatEnrichedOrdinary C} {f g : X ⟶ Y} (α : homEquiv f ⟶ homEquiv g)
   定义体: .mk' α
 
@@ -740,7 +740,7 @@ theorem Hom.id_eq
   proof: rfl
 
 中文:
-定理 Hom.id_eq
+定理 态射.id_eq
   条件: {X Y : CatEnrichedOrdinary C} (f : X ⟶ Y)
   证明: rfl
 -/
@@ -756,7 +756,7 @@ theorem Hom.base_id
   proof: rfl
 
 中文:
-定理 Hom.base_id
+定理 态射.base_id
   条件: {X Y : CatEnrichedOrdinary C} (f : X ⟶ Y)
   证明: rfl
 -/
@@ -772,7 +772,7 @@ theorem Hom.comp_eq
   proof: rfl
 
 中文:
-定理 Hom.comp_eq
+定理 态射.comp_eq
   结论: {X Y : CatEnrichedOrdinary C} {f g h : X ⟶ Y}
   证明: rfl
 -/
@@ -788,7 +788,7 @@ theorem Hom.base_comp
   proof: rfl
 
 中文:
-定理 Hom.base_comp
+定理 态射.base_comp
   结论: {X Y : CatEnrichedOrdinary C} {f g h : X ⟶ Y}
   证明: rfl
 -/
@@ -804,7 +804,7 @@ theorem Hom.mk_comp
   proof: rfl
 
 中文:
-定理 Hom.mk_comp
+定理 态射.mk_comp
   结论: {X Y : CatEnrichedOrdinary C} {f g h : X ⟶ Y}
   证明: rfl
 -/
@@ -821,7 +821,7 @@ theorem Hom.ext
   proof: by cases α; cases β; cases H; rfl
 
 中文:
-定理 Hom.ext
+定理 态射.ext
   结论: {X Y : CatEnrichedOrdinary C} {f g : X ⟶ Y} (α β : f ⟶ g)
   证明: by cases α; cases β; cases H; rfl
 -/
@@ -842,7 +842,7 @@ theorem Hom.base_eqToHom
   proof: by cases α; rfl
 
 中文:
-定理 Hom.base_eqToHom
+定理 态射.base_eqToHom
   条件: {X Y : CatEnrichedOrdinary C} {f g : X ⟶ Y} (α : f = g)
   证明: by cases α; rfl
 -/
@@ -1047,7 +1047,7 @@ theorem id_eq_eqToHom
 
 中文:
 定理 id_eq_eqToHom
-  条件: {C} [Category* C] (X : C)
+  条件: {C} [范畴* C] (X : C)
   结论: 𝟙 X = eqToHom rfl
   证明: rfl
 -/
@@ -1130,7 +1130,7 @@ instance :
 
 中文:
 实例 :
-  签名: Bicategory (CatEnrichedOrdinary C)
+  签名: 双范畴 (CatEnrichedOrdinary C)
   定义体: inferInstance
   whiskerLeft {_ _ _} f {_ _} η := hComp (𝟙 f) η
   whiskerRight η h := hComp η (𝟙 h)
@@ -1164,7 +1164,7 @@ instance :
 
 中文:
 实例 :
-  签名: Bicategory.Strict (CatEnrichedOrdinary C)
+  签名: 双范畴.Strict (CatEnrichedOrdinary C)
 -/
 instance : Bicategory.Strict (CatEnrichedOrdinary C) where
 

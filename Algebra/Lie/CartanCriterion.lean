@@ -65,7 +65,7 @@ lemma exists_polynomial_eval_sub_aux
     obtain ⟨r, hr⟩ := (Polynomial.exists_eval_eq_if
 
 中文:
-引理 exists_polynomial_eval_sub_aux
+引理 存在_polynomial_eval_sub_aux
   证明: by
   suffices forall (ij kl : ι × ι) (hij : a ij.1 - a ij.2 = a kl.1 - a kl.2),
       algebraMap R K (f ⟨a ij.1, ha ij.1⟩) - algebraMap R K (f ⟨a ij.2, ha ij.2⟩) =

@@ -95,7 +95,7 @@ lemma includeLeftSubRight_zero_of_mem_range
 
 中文:
 引理 includeLeftSubRight_zero_of_mem_range
-  条件: {s : S} (hs : s in Set.range ⇑(algebraMap R S))
+  条件: {s : S} (hs : s in 集合.range ⇑(algebraMap R S))
   证明: by
   obtain ⟨_, hr⟩ := Set.mem_range.mp hs
   simp [← hr, algebraMap_eq_smul_one]
@@ -140,7 +140,7 @@ lemma distribBaseChange_comp_includeLeftSubRight
 
 中文:
 引理 distribBaseChange_comp_includeLeftSubRight
-  条件: (T : 类型) [CommRing T] [Algebra R T]
+  条件: (T : 类型) [交换环 T] [代数 R T]
   证明: by
   ext
   simp [TensorProduct.tmul_sub, TensorProduct.one_def, tmul_one_tmul_one_tmul]
@@ -167,7 +167,7 @@ lemma distribBaseChange_includeLeftSubRight_apply
 
 中文:
 引理 distribBaseChange_includeLeftSubRight_apply
-  结论: (T : 类型) [CommRing T] [Algebra R T]
+  结论: (T : 类型) [交换环 T] [代数 R T]
   证明: congr($(distribBaseChange_comp_includeLeftSubRight _) x)
 
 Depends on / 依赖: distribBaseChange_comp_includeLeftSubRight
@@ -328,7 +328,7 @@ lemma of_faithfullyFlat
 
 中文:
 引理 of_faithfullyFlat
-  条件: [CommRing S] [Algebra R S] [Module.FaithfullyFlat R S]
+  条件: [交换环 S] [代数 R S] [模.忠实平坦 R S]
   证明: of_isEffective_tensorProduct_of_faithfullyFlat _ _ _ (of_section (TensorProduct.lmul'' R))
 
 Depends on / 依赖: TensorProduct, TensorProduct.lmul, of_isEffective_tensorProduct_of_faithfullyFlat, of_section
@@ -384,7 +384,7 @@ lemma codRestrictEqLocusPushoutCocone.injective_of_faithfulSMul
 
 中文:
 引理 codRestrictEqLocusPushoutCocone.injective_of_faithfulSMul
-  条件: [FaithfulSMul R S]
+  条件: [忠实标量乘法 R S]
   证明: RingHom.injective_codRestrict.mpr (FaithfulSMul.algebraMap_injective _ _)
 
 Depends on / 依赖: FaithfulSMul, FaithfulSMul.algebraMap_injective, RingHom, RingHom.injective_codRestrict.mpr, algebraMap_injective, injective_codRestrict
@@ -407,7 +407,7 @@ obtain ⟨t, rfl⟩ := Set.mem_range.mp
 
 中文:
 引理 codRestrictEqLocusPushoutCocone.surjective_of_isEffective
-  条件: (hf : Algebra.IsEffective R S)
+  条件: (hf : 代数.IsEffective R S)
   证明: by
   intro ⟨s, hs⟩
 obtain ⟨t, rfl⟩ := Set.mem_range.mp
@@ -436,7 +436,7 @@ lemma codRestrictEqLocusPushoutCocone.bijective_of_faithfullyFlat
 
 中文:
 引理 codRestrictEqLocusPushoutCocone.bijective_of_faithfullyFlat
-  条件: [Module.FaithfullyFlat R S]
+  条件: [模.忠实平坦 R S]
   证明: by
   constructor
   · exact codRestrictEqLocusPushoutCocone.injective_of_faithfulSMul _ _

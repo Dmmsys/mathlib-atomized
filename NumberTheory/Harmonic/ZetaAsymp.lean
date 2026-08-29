@@ -604,7 +604,7 @@ lemma continuousOn_termTSum
 
 中文:
 引理 continuousOn_termTSum
-  结论: ContinuousOn termTSum (Ici 1)
+  结论: ContinuousOn termTSum (左闭右无界区间 1)
   证明: by
   -- We use dominated convergence, using `fun n ↦ term n 1` as our uniform bound (since `term` is
   -- monotone decreasing in `s`.)
@@ -745,7 +745,7 @@ lemma _root_.isBigO_riemannZeta_sub_one_div
 
 中文:
 引理 _root_.isBigO_riemannZeta_sub_one_div
-  条件: {F : 类型} [Norm F] [One F] [NormOneClass F]
+  条件: {F : 类型} [范数 F] [幺 F] [NormOne类 F]
   证明: by
   simpa only [Asymptotics.isBigO_one_nhds_ne_iff] using
      tendsto_riemannZeta_sub_one_div.isBigO_one (F := F)
@@ -778,7 +778,7 @@ lemma tendsto_Gamma_term_aux
 
 中文:
 引理 tendsto_Gamma_term_aux
-  结论: Tendsto (fun s => 1 / (s - 1) - 1 / Gamma实数 s / (s - 1)) (𝓝[!=] 1)
+  结论: 收敛 (fun s => 1 / (s - 1) - 1 / Gamma实数 s / (s - 1)) (𝓝[!=] 1)
   证明: by
   have h := hasDerivAt_GammaReal_one
   rw [hasDerivAt_iff_tendsto_slope]; rw [slope_fun_def_field]; rw [GammaReal_one] at h
@@ -815,7 +815,7 @@ lemma tendsto_riemannZeta_sub_one_div_GammaReal
   ring_nf
 
 中文:
-引理 tendsto_riemannZeta_sub_one_div_GammaReal
+引理 tendsto_riemannZeta_sub_one_div_Gamma实数
   证明: by
   have := tendsto_riemannZeta_sub_one_div.add tendsto_Gamma_term_aux
   simp_rw [sub_add_sub_cancel] at this
@@ -971,7 +971,7 @@ theorem riemannZeta_conj
 
 中文:
 定理 riemannZeta_conj
-  条件: (s : Complex)
+  条件: (s : 复形)
   结论: riemannZeta (conj s) = conj (riemannZeta s)
   证明: by
   rcases eq_or_ne s 1 with rfl | hs
@@ -1044,7 +1044,7 @@ lemma completedRiemannZeta₀_zero
 
 中文:
 引理 completedRiemannZeta₀_zero
-  结论: completedRiemannZeta₀ 0 = (γ - Complex.log (4 * π)) / 2 + 1
+  结论: completedRiemannZeta₀ 0 = (γ - 复形.log (4 * π)) / 2 + 1
   证明: by
   rw [← completedRiemannZeta₀_one_sub]
   simp [completedRiemannZeta₀_one]
@@ -1128,7 +1128,7 @@ definition riemannZeta₀
 
 中文:
 定义 riemannZeta₀
-  签名: (s : Complex)
+  签名: (s : 复形)
   定义体: if s = 1 then γ else riemannZeta s - (s-1)⁻¹
 
 Depends on / 依赖: riemannZeta
@@ -1148,7 +1148,7 @@ definition riemannZeta₁
 
 中文:
 定义 riemannZeta₁
-  签名: (s : Complex)
+  签名: (s : 复形)
   定义体: 1 + (s - 1) * riemannZeta₀ s
 
 @[simp]
@@ -1201,7 +1201,7 @@ lemma riemannZeta_eq_inv_sub_add
 
 中文:
 引理 riemannZeta_eq_inv_sub_add
-  条件: {s : Complex} (hs : s != 1)
+  条件: {s : 复形} (hs : s != 1)
   证明: by simp [riemannZeta₀, hs]
 -/
 lemma riemannZeta_eq_inv_sub_add {s : Complex} (hs : s != 1) :
@@ -1219,7 +1219,7 @@ lemma riemannZeta_eq_inv_sub_mul
 
 中文:
 引理 riemannZeta_eq_inv_sub_mul
-  条件: {s : Complex} (hs : s != 1)
+  条件: {s : 复形} (hs : s != 1)
   证明: by grind [riemannZeta₁, riemannZeta₀]
 
 @[fun_prop]
@@ -1242,7 +1242,7 @@ lemma differentiable_riemannZeta₀
 
 中文:
 引理 differentiable_riemannZeta₀
-  结论: Differentiable Complex riemannZeta₀
+  结论: 可微 复形 riemannZeta₀
   证明: by
   rw [← differentiableOn_univ]; rw [← differentiableOn_compl_singleton_and_continuousAt_iff
     (univ_mem : _ in 𝓝 (1 : Complex))]; rw [continuousAt_iff_punctured_nhds]; rw [← compl_eq_univ_sdiff]
@@ -1272,7 +1272,7 @@ lemma differentiable_riemannZeta₁
 
 中文:
 引理 differentiable_riemannZeta₁
-  结论: Differentiable Complex riemannZeta₁
+  结论: 可微 复形 riemannZeta₁
   证明: by
   unfold riemannZeta₁; fun_prop
 
@@ -1350,7 +1350,7 @@ lemma deriv_riemannZeta_eq_neg_inv_sub_sq_add
 
 中文:
 引理 deriv_riemannZeta_eq_neg_inv_sub_sq_add
-  条件: {s : Complex} (hs : s != 1)
+  条件: {s : 复形} (hs : s != 1)
   证明: by
   have := sub_ne_zero_of_ne hs
   convert EventuallyEq.deriv_eq (f := fun s => (s - 1)⁻¹ + riemannZeta₀ s) ?_
@@ -1383,7 +1383,7 @@ lemma deriv_riemannZeta_eq_neg_inv_sub_sq_mul_add
 
 中文:
 引理 deriv_riemannZeta_eq_neg_inv_sub_sq_mul_add
-  条件: {s : Complex} (hs : s != 1)
+  条件: {s : 复形} (hs : s != 1)
   证明: by
   have := sub_ne_zero_of_ne hs
   convert EventuallyEq.deriv_eq (f := fun s => (s - 1)⁻¹ * riemannZeta₁ s) ?_
@@ -1438,7 +1438,7 @@ lemma log_riemannZeta_eq_neg_log_sub_add_ofReal
   grind [riemannZeta_re_pos_of_one_lt hs]
 
 中文:
-引理 log_riemannZeta_eq_neg_log_sub_add_ofReal
+引理 log_riemannZeta_eq_neg_log_sub_add_of实数
   条件: {s : 实数} (hs : s > 1)
   证明: by
   have : (riemannZeta s).re = (s - 1)⁻¹ * (riemannZeta₁ s).re := by
@@ -1468,7 +1468,7 @@ lemma log_riemannZeta_add_log_sub_isBigO_ofReal
   suffices DifferentiableAt Real (fun (s : Real) => (rie
 
 中文:
-引理 log_riemannZeta_add_log_sub_isBigO_ofReal
+引理 log_riemannZeta_add_log_sub_isBigO_of实数
   证明: by
   suffices (fun (s : Real) => (riemannZeta₁ s).re.log) =O[𝓝 1] (· - 1) by
     refine (this.mono nhdsWithin_le_nhds).congr'
@@ -1498,7 +1498,7 @@ lemma log_riemannZeta_add_log_sub_isLittleO_ofReal
     (continuous_id.continuousAt.isLittleO.mono nhdsWithin_le_nhds)
 
 中文:
-引理 log_riemannZeta_add_log_sub_isLittleO_ofReal
+引理 log_riemannZeta_add_log_sub_isLittleO_of实数
   证明: log_riemannZeta_add_log_sub_isBigO_ofReal.trans_isLittleO
     (continuous_id.continuousAt.isLittleO.mono nhdsWithin_le_nhds)
 

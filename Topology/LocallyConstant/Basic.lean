@@ -117,7 +117,7 @@ theorem of_discrete
 
 中文:
 定理 of_discrete
-  条件: [DiscreteTopology X] (f : X -> Y)
+  条件: [离散拓扑 X] (f : X -> Y)
   结论: IsLocallyConstant f
   证明: fun _ =>
   isOpen_discrete _
@@ -137,7 +137,7 @@ theorem isOpen_fiber
 中文:
 定理 isOpen_fiber
   条件: {f : X -> Y} (hf : IsLocallyConstant f) (y : Y)
-  结论: IsOpen { x | f x = y }
+  结论: 是开集 { x | f x = y }
   证明: hf {y}
 -/
 theorem isOpen_fiber {f : X -> Y} (hf : IsLocallyConstant f) (y : Y) : IsOpen { x | f x = y } :=
@@ -155,7 +155,7 @@ theorem isClosed_fiber
 中文:
 定理 isClosed_fiber
   条件: {f : X -> Y} (hf : IsLocallyConstant f) (y : Y)
-  结论: IsClosed { x | f x = y }
+  结论: 是闭集 { x | f x = y }
   证明: ⟨hf {y}ᶜ⟩
 -/
 theorem isClosed_fiber {f : X -> Y} (hf : IsLocallyConstant f) (y : Y) : IsClosed { x | f x = y } :=
@@ -190,7 +190,7 @@ theorem iff_exists_open
   proof: (IsLocallyConstant.tfae f).out 0 4
 
 中文:
-定理 iff_exists_open
+定理 iff_存在_open
   条件: (f : X -> Y)
   证明: (IsLocallyConstant.tfae f).out 0 4
 
@@ -229,7 +229,7 @@ theorem exists_open
   proof: (iff_exists_open f).1 hf x
 
 中文:
-定理 exists_open
+定理 存在_open
   条件: {f : X -> Y} (hf : IsLocallyConstant f) (x : X)
   证明: (iff_exists_open f).1 hf x
 
@@ -268,7 +268,7 @@ theorem iff_isOpen_fiber_apply
 中文:
 定理 iff_isOpen_fiber_apply
   条件: {f : X -> Y}
-  结论: IsLocallyConstant f ↔ 对任意 x, IsOpen (f ⁻¹' {f x})
+  结论: IsLocallyConstant f ↔ 对任意 x, 是开集 (f ⁻¹' {f x})
   证明: (IsLocallyConstant.tfae f).out 0 2
 
 Depends on / 依赖: IsLocallyConstant, IsLocallyConstant.tfae
@@ -288,7 +288,7 @@ theorem iff_isOpen_fiber
 中文:
 定理 iff_isOpen_fiber
   条件: {f : X -> Y}
-  结论: IsLocallyConstant f ↔ 对任意 y, IsOpen (f ⁻¹' {y})
+  结论: IsLocallyConstant f ↔ 对任意 y, 是开集 (f ⁻¹' {y})
   证明: (IsLocallyConstant.tfae f).out 0 3
 
 Depends on / 依赖: IsLocallyConstant, IsLocallyConstant.tfae
@@ -306,7 +306,7 @@ theorem continuous
 
 中文:
 定理 continuous
-  条件: [TopologicalSpace Y] {f : X -> Y} (hf : IsLocallyConstant f)
+  条件: [拓扑空间 Y] {f : X -> Y} (hf : IsLocallyConstant f)
   证明: ⟨fun _ _ => hf _⟩
 -/
 protected theorem continuous [TopologicalSpace Y] {f : X -> Y} (hf : IsLocallyConstant f) :
@@ -323,7 +323,7 @@ theorem iff_continuous
 
 中文:
 定理 iff_continuous
-  条件: {_ : TopologicalSpace Y} [DiscreteTopology Y] (f : X -> Y)
+  条件: {_ : 拓扑空间 Y} [离散拓扑 Y] (f : X -> Y)
   证明: ⟨IsLocallyConstant.continuous, fun h s => h.isOpen_preimage s (isOpen_discrete _)⟩
 
 Depends on / 依赖: IsLocallyConstant, IsLocallyConstant.continuous, continuous, h.isOpen_preimage, isOpen_discrete, isOpen_preimage
@@ -364,7 +364,7 @@ theorem const
 中文:
 定理 const
   条件: (y : Y)
-  结论: IsLocallyConstant (Function.const X y)
+  结论: IsLocallyConstant (函数.const X y)
   证明: of_constant _ fun _ _ => rfl
 -/
 protected theorem const (y : Y) : IsLocallyConstant (Function.const X y) :=
@@ -445,7 +445,7 @@ theorem comp_continuous
 
 中文:
 定理 comp_continuous
-  结论: [TopologicalSpace Y] {g : Y -> Z} {f : X -> Y} (hg : IsLocallyConstant g)
+  结论: [拓扑空间 Y] {g : Y -> Z} {f : X -> Y} (hg : IsLocallyConstant g)
   证明: fun s => by
   rw [Set.preimage_comp]
   exact hf.isOpen_preimage _ (hg _)
@@ -473,7 +473,7 @@ theorem apply_eq_of_isPreconnected
 
 中文:
 定理 apply_eq_of_isPreconnected
-  结论: {f : X -> Y} (hf : IsLocallyConstant f) {s : Set X}
+  结论: {f : X -> Y} (hf : IsLocallyConstant f) {s : 集合 X}
   证明: by
   let U := f ⁻¹' {f y}
   suffices x ∉ Uᶜ from Classical.not_not.1 this
@@ -503,7 +503,7 @@ theorem apply_eq_of_preconnectedSpace
 
 中文:
 定理 apply_eq_of_preconnectedSpace
-  结论: [PreconnectedSpace X] {f : X -> Y} (hf : IsLocallyConstant f)
+  结论: [预连通空间 X] {f : X -> Y} (hf : IsLocallyConstant f)
   证明: hf.apply_eq_of_isPreconnected isPreconnected_univ trivial trivial
 
 Depends on / 依赖: apply_eq_of_isPreconnected, hf.apply_eq_of_isPreconnected, isPreconnected_univ
@@ -522,7 +522,7 @@ theorem eq_const
 
 中文:
 定理 eq_const
-  条件: [PreconnectedSpace X] {f : X -> Y} (hf : IsLocallyConstant f) (x : X)
+  条件: [预连通空间 X] {f : X -> Y} (hf : IsLocallyConstant f) (x : X)
   证明: funext fun y => hf.apply_eq_of_preconnectedSpace y x
 
 Depends on / 依赖: apply_eq_of_preconnectedSpace, hf.apply_eq_of_preconnectedSpace
@@ -543,8 +543,8 @@ theorem exists_eq_const
   · exact ⟨f (Classical.arbitrary X), hf.eq_const _⟩
 
 中文:
-定理 exists_eq_const
-  条件: [PreconnectedSpace X] [Nonempty Y] {f : X -> Y} (hf : IsLocallyConstant f)
+定理 存在_eq_const
+  条件: [预连通空间 X] [非空 Y] {f : X -> Y} (hf : IsLocallyConstant f)
   证明: by
   rcases isEmpty_or_nonempty X with h | h
 · exact ⟨Classical.arbitrary Y, funext h.elim⟩
@@ -569,7 +569,7 @@ theorem iff_is_const
 
 中文:
 定理 iff_is_const
-  条件: [PreconnectedSpace X] {f : X -> Y}
+  条件: [预连通空间 X] {f : X -> Y}
   结论: IsLocallyConstant f ↔ 对任意 x y, f x = f y
   证明: ⟨fun h _ _ => h.apply_eq_of_isPreconnected isPreconnected_univ trivial trivial, of_constant _⟩
 
@@ -592,7 +592,7 @@ theorem range_finite
 
 中文:
 定理 range_finite
-  条件: [CompactSpace X] {f : X -> Y} (hf : IsLocallyConstant f)
+  条件: [紧空间 X] {f : X -> Y} (hf : IsLocallyConstant f)
   证明: by
   let : TopologicalSpace Y := ⊥; have := discreteTopology_bot Y
   exact (isCompact_range hf.continuous).finite_of_discrete
@@ -620,7 +620,7 @@ theorem one
 
 中文:
 定理 one
-  条件: [One Y]
+  条件: [幺 Y]
   结论: IsLocallyConstant (1 : X -> Y)
   证明: IsLocallyConstant.const 1
 
@@ -644,7 +644,7 @@ theorem inv
 
 中文:
 定理 inv
-  条件: [Inv Y] ⦃f
+  条件: [取逆 Y] ⦃f
   结论: X -> Y⦄ (hf : IsLocallyConstant f) : IsLocallyConstant f⁻¹
   证明: hf.comp fun x => x⁻¹
 
@@ -669,7 +669,7 @@ theorem mul
 
 中文:
 定理 mul
-  条件: [Mul Y] ⦃f g
+  条件: [乘法 Y] ⦃f g
   结论: X -> Y⦄ (hf : IsLocallyConstant f) (hg : IsLocallyConstant g) :
   证明: hf.comp₂ hg (· * ·)
 
@@ -693,7 +693,7 @@ theorem div
 
 中文:
 定理 div
-  条件: [Div Y] ⦃f g
+  条件: [除法 Y] ⦃f g
   结论: X -> Y⦄ (hf : IsLocallyConstant f) (hg : IsLocallyConstant g) :
   证明: hf.comp₂ hg (· / ·)
 
@@ -738,7 +738,7 @@ theorem of_constant_on_connected_components
 
 中文:
 定理 of_constant_on_connected_components
-  结论: [LocallyConnectedSpace X] {f : X -> Y}
+  结论: [局部连通空间 X] {f : X -> Y}
   证明: (iff_exists_open _).2 fun x =>
     ⟨connectedComponent x, isOpen_connectedComponent, mem_connectedComponent, h x⟩
 
@@ -761,7 +761,7 @@ theorem of_constant_on_connected_clopens
 
 中文:
 定理 of_constant_on_connected_clopens
-  结论: [LocallyConnectedSpace X] {f : X -> Y}
+  结论: [局部连通空间 X] {f : X -> Y}
   证明: of_constant_on_connected_components fun x =>
     h (connectedComponent x) isConnected_connectedComponent isClopen_connectedComponent x
       mem_connectedComponent
@@ -785,7 +785,7 @@ theorem of_constant_on_preconnected_clopens
 
 中文:
 定理 of_constant_on_preconnected_clopens
-  结论: [LocallyConnectedSpace X] {f : X -> Y}
+  结论: [局部连通空间 X] {f : X -> Y}
   证明: of_constant_on_connected_clopens fun U hU => h U hU.isPreconnected
 
 Depends on / 依赖: hU.isPreconnected, isPreconnected, of_constant_on_connected_clopens
@@ -808,8 +808,8 @@ structure LocallyConstant
     - isLocallyConstant : IsLocallyConstant toFun
 
 中文:
-结构 LocallyConstant
-  参数: (X Y : 类型) [TopologicalSpace X]
+结构 局部常数
+  参数: (X Y : 类型) [拓扑空间 X]
   公理与运算 (2 个):
     - toFun : X -> Y
     - isLocallyConstant : IsLocallyConstant toFun
@@ -831,8 +831,8 @@ instance [Inhabited
   body: ⟨⟨_, IsLocallyConstant.const default⟩⟩
 
 中文:
-实例 [Inhabited
-  签名: Y] : Inhabited (LocallyConstant X Y)
+实例 [可居
+  签名: Y] : 可居 (局部常数 X Y)
   定义体: ⟨⟨_, IsLocallyConstant.const default⟩⟩
 
 Depends on / 依赖: IsLocallyConstant, IsLocallyConstant.const
@@ -851,7 +851,7 @@ instance :
 
 中文:
 实例 :
-  签名: FunLike (LocallyConstant X Y) X Y
+  签名: 函数状 (局部常数 X Y) X Y
   定义体: LocallyConstant.toFun
   coe_injective := by rintro ⟨_, _⟩ ⟨_, _⟩ _; congr
 
@@ -875,7 +875,7 @@ initialize_simps_projections LocallyConstant (toFun -> apply)
 
 中文:
 定义 Simps.apply
-  签名: (f : LocallyConstant X Y)
+  签名: (f : 局部常数 X Y)
   定义体: f
 
 initialize_simps_projections LocallyConstant (toFun -> apply)
@@ -900,7 +900,7 @@ theorem toFun_eq_coe
 
 中文:
 定理 toFun_eq_coe
-  条件: (f : LocallyConstant X Y)
+  条件: (f : 局部常数 X Y)
   结论: f.toFun = f
   证明: rfl
 
@@ -922,7 +922,7 @@ theorem coe_mk
 中文:
 定理 coe_mk
   条件: (f : X -> Y) (h)
-  结论: ⇑(⟨f, h⟩ : LocallyConstant X Y) = f
+  结论: ⇑(⟨f, h⟩ : 局部常数 X Y) = f
   证明: rfl
 -/
 theorem coe_mk (f : X -> Y) (h) : ⇑(⟨f, h⟩ : LocallyConstant X Y) = f :=
@@ -939,7 +939,7 @@ theorem congr_fun
 
 中文:
 定理 congr_fun
-  条件: {f g : LocallyConstant X Y} (h : f = g) (x : X)
+  条件: {f g : 局部常数 X Y} (h : f = g) (x : X)
   结论: f x = g x
   证明: DFunLike.congr_fun h x
 -/
@@ -957,7 +957,7 @@ theorem congr_arg
 
 中文:
 定理 congr_arg
-  条件: (f : LocallyConstant X Y) {x y : X} (h : x = y)
+  条件: (f : 局部常数 X Y) {x y : X} (h : x = y)
   结论: f x = f y
   证明: DFunLike.congr_arg f h
 -/
@@ -977,7 +977,7 @@ theorem coe_injective
 
 中文:
 定理 coe_injective
-  结论: @Function.Injective (LocallyConstant X Y) (X -> Y) (↑)
+  结论: @函数.单射 (局部常数 X Y) (X -> Y) (↑)
   证明: fun _ _ =>
   DFunLike.ext'
 
@@ -1000,7 +1000,7 @@ theorem coe_inj
 
 中文:
 定理 coe_inj
-  条件: {f g : LocallyConstant X Y}
+  条件: {f g : 局部常数 X Y}
   结论: (f : X -> Y) = g ↔ f = g
   证明: coe_injective.eq_iff
 
@@ -1024,7 +1024,7 @@ theorem ext
 中文:
 定理 ext
   条件: ⦃f g
-  结论: LocallyConstant X Y⦄ (h : 对任意 x, f x = g x) : f = g
+  结论: 局部常数 X Y⦄ (h : 对任意 x, f x = g x) : f = g
   证明: DFunLike.ext _ _ h
 
 Depends on / 依赖: DFunLike, DFunLike.ext
@@ -1046,7 +1046,7 @@ theorem continuous
 
 中文:
 定理 continuous
-  结论: Continuous f
+  结论: 连续 f
   证明: f.isLocallyConstant.continuous
 -/
 protected theorem continuous : Continuous f :=
@@ -1078,7 +1078,7 @@ instance :
 
 中文:
 实例 :
-  签名: Coe (LocallyConstant X Y) C(X, Y)
+  签名: Coe (局部常数 X Y) C(X, Y)
   定义体: ⟨toContinuousMap⟩
 
 Depends on / 依赖: toContinuousMap
@@ -1131,7 +1131,7 @@ definition const
 
 中文:
 定义 const
-  签名: (X : 类型) {Y : 类型} [TopologicalSpace X] (y : Y)
+  签名: (X : 类型) {Y : 类型} [拓扑空间 X] (y : Y)
   定义体: ⟨Function.const X y, IsLocallyConstant.const _⟩
 
 @[simp]
@@ -1154,7 +1154,7 @@ theorem coe_const
 中文:
 定理 coe_const
   条件: (y : Y)
-  结论: (const X y : X -> Y) = Function.const X y
+  结论: (const X y : X -> Y) = 函数.const X y
   证明: rfl
 -/
 theorem coe_const (y : Y) : (const X y : X -> Y) = Function.const X y :=
@@ -1201,7 +1201,7 @@ refine IsLocallyConstant.iff_isOpen_fiber.2 Fin.forall_fin_two.2 ⟨?_, ?_⟩
 
 中文:
 定义 ofIsClopen
-  签名: {X : 类型} [TopologicalSpace X] {U : Set X} [对任意 x, Decidable (x in U)]
+  签名: {X : 类型} [拓扑空间 X] {U : 集合 X} [对任意 x, 可判定 (x in U)]
   定义体: if x in U then 0 else 1
   isLocallyConstant := by
 refine IsLocallyConstant.iff_isOpen_fiber.2 Fin.forall_fin_two.2 ⟨?_, ?_⟩
@@ -1244,7 +1244,7 @@ theorem ofIsClopen_fiber_zero
 
 中文:
 定理 ofIsClopen_fiber_zero
-  结论: {X : 类型} [TopologicalSpace X] {U : Set X} [对任意 x, Decidable (x in U)]
+  结论: {X : 类型} [拓扑空间 X] {U : 集合 X} [对任意 x, 可判定 (x in U)]
   证明: by
   ext
   simp only [ofIsClopen, mem_singleton_iff, Fin.one_eq_zero_iff, coe_mk, mem_preimage,
@@ -1276,7 +1276,7 @@ theorem ofIsClopen_fiber_one
 
 中文:
 定理 ofIsClopen_fiber_one
-  结论: {X : 类型} [TopologicalSpace X] {U : Set X} [对任意 x, Decidable (x in U)]
+  结论: {X : 类型} [拓扑空间 X] {U : 集合 X} [对任意 x, 可判定 (x in U)]
   证明: by
   ext
   simp only [ofIsClopen, mem_singleton_iff, coe_mk, Fin.zero_eq_one_iff, mem_preimage,
@@ -1303,7 +1303,7 @@ theorem locallyConstant_eq_of_fiber_zero_eq
 
 中文:
 定理 locallyConstant_eq_of_fiber_zero_eq
-  结论: {X : 类型} [TopologicalSpace X]
+  结论: {X : 类型} [拓扑空间 X]
   证明: by
   simp only [Set.ext_iff, mem_singleton_iff, mem_preimage] at h
   ext1 x
@@ -1328,8 +1328,8 @@ theorem range_finite
 
 中文:
 定理 range_finite
-  条件: [CompactSpace X] (f : LocallyConstant X Y)
-  结论: (Set.range f).Finite
+  条件: [紧空间 X] (f : 局部常数 X Y)
+  结论: (集合.range f).有限
   证明: f.isLocallyConstant.range_finite
 
 Depends on / 依赖: f.isLocallyConstant.range_finite, isLocallyConstant, range_finite
@@ -1347,7 +1347,7 @@ theorem apply_eq_of_isPreconnected
 
 中文:
 定理 apply_eq_of_isPreconnected
-  结论: (f : LocallyConstant X Y) {s : Set X} (hs : IsPreconnected s)
+  结论: (f : 局部常数 X Y) {s : 集合 X} (hs : 是预连通 s)
   证明: f.isLocallyConstant.apply_eq_of_isPreconnected hs hx hy
 
 Depends on / 依赖: apply_eq_of_isPreconnected, f.isLocallyConstant.apply_eq_of_isPreconnected, isLocallyConstant
@@ -1366,7 +1366,7 @@ theorem apply_eq_of_preconnectedSpace
 
 中文:
 定理 apply_eq_of_preconnectedSpace
-  条件: [PreconnectedSpace X] (f : LocallyConstant X Y) (x y : X)
+  条件: [预连通空间 X] (f : 局部常数 X Y) (x y : X)
   证明: f.isLocallyConstant.apply_eq_of_isPreconnected isPreconnected_univ trivial trivial
 
 Depends on / 依赖: apply_eq_of_isPreconnected, f.isLocallyConstant.apply_eq_of_isPreconnected, isLocallyConstant, isPreconnected_univ
@@ -1386,7 +1386,7 @@ theorem eq_const
 
 中文:
 定理 eq_const
-  条件: [PreconnectedSpace X] (f : LocallyConstant X Y) (x : X)
+  条件: [预连通空间 X] (f : 局部常数 X Y) (x : X)
   结论: f = const X (f x)
   证明: ext fun _ => apply_eq_of_preconnectedSpace f _ _
 
@@ -1407,8 +1407,8 @@ theorem exists_eq_const
   · exact ⟨Classical.arbitrary Y, ext fun x => (hX ⟨x⟩).elim⟩
 
 中文:
-定理 exists_eq_const
-  条件: [PreconnectedSpace X] [Nonempty Y] (f : LocallyConstant X Y)
+定理 存在_eq_const
+  条件: [预连通空间 X] [非空 Y] (f : 局部常数 X Y)
   证明: by
   rcases Classical.em (Nonempty X) with (⟨⟨x⟩⟩ | hX)
   · exact ⟨f x, f.eq_const x⟩
@@ -1434,7 +1434,7 @@ definition map
 
 中文:
 定义 map
-  签名: (f : Y -> Z) (g : LocallyConstant X Y)
+  签名: (f : Y -> Z) (g : 局部常数 X Y)
   定义体: ⟨f ∘ g, g.isLocallyConstant.comp f⟩
 
 @[simp]
@@ -1458,7 +1458,7 @@ theorem map_apply
 
 中文:
 定理 map_apply
-  条件: (f : Y -> Z) (g : LocallyConstant X Y)
+  条件: (f : Y -> Z) (g : 局部常数 X Y)
   结论: ⇑(map f g) = f ∘ g
   证明: rfl
 
@@ -1514,7 +1514,7 @@ definition flip
 
 中文:
 定义 flip
-  签名: {X α β : 类型} [TopologicalSpace X] (f : LocallyConstant X (α -> β)) (a : α)
+  签名: {X α β : 类型} [拓扑空间 X] (f : 局部常数 X (α -> β)) (a : α)
   定义体: f.map fun f => f a
 
 Depends on / 依赖: f.map
@@ -1540,7 +1540,7 @@ definition unflip
 
 中文:
 定义 unflip
-  签名: {X α β : 类型} [Finite α] [TopologicalSpace X] (f : α -> LocallyConstant X β)
+  签名: {X α β : 类型} [有限 α] [拓扑空间 X] (f : α -> 局部常数 X β)
   定义体: f a x
   isLocallyConstant := IsLocallyConstant.iff_isOpen_fiber.2 fun g => by
     have : (fun (x : X) (a : α) => f a x) ⁻¹' {g} = ⋂ a : α, f a ⁻¹' {g a} := by
@@ -1572,7 +1572,7 @@ theorem unflip_flip
 
 中文:
 定理 unflip_flip
-  结论: {X α β : 类型} [Finite α] [TopologicalSpace X]
+  结论: {X α β : 类型} [有限 α] [拓扑空间 X]
   证明: rfl
 
 @[simp]
@@ -1591,7 +1591,7 @@ theorem flip_unflip
 
 中文:
 定理 flip_unflip
-  结论: {X α β : 类型} [Finite α] [TopologicalSpace X]
+  结论: {X α β : 类型} [有限 α] [拓扑空间 X]
   证明: rfl
 -/
 theorem flip_unflip {X α β : Type*} [Finite α] [TopologicalSpace X]
@@ -1613,7 +1613,7 @@ definition comap
 
 中文:
 定义 comap
-  签名: (f : C(X, Y)) (g : LocallyConstant Y Z)
+  签名: (f : C(X, Y)) (g : 局部常数 Y Z)
   定义体: ⟨g ∘ f, g.isLocallyConstant.comp_continuous f.continuous⟩
 
 @[simp]
@@ -1634,7 +1634,7 @@ theorem coe_comap
 
 中文:
 定理 coe_comap
-  条件: (f : C(X, Y)) (g : LocallyConstant Y Z)
+  条件: (f : C(X, Y)) (g : 局部常数 Y Z)
   证明: rfl
 -/
 theorem coe_comap (f : C(X, Y)) (g : LocallyConstant Y Z) :
@@ -1652,7 +1652,7 @@ theorem coe_comap_apply
 
 中文:
 定理 coe_comap_apply
-  条件: (f : C(X, Y)) (g : LocallyConstant Y Z) (x : X)
+  条件: (f : C(X, Y)) (g : 局部常数 Y Z) (x : X)
   证明: rfl
 
 @[simp]
@@ -1671,7 +1671,7 @@ theorem comap_id
 
 中文:
 定理 comap_id
-  结论: comap (@ContinuousMap.id X _) = @id (LocallyConstant X Z)
+  结论: comap (@连续映射.id X _) = @id (局部常数 X Z)
   证明: rfl
 -/
 theorem comap_id : comap (@ContinuousMap.id X _) = @id (LocallyConstant X Z) := rfl
@@ -1686,7 +1686,7 @@ theorem comap_comp
 
 中文:
 定理 comap_comp
-  条件: {W : 类型} [TopologicalSpace W] (f : C(W, X)) (g : C(X, Y))
+  条件: {W : 类型} [拓扑空间 W] (f : C(W, X)) (g : C(X, Y))
   证明: rfl
 
 Depends on / 依赖: g.comp
@@ -1704,7 +1704,7 @@ theorem comap_comap
 
 中文:
 定理 comap_comap
-  结论: {W : 类型} [TopologicalSpace W] (f : C(W, X)) (g : C(X, Y))
+  结论: {W : 类型} [拓扑空间 W] (f : C(W, X)) (g : C(X, Y))
   证明: rfl
 -/
 theorem comap_comap {W : Type*} [TopologicalSpace W] (f : C(W, X)) (g : C(X, Y))
@@ -1743,7 +1743,7 @@ lemma comap_injective
 
 中文:
 引理 comap_injective
-  条件: (f : C(X, Y)) (hfs : f.1.Surjective)
+  条件: (f : C(X, Y)) (hfs : f.1.满射)
   证明: by
   intro a b h
   ext y
@@ -1776,7 +1776,7 @@ definition desc
 
 中文:
 定义 desc
-  签名: {X α β : 类型} [TopologicalSpace X] {g : α -> β} (f : X -> α) (h : LocallyConstant X β)
+  签名: {X α β : 类型} [拓扑空间 X] {g : α -> β} (f : X -> α) (h : 局部常数 X β)
   定义体: f
   isLocallyConstant := IsLocallyConstant.desc _ g (cond.symm ▸ h.isLocallyConstant) inj
 
@@ -1798,7 +1798,7 @@ theorem coe_desc
 
 中文:
 定理 coe_desc
-  结论: {X α β : 类型} [TopologicalSpace X] (f : X -> α) (g : α -> β)
+  结论: {X α β : 类型} [拓扑空间 X] (f : X -> α) (g : α -> β)
   证明: rfl
 -/
 theorem coe_desc {X α β : Type*} [TopologicalSpace X] (f : X -> α) (g : α -> β)
@@ -1941,7 +1941,7 @@ definition congrLeft
 
 中文:
 定义 congrLeft
-  签名: [TopologicalSpace Y] (e : X ≃ₜ Y)
+  签名: [拓扑空间 Y] (e : X ≃ₜ Y)
   定义体: comap e.symm
   invFun := comap e
   left_inv := by
@@ -2007,7 +2007,7 @@ definition equivClopens
 
 中文:
 定义 equivClopens
-  签名: [对任意 (s : Set X) x, Decidable (x in s)]
+  签名: [对任意 (s : 集合 X) x, 可判定 (x in s)]
   定义体: ⟨f ⁻¹' {0}, f.2.isClopen_fiber _⟩
   invFun s := ofIsClopen s.2
   left_inv _ := locallyConstant_eq_of_fiber_zero_eq _ _ (by simp)
@@ -2042,7 +2042,7 @@ definition piecewise
 
 中文:
 定义 piecewise
-  签名: {C₁ C₂ : Set X} (h₁ : IsClosed C₁) (h₂ : IsClosed C₂) (h : C₁ union C₂ = Set.univ)
+  签名: {C₁ C₂ : 集合 X} (h₁ : 是闭集 C₁) (h₂ : 是闭集 C₂) (h : C₁ union C₂ = 集合.univ)
   定义体: if hi : i in C₁ then f ⟨i, hi⟩ else g ⟨i, (Set.compl_subset_iff_union.mpr h) hi⟩
   isLocallyConstant := by
     let dZ : TopologicalSpace Z := ⊥
@@ -2092,7 +2092,7 @@ lemma piecewise_apply_left
 
 中文:
 引理 piecewise_apply_left
-  结论: {C₁ C₂ : Set X} (h₁ : IsClosed C₁) (h₂ : IsClosed C₂)
+  结论: {C₁ C₂ : 集合 X} (h₁ : 是闭集 C₁) (h₂ : 是闭集 C₂)
   证明: by
   simp only [piecewise,
     coe_mk]
@@ -2127,7 +2127,7 @@ lemma piecewise_apply_right
 
 中文:
 引理 piecewise_apply_right
-  结论: {C₁ C₂ : Set X} (h₁ : IsClosed C₁) (h₂ : IsClosed C₂)
+  结论: {C₁ C₂ : 集合 X} (h₁ : 是闭集 C₁) (h₂ : 是闭集 C₂)
   证明: by
   simp only [piecewise,
     coe_mk]
@@ -2161,7 +2161,7 @@ definition piecewise'
 
 中文:
 定义 piecewise'
-  签名: {C₀ C₁ C₂ : Set X} (h₀ : C₀ subseteq C₁ union C₂) (h₁ : IsClosed C₁)
+  签名: {C₀ C₁ C₂ : 集合 X} (h₀ : C₀ subseteq C₁ union C₂) (h₁ : 是闭集 C₁)
   定义体: letI : forall j : C₀, Decidable (j in Subtype.val ⁻¹' C₁) := fun j => decidable_of_iff (↑j in C₁) Iff.rfl
   piecewise (h₁.preimage continuous_subtype_val) (h₂.preimage continuous_subtype_val)
     (by simpa [eq_univ_iff_forall] using! h₀)
@@ -2199,7 +2199,7 @@ lemma piecewise'_apply_left
 
 中文:
 引理 piecewise'_apply_left
-  结论: {C₀ C₁ C₂ : Set X} (h₀ : C₀ subseteq C₁ union C₂) (h₁ : IsClosed C₁)
+  结论: {C₀ C₁ C₂ : 集合 X} (h₀ : C₀ subseteq C₁ union C₂) (h₁ : 是闭集 C₁)
   证明: by
   let : forall j : C₀, Decidable (j in Subtype.val ⁻¹' C₁) := fun j => decidable_of_iff (↑j in C₁) Iff.rfl
   rw [piecewise']; rw [piecewise_apply_left (f := (f₁.comap
@@ -2236,7 +2236,7 @@ lemma piecewise'_apply_right
 
 中文:
 引理 piecewise'_apply_right
-  结论: {C₀ C₁ C₂ : Set X} (h₀ : C₀ subseteq C₁ union C₂) (h₁ : IsClosed C₁)
+  结论: {C₀ C₁ C₂ : 集合 X} (h₀ : C₀ subseteq C₁ union C₂) (h₁ : 是闭集 C₁)
   证明: by
   let : forall j : C₀, Decidable (j in Subtype.val ⁻¹' C₁) := fun j => decidable_of_iff (↑j in C₁) Iff.rfl
   rw [piecewise']; rw [piecewise_apply_right (f := (f₁.comap

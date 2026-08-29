@@ -40,7 +40,7 @@ instance instPow
 
 中文:
 实例 instPow
-  签名: : Pow Ordinal Ordinal
+  签名: : 幂 序数 序数
   定义体: ⟨fun a b => if a = 0 then 1 - b else
     limitRecOn b 1 (fun _ x => x * a) fun o _ f => ⨆ x : Iio o, f x.1 x.2⟩
 
@@ -61,7 +61,7 @@ theorem opow_of_ne_zero
 
 中文:
 定理 opow_of_ne_zero
-  条件: {a b : Ordinal} (h : a != 0)
+  条件: {a b : 序数} (h : a != 0)
   结论: a ^ b =
   证明: if_neg h
 -/
@@ -80,7 +80,7 @@ theorem zero_opow'
 
 中文:
 定理 zero_opow'
-  条件: (a : Ordinal)
+  条件: (a : 序数)
   结论: 0 ^ a = 1 - a
   证明: if_pos rfl
 
@@ -104,8 +104,8 @@ theorem zero_opow_le
 
 中文:
 定理 zero_opow_le
-  条件: (a : Ordinal)
-  结论: (0 : Ordinal) ^ a <= 1
+  条件: (a : 序数)
+  结论: (0 : 序数) ^ a <= 1
   证明: by
   rw [zero_opow']
   exact sub_le_self 1 a
@@ -133,8 +133,8 @@ theorem zero_opow
 
 中文:
 定理 zero_opow
-  条件: {a : Ordinal} (a0 : a != 0)
-  结论: (0 : Ordinal) ^ a = 0
+  条件: {a : 序数} (a0 : a != 0)
+  结论: (0 : 序数) ^ a = 0
   证明: by
   rwa [zero_opow', Ordinal.sub_eq_zero_iff_le, one_le_iff_ne_zero]
 
@@ -162,8 +162,8 @@ theorem opow_zero
 
 中文:
 定理 opow_zero
-  条件: (a : Ordinal)
-  结论: a ^ (0 : Ordinal) = 1
+  条件: (a : 序数)
+  结论: a ^ (0 : 序数) = 1
   证明: by
   obtain rfl | h := eq_or_ne a 0
   · rw [zero_opow', Ordinal.sub_zero]
@@ -194,7 +194,7 @@ theorem opow_add_one
 
 中文:
 定理 opow_add_one
-  条件: (a b : Ordinal)
+  条件: (a b : 序数)
   结论: a ^ (b + 1) = a ^ b * a
   证明: by
   obtain rfl | h := eq_or_ne a 0
@@ -222,7 +222,7 @@ theorem opow_succ
 
 中文:
 定理 opow_succ
-  条件: (a b : Ordinal)
+  条件: (a b : 序数)
   结论: a ^ succ b = a ^ b * a
   证明: opow_add_one a b
 
@@ -242,7 +242,7 @@ theorem opow_limit
 
 中文:
 定理 opow_limit
-  条件: {a b : Ordinal} (ha : a != 0) (hb : IsSuccLimit b)
+  条件: {a b : 序数} (ha : a != 0) (hb : 是SuccLimit b)
   证明: by
   simp_rw [opow_of_ne_zero ha, limitRecOn_limit _ _ _ _ hb]
 
@@ -264,7 +264,7 @@ theorem opow_le_of_isSuccLimit
 
 中文:
 定理 opow_le_of_isSuccLimit
-  条件: {a b c : Ordinal} (a0 : a != 0) (h : IsSuccLimit b)
+  条件: {a b c : 序数} (a0 : a != 0) (h : 是SuccLimit b)
   证明: by
   rw [opow_limit a0 h]; rw [Ordinal.iSup_le_iff]; rw [Subtype.forall]
   rfl
@@ -289,7 +289,7 @@ theorem lt_opow_of_isSuccLimit
 
 中文:
 定理 lt_opow_of_isSuccLimit
-  条件: {a b c : Ordinal} (b0 : b != 0) (h : IsSuccLimit c)
+  条件: {a b c : 序数} (b0 : b != 0) (h : 是SuccLimit c)
   证明: by
   simpa using (opow_le_of_isSuccLimit b0 h).not
 
@@ -316,8 +316,8 @@ theorem opow_one
 
 中文:
 定理 opow_one
-  条件: (a : Ordinal)
-  结论: a ^ (1 : Ordinal) = a
+  条件: (a : 序数)
+  结论: a ^ (1 : 序数) = a
   证明: by
   simpa using opow_add_one a 0
 
@@ -347,8 +347,8 @@ theorem one_opow
 
 中文:
 定理 one_opow
-  条件: (a : Ordinal)
-  结论: (1 : Ordinal) ^ a = 1
+  条件: (a : 序数)
+  结论: (1 : 序数) ^ a = 1
   证明: by
   induction a using limitRecOn with
   | zero => simp
@@ -385,7 +385,7 @@ theorem opow_pos
 
 中文:
 定理 opow_pos
-  条件: {a : Ordinal} (b : Ordinal) (a0 : 0 < a)
+  条件: {a : 序数} (b : 序数) (a0 : 0 < a)
   结论: 0 < a ^ b
   证明: by
   have h0 : 0 < a ^ (0 : Ordinal) := by simp
@@ -416,7 +416,7 @@ theorem opow_ne_zero
 
 中文:
 定理 opow_ne_zero
-  条件: {a : Ordinal} (b : Ordinal) (a0 : a != 0)
+  条件: {a : 序数} (b : 序数) (a0 : a != 0)
   结论: a ^ b != 0
   证明: pos_iff_ne_zero.1 opow_pos b pos_iff_ne_zero.2 a0
 
@@ -442,7 +442,7 @@ theorem opow_eq_zero
 
 中文:
 定理 opow_eq_zero
-  条件: {a b : Ordinal}
+  条件: {a b : 序数}
   结论: a ^ b = 0 ↔ a = 0 ∧ b != 0
   证明: by
   by_cases a = 0 <;> by_cases b = 0 <;> simp_all [opow_ne_zero]
@@ -469,8 +469,8 @@ theorem opow_natCast
 
 中文:
 定理 opow_natCast
-  条件: (a : Ordinal) (n : 自然数)
-  结论: a ^ (n : Ordinal) = a ^ n
+  条件: (a : 序数) (n : 自然数)
+  结论: a ^ (n : 序数) = a ^ n
   证明: by
   induction n with
   | zero => rw [Nat.cast_zero, opow_zero, pow_zero]
@@ -500,8 +500,8 @@ theorem isNormal_opow
 
 中文:
 定理 isNormal_opow
-  条件: {a : Ordinal} (h : 1 < a)
-  结论: IsNormal (a ^ · : Ordinal -> Ordinal)
+  条件: {a : 序数} (h : 1 < a)
+  结论: 是正规 (a ^ · : 序数 -> 序数)
   证明: by
   have ha : 0 < a := zero_lt_one.trans h
   refine IsNormal.of_succ_lt ?_ fun hl => ?_
@@ -532,7 +532,7 @@ theorem opow_lt_opow_iff_right
 
 中文:
 定理 opow_lt_opow_iff_right
-  条件: {a b c : Ordinal} (a1 : 1 < a)
+  条件: {a b c : 序数} (a1 : 1 < a)
   结论: a ^ b < a ^ c ↔ b < c
   证明: (isNormal_opow a1).strictMono.lt_iff_lt
 
@@ -557,7 +557,7 @@ theorem opow_le_opow_iff_right
 
 中文:
 定理 opow_le_opow_iff_right
-  条件: {a b c : Ordinal} (a1 : 1 < a)
+  条件: {a b c : 序数} (a1 : 1 < a)
   结论: a ^ b <= a ^ c ↔ b <= c
   证明: (isNormal_opow a1).strictMono.le_iff_le
 
@@ -582,7 +582,7 @@ theorem opow_right_inj
 
 中文:
 定理 opow_right_inj
-  条件: {a b c : Ordinal} (a1 : 1 < a)
+  条件: {a b c : 序数} (a1 : 1 < a)
   结论: a ^ b = a ^ c ↔ b = c
   证明: (isNormal_opow a1).strictMono.injective.eq_iff
 
@@ -615,7 +615,7 @@ theorem one_lt_opow
 
 中文:
 定理 one_lt_opow
-  条件: {a b : Ordinal}
+  条件: {a b : 序数}
   结论: 1 < a ^ b ↔ 1 < a ∧ b != 0
   证明: by
   refine ⟨?_, fun ⟨ha, hb⟩ => ?_⟩
@@ -655,7 +655,7 @@ theorem one_lt_pow
 
 中文:
 定理 one_lt_pow
-  条件: {a : Ordinal} {n : 自然数}
+  条件: {a : 序数} {n : 自然数}
   结论: 1 < a ^ n ↔ 1 < a ∧ n != 0
   证明: mod_cast one_lt_opow (b := n)
 
@@ -685,7 +685,7 @@ theorem opow_eq_one_iff
 
 中文:
 定理 opow_eq_one_iff
-  条件: {a b : Ordinal}
+  条件: {a b : 序数}
   结论: a ^ b = 1 ↔ a = 1 ∨ b = 0
   证明: by
   refine ⟨fun h => ?_, by simp +contextual [or_imp]⟩
@@ -717,7 +717,7 @@ theorem pow_eq_one_iff
 
 中文:
 定理 pow_eq_one_iff
-  条件: {a : Ordinal} {n : 自然数}
+  条件: {a : 序数} {n : 自然数}
   结论: a ^ n = 1 ↔ a = 1 ∨ n = 0
   证明: mod_cast opow_eq_one_iff (b := n)
 
@@ -737,8 +737,8 @@ theorem isSuccLimit_opow
 
 中文:
 定理 isSuccLimit_opow
-  条件: {a b : Ordinal} (a1 : 1 < a)
-  结论: IsSuccLimit b -> IsSuccLimit (a ^ b)
+  条件: {a b : 序数} (a1 : 1 < a)
+  结论: 是SuccLimit b -> 是SuccLimit (a ^ b)
   证明: (isNormal_opow a1).map_isSuccLimit
 
 Depends on / 依赖: isNormal_opow, map_isSuccLimit
@@ -761,7 +761,7 @@ theorem isSuccLimit_opow_left
 
 中文:
 定理 isSuccLimit_opow_left
-  条件: {a b : Ordinal} (l : IsSuccLimit a) (hb : b != 0)
+  条件: {a b : 序数} (l : 是SuccLimit a) (hb : b != 0)
   证明: by
   rcases zero_or_succ_or_isSuccLimit b with (e | ⟨b, rfl⟩ | l')
   · exact absurd e hb
@@ -795,7 +795,7 @@ theorem opow_le_opow_right
 
 中文:
 定理 opow_le_opow_right
-  条件: {a b c : Ordinal} (h₁ : 0 < a) (h₂ : b <= c)
+  条件: {a b c : 序数} (h₁ : 0 < a) (h₂ : b <= c)
   结论: a ^ b <= a ^ c
   证明: by
   rcases (one_le_iff_pos.2 h₁).eq_or_lt' with h₁ | h₁
@@ -831,7 +831,7 @@ theorem opow_le_opow_left
 
 中文:
 定理 opow_le_opow_left
-  条件: {a b : Ordinal} (c : Ordinal) (ab : a <= b)
+  条件: {a b : 序数} (c : 序数) (ab : a <= b)
   结论: a ^ c <= b ^ c
   证明: by
   by_cases ha : a = 0
@@ -867,7 +867,7 @@ theorem opow_le_opow
 
 中文:
 定理 opow_le_opow
-  条件: {a b c d : Ordinal} (hac : a <= c) (hbd : b <= d) (hc : 0 < c)
+  条件: {a b c d : 序数} (hac : a <= c) (hbd : b <= d) (hc : 0 < c)
   结论: a ^ b <= c ^ d
   证明: (opow_le_opow_left b hac).trans (opow_le_opow_right hc hbd)
 
@@ -895,7 +895,7 @@ theorem left_le_opow
 
 中文:
 定理 left_le_opow
-  条件: (a : Ordinal) {b : Ordinal} (b1 : 0 < b)
+  条件: (a : 序数) {b : 序数} (b1 : 0 < b)
   结论: a <= a ^ b
   证明: by
   nth_rw 1 [← opow_one a]
@@ -932,7 +932,7 @@ theorem left_lt_opow
 
 中文:
 定理 left_lt_opow
-  条件: {a b : Ordinal} (ha : 1 < a) (hb : 1 < b)
+  条件: {a b : 序数} (ha : 1 < a) (hb : 1 < b)
   结论: a < a ^ b
   证明: by
   conv_lhs => rw [← opow_one a]
@@ -955,7 +955,7 @@ theorem right_le_opow
 
 中文:
 定理 right_le_opow
-  条件: {a : Ordinal} (b : Ordinal) (a1 : 1 < a)
+  条件: {a : 序数} (b : 序数) (a1 : 1 < a)
   结论: b <= a ^ b
   证明: (isNormal_opow a1).strictMono.le_apply
 
@@ -977,7 +977,7 @@ theorem opow_lt_opow_left_of_succ
 
 中文:
 定理 opow_lt_opow_left_of_succ
-  条件: {a b c : Ordinal} (ab : a < b)
+  条件: {a b c : 序数} (ab : a < b)
   结论: a ^ succ c < b ^ succ c
   证明: by
   rw [opow_succ]; rw [opow_succ]
@@ -1006,7 +1006,7 @@ theorem opow_add
 
 中文:
 定理 opow_add
-  条件: (a b c : Ordinal)
+  条件: (a b c : 序数)
   结论: a ^ (b + c) = a ^ b * a ^ c
   证明: by
   obtain rfl | ha := eq_zero_or_pos a
@@ -1046,7 +1046,7 @@ theorem opow_one_add
 
 中文:
 定理 opow_one_add
-  条件: (a b : Ordinal)
+  条件: (a b : 序数)
   结论: a ^ (1 + b) = a * a ^ b
   证明: by rw [opow_add, opow_one]
 
@@ -1065,7 +1065,7 @@ theorem opow_dvd_opow
 
 中文:
 定理 opow_dvd_opow
-  条件: (a : Ordinal) {b c : Ordinal} (h : b <= c)
+  条件: (a : 序数) {b c : 序数} (h : b <= c)
   结论: a ^ b ∣ a ^ c
   证明: ⟨a ^ (c - b), by rw [← opow_add, Ordinal.add_sub_cancel_of_le h]⟩
 
@@ -1089,7 +1089,7 @@ not_le_of_gt ((opow_lt_opow_iff_right a1).2 hn)
 
 中文:
 定理 opow_dvd_opow_iff
-  条件: {a b c : Ordinal} (a1 : 1 < a)
+  条件: {a b c : 序数} (a1 : 1 < a)
   结论: a ^ b ∣ a ^ c ↔ b <= c
   证明: ⟨fun h =>
     le_of_not_gt fun hn =>
@@ -1125,7 +1125,7 @@ theorem opow_mul
 
 中文:
 定理 opow_mul
-  条件: (a b c : Ordinal)
+  条件: (a b c : 序数)
   结论: a ^ (b * c) = (a ^ b) ^ c
   证明: by
   obtain rfl | hb := eq_zero_or_pos b; · simp
@@ -1164,7 +1164,7 @@ theorem opow_mul_add_pos
 
 中文:
 定理 opow_mul_add_pos
-  条件: {b v : Ordinal} (hb : b != 0) (u : Ordinal) (hv : v != 0) (w : Ordinal)
+  条件: {b v : 序数} (hb : b != 0) (u : 序数) (hv : v != 0) (w : 序数)
   证明: (opow_pos u <| pos_iff_ne_zero.2 hb).trans_le
     (le_mul_left _ <| pos_iff_ne_zero.2 hv).trans le_self_add
 
@@ -1188,7 +1188,7 @@ theorem opow_mul_add_lt_opow_mul
 
 中文:
 定理 opow_mul_add_lt_opow_mul
-  条件: {b u w x : Ordinal} {v : Ordinal} (hw : w < b ^ u) (hv : v < x)
+  条件: {b u w x : 序数} {v : 序数} (hw : w < b ^ u) (hv : v < x)
   证明: by
   apply lt_of_lt_of_le (b := b ^ u * (v + 1))
   · rwa [mul_add_one, add_lt_add_iff_left]
@@ -1215,7 +1215,7 @@ theorem opow_mul_add_lt_opow
 
 中文:
 定理 opow_mul_add_lt_opow
-  条件: {b u v w x : Ordinal} (hv : v < b) (hw : w < b ^ u) (hu : u < x)
+  条件: {b u v w x : 序数} (hv : v < b) (hw : w < b ^ u) (hu : u < x)
   证明: by
   apply (opow_mul_add_lt_opow_mul hw hv).trans_le
   rw [← opow_succ]
@@ -1241,7 +1241,7 @@ theorem opow_mul_lt_opow
 
 中文:
 定理 opow_mul_lt_opow
-  条件: {b u v x : Ordinal} (hv : v < b) (hu : u < x)
+  条件: {b u v x : 序数} (hv : v < b) (hu : u < x)
   结论: b ^ u * v < b ^ x
   证明: by
   simpa using opow_mul_add_lt_opow hv (opow_pos _ hv.pos) hu
@@ -1270,7 +1270,7 @@ definition log
 
 中文:
 定义 log
-  签名: (b x : Ordinal)
+  签名: (b x : 序数)
   定义体: sSup ((b ^ ·) ⁻¹' Iic x)
 
 @[simp]
@@ -1297,7 +1297,7 @@ theorem log_of_left_le_one
 
 中文:
 定理 log_of_left_le_one
-  条件: {b : Ordinal} (h : b <= 1) (x : Ordinal)
+  条件: {b : 序数} (h : b <= 1) (x : 序数)
   结论: log b x = 0
   证明: by
   obtain rfl | rfl := le_one_iff.1 h
@@ -1330,7 +1330,7 @@ theorem log_zero_left
 
 中文:
 定理 log_zero_left
-  条件: (x : Ordinal)
+  条件: (x : 序数)
   结论: log 0 x = 0
   证明: by simp
 -/
@@ -1348,7 +1348,7 @@ theorem log_one_left
 
 中文:
 定理 log_one_left
-  条件: (x : Ordinal)
+  条件: (x : 序数)
   结论: log 1 x = 0
   证明: by simp
 
@@ -1373,7 +1373,7 @@ theorem log_zero_right
 
 中文:
 定理 log_zero_right
-  条件: (b : Ordinal)
+  条件: (b : 序数)
   结论: log b 0 = 0
   证明: by
   obtain rfl | hb := eq_or_ne b 0
@@ -1401,7 +1401,7 @@ theorem opow_le_iff_le_log
 
 中文:
 定理 opow_le_iff_le_log
-  条件: {b x c : Ordinal} (hb : 1 < b) (hx : x != 0)
+  条件: {b x c : 序数} (hb : 1 < b) (hx : x != 0)
   证明: (isNormal_opow hb).le_iff_le_sSup' ⟨0, by simpa [one_le_iff_ne_zero]⟩
 
 Depends on / 依赖: isNormal_opow, le_iff_le_sSup, one_le_iff_ne_zero
@@ -1423,7 +1423,7 @@ theorem opow_le_iff_le_log'
 
 中文:
 定理 opow_le_iff_le_log'
-  条件: {b x c : Ordinal} (hb : 1 < b) (hc : c != 0)
+  条件: {b x c : 序数} (hb : 1 < b) (hc : c != 0)
   证明: by
   obtain rfl | hx := eq_or_ne x 0
   · simpa [hc] using hb.ne_bot
@@ -1452,7 +1452,7 @@ theorem le_log_of_opow_le
 
 中文:
 定理 le_log_of_opow_le
-  条件: {b x c : Ordinal} (hb : 1 < b) (h : b ^ c <= x)
+  条件: {b x c : 序数} (hb : 1 < b) (h : b ^ c <= x)
   结论: c <= log b x
   证明: by
   obtain rfl | hx := eq_or_ne x 0
@@ -1483,7 +1483,7 @@ theorem opow_le_of_le_log
 
 中文:
 定理 opow_le_of_le_log
-  条件: {b x c : Ordinal} (hc : c != 0) (h : c <= log b x)
+  条件: {b x c : 序数} (hc : c != 0) (h : c <= log b x)
   结论: b ^ c <= x
   证明: by
   obtain hb | hb := le_or_gt b 1
@@ -1510,7 +1510,7 @@ theorem lt_opow_iff_log_lt
 
 中文:
 定理 lt_opow_iff_log_lt
-  条件: {b x c : Ordinal} (hb : 1 < b) (hx : x != 0)
+  条件: {b x c : 序数} (hb : 1 < b) (hx : x != 0)
   结论: x < b ^ c ↔ log b x < c
   证明: lt_iff_lt_of_le_iff_le (opow_le_iff_le_log hb hx)
 
@@ -1530,7 +1530,7 @@ theorem lt_opow_iff_log_lt'
 
 中文:
 定理 lt_opow_iff_log_lt'
-  条件: {b x c : Ordinal} (hb : 1 < b) (hc : c != 0)
+  条件: {b x c : 序数} (hb : 1 < b) (hc : c != 0)
   结论: x < b ^ c ↔ log b x < c
   证明: lt_iff_lt_of_le_iff_le (opow_le_iff_le_log' hb hc)
 
@@ -1550,7 +1550,7 @@ theorem lt_opow_of_log_lt
 
 中文:
 定理 lt_opow_of_log_lt
-  条件: {b x c : Ordinal} (hb : 1 < b)
+  条件: {b x c : 序数} (hb : 1 < b)
   结论: log b x < c -> x < b ^ c
   证明: lt_imp_lt_of_le_imp_le le_log_of_opow_le hb
 
@@ -1570,7 +1570,7 @@ theorem lt_log_of_lt_opow
 
 中文:
 定理 lt_log_of_lt_opow
-  条件: {b x c : Ordinal} (hc : c != 0)
+  条件: {b x c : 序数} (hc : c != 0)
   结论: x < b ^ c -> log b x < c
   证明: lt_imp_lt_of_le_imp_le opow_le_of_le_log hc
 
@@ -1592,7 +1592,7 @@ theorem lt_opow_succ_log_self
 
 中文:
 定理 lt_opow_succ_log_self
-  条件: {b : Ordinal} (hb : 1 < b) (x : Ordinal)
+  条件: {b : 序数} (hb : 1 < b) (x : 序数)
   证明: by
   obtain rfl | hx := eq_or_ne x 0
   · simpa using hb.pos
@@ -1621,7 +1621,7 @@ theorem opow_log_le_self
 
 中文:
 定理 opow_log_le_self
-  条件: (b : Ordinal) {x : Ordinal} (hx : x != 0)
+  条件: (b : 序数) {x : 序数} (hx : x != 0)
   结论: b ^ log b x <= x
   证明: by
   obtain hb | hb := le_or_gt b 1
@@ -1649,7 +1649,7 @@ theorem log_pos
 
 中文:
 定理 log_pos
-  条件: {b o : Ordinal} (hb : 1 < b) (ho : o != 0) (hbo : b <= o)
+  条件: {b o : 序数} (hb : 1 < b) (ho : o != 0) (hbo : b <= o)
   结论: 0 < log b o
   证明: by
   rwa [← add_one_le_iff, zero_add, ← opow_le_iff_le_log hb ho, opow_one]
@@ -1679,7 +1679,7 @@ theorem log_eq_zero
 
 中文:
 定理 log_eq_zero
-  条件: {b o : Ordinal} (hbo : o < b)
+  条件: {b o : 序数} (hbo : o < b)
   结论: log b o = 0
   证明: by
   rcases eq_or_ne o 0 with (rfl | ho)
@@ -1721,7 +1721,7 @@ theorem log_mono_right
 
 中文:
 定理 log_mono_right
-  条件: (b : Ordinal) {x y : Ordinal} (xy : x <= y)
+  条件: (b : 序数) {x y : 序数} (xy : x <= y)
   结论: log b x <= log b y
   证明: by
   obtain rfl | hx := eq_or_ne x 0
@@ -1759,7 +1759,7 @@ theorem log_le_self
 
 中文:
 定理 log_le_self
-  条件: (b x : Ordinal)
+  条件: (b x : 序数)
   结论: log b x <= x
   证明: by
   obtain rfl | hx := eq_or_ne x 0
@@ -1794,7 +1794,7 @@ theorem log_one_right
 
 中文:
 定理 log_one_right
-  条件: (b : Ordinal)
+  条件: (b : 序数)
   结论: log b 1 = 0
   证明: by
   obtain hb | hb := lt_or_ge 1 b
@@ -1822,7 +1822,7 @@ theorem mod_opow_log_lt_self
 
 中文:
 定理 mod_opow_log_lt_self
-  条件: (b : Ordinal) {o : Ordinal} (ho : o != 0)
+  条件: (b : 序数) {o : 序数} (ho : o != 0)
   结论: o % (b ^ log b o) < o
   证明: by
   rcases eq_or_ne b 0 with (rfl | hb)
@@ -1851,7 +1851,7 @@ theorem log_mod_opow_log_lt_log_self
 
 中文:
 定理 log_mod_opow_log_lt_log_self
-  条件: {b o : Ordinal} (hb : 1 < b) (hbo : b <= o)
+  条件: {b o : 序数} (hb : 1 < b) (hbo : b <= o)
   证明: by
   rcases eq_or_ne (o % (b ^ log b o)) 0 with h | h
   · rw [h, log_zero_right]
@@ -1886,7 +1886,7 @@ theorem log_eq_iff
 
 中文:
 定理 log_eq_iff
-  条件: {b x : Ordinal} (hb : 1 < b) (hx : x != 0) (y : Ordinal)
+  条件: {b x : 序数} (hb : 1 < b) (hx : x != 0) (y : 序数)
   证明: by
   constructor
   · rintro rfl
@@ -1927,7 +1927,7 @@ theorem log_opow_mul_add
 
 中文:
 定理 log_opow_mul_add
-  条件: {b u v w : Ordinal} (hb : 1 < b) (hv : v != 0) (hw : w < b ^ u)
+  条件: {b u v w : 序数} (hb : 1 < b) (hv : v != 0) (hw : w < b ^ u)
   证明: by
   rw [log_eq_iff hb]
   · constructor
@@ -1964,7 +1964,7 @@ theorem log_opow_mul
 
 中文:
 定理 log_opow_mul
-  条件: {b v : Ordinal} (hb : 1 < b) (u : Ordinal) (hv : v != 0)
+  条件: {b v : 序数} (hb : 1 < b) (u : 序数) (hv : v != 0)
   证明: by
   simpa using log_opow_mul_add hb hv (opow_pos u (bot_lt_of_lt hb))
 
@@ -1988,7 +1988,7 @@ theorem log_opow
 
 中文:
 定理 log_opow
-  条件: {b : Ordinal} (hb : 1 < b) (x : Ordinal)
+  条件: {b : 序数} (hb : 1 < b) (x : 序数)
   结论: log b (b ^ x) = x
   证明: by
   convert! log_opow_mul hb x zero_ne_one.symm using 1
@@ -2017,7 +2017,7 @@ theorem div_opow_log_pos
 
 中文:
 定理 div_opow_log_pos
-  条件: (b : Ordinal) {o : Ordinal} (ho : o != 0)
+  条件: (b : 序数) {o : 序数} (ho : o != 0)
   结论: 0 < o / b ^ log b o
   证明: by
   rcases eq_zero_or_pos b with (rfl | hb)
@@ -2046,7 +2046,7 @@ theorem div_opow_log_lt
 
 中文:
 定理 div_opow_log_lt
-  条件: {b : Ordinal} (o : Ordinal) (hb : 1 < b)
+  条件: {b : 序数} (o : 序数) (hb : 1 < b)
   结论: o / b ^ log b o < b
   证明: by
   rw [← lt_mul_iff_div_lt (opow_pos _ (zero_lt_one.trans hb)).ne']; rw [← opow_succ]
@@ -2072,7 +2072,7 @@ theorem div_two_opow_log
 
 中文:
 定理 div_two_opow_log
-  条件: {o : Ordinal} (ho : o != 0)
+  条件: {o : 序数} (ho : o != 0)
   结论: o / 2 ^ log 2 o = 1
   证明: by
   apply le_antisymm
@@ -2099,7 +2099,7 @@ theorem two_opow_log_add
 
 中文:
 定理 two_opow_log_add
-  条件: {o : Ordinal} (ho : o != 0)
+  条件: {o : 序数} (ho : o != 0)
   结论: 2 ^ log 2 o + o % 2 ^ log 2 o = o
   证明: by
   convert! div_add_mod .. using 2
@@ -2127,7 +2127,7 @@ theorem add_log_le_log_mul
 
 中文:
 定理 add_log_le_log_mul
-  条件: {x y : Ordinal} (b : Ordinal) (hx : x != 0) (hy : y != 0)
+  条件: {x y : 序数} (b : 序数) (hx : x != 0) (hy : y != 0)
   证明: by
   obtain hb | hb := lt_or_ge 1 b
   · rw [← opow_le_iff_le_log hb (mul_ne_zero hx hy), opow_add]
@@ -2157,7 +2157,7 @@ theorem omega0_opow_mul_nat_lt
 
 中文:
 定理 omega0_opow_mul_nat_lt
-  条件: {a b : Ordinal} (h : a < b) (n : 自然数)
+  条件: {a b : 序数} (h : a < b) (n : 自然数)
   结论: ω ^ a * n < ω ^ b
   证明: opow_mul_lt_opow (natCast_lt_omega0 n) h
 
@@ -2184,7 +2184,7 @@ obtain ⟨n, hn⟩ := lt_omega0.1 div_opow_log_lt a one_lt_omega0
 
 中文:
 定理 sub_omega0_opow_log_lt
-  条件: {a : Ordinal} (ha : a != 0)
+  条件: {a : 序数} (ha : a != 0)
   结论: a - ω ^ log ω a < a
   证明: by
 obtain ⟨n, hn⟩ := lt_omega0.1 div_opow_log_lt a one_lt_omega0
@@ -2225,7 +2225,7 @@ theorem lt_omega0_opow
 
 中文:
 定理 lt_omega0_opow
-  条件: {a b : Ordinal} (hb : b != 0)
+  条件: {a b : 序数} (hb : b != 0)
   证明: by
   refine ⟨fun ha => ⟨_, lt_log_of_lt_opow hb ha, ?_⟩,
     fun ⟨c, hc, n, hn⟩ => hn.trans (opow_mul_lt_opow (natCast_lt_omega0 n) hc)⟩
@@ -2261,7 +2261,7 @@ theorem lt_omega0_opow_succ
 
 中文:
 定理 lt_omega0_opow_succ
-  条件: {a b : Ordinal}
+  条件: {a b : 序数}
   结论: a < ω ^ succ b ↔ 存在 n : 自然数, a < ω ^ b * n
   证明: by
   refine ⟨fun ha => ?_, fun ⟨n, hn⟩ => hn.trans (opow_mul_lt_opow (natCast_lt_omega0 n) (lt_succ b))⟩
@@ -2296,7 +2296,7 @@ exact ⟨_, hb, _, hn.trans opow_mul_lt_opow (natCast_lt_omega0 _)
 
 中文:
 定理 lt_omega0_omega0_opow
-  条件: {a b : Ordinal} (hb : b != 0)
+  条件: {a b : 序数} (hb : b != 0)
   证明: by
   simp_rw [lt_omega0_opow (opow_ne_zero _ omega0_ne_zero), lt_omega0_opow hb]
   constructor
@@ -2334,7 +2334,7 @@ theorem natCast_pow
 中文:
 定理 natCast_pow
   条件: (m : 自然数)
-  结论: 对任意 n : 自然数, ↑(m ^ n : 自然数) = (m : Ordinal) ^ n
+  结论: 对任意 n : 自然数, ↑(m ^ n : 自然数) = (m : 序数) ^ n
 -/
 theorem natCast_pow (m : Nat) : forall n : Nat, ↑(m ^ n : Nat) = (m : Ordinal) ^ n
   | 0 => by simp
@@ -2354,7 +2354,7 @@ theorem natCast_opow
 中文:
 定理 natCast_opow
   条件: (m : 自然数)
-  结论: 对任意 n : 自然数, ↑(m ^ n : 自然数) = (m : Ordinal) ^ (n : Ordinal)
+  结论: 对任意 n : 自然数, ↑(m ^ n : 自然数) = (m : 序数) ^ (n : 序数)
   证明: by
   simp
 -/
@@ -2377,7 +2377,7 @@ theorem iSup_pow_natCast
 
 中文:
 定理 iSup_pow_natCast
-  条件: {o : Ordinal} (ho : 0 < o)
+  条件: {o : 序数} (ho : 0 < o)
   结论: ⨆ n : 自然数, o ^ n = o ^ ω
   证明: by
   rcases (one_le_iff_pos.2 ho).lt_or_eq with ho₁ | rfl
@@ -2411,7 +2411,7 @@ lemma natCast_log
 中文:
 引理 natCast_log
   条件: (m n : 自然数)
-  结论: ↑(自然数.log m n) = Ordinal.log ↑m ↑n
+  结论: ↑(自然数.log m n) = 序数.log ↑m ↑n
   证明: by
   obtain hm | hm := le_or_gt m 1
   case inl => rw_mod_cast [Nat.log_of_left_le_one hm, log_of_left_le_one (mod_cast hm)]

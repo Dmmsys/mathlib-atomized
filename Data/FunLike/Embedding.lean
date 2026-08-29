@@ -47,7 +47,7 @@ definition copy
 
 中文:
 定义 copy
-  签名: (f : MyEmbedding A B) (f' : A -> B) (h : f' = ⇑f)
+  签名: (f : My嵌入 A B) (f' : A -> B) (h : f' = ⇑f)
   定义体: { toFun := f'
     injective' := h.symm ▸ f.injective'
     map_op' := h.symm ▸ f.map_op' }
@@ -82,7 +82,7 @@ class MyEmbeddingClass
     - map_op : forall (f : F) (x y : A), f (MyClass.op x y) = MyClass.op (f x) (f y)
 
 中文:
-类 MyEmbeddingClass
+类 My嵌入类
   参数: (F : 类型) (A B : outParam 类型) [MyClass A] [MyClass B]
   继承: EmbeddingLike F A B
   公理与运算 (1 个):
@@ -104,7 +104,7 @@ lemma map_op
 
 中文:
 引理 map_op
-  结论: {F A B : 类型} [MyClass A] [MyClass B] [FunLike F A B] [MyEmbeddingClass F A B]
+  结论: {F A B : 类型} [MyClass A] [MyClass B] [函数状 F A B] [My嵌入类 F A B]
   证明: MyEmbeddingClass.map_op _ _ _
 -/
 lemma map_op {F A B : Type*} [MyClass A] [MyClass B] [FunLike F A B] [MyEmbeddingClass F A B]
@@ -128,7 +128,7 @@ instance :
 
 中文:
 实例 :
-  签名: MyEmbeddingClass (MyEmbedding A B) A B
+  签名: My嵌入类 (My嵌入 A B) A B
   定义体: MyEmbedding.injective'
   map_op := MyEmbedding.map_op'
 
@@ -157,9 +157,9 @@ structure CoolerEmbedding
     - (map_cool' : toFun CoolClass.cool = CoolClass.cool)
 
 中文:
-结构 CoolerEmbedding
+结构 余oler嵌入
   参数: (A B : 类型) [CoolClass A] [CoolClass B]
-  继承: MyEmbedding A B
+  继承: My嵌入 A B
   公理与运算 (1 个):
     - (map_cool' : toFun CoolClass.cool = CoolClass.cool)
 -/
@@ -177,9 +177,9 @@ class CoolerEmbeddingClass
     - (map_cool : forall (f : F), f CoolClass.cool = CoolClass.cool)
 
 中文:
-类 CoolerEmbeddingClass
+类 余oler嵌入类
   参数: (F : 类型) (A B : outParam 类型) [CoolClass A] [CoolClass B]
-  继承: MyEmbeddingClass F A B
+  继承: My嵌入类 F A B
   公理与运算 (1 个):
     - (map_cool : 对任意 (f : F), f CoolClass.cool = CoolClass.cool)
 -/
@@ -222,7 +222,7 @@ instance :
 
 中文:
 实例 :
-  签名: FunLike (CoolerEmbedding A B) A B
+  签名: 函数状 (余oler嵌入 A B) A B
   定义体: f.toFun
   coe_injective f g h := by cases f; cases g; congr; apply DFunLike.coe_injective; congr
 
@@ -244,7 +244,7 @@ instance :
 
 中文:
 实例 :
-  签名: CoolerEmbeddingClass (CoolerEmbedding A B) A B
+  签名: 余oler嵌入类 (余oler嵌入 A B) A B
   定义体: f.injective'
   map_op f := f.map_op'
   map_cool f := f.map_cool'
@@ -295,7 +295,7 @@ instead of linearly increasing the work per `MyEmbedding`-related declaration.
 
 中文:
 引理 do_something
-  条件: {F : 类型} [FunLike F A B] [MyEmbeddingClass F A B] (f : F)
+  条件: {F : 类型} [函数状 F A B] [My嵌入类 F A B] (f : F)
   结论: sorry
   证明: sorry
 ```
@@ -329,9 +329,9 @@ class EmbeddingLike
 
 中文:
 类 EmbeddingLike
-  参数: (F : Sort*) (α β : outParam (Sort*)) [FunLike F α β]
+  参数: (F : 类型层*) (α β : outParam (类型层*)) [函数状 F α β]
   公理与运算 (1 个):
-    - injective' : 对任意 f : F, Function.Injective (DFunLike.coe f)
+    - injective' : 对任意 f : F, 函数.单射 (依赖函数状.coe f)
 -/
 class EmbeddingLike (F : Sort*) (α β : outParam (Sort*)) [FunLike F α β] : Prop where
   /-- The coercion to functions must produce injective functions. -/
@@ -355,7 +355,7 @@ theorem injective
 中文:
 定理 injective
   条件: (f : F)
-  结论: Function.Injective f
+  结论: 函数.单射 f
   证明: injective' f
 
 @[simp]
@@ -399,7 +399,7 @@ theorem comp_injective
 
 中文:
 定理 comp_injective
-  条件: {F : Sort*} [FunLike F β γ] [EmbeddingLike F β γ] (f : α -> β) (e : F)
+  条件: {F : 类型层*} [函数状 F β γ] [EmbeddingLike F β γ] (f : α -> β) (e : F)
   证明: (EmbeddingLike.injective e).of_comp_iff f
 
 Depends on / 依赖: EmbeddingLike, EmbeddingLike.injective, injective, of_comp_iff

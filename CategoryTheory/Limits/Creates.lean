@@ -46,9 +46,9 @@ structure LiftableCone
 
 中文:
 结构 LiftableCone
-  参数: (K : J ⥤ C) (F : C ⥤ D) (c : Cone (K ⋙ F))
+  参数: (K : J ⥤ C) (F : C ⥤ D) (c : 锥 (K ⋙ F))
   公理与运算 (2 个):
-    - liftedCone : Cone K
+    - liftedCone : 锥 K
     - validLift : F.mapCone liftedCone ≅ c
 -/
 structure LiftableCone (K : J ⥤ C) (F : C ⥤ D) (c : Cone (K ⋙ F)) where
@@ -69,9 +69,9 @@ structure LiftableCocone
 
 中文:
 结构 LiftableCocone
-  参数: (K : J ⥤ C) (F : C ⥤ D) (c : Cocone (K ⋙ F))
+  参数: (K : J ⥤ C) (F : C ⥤ D) (c : 余锥 (K ⋙ F))
   公理与运算 (2 个):
-    - liftedCocone : Cocone K
+    - liftedCocone : 余锥 K
     - validLift : F.mapCocone liftedCocone ≅ c
 -/
 structure LiftableCocone (K : J ⥤ C) (F : C ⥤ D) (c : Cocone (K ⋙ F)) where
@@ -91,11 +91,11 @@ class CreatesLimit
     - lifts : forall c, IsLimit c -> LiftableCone K F c
 
 中文:
-类 CreatesLimit
+类 创造极限
   参数: (K : J ⥤ C) (F : C ⥤ D)
-  继承: ReflectsLimit K F
+  继承: 反映极限 K F
   公理与运算 (1 个):
-    - lifts : 对任意 c, IsLimit c -> LiftableCone K F c
+    - lifts : 对任意 c, 是极限 c -> LiftableCone K F c
 -/
 class CreatesLimit (K : J ⥤ C) (F : C ⥤ D) extends ReflectsLimit K F where
   /-- any limit cone can be lifted to a cone above -/
@@ -111,10 +111,10 @@ class CreatesLimitsOfShape
     - CreatesLimit : forall {K : J ⥤ C}, CreatesLimit K F  [default: by infer_instance]
 
 中文:
-类 CreatesLimitsOfShape
-  参数: (J : Type w) [Category.{w'} J] (F : C ⥤ D)
+类 创造形状极限
+  参数: (J : 类型 w) [范畴.{w'} J] (F : C ⥤ D)
   公理与运算 (1 个):
-    - CreatesLimit : 对任意 {K : J ⥤ C}, CreatesLimit K F  [默认: by infer_instance]
+    - CreatesLimit : 对任意 {K : J ⥤ C}, 创造极限 K F  [默认: by infer_instance]
 
 Depends on / 依赖: infer_instance
 -/
@@ -142,7 +142,7 @@ class CreatesLimitsOfSize
 类 CreatesLimitsOfSize
   参数: (F : C ⥤ D)
   公理与运算 (1 个):
-    - CreatesLimitsOfShape : 对任意 {J : Type w} [Category.{w'} J], CreatesLimitsOfShape J F  [默认: by infer_instance]
+    - CreatesLimitsOfShape : 对任意 {J : 类型 w} [范畴.{w'} J], 创造形状极限 J F  [默认: by infer_instance]
 
 Depends on / 依赖: infer_instance
 -/
@@ -179,11 +179,11 @@ class CreatesColimit
     - lifts : forall c, IsColimit c -> LiftableCocone K F c
 
 中文:
-类 CreatesColimit
+类 创造余极限
   参数: (K : J ⥤ C) (F : C ⥤ D)
-  继承: ReflectsColimit K F
+  继承: 反映余极限 K F
   公理与运算 (1 个):
-    - lifts : 对任意 c, IsColimit c -> LiftableCocone K F c
+    - lifts : 对任意 c, 是余极限 c -> LiftableCocone K F c
 -/
 class CreatesColimit (K : J ⥤ C) (F : C ⥤ D) extends ReflectsColimit K F where
   /-- any limit cocone can be lifted to a cocone above -/
@@ -199,10 +199,10 @@ class CreatesColimitsOfShape
     - CreatesColimit : forall {K : J ⥤ C}, CreatesColimit K F  [default: by infer_instance]
 
 中文:
-类 CreatesColimitsOfShape
-  参数: (J : Type w) [Category.{w'} J] (F : C ⥤ D)
+类 创造形状余极限
+  参数: (J : 类型 w) [范畴.{w'} J] (F : C ⥤ D)
   公理与运算 (1 个):
-    - CreatesColimit : 对任意 {K : J ⥤ C}, CreatesColimit K F  [默认: by infer_instance]
+    - CreatesColimit : 对任意 {K : J ⥤ C}, 创造余极限 K F  [默认: by infer_instance]
 
 Depends on / 依赖: infer_instance
 -/
@@ -226,7 +226,7 @@ class CreatesColimitsOfSize
 类 CreatesColimitsOfSize
   参数: (F : C ⥤ D)
   公理与运算 (1 个):
-    - CreatesColimitsOfShape : 对任意 {J : Type w} [Category.{w'} J], CreatesColimitsOfShape J F  [默认: by infer_instance]
+    - CreatesColimitsOfShape : 对任意 {J : 类型 w} [范畴.{w'} J], 创造形状余极限 J F  [默认: by infer_instance]
 
 Depends on / 依赖: infer_instance
 -/
@@ -269,7 +269,7 @@ definition liftLimit
 
 中文:
 定义 liftLimit
-  签名: {K : J ⥤ C} {F : C ⥤ D} [CreatesLimit K F] {c : Cone (K ⋙ F)} (t : IsLimit c)
+  签名: {K : J ⥤ C} {F : C ⥤ D} [创造极限 K F] {c : 锥 (K ⋙ F)} (t : 是极限 c)
   定义体: (CreatesLimit.lifts c t).liftedCone
 
 Depends on / 依赖: CreatesLimit, CreatesLimit.lifts, liftedCone
@@ -288,7 +288,7 @@ definition liftedLimitMapsToOriginal
 
 中文:
 定义 liftedLimitMapsToOriginal
-  签名: {K : J ⥤ C} {F : C ⥤ D} [CreatesLimit K F] {c : Cone (K ⋙ F)}
+  签名: {K : J ⥤ C} {F : C ⥤ D} [创造极限 K F] {c : 锥 (K ⋙ F)}
   定义体: (CreatesLimit.lifts c t).validLift
 
 Depends on / 依赖: CreatesLimit, CreatesLimit.lifts, validLift
@@ -361,7 +361,7 @@ definition liftedLimitIsLimit
 
 中文:
 定义 liftedLimitIsLimit
-  签名: {K : J ⥤ C} {F : C ⥤ D} [CreatesLimit K F] {c : Cone (K ⋙ F)}
+  签名: {K : J ⥤ C} {F : C ⥤ D} [创造极限 K F] {c : 锥 (K ⋙ F)}
   定义体: isLimitOfReflects _ (IsLimit.ofIsoLimit t (liftedLimitMapsToOriginal t).symm)
 
 Depends on / 依赖: IsLimit, IsLimit.ofIsoLimit, Quot.sound, coendRel, coendRel.mk, isLimitOfReflects, liftedLimitMapsToOriginal, ofIsoLimit
@@ -382,7 +382,7 @@ theorem hasLimit_of_created
 
 中文:
 定理 hasLimit_of_created
-  条件: (K : J ⥤ C) (F : C ⥤ D) [HasLimit (K ⋙ F)] [CreatesLimit K F]
+  条件: (K : J ⥤ C) (F : C ⥤ D) [有极限 (K ⋙ F)] [创造极限 K F]
   证明: HasLimit.mk
     { cone := liftLimit (limit.isLimit (K ⋙ F))
       isLimit := liftedLimitIsLimit _ }
@@ -405,7 +405,7 @@ theorem hasLimitsOfShape_of_hasLimitsOfShape_createsLimitsOfShape
 
 中文:
 定理 hasLimitsOfShape_of_hasLimitsOfShape_createsLimitsOfShape
-  结论: (F : C ⥤ D) [HasLimitsOfShape J D]
+  结论: (F : C ⥤ D) [有形状极限 J D]
   证明: ⟨fun G => hasLimit_of_created G F⟩
 
 Depends on / 依赖: hasLimit_of_created
@@ -424,7 +424,7 @@ theorem hasLimits_of_hasLimits_createsLimits
 
 中文:
 定理 hasLimits_of_hasLimits_createsLimits
-  结论: (F : C ⥤ D) [HasLimitsOfSize.{w, w'} D]
+  结论: (F : C ⥤ D) [有LimitsOfSize.{w, w'} D]
   证明: ⟨fun _ _ => hasLimitsOfShape_of_hasLimitsOfShape_createsLimitsOfShape F⟩
 
 Depends on / 依赖: hasLimitsOfShape_of_hasLimitsOfShape_createsLimitsOfShape
@@ -444,7 +444,7 @@ definition liftColimit
 
 中文:
 定义 liftColimit
-  签名: {K : J ⥤ C} {F : C ⥤ D} [CreatesColimit K F] {c : Cocone (K ⋙ F)}
+  签名: {K : J ⥤ C} {F : C ⥤ D} [创造余极限 K F] {c : 余锥 (K ⋙ F)}
   定义体: (CreatesColimit.lifts c t).liftedCocone
 
 Depends on / 依赖: CreatesColimit, CreatesColimit.lifts, liftedCocone
@@ -463,7 +463,7 @@ definition liftedColimitMapsToOriginal
 
 中文:
 定义 liftedColimitMapsToOriginal
-  签名: {K : J ⥤ C} {F : C ⥤ D} [CreatesColimit K F] {c : Cocone (K ⋙ F)}
+  签名: {K : J ⥤ C} {F : C ⥤ D} [创造余极限 K F] {c : 余锥 (K ⋙ F)}
   定义体: (CreatesColimit.lifts c t).validLift
 
 Depends on / 依赖: CreatesColimit, CreatesColimit.lifts, validLift
@@ -482,7 +482,7 @@ definition liftedColimitIsColimit
 
 中文:
 定义 liftedColimitIsColimit
-  签名: {K : J ⥤ C} {F : C ⥤ D} [CreatesColimit K F] {c : Cocone (K ⋙ F)}
+  签名: {K : J ⥤ C} {F : C ⥤ D} [创造余极限 K F] {c : 余锥 (K ⋙ F)}
   定义体: isColimitOfReflects _ (IsColimit.ofIsoColimit t (liftedColimitMapsToOriginal t).symm)
 
 Depends on / 依赖: IsColimit, IsColimit.ofIsoColimit, isColimitOfReflects, liftedColimitMapsToOriginal, ofIsoColimit
@@ -503,7 +503,7 @@ theorem hasColimit_of_created
 
 中文:
 定理 hasColimit_of_created
-  条件: (K : J ⥤ C) (F : C ⥤ D) [HasColimit (K ⋙ F)] [CreatesColimit K F]
+  条件: (K : J ⥤ C) (F : C ⥤ D) [有余极限 (K ⋙ F)] [创造余极限 K F]
   证明: HasColimit.mk
     { cocone := liftColimit (colimit.isColimit (K ⋙ F))
       isColimit := liftedColimitIsColimit _ }
@@ -545,7 +545,7 @@ theorem hasColimits_of_hasColimits_createsColimits
 
 中文:
 定理 hasColimits_of_hasColimits_createsColimits
-  结论: (F : C ⥤ D) [HasColimitsOfSize.{w, w'} D]
+  结论: (F : C ⥤ D) [有余limitsOfSize.{w, w'} D]
   证明: ⟨fun _ _ => hasColimitsOfShape_of_hasColimitsOfShape_createsColimitsOfShape F⟩
 
 Depends on / 依赖: hasColimitsOfShape_of_hasColimitsOfShape_createsColimitsOfShape
@@ -577,9 +577,9 @@ structure LiftsToLimit
 
 中文:
 结构 LiftsToLimit
-  参数: (K : J ⥤ C) (F : C ⥤ D) (c : Cone (K ⋙ F)) (t : IsLimit c)
+  参数: (K : J ⥤ C) (F : C ⥤ D) (c : 锥 (K ⋙ F)) (t : 是极限 c)
   公理与运算 (1 个):
-    - makesLimit : IsLimit liftedCone
+    - makesLimit : 是极限 liftedCone
 -/
 structure LiftsToLimit (K : J ⥤ C) (F : C ⥤ D) (c : Cone (K ⋙ F)) (t : IsLimit c) extends
   LiftableCone K F c where
@@ -597,9 +597,9 @@ structure LiftsToColimit
 
 中文:
 结构 LiftsToColimit
-  参数: (K : J ⥤ C) (F : C ⥤ D) (c : Cocone (K ⋙ F)) (t : IsColimit c)
+  参数: (K : J ⥤ C) (F : C ⥤ D) (c : 余锥 (K ⋙ F)) (t : 是余极限 c)
   公理与运算 (1 个):
-    - makesColimit : IsColimit liftedCocone
+    - makesColimit : 是余极限 liftedCocone
 -/
 structure LiftsToColimit (K : J ⥤ C) (F : C ⥤ D) (c : Cocone (K ⋙ F)) (t : IsColimit c) extends
   LiftableCocone K F c where
@@ -628,7 +628,7 @@ definition createsLimitOfReflectsIso
 
 中文:
 定义 createsLimitOfReflectsIso
-  签名: {K : J ⥤ C} {F : C ⥤ D} [F.ReflectsIsomorphisms]
+  签名: {K : J ⥤ C} {F : C ⥤ D} [F.反映同构]
   定义体: (h c t).toLiftableCone
   toReflectsLimit :=
     { reflects := fun {d} hd => ⟨by
@@ -674,7 +674,7 @@ definition createsLimitOfReflectsIso'
 
 中文:
 定义 createsLimitOfReflectsIso'
-  签名: {K : J ⥤ C} {F : C ⥤ D} [F.ReflectsIsomorphisms]
+  签名: {K : J ⥤ C} {F : C ⥤ D} [F.反映同构]
   定义体: createsLimitOfReflectsIso fun _ t =>
     { liftedCone := h.liftedCone
       validLift := h.validLift ≪≫ IsLimit.uniqueUpToIso hc t
@@ -703,7 +703,7 @@ definition createsLimitOfReflectsIsomorphismsOfPreserves
 
 中文:
 定义 createsLimitOfReflectsIsomorphismsOfPreserves
-  签名: {K : J ⥤ C} {F : C ⥤ D} [F.ReflectsIsomorphisms]
+  签名: {K : J ⥤ C} {F : C ⥤ D} [F.反映同构]
   定义体: createsLimitOfReflectsIso' (isLimitOfPreserves F (limit.isLimit _))
     ⟨⟨_, Iso.refl _⟩, limit.isLimit _⟩
 
@@ -732,7 +732,7 @@ definition createsLimitOfFullyFaithfulOfLift'
 
 中文:
 定义 createsLimitOfFullyFaithfulOfLift'
-  签名: {K : J ⥤ C} {F : C ⥤ D} [F.Full] [F.Faithful]
+  签名: {K : J ⥤ C} {F : C ⥤ D} [F.满] [F.忠实]
   定义体: createsLimitOfReflectsIso' hl ⟨⟨c, i⟩, isLimitOfReflects F (IsLimit.ofIsoLimit hl i.symm)⟩
 
 Depends on / 依赖: IsLimit, IsLimit.ofIsoLimit, createsLimitOfReflectsIso, i.symm, isLimitOfReflects, ofIsoLimit
@@ -759,7 +759,7 @@ definition createsLimitOfFullyFaithfulOfLift
 
 中文:
 定义 createsLimitOfFullyFaithfulOfLift
-  签名: {K : J ⥤ C} {F : C ⥤ D} [F.Full] [F.Faithful]
+  签名: {K : J ⥤ C} {F : C ⥤ D} [F.满] [F.忠实]
   定义体: createsLimitOfFullyFaithfulOfLift' (limit.isLimit _) c i
 
 Depends on / 依赖: createsLimitOfFullyFaithfulOfLift, isLimit, limit.isLimit
@@ -796,7 +796,7 @@ F.map_injective by
 
 中文:
 定义 createsLimitOfFullyFaithfulOfIso'
-  签名: {K : J ⥤ C} {F : C ⥤ D} [F.Full] [F.Faithful]
+  签名: {K : J ⥤ C} {F : C ⥤ D} [F.满] [F.忠实]
   定义体: createsLimitOfFullyFaithfulOfLift' hl
     { pt := X
       π :=
@@ -836,7 +836,7 @@ definition createsLimitOfFullyFaithfulOfIso
 
 中文:
 定义 createsLimitOfFullyFaithfulOfIso
-  签名: {K : J ⥤ C} {F : C ⥤ D} [F.Full] [F.Faithful]
+  签名: {K : J ⥤ C} {F : C ⥤ D} [F.满] [F.忠实]
   定义体: createsLimitOfFullyFaithfulOfIso' (limit.isLimit _) X i
 
 Depends on / 依赖: createsLimitOfFullyFaithfulOfIso, isLimit, limit.isLimit
@@ -857,7 +857,7 @@ definition createsLimitOfFullyFaithfulOfPreserves
 
 中文:
 定义 createsLimitOfFullyFaithfulOfPreserves
-  签名: {K : J ⥤ C} {F : C ⥤ D} [F.Full] [F.Faithful]
+  签名: {K : J ⥤ C} {F : C ⥤ D} [F.满] [F.忠实]
   定义体: createsLimitOfFullyFaithfulOfLift' (isLimitOfPreserves _ (limit.isLimit K)) _ (Iso.refl _)
 
 Depends on / 依赖: Iso.refl, createsLimitOfFullyFaithfulOfLift, isLimit, isLimitOfPreserves, limit.isLimit
@@ -907,7 +907,7 @@ definition createsColimitOfReflectsIso
 
 中文:
 定义 createsColimitOfReflectsIso
-  签名: {K : J ⥤ C} {F : C ⥤ D} [F.ReflectsIsomorphisms]
+  签名: {K : J ⥤ C} {F : C ⥤ D} [F.反映同构]
   定义体: (h c t).toLiftableCocone
   toReflectsColimit :=
     { reflects := fun {d} hd => ⟨by
@@ -953,7 +953,7 @@ definition createsColimitOfReflectsIso'
 
 中文:
 定义 createsColimitOfReflectsIso'
-  签名: {K : J ⥤ C} {F : C ⥤ D} [F.ReflectsIsomorphisms]
+  签名: {K : J ⥤ C} {F : C ⥤ D} [F.反映同构]
   定义体: createsColimitOfReflectsIso fun _ t =>
     { liftedCocone := h.liftedCocone
       validLift := h.validLift ≪≫ IsColimit.uniqueUpToIso hc t
@@ -1011,7 +1011,7 @@ definition createsColimitOfFullyFaithfulOfLift'
 
 中文:
 定义 createsColimitOfFullyFaithfulOfLift'
-  签名: {K : J ⥤ C} {F : C ⥤ D} [F.Full] [F.Faithful]
+  签名: {K : J ⥤ C} {F : C ⥤ D} [F.满] [F.忠实]
   定义体: createsColimitOfReflectsIso' hl ⟨⟨c, i⟩, isColimitOfReflects F (IsColimit.ofIsoColimit hl i.symm)⟩
 
 Depends on / 依赖: IsColimit, IsColimit.ofIsoColimit, createsColimitOfReflectsIso, i.symm, isColimitOfReflects, ofIsoColimit
@@ -1039,7 +1039,7 @@ definition createsColimitOfFullyFaithfulOfLift
 
 中文:
 定义 createsColimitOfFullyFaithfulOfLift
-  签名: {K : J ⥤ C} {F : C ⥤ D} [F.Full] [F.Faithful]
+  签名: {K : J ⥤ C} {F : C ⥤ D} [F.满] [F.忠实]
   定义体: createsColimitOfFullyFaithfulOfLift' (colimit.isColimit _) c i
 
 Depends on / 依赖: colimit, colimit.isColimit, createsColimitOfFullyFaithfulOfLift, isColimit
@@ -1075,7 +1075,7 @@ F.map_injective by
 
 中文:
 定义 createsColimitOfFullyFaithfulOfIso'
-  签名: {K : J ⥤ C} {F : C ⥤ D} [F.Full] [F.Faithful]
+  签名: {K : J ⥤ C} {F : C ⥤ D} [F.满] [F.忠实]
   定义体: createsColimitOfFullyFaithfulOfLift' hl
     { pt := X
       ι :=
@@ -1116,7 +1116,7 @@ definition createsColimitOfFullyFaithfulOfIso
 
 中文:
 定义 createsColimitOfFullyFaithfulOfIso
-  签名: {K : J ⥤ C} {F : C ⥤ D} [F.Full] [F.Faithful]
+  签名: {K : J ⥤ C} {F : C ⥤ D} [F.满] [F.忠实]
   定义体: createsColimitOfFullyFaithfulOfIso' (colimit.isColimit _) X i
 
 Depends on / 依赖: colimit, colimit.isColimit, createsColimitOfFullyFaithfulOfIso, isColimit
@@ -1166,7 +1166,7 @@ definition createsLimitOfIsoDiagram
 
 中文:
 定义 createsLimitOfIsoDiagram
-  签名: {K₁ K₂ : J ⥤ C} (F : C ⥤ D) (h : K₁ ≅ K₂) [CreatesLimit K₁ F]
+  签名: {K₁ K₂ : J ⥤ C} (F : C ⥤ D) (h : K₁ ≅ K₂) [创造极限 K₁ F]
   定义体: { reflectsLimit_of_iso_diagram F h with
     lifts := fun c t =>
       let t' := (IsLimit.postcomposeInvEquiv (isoWhiskerRight h F :) c).symm t
@@ -1207,8 +1207,8 @@ definition createsLimitOfNatIso
   
 
 中文:
-定义 createsLimitOfNatIso
-  签名: {F G : C ⥤ D} (h : F ≅ G) [CreatesLimit K F]
+定义 createsLimitOf自然数Iso
+  签名: {F G : C ⥤ D} (h : F ≅ G) [创造极限 K F]
   定义体: { liftedCone := liftLimit ((IsLimit.postcomposeInvEquiv (isoWhiskerLeft K h :) c).symm t)
       validLift := by
         refine (IsLimit.mapConeEquiv h ?_).uniqueUpToIso t
@@ -1238,8 +1238,8 @@ definition createsLimitsOfShapeOfNatIso
   body: createsLimitOfNatIso h
 
 中文:
-定义 createsLimitsOfShapeOfNatIso
-  签名: {F G : C ⥤ D} (h : F ≅ G) [CreatesLimitsOfShape J F]
+定义 createsLimitsOfShapeOf自然数Iso
+  签名: {F G : C ⥤ D} (h : F ≅ G) [创造形状极限 J F]
   定义体: createsLimitOfNatIso h
 
 Depends on / 依赖: createsLimitOfNatIso
@@ -1258,7 +1258,7 @@ definition createsLimitsOfNatIso
   body: createsLimitsOfShapeOfNatIso h
 
 中文:
-定义 createsLimitsOfNatIso
+定义 createsLimitsOf自然数Iso
   签名: {F G : C ⥤ D} (h : F ≅ G) [CreatesLimitsOfSize.{w, w'} F]
   定义体: createsLimitsOfShapeOfNatIso h
 
@@ -1286,7 +1286,7 @@ definition createsLimitsOfShapeOfEquiv
 
 中文:
 定义 createsLimitsOfShapeOfEquiv
-  签名: {J' : Type w₁} [Category.{w'₁} J'] (e : J ≌ J') (F : C ⥤ D)
+  签名: {J' : 类型 w₁} [范畴.{w'₁} J'] (e : J ≌ J') (F : C ⥤ D)
   定义体: { lifts c hc := by
         refine ⟨(Cone.whiskeringEquivalence e).inverse.obj
           (liftLimit (hc.whiskerEquivalence e)), ?_⟩
@@ -1327,7 +1327,7 @@ definition createsColimitOfIsoDiagram
 
 中文:
 定义 createsColimitOfIsoDiagram
-  签名: {K₁ K₂ : J ⥤ C} (F : C ⥤ D) (h : K₁ ≅ K₂) [CreatesColimit K₁ F]
+  签名: {K₁ K₂ : J ⥤ C} (F : C ⥤ D) (h : K₁ ≅ K₂) [创造余极限 K₁ F]
   定义体: { reflectsColimit_of_iso_diagram F h with
     lifts := fun c t =>
       let t' := (IsColimit.precomposeHomEquiv (isoWhiskerRight h F :) c).symm t
@@ -1368,8 +1368,8 @@ definition createsColimitOfNatIso
         apply (IsColimit.precomposeHomEquiv 
 
 中文:
-定义 createsColimitOfNatIso
-  签名: {F G : C ⥤ D} (h : F ≅ G) [CreatesColimit K F]
+定义 createsColimitOf自然数Iso
+  签名: {F G : C ⥤ D} (h : F ≅ G) [创造余极限 K F]
   定义体: { liftedCocone := liftColimit ((IsColimit.precomposeHomEquiv (isoWhiskerLeft K h :) c).symm t)
       validLift := by
         refine (IsColimit.mapCoconeEquiv h ?_).uniqueUpToIso t
@@ -1398,8 +1398,8 @@ definition createsColimitsOfShapeOfNatIso
   body: createsColimitOfNatIso h
 
 中文:
-定义 createsColimitsOfShapeOfNatIso
-  签名: {F G : C ⥤ D} (h : F ≅ G) [CreatesColimitsOfShape J F]
+定义 createsColimitsOfShapeOf自然数Iso
+  签名: {F G : C ⥤ D} (h : F ≅ G) [创造形状余极限 J F]
   定义体: createsColimitOfNatIso h
 
 Depends on / 依赖: createsColimitOfNatIso
@@ -1418,7 +1418,7 @@ definition createsColimitsOfNatIso
   body: createsColimitsOfShapeOfNatIso h
 
 中文:
-定义 createsColimitsOfNatIso
+定义 createsColimitsOf自然数Iso
   签名: {F G : C ⥤ D} (h : F ≅ G) [CreatesColimitsOfSize.{w, w'} F]
   定义体: createsColimitsOfShapeOfNatIso h
 
@@ -1445,7 +1445,7 @@ definition createsColimitsOfShapeOfEquiv
 
 中文:
 定义 createsColimitsOfShapeOfEquiv
-  签名: {J' : Type w₁} [Category.{w'₁} J'] (e : J ≌ J') (F : C ⥤ D)
+  签名: {J' : 类型 w₁} [范畴.{w'₁} J'] (e : J ≌ J') (F : C ⥤ D)
   定义体: { lifts c hc := by
         refine ⟨(Cocone.whiskeringEquivalence e).inverse.obj
           (liftColimit (hc.whiskerEquivalence e)), ?_⟩
@@ -1479,7 +1479,7 @@ definition liftsToLimitOfCreates
 
 中文:
 定义 liftsToLimitOfCreates
-  签名: (K : J ⥤ C) (F : C ⥤ D) [CreatesLimit K F] (c : Cone (K ⋙ F))
+  签名: (K : J ⥤ C) (F : C ⥤ D) [创造极限 K F] (c : 锥 (K ⋙ F))
   定义体: liftLimit t
   validLift := liftedLimitMapsToOriginal t
   makesLimit := liftedLimitIsLimit t
@@ -1505,7 +1505,7 @@ definition liftsToColimitOfCreates
 
 中文:
 定义 liftsToColimitOfCreates
-  签名: (K : J ⥤ C) (F : C ⥤ D) [CreatesColimit K F] (c : Cocone (K ⋙ F))
+  签名: (K : J ⥤ C) (F : C ⥤ D) [创造余极限 K F] (c : 余锥 (K ⋙ F))
   定义体: liftColimit t
   validLift := liftedColimitMapsToOriginal t
   makesColimit := liftedColimitIsColimit t
@@ -1531,7 +1531,7 @@ definition idLiftsCone
 
 中文:
 定义 idLiftsCone
-  签名: (c : Cone (K ⋙ 𝟭 C))
+  签名: (c : 锥 (K ⋙ 𝟭 C))
   定义体: { pt := c.pt
       π := c.π ≫ K.rightUnitor.hom }
   validLift := Cone.ext (Iso.refl _)
@@ -1576,7 +1576,7 @@ definition idLiftsCocone
 
 中文:
 定义 idLiftsCocone
-  签名: (c : Cocone (K ⋙ 𝟭 C))
+  签名: (c : 余锥 (K ⋙ 𝟭 C))
   定义体: { pt := c.pt
       ι := K.rightUnitor.inv ≫ c.ι }
   validLift := Cocone.ext (Iso.refl _)
@@ -1618,7 +1618,7 @@ instance inhabitedLiftableCone
 
 中文:
 实例 inhabitedLiftableCone
-  签名: (c : Cone (K ⋙ 𝟭 C))
+  签名: (c : 锥 (K ⋙ 𝟭 C))
   定义体: ⟨idLiftsCone c⟩
 
 Depends on / 依赖: idLiftsCone
@@ -1636,7 +1636,7 @@ instance inhabitedLiftableCocone
 
 中文:
 实例 inhabitedLiftableCocone
-  签名: (c : Cocone (K ⋙ 𝟭 C))
+  签名: (c : 余锥 (K ⋙ 𝟭 C))
   定义体: ⟨idLiftsCocone c⟩
 
 Depends on / 依赖: idLiftsCocone
@@ -1654,7 +1654,7 @@ instance inhabitedLiftsToLimit
 
 中文:
 实例 inhabitedLiftsToLimit
-  签名: (K : J ⥤ C) (F : C ⥤ D) [CreatesLimit K F] (c : Cone (K ⋙ F))
+  签名: (K : J ⥤ C) (F : C ⥤ D) [创造极限 K F] (c : 锥 (K ⋙ F))
   定义体: ⟨liftsToLimitOfCreates K F c t⟩
 
 Depends on / 依赖: liftsToLimitOfCreates
@@ -1673,7 +1673,7 @@ instance inhabitedLiftsToColimit
 
 中文:
 实例 inhabitedLiftsToColimit
-  签名: (K : J ⥤ C) (F : C ⥤ D) [CreatesColimit K F] (c : Cocone (K ⋙ F))
+  签名: (K : J ⥤ C) (F : C ⥤ D) [创造余极限 K F] (c : 余锥 (K ⋙ F))
   定义体: ⟨liftsToColimitOfCreates K F c t⟩
 
 Depends on / 依赖: liftsToColimitOfCreates
@@ -1704,7 +1704,7 @@ instance compCreatesLimit
 
 中文:
 实例 compCreatesLimit
-  签名: [CreatesLimit K F] [CreatesLimit (K ⋙ F) G]
+  签名: [创造极限 K F] [创造极限 (K ⋙ F) G]
   定义体: by
     let c' : Cone ((K ⋙ F) ⋙ G) := c
     let t' : IsLimit c' := t
@@ -1737,7 +1737,7 @@ instance compCreatesLimitsOfShape
 
 中文:
 实例 compCreatesLimitsOfShape
-  签名: [CreatesLimitsOfShape J F] [CreatesLimitsOfShape J G]
+  签名: [创造形状极限 J F] [创造形状极限 J G]
   定义体: inferInstance
 -/
 instance compCreatesLimitsOfShape [CreatesLimitsOfShape J F] [CreatesLimitsOfShape J G] :
@@ -1771,7 +1771,7 @@ instance preservesLimit_comp_of_createsLimit
 
 中文:
 实例 preservesLimit_comp_of_createsLimit
-  签名: [CreatesLimit K F] [PreservesLimit K (F ⋙ G)]
+  签名: [创造极限 K F] [保持极限 K (F ⋙ G)]
   定义体: ⟨IsLimit.ofIsoLimit (isLimitOfPreserves (F ⋙ G) (liftedLimitIsLimit hc))
     ((Functor.mapConeMapCone (liftLimit hc)).symm ≪≫
       (Cone.functoriality _ _).mapIso (liftedLimitMapsToOriginal hc))⟩
@@ -1800,7 +1800,7 @@ instance compCreatesColimit
 
 中文:
 实例 compCreatesColimit
-  签名: [CreatesColimit K F] [CreatesColimit (K ⋙ F) G]
+  签名: [创造余极限 K F] [创造余极限 (K ⋙ F) G]
   定义体: let c' : Cocone ((K ⋙ F) ⋙ G) := c
     let t' : IsColimit c' := t
     { liftedCocone := liftColimit (liftedColimitIsColimit t')
@@ -1832,7 +1832,7 @@ instance compCreatesColimitsOfShape
 
 中文:
 实例 compCreatesColimitsOfShape
-  签名: [CreatesColimitsOfShape J F] [CreatesColimitsOfShape J G]
+  签名: [创造形状余极限 J F] [创造形状余极限 J G]
   定义体: inferInstance
 -/
 instance compCreatesColimitsOfShape [CreatesColimitsOfShape J F] [CreatesColimitsOfShape J G] :
@@ -1866,7 +1866,7 @@ instance preservesColimit_comp_of_createsColimit
 
 中文:
 实例 preservesColimit_comp_of_createsColimit
-  签名: [CreatesColimit K F] [PreservesColimit K (F ⋙ G)]
+  签名: [创造余极限 K F] [保持余极限 K (F ⋙ G)]
   定义体: ⟨IsColimit.ofIsoColimit (isColimitOfPreserves (F ⋙ G) (liftedColimitIsColimit hc))
     ((Functor.mapCoconeMapCocone (liftColimit hc)).symm ≪≫
       (Cocone.functoriality _ _).mapIso (liftedColimitMapsToOriginal hc))⟩

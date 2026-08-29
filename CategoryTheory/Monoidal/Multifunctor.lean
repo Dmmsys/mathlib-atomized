@@ -224,8 +224,8 @@ definition Functor.curriedTensorPreIsoPost
   body: NatIso.ofComponents (fun _ => NatIso.ofComponents (fun _ => Monoidal.μIso F _ _))
 
 中文:
-定义 Functor.curriedTensorPreIsoPost
-  签名: (F : C ⥤ D) [F.Monoidal]
+定义 函子.curriedTensorPreIsoPost
+  签名: (F : C ⥤ D) [F.幺半群]
   定义体: NatIso.ofComponents (fun _ => NatIso.ofComponents (fun _ => Monoidal.μIso F _ _))
 
 Depends on / 依赖: Monoidal, NatIso, NatIso.ofComponents, ofComponents
@@ -709,7 +709,7 @@ definition ofBifunctor
 
 中文:
 定义 ofBifunctor
-  签名: : F.LaxMonoidal where
+  签名: : F.松弛幺半群 where
   定义体: ε
   μ X Y := (μ.app X).app Y
   μ_natural_left f X := NatTrans.congr_app (μ.naturality f) X
@@ -1141,7 +1141,7 @@ definition ofBifunctor
 
 中文:
 定义 ofBifunctor
-  签名: : F.OplaxMonoidal where
+  签名: : F.反松弛幺半群 where
   定义体: η
   δ X Y := (δ.app X).app Y
   δ_natural_left f X := (NatTrans.congr_app (δ.naturality f) X).symm
@@ -1265,7 +1265,7 @@ definition ofBifunctor
 
 中文:
 定义 ofBifunctor
-  签名: : F.CoreMonoidal where
+  签名: : F.余reMonoidal where
   定义体: ε
   μIso X Y := (μ.app X).app Y
   μIso_hom_natural_left f X := NatTrans.congr_app (μ.hom.naturality f) X

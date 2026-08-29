@@ -130,7 +130,7 @@ lemma dist_orthogonalProjection_eq_iff_angle_eq
 
 中文:
 引理 dist_orthogonalProjection_eq_iff_angle_eq
-  结论: {p p' : P} {s₁ s₂ : AffineSubspace 实数 P}
+  结论: {p p' : P} {s₁ s₂ : 仿射子空间 实数 P}
   证明: ⟨p', hp'₁⟩
     haveI : Nonempty s₂ := ⟨p', hp'₂⟩
     dist p (orthogonalProjection s₁ p) = dist p (orthogonalProjection s₂ p) ↔
@@ -194,7 +194,7 @@ lemma dist_orthogonalProjection_eq_of_oangle_eq
 
 中文:
 引理 dist_orthogonalProjection_eq_of_oangle_eq
-  结论: {p p' : P} {s₁ s₂ : AffineSubspace 实数 P}
+  结论: {p p' : P} {s₁ s₂ : 仿射子空间 实数 P}
   证明: ⟨p', hp'₁⟩
     haveI : Nonempty s₂ := ⟨p', hp'₂⟩
     orthogonalProjection s₁ p != p' ->
@@ -232,7 +232,7 @@ lemma oangle_eq_of_dist_orthogonalProjection_eq
 
 中文:
 引理 oangle_eq_of_dist_orthogonalProjection_eq
-  结论: {p p' : P} {s₁ s₂ : AffineSubspace 实数 P}
+  结论: {p p' : P} {s₁ s₂ : 仿射子空间 实数 P}
   证明: ⟨p', hp'₁⟩
     haveI : Nonempty s₂ := ⟨p', hp'₂⟩
     (orthogonalProjection s₁ p : P) != orthogonalProjection s₂ p ->
@@ -308,7 +308,7 @@ lemma dist_orthogonalProjection_eq_iff_oangle_eq
 
 中文:
 引理 dist_orthogonalProjection_eq_iff_oangle_eq
-  结论: {p p' : P} {s₁ s₂ : AffineSubspace 实数 P}
+  结论: {p p' : P} {s₁ s₂ : 仿射子空间 实数 P}
   证明: ⟨p', hp'₁⟩
     haveI : Nonempty s₂ := ⟨p', hp'₂⟩
     (orthogonalProjection s₁ p : P) != orthogonalProjection s₂ p ->

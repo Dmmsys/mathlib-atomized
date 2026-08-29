@@ -33,7 +33,7 @@ definition IsEquiv
   body: forall x y, v x <= v y ↔ w x <= w y
 
 中文:
-定义 IsEquiv
+定义 Is等价
   签名: : 命题
   定义体: forall x y, v x <= v y ↔ w x <= w y
 -/
@@ -48,8 +48,8 @@ theorem IsEquiv.refl
   proof: fun _ _ => .rfl
 
 中文:
-定理 IsEquiv.refl
-  结论: v.IsEquiv v
+定理 Is等价.refl
+  结论: v.Is等价 v
   证明: fun _ _ => .rfl
 -/
 theorem IsEquiv.refl : v.IsEquiv v := fun _ _ => .rfl
@@ -65,8 +65,8 @@ theorem IsEquiv.rfl
   proof: fun _ _ => .rfl
 
 中文:
-定理 IsEquiv.rfl
-  结论: v.IsEquiv v
+定理 Is等价.rfl
+  结论: v.Is等价 v
   证明: fun _ _ => .rfl
 -/
 theorem IsEquiv.rfl : v.IsEquiv v := fun _ _ => .rfl
@@ -81,9 +81,9 @@ theorem IsEquiv.symm
   proof: fun _ _ => (h _ _).symm
 
 中文:
-定理 IsEquiv.symm
-  条件: (h : v.IsEquiv w)
-  结论: w.IsEquiv v
+定理 Is等价.symm
+  条件: (h : v.Is等价 w)
+  结论: w.Is等价 v
   证明: fun _ _ => (h _ _).symm
 -/
 theorem IsEquiv.symm (h : v.IsEquiv w) : w.IsEquiv v := fun _ _ => (h _ _).symm
@@ -97,8 +97,8 @@ theorem IsEquiv.trans
   proof: fun _ _ => (h₁ _ _).trans (h₂ _ _)
 
 中文:
-定理 IsEquiv.trans
-  结论: {u : AbsoluteValue R S} (h₁ : v.IsEquiv w)
+定理 Is等价.trans
+  结论: {u : 绝对值 R S} (h₁ : v.Is等价 w)
   证明: fun _ _ => (h₁ _ _).trans (h₂ _ _)
 -/
 theorem IsEquiv.trans {u : AbsoluteValue R S} (h₁ : v.IsEquiv w)
@@ -119,7 +119,7 @@ instance :
 
 中文:
 实例 :
-  签名: Setoid (AbsoluteValue R S)
+  签名: 集合等价关系 (绝对值 R S)
   定义体: IsEquiv
   iseqv := {
     refl := .refl
@@ -147,8 +147,8 @@ theorem IsEquiv.le_iff_le
   proof: h ..
 
 中文:
-定理 IsEquiv.le_iff_le
-  条件: (h : v.IsEquiv w) {x y : R}
+定理 Is等价.le_iff_le
+  条件: (h : v.Is等价 w) {x y : R}
   结论: v x <= v y ↔ w x <= w y
   证明: h ..
 -/
@@ -164,8 +164,8 @@ theorem IsEquiv.lt_iff_lt
   proof: lt_iff_lt_of_le_iff_le' (h y x) (h x y)
 
 中文:
-定理 IsEquiv.lt_iff_lt
-  条件: (h : v.IsEquiv w) {x y : R}
+定理 Is等价.lt_iff_lt
+  条件: (h : v.Is等价 w) {x y : R}
   结论: v x < v y ↔ w x < w y
   证明: lt_iff_lt_of_le_iff_le' (h y x) (h x y)
 
@@ -185,8 +185,8 @@ theorem IsEquiv.eq_iff_eq
   simp [le_antisymm_iff, h x y, h y x]
 
 中文:
-定理 IsEquiv.eq_iff_eq
-  条件: (h : v.IsEquiv w) {x y : R}
+定理 Is等价.eq_iff_eq
+  条件: (h : v.Is等价 w) {x y : R}
   结论: v x = v y ↔ w x = w y
   证明: by
   simp [le_antisymm_iff, h x y, h y x]
@@ -208,8 +208,8 @@ theorem IsEquiv.lt_one_iff
   simpa only [map_one] using h.lt_iff_lt (y := 1)
 
 中文:
-定理 IsEquiv.lt_one_iff
-  条件: (h : v.IsEquiv w) {x : R}
+定理 Is等价.lt_one_iff
+  条件: (h : v.Is等价 w) {x : R}
   证明: by
   simpa only [map_one] using h.lt_iff_lt (y := 1)
 
@@ -229,8 +229,8 @@ theorem IsEquiv.one_lt_iff
   simpa only [map_one] using h.lt_iff_lt (x := 1)
 
 中文:
-定理 IsEquiv.one_lt_iff
-  条件: (h : v.IsEquiv w) {x : R}
+定理 Is等价.one_lt_iff
+  条件: (h : v.Is等价 w) {x : R}
   证明: by
   simpa only [map_one] using h.lt_iff_lt (x := 1)
 
@@ -250,8 +250,8 @@ theorem IsEquiv.le_one_iff
   simpa only [map_one] using h x 1
 
 中文:
-定理 IsEquiv.le_one_iff
-  条件: (h : v.IsEquiv w) {x : R}
+定理 Is等价.le_one_iff
+  条件: (h : v.Is等价 w) {x : R}
   证明: by
   simpa only [map_one] using h x 1
 
@@ -271,8 +271,8 @@ theorem IsEquiv.one_le_iff
   simpa only [map_one] using h 1 x
 
 中文:
-定理 IsEquiv.one_le_iff
-  条件: (h : v.IsEquiv w) {x : R}
+定理 Is等价.one_le_iff
+  条件: (h : v.Is等价 w) {x : R}
   证明: by
   simpa only [map_one] using h 1 x
 
@@ -293,8 +293,8 @@ theorem IsEquiv.eq_one_iff
   simpa only [map_one] using h.eq_iff_eq (x := x) (y := 1)
 
 中文:
-定理 IsEquiv.eq_one_iff
-  条件: (h : v.IsEquiv w) {x : R}
+定理 Is等价.eq_one_iff
+  条件: (h : v.Is等价 w) {x : R}
   结论: v x = 1 ↔ w x = 1
   证明: by
   simpa only [map_one] using h.eq_iff_eq (x := x) (y := 1)
@@ -315,8 +315,8 @@ theorem IsEquiv.isNontrivial_congr
 alias ⟨IsEquiv.isNontrivial, _⟩ := IsEquiv.isNontrivial_congr
 
 中文:
-定理 IsEquiv.isNontrivial_congr
-  条件: {w : AbsoluteValue R S} (h : v.IsEquiv w)
+定理 Is等价.isNontrivial_congr
+  条件: {w : 绝对值 R S} (h : v.Is等价 w)
   证明: not_iff_not.1 by aesop (add simp [not_isNontrivial_iff, h.eq_one_iff])
 
 alias ⟨IsEquiv.isNontrivial, _⟩ := IsEquiv.isNontrivial_congr
@@ -347,7 +347,7 @@ lemma isEquiv_trivial_iff_eq_trivial
 
 中文:
 引理 isEquiv_trivial_iff_eq_trivial
-  结论: [DecidablePred fun x : R => x = 0] [NoZeroDivisors R]
+  结论: [DecidablePred fun x : R => x = 0] [无零因子 R]
   证明: ⟨fun h => by aesop (add simp [h.eq_one_iff, AbsoluteValue.trivial]), fun h => h ▸ .rfl⟩
 
 Depends on / 依赖: AbsoluteValue, AbsoluteValue.trivial, eq_one_iff, h.eq_one_iff
@@ -408,8 +408,8 @@ theorem isEquiv_of_lt_one_imp
 
 中文:
 定理 isEquiv_of_lt_one_imp
-  条件: (hv : v.IsNontrivial) (h : 对任意 x, v x < 1 -> w x < 1)
-  结论: v.IsEquiv w
+  条件: (hv : v.是非平凡) (h : 对任意 x, v x < 1 -> w x < 1)
+  结论: v.Is等价 w
   证明: by
   refine isEquiv_iff_lt_one_iff.2 fun a => ?_
   rcases eq_or_ne a 0 with (rfl | ha₀)
@@ -446,8 +446,8 @@ theorem exists_lt_one_one_le_of_not_isEquiv
   exact isEquiv_of_lt_one_imp hv h
 
 中文:
-定理 exists_lt_one_one_le_of_not_isEquiv
-  结论: {v w : AbsoluteValue R S} (hv : v.IsNontrivial)
+定理 存在_lt_one_one_le_of_not_isEquiv
+  结论: {v w : 绝对值 R S} (hv : v.是非平凡)
   证明: by
   contrapose! h
   exact isEquiv_of_lt_one_imp hv h
@@ -472,8 +472,8 @@ theorem exists_one_lt_lt_one_of_not_isEquiv
     lt_of_le_of_lt' hvb hva, lt_of_le_of_lt' hwa hwb]⟩
 
 中文:
-定理 exists_one_lt_lt_one_of_not_isEquiv
-  结论: {v w : AbsoluteValue R S} (hv : v.IsNontrivial)
+定理 存在_one_lt_lt_one_of_not_isEquiv
+  结论: {v w : 绝对值 R S} (hv : v.是非平凡)
   证明: by
   let ⟨a, hva, hwa⟩ := exists_lt_one_one_le_of_not_isEquiv hv h
   let ⟨b, hwb, hvb⟩ := exists_lt_one_one_le_of_not_isEquiv hw (mt .symm h)
@@ -517,7 +517,7 @@ theorem exists_one_lt_lt_one_pi_of_eq_one
  
 
 中文:
-定理 exists_one_lt_lt_one_pi_of_eq_one
+定理 存在_one_lt_lt_one_pi_of_eq_one
   结论: (ha : 1 < v i a) (haj : 对任意 j != i, v j a < 1)
   证明: by
   classical
@@ -561,7 +561,7 @@ theorem exists_one_lt_lt_one_pi_of_one_lt
   have hcⱼ (j : ι)
 
 中文:
-定理 exists_one_lt_lt_one_pi_of_one_lt
+定理 存在_one_lt_lt_one_pi_of_one_lt
   结论: (ha : 1 < v i a) (haj : 对任意 j != i, v j a < 1)
   证明: by
   classical
@@ -616,8 +616,8 @@ theorem exists_one_lt_lt_one_pi_of_not_isEquiv
   -- Use strong induction
 
 中文:
-定理 exists_one_lt_lt_one_pi_of_not_isEquiv
-  结论: (h : 对任意 i, (v i).IsNontrivial)
+定理 存在_one_lt_lt_one_pi_of_not_isEquiv
+  结论: (h : 对任意 i, (v i).是非平凡)
   证明: by
   classical
   have := Fintype.ofFinite ι
@@ -693,8 +693,8 @@ theorem IsEquiv.log_div_log_pos
   · exact div_pos (log_pos <| hwa) (log_pos (h.one_lt_iff.2 hwa))
 
 中文:
-定理 IsEquiv.log_div_log_pos
-  条件: (h : v.IsEquiv w) {a : F} (ha₀ : a != 0) (ha₁ : w a != 1)
+定理 Is等价.log_div_log_pos
+  条件: (h : v.Is等价 w) {a : F} (ha₀ : a != 0) (ha₁ : w a != 1)
   证明: by
   rcases ha₁.lt_or_gt with hwa | hwa
   · simpa using div_pos (neg_pos_of_neg <| log_neg (w.pos ha₀) (hwa))
@@ -726,8 +726,8 @@ theorem IsEquiv.log_div_log_eq_log_div_log
     simpa u
 
 中文:
-定理 IsEquiv.log_div_log_eq_log_div_log
-  结论: (h : v.IsEquiv w)
+定理 Is等价.log_div_log_eq_log_div_log
+  结论: (h : v.Is等价 w)
   证明: by
   by_contra! h_ne
   wlog! ha : 1 < v a generalizing a b
@@ -779,8 +779,8 @@ theorem isEquiv_iff_exists_rpow_eq
     rcases eq_or_ne b 0 with rfl
 
 中文:
-定理 isEquiv_iff_exists_rpow_eq
-  条件: {v w : AbsoluteValue F 实数}
+定理 isEquiv_iff_存在_rpow_eq
+  条件: {v w : 绝对值 F 实数}
   证明: by
   refine ⟨fun h => ?_, fun ⟨t, ht, h⟩ => isEquiv_iff_lt_one_iff.2
     fun x => h ▸ (rpow_lt_one_iff' (v.nonneg x) ht).symm⟩
@@ -822,8 +822,8 @@ theorem IsEquiv.equivWithAbs_image_mem_nhds_zero
   rw [Metric.mem
 
 中文:
-定理 IsEquiv.equivWithAbs_image_mem_nhds_zero
-  结论: (h : v.IsEquiv w) {U : Set (WithAbs v)}
+定理 Is等价.equivWithAbs_image_mem_nhds_zero
+  结论: (h : v.Is等价 w) {U : 集合 (WithAbs v)}
   证明: by
   rw [Metric.mem_nhds_iff] at hU ⊢
   obtain ⟨ε, hε, hU⟩ := hU
@@ -862,8 +862,8 @@ refine IsInducing.isEmbedding isInducing_iff_nhds_zero.2 Filter.ext fun U =>
         (rep
 
 中文:
-定理 IsEquiv.isEmbedding_equivWithAbs
-  条件: (h : v.IsEquiv w)
+定理 Is等价.isEmbedding_equivWithAbs
+  条件: (h : v.Is等价 w)
   证明: by
 refine IsInducing.isEmbedding isInducing_iff_nhds_zero.2 Filter.ext fun U =>
     ⟨fun hU => ?_, fun hU => ?_⟩
@@ -907,7 +907,7 @@ theorem isEquiv_iff_isHomeomorph
 
 中文:
 定理 isEquiv_iff_isHomeomorph
-  条件: (v w : AbsoluteValue F 实数)
+  条件: (v w : 绝对值 F 实数)
   证明: by
   rw [isHomeomorph_iff_isEmbedding_surjective]
   refine ⟨fun h => ⟨h.isEmbedding_equivWithAbs, RingEquiv.surjective _⟩, fun ⟨hi, _⟩ => ?_⟩
@@ -955,7 +955,7 @@ theorem denseRange_algebraMap_pi
 
 中文:
 定理 denseRange_algebraMap_pi
-  结论: {ι : 类型} [Finite ι] {v : ι -> AbsoluteValue F 实数}
+  结论: {ι : 类型} [有限 ι] {v : ι -> 绝对值 F 实数}
   证明: by
   classical
   have := Fintype.ofFinite ι

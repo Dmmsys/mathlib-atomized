@@ -61,7 +61,7 @@ lemma toTopology_ofTopology
 
 中文:
 引理 toTopology_ofTopology
-  条件: (x : WithTopology X t)
+  条件: (x : With拓扑 X t)
   证明: rfl
 -/
 lemma toTopology_ofTopology (x : WithTopology X t) :
@@ -77,7 +77,7 @@ lemma ofTopology_surjective
 
 中文:
 引理 ofTopology_surjective
-  结论: Function.Surjective (ofTopology (t := t))
+  结论: 函数.满射 (ofTopology (t := t))
   证明: Function.RightInverse.surjective ofTopology_toTopology _
 -/
 lemma ofTopology_surjective : Function.Surjective (ofTopology (t := t)) :=
@@ -93,7 +93,7 @@ lemma toTopology_surjective
 
 中文:
 引理 toTopology_surjective
-  结论: Function.Surjective (toTopology t)
+  结论: 函数.满射 (toTopology t)
   证明: Function.RightInverse.surjective toTopology_ofTopology _
 
 Depends on / 依赖: Function, Function.RightInverse.surjective, RightInverse, surjective, toTopology_ofTopology
@@ -111,7 +111,7 @@ lemma ofTopology_injective
 
 中文:
 引理 ofTopology_injective
-  结论: Function.Injective (ofTopology (t := t))
+  结论: 函数.单射 (ofTopology (t := t))
   证明: Function.LeftInverse.injective toTopology_ofTopology _
 -/
 lemma ofTopology_injective : Function.Injective (ofTopology (t := t)) :=
@@ -127,7 +127,7 @@ lemma toTopology_injective
 
 中文:
 引理 toTopology_injective
-  结论: Function.Injective (toTopology t)
+  结论: 函数.单射 (toTopology t)
   证明: Function.LeftInverse.injective ofTopology_toTopology _
 
 Depends on / 依赖: Function, Function.LeftInverse.injective, LeftInverse, injective, ofTopology_toTopology
@@ -145,7 +145,7 @@ lemma ofTopology_bijective
 
 中文:
 引理 ofTopology_bijective
-  结论: Function.Bijective (ofTopology (t := t))
+  结论: 函数.双射 (ofTopology (t := t))
   证明: ⟨ofTopology_injective t, ofTopology_surjective t⟩
 -/
 lemma ofTopology_bijective : Function.Bijective (ofTopology (t := t)) :=
@@ -161,7 +161,7 @@ lemma toTopology_bijective
 
 中文:
 引理 toTopology_bijective
-  结论: Function.Bijective (toTopology t)
+  结论: 函数.双射 (toTopology t)
   证明: ⟨toTopology_injective t, toTopology_surjective t⟩
 
 Depends on / 依赖: toTopology_injective, toTopology_surjective
@@ -200,7 +200,7 @@ lemma ofTopology_inj
 
 中文:
 引理 ofTopology_inj
-  条件: {x y : WithTopology X t}
+  条件: {x y : With拓扑 X t}
   结论: ofTopology x = ofTopology y ↔ x = y
   证明: (ofTopology_injective t).eq_iff
 -/
@@ -219,7 +219,7 @@ lemma isOpen_iff
 
 中文:
 引理 isOpen_iff
-  条件: {s : Set (WithTopology X t)}
+  条件: {s : 集合 (With拓扑 X t)}
   证明: .rfl
 -/
 lemma isOpen_iff {s : Set (WithTopology X t)} :
@@ -237,7 +237,7 @@ lemma isClosed_iff
 
 中文:
 引理 isClosed_iff
-  条件: {s : Set (WithTopology X t)}
+  条件: {s : 集合 (With拓扑 X t)}
   证明: by
   simp [← isOpen_compl_iff, isOpen_iff]
 
@@ -257,7 +257,7 @@ lemma continuous_toTopology
 
 中文:
 引理 continuous_toTopology
-  结论: Continuous[t, _] (toTopology t)
+  结论: 连续[t, _] (toTopology t)
   证明: ⟨fun _ => (·)⟩
 -/
 lemma continuous_toTopology : Continuous[t, _] (toTopology t) :=
@@ -273,7 +273,7 @@ lemma continuous_ofTopology
 
 中文:
 引理 continuous_ofTopology
-  结论: Continuous[_, t] (ofTopology (t := t))
+  结论: 连续[_, t] (ofTopology (t := t))
   证明: ⟨fun _ => (·)⟩
 -/
 lemma continuous_ofTopology : Continuous[_, t] (ofTopology (t := t)) :=
@@ -294,7 +294,7 @@ lemma image_ofTopology
 
 中文:
 引理 image_ofTopology
-  条件: (s : Set (WithTopology X t))
+  条件: (s : 集合 (With拓扑 X t))
   结论: ofTopology '' s = toTopology t ⁻¹' s
   证明: .symm.image_symm_eq_preimage _ WithTopology.equiv X t
 
@@ -314,7 +314,7 @@ lemma preimage_toTopology
 
 中文:
 引理 preimage_toTopology
-  条件: (s : Set (WithTopology X t))
+  条件: (s : 集合 (With拓扑 X t))
   结论: toTopology t ⁻¹' s = ofTopology '' s
   证明: (image_ofTopology t s).symm
 
@@ -334,7 +334,7 @@ lemma image_toTopology
 
 中文:
 引理 image_toTopology
-  条件: (s : Set X)
+  条件: (s : 集合 X)
   结论: toTopology t '' s = ofTopology ⁻¹' s
   证明: .symm.image_eq_preimage_symm _ WithTopology.equiv X t
 
@@ -354,7 +354,7 @@ lemma preimage_ofTopology
 
 中文:
 引理 preimage_ofTopology
-  条件: (s : Set X)
+  条件: (s : 集合 X)
   结论: ofTopology ⁻¹' s = toTopology t '' s
   证明: (image_toTopology t s).symm
 
@@ -373,8 +373,8 @@ instance [Nonempty
   body: (WithTopology.equiv X t).nonempty
 
 中文:
-实例 [Nonempty
-  签名: X] : Nonempty (WithTopology X t)
+实例 [非空
+  签名: X] : 非空 (With拓扑 X t)
   定义体: (WithTopology.equiv X t).nonempty
 
 Depends on / 依赖: WithTopology, WithTopology.equiv, nonempty
@@ -391,8 +391,8 @@ instance [Inhabited
   body: ⟨toTopology t default⟩
 
 中文:
-实例 [Inhabited
-  签名: X] : Inhabited (WithTopology X t)
+实例 [可居
+  签名: X] : 可居 (With拓扑 X t)
   定义体: ⟨toTopology t default⟩
 
 Depends on / 依赖: toTopology
@@ -409,8 +409,8 @@ instance [Subsingleton
   body: (WithTopology.equiv X t).subsingleton
 
 中文:
-实例 [Subsingleton
-  签名: X] : Subsingleton (WithTopology X t)
+实例 [子单例
+  签名: X] : 子单例 (With拓扑 X t)
   定义体: (WithTopology.equiv X t).subsingleton
 
 Depends on / 依赖: WithTopology, WithTopology.equiv, subsingleton
@@ -427,8 +427,8 @@ instance [Unique
   body: .mk' _
 
 中文:
-实例 [Unique
-  签名: X] : Unique (WithTopology X t)
+实例 [唯一
+  签名: X] : 唯一 (With拓扑 X t)
   定义体: .mk' _
 -/
 instance [Unique X] : Unique (WithTopology X t) := .mk' _
@@ -442,8 +442,8 @@ instance [Finite
   body: .of_equiv _ (WithTopology.equiv X t).symm
 
 中文:
-实例 [Finite
-  签名: X] : Finite (WithTopology X t)
+实例 [有限
+  签名: X] : 有限 (With拓扑 X t)
   定义体: .of_equiv _ (WithTopology.equiv X t).symm
 
 Depends on / 依赖: WithTopology, WithTopology.equiv, of_equiv
@@ -459,8 +459,8 @@ instance [Infinite
   body: .of_injective _ toTopology_injective _
 
 中文:
-实例 [Infinite
-  签名: X] : Infinite (WithTopology X t)
+实例 [无限
+  签名: X] : 无限 (With拓扑 X t)
   定义体: .of_injective _ toTopology_injective _
 
 Depends on / 依赖: of_injective, toTopology_injective
@@ -478,8 +478,8 @@ instance [Fintype
 deriving instance DecidableEq for WithTopology
 
 中文:
-实例 [Fintype
-  签名: X] : Fintype (WithTopology X t)
+实例 [有限类型
+  签名: X] : 有限类型 (With拓扑 X t)
   定义体: .ofBijective (.toTopology t) (toTopology_bijective t)
 
 deriving instance DecidableEq for WithTopology
@@ -501,7 +501,7 @@ instance [LE
 
 中文:
 实例 [LE
-  签名: X] : LE (WithTopology X t) where
+  签名: X] : LE (With拓扑 X t) where
   定义体: ofTopology x <= ofTopology y
 
 Depends on / 依赖: ofTopology
@@ -519,7 +519,7 @@ instance [LT
 
 中文:
 实例 [LT
-  签名: X] : LT (WithTopology X t) where
+  签名: X] : LT (With拓扑 X t) where
   定义体: ofTopology x < ofTopology y
 
 Depends on / 依赖: ofTopology
@@ -539,7 +539,7 @@ instance [LE
 
 中文:
 实例 [LE
-  签名: X] [DecidableLE X] : DecidableLE (WithTopology X t)
+  签名: X] [DecidableLE X] : DecidableLE (With拓扑 X t)
   定义体: fun x y =>
   inferInstanceAs (Decidable (x.ofTopology <= y.ofTopology))
 -/
@@ -558,7 +558,7 @@ instance [LT
 
 中文:
 实例 [LT
-  签名: X] [DecidableLT X] : DecidableLT (WithTopology X t)
+  签名: X] [DecidableLT X] : DecidableLT (With拓扑 X t)
   定义体: fun x y =>
   inferInstanceAs (Decidable (x.ofTopology < y.ofTopology))
 -/
@@ -574,8 +574,8 @@ instance [Preorder
   body: .lift ofTopology
 
 中文:
-实例 [Preorder
-  签名: X] : Preorder (WithTopology X t)
+实例 [预序
+  签名: X] : 预序 (With拓扑 X t)
   定义体: .lift ofTopology
 
 Depends on / 依赖: ofTopology
@@ -594,8 +594,8 @@ instance [PartialOrder
 @[to_dual]
 
 中文:
-实例 [PartialOrder
-  签名: X] : PartialOrder (WithTopology X t)
+实例 [偏序
+  签名: X] : 偏序 (With拓扑 X t)
   定义体: .partialOrder _ .rfl .rfl ofTopology_injective t
 
 @[to_dual]
@@ -617,8 +617,8 @@ instance [Max
 @[to_dual]
 
 中文:
-实例 [Max
-  签名: X] : Max (WithTopology X t) where
+实例 [最大值
+  签名: X] : 最大值 (With拓扑 X t) where
   定义体: toTopology t (max x.ofTopology y.ofTopology)
 
 @[to_dual]
@@ -639,7 +639,7 @@ instance [SemilatticeSup
 
 中文:
 实例 [SemilatticeSup
-  签名: X] : SemilatticeSup (WithTopology X t)
+  签名: X] : SemilatticeSup (With拓扑 X t)
   定义体: .semilatticeSup _ .rfl .rfl fun _ _ => rfl ofTopology_injective t
 
 Depends on / 依赖: ofTopology_injective, semilatticeSup
@@ -655,8 +655,8 @@ instance [Lattice
   signature: X] : Lattice (WithTopology X t) where
 
 中文:
-实例 [Lattice
-  签名: X] : Lattice (WithTopology X t) where
+实例 [格
+  签名: X] : 格 (With拓扑 X t) where
 -/
 instance [Lattice X] : Lattice (WithTopology X t) where
 
@@ -669,8 +669,8 @@ instance [DistribLattice
   body: le_sup_inf (α := X)
 
 中文:
-实例 [DistribLattice
-  签名: X] : DistribLattice (WithTopology X t) where
+实例 [Distrib格
+  签名: X] : Distrib格 (With拓扑 X t) where
   定义体: le_sup_inf (α := X)
 
 Depends on / 依赖: le_sup_inf
@@ -687,8 +687,8 @@ instance [Ord
   body: compare x.ofTopology y.ofTopology
 
 中文:
-实例 [Ord
-  签名: X] : Ord (WithTopology X t) where
+实例 [序
+  签名: X] : 序 (With拓扑 X t) where
   定义体: compare x.ofTopology y.ofTopology
 
 Depends on / 依赖: compare, ofTopology, x.ofTopology, y.ofTopology
@@ -705,8 +705,8 @@ instance [LinearOrder
   body: .linearOrder _ .rfl .rfl (fun _ _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl) ofTopology_injective t
 
 中文:
-实例 [LinearOrder
-  签名: X] : LinearOrder (WithTopology X t)
+实例 [线性序
+  签名: X] : 线性序 (With拓扑 X t)
   定义体: .linearOrder _ .rfl .rfl (fun _ _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl) ofTopology_injective t
 
 Depends on / 依赖: linearOrder, ofTopology_injective

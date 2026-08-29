@@ -48,7 +48,7 @@ definition AEval
 
 中文:
 定义 AEval
-  签名: (R M : 类型) {A : 类型} [CommSemiring R] [Semiring A] [Algebra R A]
+  签名: (R M : 类型) {A : 类型} [交换半环 R] [半环 A] [代数 R A]
   定义体: M
   deriving AddCommMonoid, Module R
 -/
@@ -66,7 +66,7 @@ instance AEval.instAddCommGroup
 
 中文:
 实例 AEval.instAddCommGroup
-  签名: {R A M} [CommSemiring R] [Semiring A] (a : A) [Algebra R A]
+  签名: {R A M} [交换半环 R] [半环 A] (a : A) [代数 R A]
   定义体: inferInstanceAs (AddCommGroup M)
 
 Depends on / 依赖: AddCommGroup
@@ -90,7 +90,7 @@ instance instFiniteOrig
 
 中文:
 实例 instFiniteOrig
-  签名: [Module.Finite R M]
+  签名: [模.有限 R M]
   定义体: inferInstanceAs Module.Finite R M
 
 Depends on / 依赖: Finite, Module, Module.Finite
@@ -108,7 +108,7 @@ instance instModulePolynomial
 
 中文:
 实例 instModulePolynomial
-  签名: : Module R[X] AEval R M a
+  签名: : 模 R[X] AEval R M a
   定义体: compHom M (aeval a).toRingHom
 
 Depends on / 依赖: compHom, toRingHom
@@ -266,7 +266,7 @@ instance instIsScalarTowerOrigPolynomial
 
 中文:
 实例 instIsScalarTowerOrigPolynomial
-  签名: : IsScalarTower R R[X] AEval R M a where
+  签名: : 标量塔 R R[X] AEval R M a where
   定义体: by
     apply (of R M a).symm.injective
     rw [of_symm_smul]; rw [map_smul]; rw [smul_assoc]; rw [map_smul]; rw [of_symm_smul]
@@ -288,7 +288,7 @@ instance instFinitePolynomial
 
 中文:
 实例 instFinitePolynomial
-  签名: [Module.Finite R M]
+  签名: [模.有限 R M]
   定义体: Finite.of_restrictScalars_finite R _ _
 
 Depends on / 依赖: Finite, Finite.of_restrictScalars_finite, of_restrictScalars_finite
@@ -309,8 +309,8 @@ definition _root_.LinearMap.ofAEval
         LinearMap.comp_apply, LinearEquiv.coe_toLinearMap] at h 
 
 中文:
-定义 _root_.LinearMap.ofAEval
-  签名: {N} [AddCommMonoid N] [Module R N] [Module R[X] N]
+定义 _root_.线性映射.ofAEval
+  签名: {N} [加法交换幺半群 N] [模 R N] [模 R[X] N]
   定义体: f ∘ₗ (of R M a).symm
   map_smul' p := p.induction_on (fun k m => by simp [C_eq_algebraMap])
     (fun p q hp hq m => by simp_all [add_smul]) fun n k h m => by
@@ -339,8 +339,8 @@ definition _root_.LinearEquiv.ofAEval
   right_inv x := by simp [LinearMap.ofAEval]
 
 中文:
-定义 _root_.LinearEquiv.ofAEval
-  签名: {N} [AddCommMonoid N] [Module R N] [Module R[X] N]
+定义 _root_.线性等价.ofAEval
+  签名: {N} [加法交换幺半群 N] [模 R N] [模 R[X] N]
   定义体: LinearMap.ofAEval a f hf
   invFun := (of R M a) ∘ f.symm
   left_inv x := by simp [LinearMap.ofAEval]
@@ -372,7 +372,7 @@ exact ⟨fun h => eq_of_smul_eq_smul (α := M) by simp [h], fun h => by simp [h]
 
 中文:
 引理 annihilator_eq_ker_aeval
-  条件: [FaithfulSMul A M]
+  条件: [忠实标量乘法 A M]
   证明: by
   ext p
   simp_rw [mem_annihilator, RingHom.mem_ker]
@@ -405,7 +405,7 @@ exact ⟨fun h => eq_of_smul_eq_smul (α := M) by simp [h], fun h => by simp [h]
 
 中文:
 引理 annihilator_top_eq_ker_aeval
-  条件: [FaithfulSMul A M]
+  条件: [忠实标量乘法 A M]
   证明: by
   ext p
   simp only [Submodule.mem_annihilator, Submodule.mem_top, forall_true_left, RingHom.mem_ker]
@@ -476,7 +476,7 @@ lemma mem_mapSubmodule_apply
 
 中文:
 引理 mem_mapSubmodule_apply
-  条件: {p : (Algebra.lsmul R R M a).invtSubmodule} {m : AEval R M a}
+  条件: {p : (代数.lsmul R R M a).invtSubmodule} {m : AEval R M a}
   证明: ⟨fun ⟨_, hm, hm'⟩ => hm'.symm ▸ hm, fun hm => ⟨(of R M a).symm m, hm, rfl⟩⟩
 -/
 @[simp] lemma mem_mapSubmodule_apply {p : (Algebra.lsmul R R M a).invtSubmodule} {m : AEval R M a} :
@@ -493,7 +493,7 @@ lemma mem_mapSubmodule_symm_apply
 
 中文:
 引理 mem_mapSubmodule_symm_apply
-  条件: {q : Submodule R[X] (AEval R M a)} {m : M}
+  条件: {q : 子模 R[X] (AEval R M a)} {m : M}
   证明: Iff.rfl
 -/
 @[simp] lemma mem_mapSubmodule_symm_apply {q : Submodule R[X] (AEval R M a)} {m : M} :
@@ -660,8 +660,8 @@ instance [Module.Finite
   body: inferInstance
 
 中文:
-实例 [Module.Finite
-  签名: R M] : Module.Finite R[X] AEval' φ
+实例 [模.有限
+  签名: R M] : 模.有限 R[X] AEval' φ
   定义体: inferInstance
 -/
 instance [Module.Finite R M] : Module.Finite R[X] AEval' φ := inferInstance

@@ -80,7 +80,7 @@ definition MonovaryOn
 
 中文:
 定义 MonovaryOn
-  签名: (f : ι -> α) (g : ι -> β) (s : Set ι)
+  签名: (f : ι -> α) (g : ι -> β) (s : 集合 ι)
   定义体: forall ⦃i⦄ (_ : i in s) ⦃j⦄ (_ : j in s), g i < g j -> f i <= f j
 -/
 def MonovaryOn (f : ι -> α) (g : ι -> β) (s : Set ι) : Prop :=
@@ -96,7 +96,7 @@ definition AntivaryOn
 
 中文:
 定义 AntivaryOn
-  签名: (f : ι -> α) (g : ι -> β) (s : Set ι)
+  签名: (f : ι -> α) (g : ι -> β) (s : 集合 ι)
   定义体: forall ⦃i⦄ (_ : i in s) ⦃j⦄ (_ : j in s), g i < g j -> f j <= f i
 -/
 def AntivaryOn (f : ι -> α) (g : ι -> β) (s : Set ι) : Prop :=
@@ -113,7 +113,7 @@ theorem Monovary.monovaryOn
 
 中文:
 定理 Monovary.monovaryOn
-  条件: (h : Monovary f g) (s : Set ι)
+  条件: (h : Monovary f g) (s : 集合 ι)
   结论: MonovaryOn f g s
   证明: fun _ _ _ _ hij => h hij
 -/
@@ -133,7 +133,7 @@ theorem Antivary.antivaryOn
 
 中文:
 定理 Antivary.antivaryOn
-  条件: (h : Antivary f g) (s : Set ι)
+  条件: (h : Antivary f g) (s : 集合 ι)
   结论: AntivaryOn f g s
   证明: fun _ _ _ _ hij => h hij
 
@@ -408,7 +408,7 @@ theorem monovaryOn_self
 
 中文:
 定理 monovaryOn_self
-  条件: (f : ι -> α) (s : Set ι)
+  条件: (f : ι -> α) (s : 集合 ι)
   结论: MonovaryOn f f s
   证明: fun _ _ _ _ => le_of_lt
 
@@ -426,8 +426,8 @@ theorem Subsingleton.monovary
   proof: fun _ _ h => (ne_of_apply_ne _ h.ne <| Subsingleton.elim _ _).elim
 
 中文:
-定理 Subsingleton.monovary
-  条件: [Subsingleton ι] (f : ι -> α) (g : ι -> β)
+定理 子单例.monovary
+  条件: [子单例 ι] (f : ι -> α) (g : ι -> β)
   结论: Monovary f g
   证明: fun _ _ h => (ne_of_apply_ne _ h.ne <| Subsingleton.elim _ _).elim
 -/
@@ -444,8 +444,8 @@ theorem Subsingleton.antivary
   proof: fun _ _ h => (ne_of_apply_ne _ h.ne <| Subsingleton.elim _ _).elim
 
 中文:
-定理 Subsingleton.antivary
-  条件: [Subsingleton ι] (f : ι -> α) (g : ι -> β)
+定理 子单例.antivary
+  条件: [子单例 ι] (f : ι -> α) (g : ι -> β)
   结论: Antivary f g
   证明: fun _ _ h => (ne_of_apply_ne _ h.ne <| Subsingleton.elim _ _).elim
 -/
@@ -461,8 +461,8 @@ theorem Subsingleton.monovaryOn
   proof: fun _ _ _ _ h => (ne_of_apply_ne _ h.ne <| Subsingleton.elim _ _).elim
 
 中文:
-定理 Subsingleton.monovaryOn
-  条件: [Subsingleton ι] (f : ι -> α) (g : ι -> β) (s : Set ι)
+定理 子单例.monovaryOn
+  条件: [子单例 ι] (f : ι -> α) (g : ι -> β) (s : 集合 ι)
   证明: fun _ _ _ _ h => (ne_of_apply_ne _ h.ne <| Subsingleton.elim _ _).elim
 -/
 protected theorem Subsingleton.monovaryOn [Subsingleton ι] (f : ι -> α) (g : ι -> β) (s : Set ι) :
@@ -477,8 +477,8 @@ theorem Subsingleton.antivaryOn
   proof: fun _ _ _ _ h => (ne_of_apply_ne _ h.ne <| Subsingleton.elim _ _).elim
 
 中文:
-定理 Subsingleton.antivaryOn
-  条件: [Subsingleton ι] (f : ι -> α) (g : ι -> β) (s : Set ι)
+定理 子单例.antivaryOn
+  条件: [子单例 ι] (f : ι -> α) (g : ι -> β) (s : 集合 ι)
   证明: fun _ _ _ _ h => (ne_of_apply_ne _ h.ne <| Subsingleton.elim _ _).elim
 -/
 protected theorem Subsingleton.antivaryOn [Subsingleton ι] (f : ι -> α) (g : ι -> β) (s : Set ι) :
@@ -495,7 +495,7 @@ theorem monovaryOn_const_left
 
 中文:
 定理 monovaryOn_const_left
-  条件: (g : ι -> β) (a : α) (s : Set ι)
+  条件: (g : ι -> β) (a : α) (s : 集合 ι)
   结论: MonovaryOn (const ι a) g s
   证明: fun _ _ _ _ _ => le_rfl
 
@@ -515,7 +515,7 @@ theorem antivaryOn_const_left
 
 中文:
 定理 antivaryOn_const_left
-  条件: (g : ι -> β) (a : α) (s : Set ι)
+  条件: (g : ι -> β) (a : α) (s : 集合 ι)
   结论: AntivaryOn (const ι a) g s
   证明: fun _ _ _ _ _ => le_rfl
 
@@ -535,7 +535,7 @@ theorem monovaryOn_const_right
 
 中文:
 定理 monovaryOn_const_right
-  条件: (f : ι -> α) (b : β) (s : Set ι)
+  条件: (f : ι -> α) (b : β) (s : 集合 ι)
   结论: MonovaryOn f (const ι b) s
   证明: fun _ _ _ _ h => (h.ne rfl).elim
 
@@ -555,7 +555,7 @@ theorem antivaryOn_const_right
 
 中文:
 定理 antivaryOn_const_right
-  条件: (f : ι -> α) (b : β) (s : Set ι)
+  条件: (f : ι -> α) (b : β) (s : 集合 ι)
   结论: AntivaryOn f (const ι b) s
   证明: fun _ _ _ _ h => (h.ne rfl).elim
 
@@ -643,7 +643,7 @@ theorem Monovary.comp_monotone_left
 
 中文:
 定理 Monovary.comp_monotone_left
-  条件: (h : Monovary f g) (hf : Monotone f')
+  条件: (h : Monovary f g) (hf : 递增 f')
   结论: Monovary (f' ∘ f) g
   证明: fun _ _ hij => hf h hij
 -/
@@ -661,7 +661,7 @@ theorem Monovary.comp_antitone_left
 
 中文:
 定理 Monovary.comp_antitone_left
-  条件: (h : Monovary f g) (hf : Antitone f')
+  条件: (h : Monovary f g) (hf : 递减 f')
   结论: Antivary (f' ∘ f) g
   证明: fun _ _ hij => hf h hij
 -/
@@ -679,7 +679,7 @@ theorem Antivary.comp_monotone_left
 
 中文:
 定理 Antivary.comp_monotone_left
-  条件: (h : Antivary f g) (hf : Monotone f')
+  条件: (h : Antivary f g) (hf : 递增 f')
   结论: Antivary (f' ∘ f) g
   证明: fun _ _ hij => hf h hij
 -/
@@ -697,7 +697,7 @@ theorem Antivary.comp_antitone_left
 
 中文:
 定理 Antivary.comp_antitone_left
-  条件: (h : Antivary f g) (hf : Antitone f')
+  条件: (h : Antivary f g) (hf : 递减 f')
   结论: Monovary (f' ∘ f) g
   证明: fun _ _ hij => hf h hij
 -/
@@ -714,7 +714,7 @@ theorem MonovaryOn.comp_monotone_on_left
 
 中文:
 定理 MonovaryOn.comp_monotone_on_left
-  条件: (h : MonovaryOn f g s) (hf : Monotone f')
+  条件: (h : MonovaryOn f g s) (hf : 递增 f')
   证明: fun _ hi _ hj hij => hf h hi hj hij
 -/
 theorem MonovaryOn.comp_monotone_on_left (h : MonovaryOn f g s) (hf : Monotone f') :
@@ -730,7 +730,7 @@ theorem MonovaryOn.comp_antitone_on_left
 
 中文:
 定理 MonovaryOn.comp_antitone_on_left
-  条件: (h : MonovaryOn f g s) (hf : Antitone f')
+  条件: (h : MonovaryOn f g s) (hf : 递减 f')
   证明: fun _ hi _ hj hij => hf h hi hj hij
 -/
 theorem MonovaryOn.comp_antitone_on_left (h : MonovaryOn f g s) (hf : Antitone f') :
@@ -746,7 +746,7 @@ theorem AntivaryOn.comp_monotone_on_left
 
 中文:
 定理 AntivaryOn.comp_monotone_on_left
-  条件: (h : AntivaryOn f g s) (hf : Monotone f')
+  条件: (h : AntivaryOn f g s) (hf : 递增 f')
   证明: fun _ hi _ hj hij => hf h hi hj hij
 -/
 theorem AntivaryOn.comp_monotone_on_left (h : AntivaryOn f g s) (hf : Monotone f') :
@@ -762,7 +762,7 @@ theorem AntivaryOn.comp_antitone_on_left
 
 中文:
 定理 AntivaryOn.comp_antitone_on_left
-  条件: (h : AntivaryOn f g s) (hf : Antitone f')
+  条件: (h : AntivaryOn f g s) (hf : 递减 f')
   证明: fun _ hi _ hj hij => hf h hi hj hij
 -/
 theorem AntivaryOn.comp_antitone_on_left (h : AntivaryOn f g s) (hf : Antitone f') :
@@ -1163,7 +1163,7 @@ theorem monovary_id_iff
 
 中文:
 定理 monovary_id_iff
-  结论: Monovary f id ↔ Monotone f
+  结论: Monovary f id ↔ 递增 f
   证明: monotone_iff_forall_lt.symm
 
 @[simp]
@@ -1186,7 +1186,7 @@ theorem antivary_id_iff
 
 中文:
 定理 antivary_id_iff
-  结论: Antivary f id ↔ Antitone f
+  结论: Antivary f id ↔ 递减 f
   证明: antitone_iff_forall_lt.symm
 
 @[simp]
@@ -1248,9 +1248,9 @@ lemma StrictMono.trans_monovary
   proof: monotone_iff_forall_lt.2 fun _a _b hab => h hf hab
 
 中文:
-引理 StrictMono.trans_monovary
-  条件: (hf : StrictMono f) (h : Monovary g f)
-  结论: Monotone g
+引理 严格递增.trans_monovary
+  条件: (hf : 严格递增 f) (h : Monovary g f)
+  结论: 递增 g
   证明: monotone_iff_forall_lt.2 fun _a _b hab => h hf hab
 
 Depends on / 依赖: monotone_iff_forall_lt
@@ -1268,9 +1268,9 @@ lemma StrictMono.trans_antivary
   proof: antitone_iff_forall_lt.2 fun _a _b hab => h hf hab
 
 中文:
-引理 StrictMono.trans_antivary
-  条件: (hf : StrictMono f) (h : Antivary g f)
-  结论: Antitone g
+引理 严格递增.trans_antivary
+  条件: (hf : 严格递增 f) (h : Antivary g f)
+  结论: 递减 g
   证明: antitone_iff_forall_lt.2 fun _a _b hab => h hf hab
 
 Depends on / 依赖: antitone_iff_forall_lt
@@ -1288,9 +1288,9 @@ lemma StrictAnti.trans_monovary
   proof: antitone_iff_forall_lt.2 fun _a _b hab => h hf hab
 
 中文:
-引理 StrictAnti.trans_monovary
-  条件: (hf : StrictAnti f) (h : Monovary g f)
-  结论: Antitone g
+引理 严格递减.trans_monovary
+  条件: (hf : 严格递减 f) (h : Monovary g f)
+  结论: 递减 g
   证明: antitone_iff_forall_lt.2 fun _a _b hab => h hf hab
 
 Depends on / 依赖: antitone_iff_forall_lt
@@ -1308,9 +1308,9 @@ lemma StrictAnti.trans_antivary
   proof: monotone_iff_forall_lt.2 fun _a _b hab => h hf hab
 
 中文:
-引理 StrictAnti.trans_antivary
-  条件: (hf : StrictAnti f) (h : Antivary g f)
-  结论: Monotone g
+引理 严格递减.trans_antivary
+  条件: (hf : 严格递减 f) (h : Antivary g f)
+  结论: 递增 g
   证明: monotone_iff_forall_lt.2 fun _a _b hab => h hf hab
 
 Depends on / 依赖: monotone_iff_forall_lt
@@ -1404,8 +1404,8 @@ theorem Monotone.monovary
   proof: fun _ _ hij => hf (hg.reflect_lt hij).le
 
 中文:
-定理 Monotone.monovary
-  条件: (hf : Monotone f) (hg : Monotone g)
+定理 递增.monovary
+  条件: (hf : 递增 f) (hg : 递增 g)
   结论: Monovary f g
   证明: fun _ _ hij => hf (hg.reflect_lt hij).le
 -/
@@ -1422,8 +1422,8 @@ theorem Monotone.antivary
   proof: (hf.monovary hg.dual_right).dual_right
 
 中文:
-定理 Monotone.antivary
-  条件: (hf : Monotone f) (hg : Antitone g)
+定理 递增.antivary
+  条件: (hf : 递增 f) (hg : 递减 g)
   结论: Antivary f g
   证明: (hf.monovary hg.dual_right).dual_right
 -/
@@ -1440,8 +1440,8 @@ theorem Antitone.monovary
   proof: (hf.dual_right.antivary hg).dual_left
 
 中文:
-定理 Antitone.monovary
-  条件: (hf : Antitone f) (hg : Antitone g)
+定理 递减.monovary
+  条件: (hf : 递减 f) (hg : 递减 g)
   结论: Monovary f g
   证明: (hf.dual_right.antivary hg).dual_left
 -/
@@ -1458,8 +1458,8 @@ theorem Antitone.antivary
   proof: (hf.monovary hg.dual_right).dual_right
 
 中文:
-定理 Antitone.antivary
-  条件: (hf : Antitone f) (hg : Monotone g)
+定理 递减.antivary
+  条件: (hf : 递减 f) (hg : 递增 g)
   结论: Antivary f g
   证明: (hf.monovary hg.dual_right).dual_right
 -/

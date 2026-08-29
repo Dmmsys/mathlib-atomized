@@ -49,7 +49,7 @@ definition mappingConeCompTriangle
 
 中文:
 定义 mappingConeCompTriangle
-  签名: : Triangle (CochainComplex C 整数)
+  签名: : Triangle (上链复形 C 整数)
   定义体: Triangle.mk (map f (f ≫ g) (𝟙 X₁) g (by rw [id_comp]))
     (map (f ≫ g) g f (𝟙 X₃) (by rw [comp_id]))
     ((triangle g).mor₃ ≫ (inr f)⟦1⟧')
@@ -98,7 +98,7 @@ lemma mappingConeCompTriangle_mor₃_naturality
 
 中文:
 引理 mappingConeCompTriangle_mor₃_naturality
-  结论: {Y₁ Y₂ Y₃ : CochainComplex C 整数} (f' : Y₁ ⟶ Y₂)
+  结论: {Y₁ Y₂ Y₃ : 上链复形 C 整数} (f' : Y₁ ⟶ Y₂)
   证明: by
   ext n
   dsimp [map]
@@ -228,7 +228,7 @@ definition homotopyInvHomId
 
 中文:
 定义 homotopyInvHomId
-  签名: : Homotopy (inv f g ≫ hom f g) (𝟙 _)
+  签名: : 同伦 (inv f g ≫ hom f g) (𝟙 _)
   定义体: (Cochain.equivHomotopy _ _).symm ⟨-((snd _).comp ((fst (f ≫ g)).1.comp
     ((inl f).comp (inl _) (by decide)) (show 1 + (-2) = -1 by decide)) (zero_add (-1))), by
       rw [δ_neg]; rw [δ_zero_cochain_comp _ _ _ (neg_add_cancel 1)]; rw [Int.negOnePow_neg]; rw [Int.negOnePow_one]; rw [Units.neg_smul];
@@ -268,7 +268,7 @@ definition mappingConeCompHomotopyEquiv
 
 中文:
 定义 mappingConeCompHomotopyEquiv
-  签名: : HomotopyEquiv (mappingCone g)
+  签名: : 同伦等价 (mappingCone g)
   定义体: MappingConeCompHomotopyEquiv.hom f g
   inv := MappingConeCompHomotopyEquiv.inv f g
   homotopyHomInvId := Homotopy.ofEq (by simp)
@@ -450,7 +450,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsTriangulated (HomotopyCategory C (ComplexShape.up 整数))
+  签名: 是三角 (HomotopyCategory C (余mplexShape.up 整数))
   定义体: IsTriangulated.mk' (by
     rintro ⟨X₁ : CochainComplex C Int⟩ ⟨X₂ : CochainComplex C Int⟩ ⟨X₃ : CochainComplex C Int⟩ u₁₂' u₂₃'
     obtain ⟨u₁₂, rfl⟩ := (HomotopyCategory.quotient C (ComplexShape.up Int)).map_surjective u₁₂'

@@ -91,7 +91,7 @@ theorem Icc_eq_filter_powerset
 
 中文:
 定理 Icc_eq_filter_powerset
-  结论: Icc s t = {u in t.powerset | s subseteq u}
+  结论: 闭区间 s t = {u in t.powerset | s subseteq u}
   证明: by ext; simp [and_comm]
 
 Depends on / 依赖: and_comm
@@ -107,7 +107,7 @@ theorem Ico_eq_filter_ssubsets
 
 中文:
 定理 Ico_eq_filter_ssubsets
-  结论: Ico s t = {u in t.ssubsets | s subseteq u}
+  结论: 左闭右开区间 s t = {u in t.ssubsets | s subseteq u}
   证明: by ext; simp [and_comm]
 
 Depends on / 依赖: and_comm
@@ -123,7 +123,7 @@ theorem Ioc_eq_filter_powerset
 
 中文:
 定理 Ioc_eq_filter_powerset
-  结论: Ioc s t = {u in t.powerset | s ⊂ u}
+  结论: 左开右闭区间 s t = {u in t.powerset | s ⊂ u}
   证明: by ext; simp [and_comm]
 
 Depends on / 依赖: and_comm
@@ -139,7 +139,7 @@ theorem Ioo_eq_filter_ssubsets
 
 中文:
 定理 Ioo_eq_filter_ssubsets
-  结论: Ioo s t = {u in t.ssubsets | s ⊂ u}
+  结论: 开区间 s t = {u in t.ssubsets | s ⊂ u}
   证明: by ext; simp [and_comm]
 
 Depends on / 依赖: and_comm
@@ -155,7 +155,7 @@ theorem Iic_eq_powerset
 
 中文:
 定理 Iic_eq_powerset
-  结论: Iic s = s.powerset
+  结论: 左无界右闭区间 s = s.powerset
   证明: by ext; simp
 -/
 theorem Iic_eq_powerset : Iic s = s.powerset := by ext; simp
@@ -169,7 +169,7 @@ theorem Iio_eq_ssubsets
 
 中文:
 定理 Iio_eq_ssubsets
-  结论: Iio s = s.ssubsets
+  结论: 左无界右开区间 s = s.ssubsets
   证明: by ext; simp
 -/
 theorem Iio_eq_ssubsets : Iio s = s.ssubsets := by ext; simp
@@ -191,7 +191,7 @@ theorem Icc_eq_image_powerset
 中文:
 定理 Icc_eq_image_powerset
   条件: (h : s subseteq t)
-  结论: Icc s t = (t \ s).powerset.image (s union ·)
+  结论: 闭区间 s t = (t \ s).powerset.像 (s union ·)
   证明: by
   unfold Finset.Icc instLocallyFiniteOrder LocallyFiniteOrder.ofIcc
   ext
@@ -223,7 +223,7 @@ theorem Ico_eq_image_ssubsets
 中文:
 定理 Ico_eq_image_ssubsets
   条件: (h : s subseteq t)
-  结论: Ico s t = (t \ s).ssubsets.image (s union ·)
+  结论: 左闭右开区间 s t = (t \ s).ssubsets.像 (s union ·)
   证明: by
   ext u
   simp_rw [mem_Ico, mem_image, mem_ssubsets]
@@ -258,7 +258,7 @@ theorem card_Icc_finset
 中文:
 定理 card_Icc_finset
   条件: (h : s subseteq t)
-  结论: (Icc s t).card = 2 ^ (t.card - s.card)
+  结论: (闭区间 s t).card = 2 ^ (t.card - s.card)
   证明: by
   unfold Finset.Icc instLocallyFiniteOrder LocallyFiniteOrder.ofIcc
   simp [h, card_sdiff_of_subset]
@@ -282,7 +282,7 @@ theorem card_Ico_finset
 中文:
 定理 card_Ico_finset
   条件: (h : s subseteq t)
-  结论: (Ico s t).card = 2 ^ (t.card - s.card) - 1
+  结论: (左闭右开区间 s t).card = 2 ^ (t.card - s.card) - 1
   证明: by
   rw [card_Ico_eq_card_Icc_sub_one]; rw [card_Icc_finset h]
 
@@ -304,7 +304,7 @@ theorem card_Ioc_finset
 中文:
 定理 card_Ioc_finset
   条件: (h : s subseteq t)
-  结论: (Ioc s t).card = 2 ^ (t.card - s.card) - 1
+  结论: (左开右闭区间 s t).card = 2 ^ (t.card - s.card) - 1
   证明: by
   rw [card_Ioc_eq_card_Icc_sub_one]; rw [card_Icc_finset h]
 
@@ -326,7 +326,7 @@ theorem card_Ioo_finset
 中文:
 定理 card_Ioo_finset
   条件: (h : s subseteq t)
-  结论: (Ioo s t).card = 2 ^ (t.card - s.card) - 2
+  结论: (开区间 s t).card = 2 ^ (t.card - s.card) - 2
   证明: by
   rw [card_Ioo_eq_card_Icc_sub_two]; rw [card_Icc_finset h]
 
@@ -345,7 +345,7 @@ theorem card_Iic_finset
 
 中文:
 定理 card_Iic_finset
-  结论: (Iic s).card = 2 ^ s.card
+  结论: (左无界右闭区间 s).card = 2 ^ s.card
   证明: by rw [Iic_eq_powerset, card_powerset]
 
 Depends on / 依赖: Iic_eq_powerset, card_powerset
@@ -363,7 +363,7 @@ theorem card_Iio_finset
 
 中文:
 定理 card_Iio_finset
-  结论: (Iio s).card = 2 ^ s.card - 1
+  结论: (左无界右开区间 s).card = 2 ^ s.card - 1
   证明: by
   rw [Iio_eq_ssubsets]; rw [ssubsets]; rw [card_erase_of_mem (mem_powerset_self _)]; rw [card_powerset]
 
@@ -388,8 +388,8 @@ lemma monotone_iff_forall_le_cons
   classical simp [monotone_iff_forall_covBy, covBy_iff_exists_cons]
 
 中文:
-引理 monotone_iff_forall_le_cons
-  结论: Monotone f ↔ 对任意 s, 对任意 ⦃a⦄ (ha), f s <= f (cons a s ha)
+引理 monotone_iff_对任意_le_cons
+  结论: 递增 f ↔ 对任意 s, 对任意 ⦃a⦄ (ha), f s <= f (cons a s ha)
   证明: by
   classical simp [monotone_iff_forall_covBy, covBy_iff_exists_cons]
 
@@ -407,8 +407,8 @@ lemma antitone_iff_forall_cons_le
   proof: monotone_iff_forall_le_cons (β := βᵒᵈ)
 
 中文:
-引理 antitone_iff_forall_cons_le
-  结论: Antitone f ↔ 对任意 s ⦃a⦄ ha, f (cons a s ha) <= f s
+引理 antitone_iff_对任意_cons_le
+  结论: 递减 f ↔ 对任意 s ⦃a⦄ ha, f (cons a s ha) <= f s
   证明: monotone_iff_forall_le_cons (β := βᵒᵈ)
 
 Depends on / 依赖: monotone_iff_forall_le_cons
@@ -426,8 +426,8 @@ lemma strictMono_iff_forall_lt_cons
   classical simp [strictMono_iff_forall_covBy, covBy_iff_exists_cons]
 
 中文:
-引理 strictMono_iff_forall_lt_cons
-  结论: StrictMono f ↔ 对任意 s ⦃a⦄ ha, f s < f (cons a s ha)
+引理 strictMono_iff_对任意_lt_cons
+  结论: 严格递增 f ↔ 对任意 s ⦃a⦄ ha, f s < f (cons a s ha)
   证明: by
   classical simp [strictMono_iff_forall_covBy, covBy_iff_exists_cons]
 
@@ -445,8 +445,8 @@ lemma strictAnti_iff_forall_cons_lt
   proof: strictMono_iff_forall_lt_cons (β := βᵒᵈ)
 
 中文:
-引理 strictAnti_iff_forall_cons_lt
-  结论: StrictAnti f ↔ 对任意 s ⦃a⦄ ha, f (cons a s ha) < f s
+引理 strictAnti_iff_对任意_cons_lt
+  结论: 严格递减 f ↔ 对任意 s ⦃a⦄ ha, f (cons a s ha) < f s
   证明: strictMono_iff_forall_lt_cons (β := βᵒᵈ)
 
 Depends on / 依赖: strictMono_iff_forall_lt_cons
@@ -470,8 +470,8 @@ lemma monotone_iff_forall_le_insert
   simp [monotone_iff_forall_le_cons]
 
 中文:
-引理 monotone_iff_forall_le_insert
-  结论: Monotone f ↔ 对任意 s ⦃a⦄, a ∉ s -> f s <= f (insert a s)
+引理 monotone_iff_对任意_le_insert
+  结论: 递增 f ↔ 对任意 s ⦃a⦄, a ∉ s -> f s <= f (insert a s)
   证明: by
   simp [monotone_iff_forall_le_cons]
 
@@ -489,8 +489,8 @@ lemma antitone_iff_forall_insert_le
   proof: monotone_iff_forall_le_insert (β := βᵒᵈ)
 
 中文:
-引理 antitone_iff_forall_insert_le
-  结论: Antitone f ↔ 对任意 s ⦃a⦄, a ∉ s -> f (insert a s) <= f s
+引理 antitone_iff_对任意_insert_le
+  结论: 递减 f ↔ 对任意 s ⦃a⦄, a ∉ s -> f (insert a s) <= f s
   证明: monotone_iff_forall_le_insert (β := βᵒᵈ)
 
 Depends on / 依赖: monotone_iff_forall_le_insert
@@ -508,8 +508,8 @@ lemma strictMono_iff_forall_lt_insert
   simp [strictMono_iff_forall_lt_cons]
 
 中文:
-引理 strictMono_iff_forall_lt_insert
-  结论: StrictMono f ↔ 对任意 s ⦃a⦄, a ∉ s -> f s < f (insert a s)
+引理 strictMono_iff_对任意_lt_insert
+  结论: 严格递增 f ↔ 对任意 s ⦃a⦄, a ∉ s -> f s < f (insert a s)
   证明: by
   simp [strictMono_iff_forall_lt_cons]
 
@@ -527,8 +527,8 @@ lemma strictAnti_iff_forall_lt_insert
   proof: strictMono_iff_forall_lt_insert (β := βᵒᵈ)
 
 中文:
-引理 strictAnti_iff_forall_lt_insert
-  结论: StrictAnti f ↔ 对任意 s ⦃a⦄, a ∉ s -> f (insert a s) < f s
+引理 strictAnti_iff_对任意_lt_insert
+  结论: 严格递减 f ↔ 对任意 s ⦃a⦄, a ∉ s -> f (insert a s) < f s
   证明: strictMono_iff_forall_lt_insert (β := βᵒᵈ)
 
 Depends on / 依赖: strictMono_iff_forall_lt_insert

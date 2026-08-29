@@ -87,7 +87,7 @@ lemma nnnorm_sqrt
 中文:
 引理 nnnorm_sqrt
   条件: (a : A) (ha : 0 <= a := by cfc_tac)
-  结论: ‖sqrt a‖₊ = NN实数.sqrt ‖a‖₊
+  结论: ‖sqrt a‖₊ = 非负实数.sqrt ‖a‖₊
   证明: by
   rw [sqrt_eq_nnrpow]; rw [NNReal.sqrt_eq_rpow]
   exact nnnorm_nnrpow a (by simp) ha
@@ -235,7 +235,7 @@ lemma continuousOn_rpow
 
 中文:
 引理 continuousOn_rpow
-  条件: [ContinuousStar A] [CompleteSpace A] (r : 实数)
+  条件: [余ntinuousStar A] [完备空间 A] (r : 实数)
   证明: by
   refine continuousOn_id.cfc_nnreal_of_mem_nhdsSet _ (s := {0}ᶜ) ?_
   simp_rw [nhdsSet_iUnion, Filter.mem_iSup, isOpen_compl_singleton.mem_nhdsSet]

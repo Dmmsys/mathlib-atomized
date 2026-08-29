@@ -52,7 +52,7 @@ lemma isUniformInducing_cast_withVal
 
 中文:
 引理 isUniformInducing_cast_withVal
-  结论: IsUniformInducing ((Rat.castHom Rat_[p]).comp
+  结论: 是UniformInducing ((有理数.castHom Rat_[p]).comp
   证明: by
   have hp0' : 0 < (p : Rat) := by simp [Nat.Prime.pos Fact.out]
   have hp0 : 0 < (p : Real)⁻¹ := by simp [Nat.Prime.pos Fact.out]
@@ -129,7 +129,7 @@ lemma isDenseInducing_cast_withVal
 
 中文:
 引理 isDenseInducing_cast_withVal
-  结论: IsDenseInducing ((Rat.castHom Rat_[p]).comp
+  结论: 是DenseInducing ((有理数.castHom Rat_[p]).comp
   证明: by
   refine Padic.isUniformInducing_cast_withVal.isDenseInducing ?_
   intro
@@ -309,7 +309,7 @@ theorem withValUniformEquiv_cast_apply
 
 中文:
 定理 withValUniformEquiv_cast_apply
-  条件: (x : WithVal (Rat.padicValuation p))
+  条件: (x : WithVal (有理数.padicValuation p))
   证明: by
   simpa [Equiv.toUniformEquivOfIsUniformInducing] using!
     extension_coe (Padic.isUniformInducing_cast_withVal (p := p)).uniformContinuous _
@@ -335,7 +335,7 @@ simpa [Nat.Prime.coprime_iff_not_dvd Fact.out] using isUnit_iff.1 isUnit_den _ h
 
 中文:
 定理 norm_rat_le_one_iff_padicValuation_le_one
-  条件: (p : 自然数) [Fact p.Prime] {x : Rat}
+  条件: (p : 自然数) [Fact p.素] {x : 有理数}
   证明: by
   rw [Rat.padicValuation_le_one_iff]
   refine ⟨fun h => ?_, fun h => Padic.norm_rat_le_one h⟩
@@ -365,7 +365,7 @@ theorem withValUniformEquiv_norm_le_one_iff
 
 中文:
 定理 withValUniformEquiv_norm_le_one_iff
-  结论: {p : 自然数} [Fact p.Prime]
+  结论: {p : 自然数} [Fact p.素]
   证明: by
   induction x using UniformSpace.Completion.induction_on with
   | hp =>
@@ -407,8 +407,8 @@ definition withValIntegersRingEquiv
   body: withValRingEquiv.restrict _ (subring p) fun _ => (withValUniformEquiv_norm_le_one_iff _).symm
 
 中文:
-定义 withValIntegersRingEquiv
-  签名: {p : 自然数} [Fact p.Prime]
+定义 withVal整数egersRingEquiv
+  签名: {p : 自然数} [Fact p.素]
   定义体: withValRingEquiv.restrict _ (subring p) fun _ => (withValUniformEquiv_norm_le_one_iff _).symm
 
 Depends on / 依赖: restrict, subring, withValRingEquiv, withValRingEquiv.restrict, withValUniformEquiv_norm_le_one_iff
@@ -426,8 +426,8 @@ definition withValIntegersUniformEquiv
   body: withValUniformEquiv.subtype fun _ => (withValUniformEquiv_norm_le_one_iff _).symm
 
 中文:
-定义 withValIntegersUniformEquiv
-  签名: : 𝒪[(Rat.padicValuation p).Completion] ≃ᵤ 整数_[p]
+定义 withVal整数egersUniformEquiv
+  签名: : 𝒪[(有理数.padicValuation p).完备化] ≃ᵤ 整数_[p]
   定义体: withValUniformEquiv.subtype fun _ => (withValUniformEquiv_norm_le_one_iff _).symm
 
 Depends on / 依赖: subtype, withValUniformEquiv, withValUniformEquiv.subtype, withValUniformEquiv_norm_le_one_iff

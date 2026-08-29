@@ -59,8 +59,8 @@ theorem existsUnique_dist_eq_of_insert
   have hy0 : y != 0 := dist_orthogonalProjection_ne_zero_of_notMe
 
 中文:
-定理 existsUnique_dist_eq_of_insert
-  结论: {s : AffineSubspace 实数 P}
+定理 存在Unique_dist_eq_of_insert
+  结论: {s : 仿射子空间 实数 P}
   证明: by
   have : Nonempty s := Set.Nonempty.to_subtype (hnps.mono hps)
   rcases hu with ⟨⟨cc, cr⟩, ⟨hcc, hcr⟩, hcccru⟩
@@ -159,8 +159,8 @@ theorem _root_.AffineIndependent.existsUnique_dist_eq
  
 
 中文:
-定理 _root_.AffineIndependent.existsUnique_dist_eq
-  结论: {ι : 类型} [hne : Nonempty ι] [Finite ι]
+定理 _root_.AffineIndependent.存在Unique_dist_eq
+  结论: {ι : 类型} [hne : 非空 ι] [有限 ι]
   证明: by
   cases nonempty_fintype ι
   induction hn : Fintype.card ι generalizing ι with
@@ -246,7 +246,7 @@ definition circumsphere
 
 中文:
 定义 circumsphere
-  签名: {n : 自然数} (s : Simplex 实数 P n)
+  签名: {n : 自然数} (s : 单纯形 实数 P n)
   定义体: s.independent.existsUnique_dist_eq.choose
 
 Depends on / 依赖: direction, existsUnique_dist_eq, independent, s.independent.existsUnique_dist_eq.choose, self_mem_mk
@@ -264,7 +264,7 @@ theorem circumsphere_unique_dist_eq
 
 中文:
 定理 circumsphere_unique_dist_eq
-  条件: {n : 自然数} (s : Simplex 实数 P n)
+  条件: {n : 自然数} (s : 单纯形 实数 P n)
   证明: s.independent.existsUnique_dist_eq.choose_spec
 
 Depends on / 依赖: choose_spec, direction, existsUnique_dist_eq, independent, s.independent.existsUnique_dist_eq.choose_spec, self_mem_mk
@@ -287,7 +287,7 @@ definition circumcenter
 
 中文:
 定义 circumcenter
-  签名: {n : 自然数} (s : Simplex 实数 P n)
+  签名: {n : 自然数} (s : 单纯形 实数 P n)
   定义体: s.circumsphere.center
 
 Depends on / 依赖: center, circumsphere, s.circumsphere.center
@@ -305,7 +305,7 @@ definition circumradius
 
 中文:
 定义 circumradius
-  签名: {n : 自然数} (s : Simplex 实数 P n)
+  签名: {n : 自然数} (s : 单纯形 实数 P n)
   定义体: s.circumsphere.radius
 
 Depends on / 依赖: Set.mem_inter, circumsphere, direction, direction_mk, ext_of_direction_eq, mem_inter, radius, s.circumsphere.radius, s.direction, self_mem_mk
@@ -326,7 +326,7 @@ theorem circumsphere_center
 
 中文:
 定理 circumsphere_center
-  条件: {n : 自然数} (s : Simplex 实数 P n)
+  条件: {n : 自然数} (s : 单纯形 实数 P n)
   结论: s.circumsphere.center = s.circumcenter
   证明: rfl
 -/
@@ -346,7 +346,7 @@ theorem circumsphere_radius
 
 中文:
 定理 circumsphere_radius
-  条件: {n : 自然数} (s : Simplex 实数 P n)
+  条件: {n : 自然数} (s : 单纯形 实数 P n)
   结论: s.circumsphere.radius = s.circumradius
   证明: rfl
 -/
@@ -363,7 +363,7 @@ theorem circumcenter_mem_affineSpan
 
 中文:
 定理 circumcenter_mem_affineSpan
-  条件: {n : 自然数} (s : Simplex 实数 P n)
+  条件: {n : 自然数} (s : 单纯形 实数 P n)
   证明: s.circumsphere_unique_dist_eq.1.1
 
 Depends on / 依赖: circumsphere_unique_dist_eq, s.circumsphere_unique_dist_eq
@@ -385,7 +385,7 @@ theorem dist_circumcenter_eq_circumradius
 
 中文:
 定理 dist_circumcenter_eq_circumradius
-  条件: {n : 自然数} (s : Simplex 实数 P n) (i : Fin (n + 1))
+  条件: {n : 自然数} (s : 单纯形 实数 P n) (i : 有限集 (n + 1))
   证明: dist_of_mem_subset_sphere (Set.mem_range_self _) s.circumsphere_unique_dist_eq.1.2
 
 Depends on / 依赖: Set.mem_range_self, circumsphere_unique_dist_eq, dist_of_mem_subset_sphere, mem_range_self, s.circumsphere_unique_dist_eq
@@ -404,7 +404,7 @@ theorem mem_circumsphere
 
 中文:
 定理 mem_circumsphere
-  条件: {n : 自然数} (s : Simplex 实数 P n) (i : Fin (n + 1))
+  条件: {n : 自然数} (s : 单纯形 实数 P n) (i : 有限集 (n + 1))
   证明: s.dist_circumcenter_eq_circumradius i
 
 Depends on / 依赖: dist_circumcenter_eq_circumradius, s.dist_circumcenter_eq_circumradius
@@ -429,7 +429,7 @@ theorem dist_circumcenter_eq_circumradius'
 
 中文:
 定理 dist_circumcenter_eq_circumradius'
-  条件: {n : 自然数} (s : Simplex 实数 P n)
+  条件: {n : 自然数} (s : 单纯形 实数 P n)
   证明: by
   intro i
   rw [dist_comm]
@@ -457,7 +457,7 @@ theorem eq_circumcenter_of_dist_eq
 
 中文:
 定理 eq_circumcenter_of_dist_eq
-  结论: {n : 自然数} (s : Simplex 实数 P n) {p : P}
+  结论: {n : 自然数} (s : 单纯形 实数 P n) {p : P}
   证明: by
   have h := s.circumsphere_unique_dist_eq.2 ⟨p, r⟩
   simp only [hp, hr, forall_const, subset_sphere (s := ⟨p, r⟩), Sphere.ext_iff,
@@ -488,7 +488,7 @@ theorem eq_circumradius_of_dist_eq
 
 中文:
 定理 eq_circumradius_of_dist_eq
-  结论: {n : 自然数} (s : Simplex 实数 P n) {p : P}
+  结论: {n : 自然数} (s : 单纯形 实数 P n) {p : P}
   证明: by
   have h := s.circumsphere_unique_dist_eq.2 ⟨p, r⟩
   simp only [hp, hr, forall_const, subset_sphere (s := ⟨p, r⟩), Sphere.ext_iff,
@@ -516,7 +516,7 @@ theorem circumradius_nonneg
 
 中文:
 定理 circumradius_nonneg
-  条件: {n : 自然数} (s : Simplex 实数 P n)
+  条件: {n : 自然数} (s : 单纯形 实数 P n)
   结论: 0 <= s.circumradius
   证明: s.dist_circumcenter_eq_circumradius 0 ▸ dist_nonneg
 
@@ -542,7 +542,7 @@ theorem circumradius_pos
 
 中文:
 定理 circumradius_pos
-  条件: {n : 自然数} (s : Simplex 实数 P (n + 1))
+  条件: {n : 自然数} (s : 单纯形 实数 P (n + 1))
   结论: 0 < s.circumradius
   证明: by
   refine lt_of_le_of_ne s.circumradius_nonneg ?_
@@ -579,7 +579,7 @@ theorem circumcenter_eq_point
 
 中文:
 定理 circumcenter_eq_point
-  条件: (s : Simplex 实数 P 0) (i : Fin 1)
+  条件: (s : 单纯形 实数 P 0) (i : 有限集 1)
   结论: s.circumcenter = s.points i
   证明: by
   have h := s.circumcenter_mem_affineSpan
@@ -611,7 +611,7 @@ lemma circumcenter_ne_point
 
 中文:
 引理 circumcenter_ne_point
-  条件: {n : 自然数} (s : Simplex 实数 P (n + 1)) (i : Fin (n + 2))
+  条件: {n : 自然数} (s : 单纯形 实数 P (n + 1)) (i : 有限集 (n + 2))
   证明: by
   rw [← dist_ne_zero]; rw [dist_circumcenter_eq_circumradius']
   exact s.circumradius_pos.ne'
@@ -639,7 +639,7 @@ theorem circumcenter_eq_centroid
 
 中文:
 定理 circumcenter_eq_centroid
-  条件: (s : Simplex 实数 P 1)
+  条件: (s : 单纯形 实数 P 1)
   证明: by
   have hr :
     Set.Pairwise Set.univ fun i j : Fin 2 =>
@@ -682,7 +682,7 @@ theorem circumsphere_reindex
 
 中文:
 定理 circumsphere_reindex
-  条件: {m n : 自然数} (s : Simplex 实数 P m) (e : Fin (m + 1) ≃ Fin (n + 1))
+  条件: {m n : 自然数} (s : 单纯形 实数 P m) (e : 有限集 (m + 1) ≃ 有限集 (n + 1))
   证明: by
   refine s.circumsphere_unique_dist_eq.2 _ ⟨?_, ?_⟩ <;> rw [← s.reindex_range_points e]
   · exact (s.reindex e).circumsphere_unique_dist_eq.1.1
@@ -708,7 +708,7 @@ theorem circumcenter_reindex
 
 中文:
 定理 circumcenter_reindex
-  条件: {m n : 自然数} (s : Simplex 实数 P m) (e : Fin (m + 1) ≃ Fin (n + 1))
+  条件: {m n : 自然数} (s : 单纯形 实数 P m) (e : 有限集 (m + 1) ≃ 有限集 (n + 1))
   证明: by simp_rw [circumcenter, circumsphere_reindex]
 
 Depends on / 依赖: circumcenter, circumsphere_reindex, simp_rw
@@ -728,7 +728,7 @@ theorem circumradius_reindex
 
 中文:
 定理 circumradius_reindex
-  条件: {m n : 自然数} (s : Simplex 实数 P m) (e : Fin (m + 1) ≃ Fin (n + 1))
+  条件: {m n : 自然数} (s : 单纯形 实数 P m) (e : 有限集 (m + 1) ≃ 有限集 (n + 1))
   证明: by simp_rw [circumradius, circumsphere_reindex]
 
 Depends on / 依赖: circumradius, circumsphere_reindex, simp_rw
@@ -751,7 +751,7 @@ lemma circumcenter_map
 
 中文:
 引理 circumcenter_map
-  结论: {V₂ P₂ : 类型} [NormedAddCommGroup V₂] [InnerProductSpace 实数 V₂]
+  结论: {V₂ P₂ : 类型} [赋范交换加群 V₂] [内积空间 实数 V₂]
   证明: by
   rw [eq_comm]
   refine (s.map f.toAffineMap f.injective).eq_circumcenter_of_dist_eq (r := s.circumradius) ?_
@@ -783,7 +783,7 @@ lemma circumradius_map
 
 中文:
 引理 circumradius_map
-  结论: {V₂ P₂ : 类型} [NormedAddCommGroup V₂] [InnerProductSpace 实数 V₂]
+  结论: {V₂ P₂ : 类型} [赋范交换加群 V₂] [内积空间 实数 V₂]
   证明: by
   rw [eq_comm]
   refine (s.map f.toAffineMap f.injective).eq_circumradius_of_dist_eq (p := f s.circumcenter) ?_
@@ -814,7 +814,7 @@ lemma circumcenter_restrict
 
 中文:
 引理 circumcenter_restrict
-  结论: {n : 自然数} (s : Simplex 实数 P n) (S : AffineSubspace 实数 P)
+  结论: {n : 自然数} (s : 单纯形 实数 P n) (S : 仿射子空间 实数 P)
   证明: Nonempty.map (AffineSubspace.inclusion hS) inferInstance
     (s.restrict S hS).circumcenter = s.circumcenter := by
   rw [eq_comm]
@@ -843,7 +843,7 @@ lemma circumradius_restrict
 
 中文:
 引理 circumradius_restrict
-  结论: {n : 自然数} (s : Simplex 实数 P n) (S : AffineSubspace 实数 P)
+  结论: {n : 自然数} (s : 单纯形 实数 P n) (S : 仿射子空间 实数 P)
   证明: Nonempty.map (AffineSubspace.inclusion hS) inferInstance
     (s.restrict S hS).circumradius = s.circumradius := by
   rw [eq_comm]
@@ -870,7 +870,7 @@ theorem dist_circumcenter_sq_eq_sq_sub_circumradius
 
 中文:
 定理 dist_circumcenter_sq_eq_sq_sub_circumradius
-  结论: {n : 自然数} {r : 实数} (s : Simplex 实数 P n) {p₁ : P}
+  结论: {n : 自然数} {r : 实数} (s : 单纯形 实数 P n) {p₁ : P}
   证明: by
   rw [dist_comm]; rw [← h₁ 0]; rw [s.dist_sq_eq_dist_orthogonalProjection_sq_add_dist_orthogonalProjection_sq p₁ h]
   simp only [h₁', dist_comm p₁, add_sub_cancel_left, Simplex.dist_circumcenter_eq_circumradius]
@@ -902,8 +902,8 @@ theorem orthogonalProjection_eq_circumcenter_of_exists_dist_eq
   r
 
 中文:
-定理 orthogonalProjection_eq_circumcenter_of_exists_dist_eq
-  结论: {n : 自然数} (s : Simplex 实数 P n) {p : P}
+定理 orthogonalProjection_eq_circumcenter_of_存在_dist_eq
+  结论: {n : 自然数} (s : 单纯形 实数 P n) {p : P}
   证明: by
   change exists r : Real, forall i, (fun x => dist x p = r) (s.points i) at hr
   have hr : exists (r : Real), forall (a : P),
@@ -941,7 +941,7 @@ theorem orthogonalProjection_eq_circumcenter_of_dist_eq
 
 中文:
 定理 orthogonalProjection_eq_circumcenter_of_dist_eq
-  结论: {n : 自然数} (s : Simplex 实数 P n) {p : P} {r : 实数}
+  结论: {n : 自然数} (s : 单纯形 实数 P n) {p : P} {r : 实数}
   证明: s.orthogonalProjection_eq_circumcenter_of_exists_dist_eq ⟨r, hr⟩
 
 Depends on / 依赖: orthogonalProjection_eq_circumcenter_of_exists_dist_eq, s.orthogonalProjection_eq_circumcenter_of_exists_dist_eq
@@ -963,7 +963,7 @@ theorem orthogonalProjection_circumcenter
 
 中文:
 定理 orthogonalProjection_circumcenter
-  结论: {n : 自然数} (s : Simplex 实数 P n) {fs : Finset (Fin (n + 1))}
+  结论: {n : 自然数} (s : 单纯形 实数 P n) {fs : 有限集 (有限集 (n + 1))}
   证明: haveI hr : exists r, forall i, dist ((s.face h).points i) s.circumcenter = r := by
     use s.circumradius
     simp [face_points]
@@ -995,7 +995,7 @@ theorem circumcenter_eq_of_range_eq
 
 中文:
 定理 circumcenter_eq_of_range_eq
-  结论: {n : 自然数} {s₁ s₂ : Simplex 实数 P n}
+  结论: {n : 自然数} {s₁ s₂ : 单纯形 实数 P n}
   证明: by
   have hs : s₁.circumcenter in affineSpan Real (Set.range s₂.points) :=
     h ▸ s₁.circumcenter_mem_affineSpan
@@ -1032,7 +1032,7 @@ inductive PointsWithCircumcenterIndex
 归纳类型 PointsWithCircumcenterIndex
   参数: (n : 自然数)
   构造子 (2 个):
-    - pointIndex: Fin (n + 1) -> PointsWithCircumcenterIndex n
+    - pointIndex: 有限集 (n + 1) -> PointsWithCircumcenterIndex n
     - circumcenterIndex: PointsWithCircumcenterIndex n
 -/
 inductive PointsWithCircumcenterIndex (n : Nat)
@@ -1096,7 +1096,7 @@ theorem sum_pointsWithCircumcenter
 
 中文:
 定理 sum_pointsWithCircumcenter
-  结论: {α : 类型} [AddCommMonoid α] {n : 自然数}
+  结论: {α : 类型} [加法交换幺半群 α] {n : 自然数}
   证明: by
   classical
   have h : univ = insert circumcenterIndex (univ.map (pointIndexEmbedding n)) := by
@@ -1134,7 +1134,7 @@ definition pointsWithCircumcenter
 
 中文:
 定义 pointsWithCircumcenter
-  签名: {n : 自然数} (s : Simplex 实数 P n)
+  签名: {n : 自然数} (s : 单纯形 实数 P n)
 -/
 def pointsWithCircumcenter {n : Nat} (s : Simplex Real P n) : PointsWithCircumcenterIndex n -> P
   | pointIndex i => s.points i
@@ -1153,7 +1153,7 @@ theorem pointsWithCircumcenter_point
 
 中文:
 定理 pointsWithCircumcenter_point
-  条件: {n : 自然数} (s : Simplex 实数 P n) (i : Fin (n + 1))
+  条件: {n : 自然数} (s : 单纯形 实数 P n) (i : 有限集 (n + 1))
   证明: rfl
 -/
 theorem pointsWithCircumcenter_point {n : Nat} (s : Simplex Real P n) (i : Fin (n + 1)) :
@@ -1173,7 +1173,7 @@ theorem pointsWithCircumcenter_eq_circumcenter
 
 中文:
 定理 pointsWithCircumcenter_eq_circumcenter
-  条件: {n : 自然数} (s : Simplex 实数 P n)
+  条件: {n : 自然数} (s : 单纯形 实数 P n)
   证明: rfl
 -/
 theorem pointsWithCircumcenter_eq_circumcenter {n : Nat} (s : Simplex Real P n) :
@@ -1189,7 +1189,7 @@ definition pointWeightsWithCircumcenter
 
 中文:
 定义 pointWeightsWithCircumcenter
-  签名: {n : 自然数} (i : Fin (n + 1))
+  签名: {n : 自然数} (i : 有限集 (n + 1))
 -/
 def pointWeightsWithCircumcenter {n : Nat} (i : Fin (n + 1)) : PointsWithCircumcenterIndex n -> Real
   | pointIndex j => if j = i then 1 else 0
@@ -1211,7 +1211,7 @@ theorem sum_pointWeightsWithCircumcenter
 
 中文:
 定理 sum_pointWeightsWithCircumcenter
-  条件: {n : 自然数} (i : Fin (n + 1))
+  条件: {n : 自然数} (i : 有限集 (n + 1))
   证明: by
   classical
   convert! sum_ite_eq' univ (pointIndex i) (Function.const _ (1 : Real)) with j
@@ -1247,7 +1247,7 @@ theorem point_eq_affineCombination_of_pointsWithCircumcenter
 
 中文:
 定理 point_eq_affineCombination_of_pointsWithCircumcenter
-  结论: {n : 自然数} (s : Simplex 实数 P n)
+  结论: {n : 自然数} (s : 单纯形 实数 P n)
   证明: by
   rw [← pointsWithCircumcenter_point]
   symm
@@ -1287,7 +1287,7 @@ definition centroidWeightsWithCircumcenter
 
 中文:
 定义 centroidWeightsWithCircumcenter
-  签名: {n : 自然数} (fs : Finset (Fin (n + 1)))
+  签名: {n : 自然数} (fs : 有限集 (有限集 (n + 1)))
 -/
 def centroidWeightsWithCircumcenter {n : Nat} (fs : Finset (Fin (n + 1))) :
     PointsWithCircumcenterIndex n -> Real
@@ -1309,7 +1309,7 @@ theorem sum_centroidWeightsWithCircumcenter
 
 中文:
 定理 sum_centroidWeightsWithCircumcenter
-  条件: {n : 自然数} {fs : Finset (Fin (n + 1))} (h : fs.Nonempty)
+  条件: {n : 自然数} {fs : 有限集 (有限集 (n + 1))} (h : fs.非空)
   证明: by
   simp_rw [sum_pointsWithCircumcenter, centroidWeightsWithCircumcenter, add_zero, ←
     fs.sum_centroidWeights_eq_one_of_nonempty Real h, ← sum_indicator_subset _ fs.subset_univ]
@@ -1337,7 +1337,7 @@ theorem centroid_eq_affineCombination_of_pointsWithCircumcenter
 
 中文:
 定理 centroid_eq_affineCombination_of_pointsWithCircumcenter
-  结论: {n : 自然数} (s : Simplex 实数 P n)
+  结论: {n : 自然数} (s : 单纯形 实数 P n)
   证明: by
   simp_rw [centroid_def, affineCombination_apply, weightedVSubOfPoint_apply,
     sum_pointsWithCircumcenter, centroidWeightsWithCircumcenter,
@@ -1421,7 +1421,7 @@ theorem circumcenter_eq_affineCombination_of_pointsWithCircumcenter
 
 中文:
 定理 circumcenter_eq_affineCombination_of_pointsWithCircumcenter
-  条件: {n : 自然数} (s : Simplex 实数 P n)
+  条件: {n : 自然数} (s : 单纯形 实数 P n)
   证明: by
   rw [← pointsWithCircumcenter_eq_circumcenter]
   symm
@@ -1448,7 +1448,7 @@ definition reflectionCircumcenterWeightsWithCircumcenter
 
 中文:
 定义 reflectionCircumcenterWeightsWithCircumcenter
-  签名: {n : 自然数} (i₁ i₂ : Fin (n + 1))
+  签名: {n : 自然数} (i₁ i₂ : 有限集 (n + 1))
 -/
 def reflectionCircumcenterWeightsWithCircumcenter {n : Nat} (i₁ i₂ : Fin (n + 1)) :
     PointsWithCircumcenterIndex n -> Real
@@ -1472,7 +1472,7 @@ theorem sum_reflectionCircumcenterWeightsWithCircumcenter
 
 中文:
 定理 sum_reflectionCircumcenterWeightsWithCircumcenter
-  结论: {n : 自然数} {i₁ i₂ : Fin (n + 1)}
+  结论: {n : 自然数} {i₁ i₂ : 有限集 (n + 1)}
   证明: by
   simp_rw [sum_pointsWithCircumcenter, reflectionCircumcenterWeightsWithCircumcenter, sum_ite,
     sum_const, filter_or, filter_eq']
@@ -1561,8 +1561,8 @@ theorem cospherical_iff_exists_mem_of_complete
   · exact fun ⟨c, _, hd⟩ => ⟨c, hd⟩
 
 中文:
-定理 cospherical_iff_exists_mem_of_complete
-  结论: {s : AffineSubspace 实数 P} {ps : Set P} (h : ps subseteq s)
+定理 cospherical_iff_存在_mem_of_complete
+  结论: {s : 仿射子空间 实数 P} {ps : 集合 P} (h : ps subseteq s)
   证明: by
   constructor
   · rintro ⟨c, hcr⟩
@@ -1590,8 +1590,8 @@ theorem cospherical_iff_exists_mem_of_finiteDimensional
   proof: cospherical_iff_exists_mem_of_complete h
 
 中文:
-定理 cospherical_iff_exists_mem_of_finiteDimensional
-  结论: {s : AffineSubspace 实数 P} {ps : Set P}
+定理 cospherical_iff_存在_mem_of_finiteDimensional
+  结论: {s : 仿射子空间 实数 P} {ps : 集合 P}
   证明: cospherical_iff_exists_mem_of_complete h
 
 Depends on / 依赖: cospherical_iff_exists_mem_of_complete
@@ -1618,8 +1618,8 @@ theorem exists_circumradius_eq_of_cospherical_subset
         (affineSpan_le_of_subset_coe
 
 中文:
-定理 exists_circumradius_eq_of_cospherical_subset
-  结论: {s : AffineSubspace 实数 P} {ps : Set P}
+定理 存在_circumradius_eq_of_cospherical_subset
+  结论: {s : 仿射子空间 实数 P} {ps : 集合 P}
   证明: by
   rw [cospherical_iff_exists_mem_of_finiteDimensional h] at hc
   rcases hc with ⟨c, hc, r, hcr⟩
@@ -1662,7 +1662,7 @@ theorem circumradius_eq_of_cospherical_subset
 
 中文:
 定理 circumradius_eq_of_cospherical_subset
-  结论: {s : AffineSubspace 实数 P} {ps : Set P} (h : ps subseteq s)
+  结论: {s : 仿射子空间 实数 P} {ps : 集合 P} (h : ps subseteq s)
   证明: by
   rcases exists_circumradius_eq_of_cospherical_subset h hd hc with ⟨r, hr⟩
   rw [hr sx₁ hsx₁]; rw [hr sx₂ hsx₂]
@@ -1688,8 +1688,8 @@ theorem exists_circumradius_eq_of_cospherical
   exact Set.subset_univ _
 
 中文:
-定理 exists_circumradius_eq_of_cospherical
-  结论: {ps : Set P} {n : 自然数} [FiniteDimensional 实数 V]
+定理 存在_circumradius_eq_of_cospherical
+  结论: {ps : 集合 P} {n : 自然数} [有限维 实数 V]
   证明: by
   rw [← finrank_top]; rw [← direction_top Real V P] at hd
   refine exists_circumradius_eq_of_cospherical_subset ?_ hd hc
@@ -1716,7 +1716,7 @@ theorem circumradius_eq_of_cospherical
 
 中文:
 定理 circumradius_eq_of_cospherical
-  结论: {ps : Set P} {n : 自然数} [FiniteDimensional 实数 V]
+  结论: {ps : 集合 P} {n : 自然数} [有限维 实数 V]
   证明: by
   rcases exists_circumradius_eq_of_cospherical hd hc with ⟨r, hr⟩
   rw [hr sx₁ hsx₁]; rw [hr sx₂ hsx₂]
@@ -1747,8 +1747,8 @@ theorem exists_circumcenter_eq_of_cospherical_subset
         (affineSpan_le_of_subset_coe
 
 中文:
-定理 exists_circumcenter_eq_of_cospherical_subset
-  结论: {s : AffineSubspace 实数 P} {ps : Set P}
+定理 存在_circumcenter_eq_of_cospherical_subset
+  结论: {s : 仿射子空间 实数 P} {ps : 集合 P}
   证明: by
   rw [cospherical_iff_exists_mem_of_finiteDimensional h] at hc
   rcases hc with ⟨c, hc, r, hcr⟩
@@ -1791,7 +1791,7 @@ theorem circumcenter_eq_of_cospherical_subset
 
 中文:
 定理 circumcenter_eq_of_cospherical_subset
-  结论: {s : AffineSubspace 实数 P} {ps : Set P} (h : ps subseteq s)
+  结论: {s : 仿射子空间 实数 P} {ps : 集合 P} (h : ps subseteq s)
   证明: by
   rcases exists_circumcenter_eq_of_cospherical_subset h hd hc with ⟨r, hr⟩
   rw [hr sx₁ hsx₁]; rw [hr sx₂ hsx₂]
@@ -1817,8 +1817,8 @@ theorem exists_circumcenter_eq_of_cospherical
   exact Set.subset_univ _
 
 中文:
-定理 exists_circumcenter_eq_of_cospherical
-  结论: {ps : Set P} {n : 自然数} [FiniteDimensional 实数 V]
+定理 存在_circumcenter_eq_of_cospherical
+  结论: {ps : 集合 P} {n : 自然数} [有限维 实数 V]
   证明: by
   rw [← finrank_top]; rw [← direction_top Real V P] at hd
   refine exists_circumcenter_eq_of_cospherical_subset ?_ hd hc
@@ -1845,7 +1845,7 @@ theorem circumcenter_eq_of_cospherical
 
 中文:
 定理 circumcenter_eq_of_cospherical
-  结论: {ps : Set P} {n : 自然数} [FiniteDimensional 实数 V]
+  结论: {ps : 集合 P} {n : 自然数} [有限维 实数 V]
   证明: by
   rcases exists_circumcenter_eq_of_cospherical hd hc with ⟨r, hr⟩
   rw [hr sx₁ hsx₁]; rw [hr sx₂ hsx₂]
@@ -1871,8 +1871,8 @@ theorem exists_circumsphere_eq_of_cospherical_subset
   exact ⟨⟨c, r⟩, fun sx hsx => Sphere.ext (hc sx hsx) (hr sx hsx)⟩
 
 中文:
-定理 exists_circumsphere_eq_of_cospherical_subset
-  结论: {s : AffineSubspace 实数 P} {ps : Set P}
+定理 存在_circumsphere_eq_of_cospherical_subset
+  结论: {s : 仿射子空间 实数 P} {ps : 集合 P}
   证明: by
   obtain ⟨r, hr⟩ := exists_circumradius_eq_of_cospherical_subset h hd hc
   obtain ⟨c, hc⟩ := exists_circumcenter_eq_of_cospherical_subset h hd hc
@@ -1900,7 +1900,7 @@ theorem circumsphere_eq_of_cospherical_subset
 
 中文:
 定理 circumsphere_eq_of_cospherical_subset
-  结论: {s : AffineSubspace 实数 P} {ps : Set P} (h : ps subseteq s)
+  结论: {s : 仿射子空间 实数 P} {ps : 集合 P} (h : ps subseteq s)
   证明: by
   rcases exists_circumsphere_eq_of_cospherical_subset h hd hc with ⟨r, hr⟩
   rw [hr sx₁ hsx₁]; rw [hr sx₂ hsx₂]
@@ -1926,8 +1926,8 @@ theorem exists_circumsphere_eq_of_cospherical
   exact Set.subset_univ _
 
 中文:
-定理 exists_circumsphere_eq_of_cospherical
-  结论: {ps : Set P} {n : 自然数} [FiniteDimensional 实数 V]
+定理 存在_circumsphere_eq_of_cospherical
+  结论: {ps : 集合 P} {n : 自然数} [有限维 实数 V]
   证明: by
   rw [← finrank_top]; rw [← direction_top Real V P] at hd
   refine exists_circumsphere_eq_of_cospherical_subset ?_ hd hc
@@ -1954,7 +1954,7 @@ theorem circumsphere_eq_of_cospherical
 
 中文:
 定理 circumsphere_eq_of_cospherical
-  结论: {ps : Set P} {n : 自然数} [FiniteDimensional 实数 V]
+  结论: {ps : 集合 P} {n : 自然数} [有限维 实数 V]
   证明: by
   rcases exists_circumsphere_eq_of_cospherical hd hc with ⟨r, hr⟩
   rw [hr sx₁ hsx₁]; rw [hr sx₂ hsx₂]
@@ -1983,7 +1983,7 @@ theorem eq_or_eq_reflection_of_dist_eq
 
 中文:
 定理 eq_or_eq_reflection_of_dist_eq
-  结论: {n : 自然数} {s : Simplex 实数 P n} {p p₁ p₂ : P} {r : 实数}
+  结论: {n : 自然数} {s : 单纯形 实数 P n} {p p₁ p₂ : P} {r : 实数}
   证明: by
   set span_s := affineSpan Real (Set.range s.points)
   have h₁' := s.orthogonalProjection_eq_circumcenter_of_dist_eq h₁

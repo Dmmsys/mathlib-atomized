@@ -90,7 +90,7 @@ lemma isSymmetric_toLin_iff
 
 中文:
 引理 isSymmetric_toLin_iff
-  结论: [Fintype n] [DecidableEq n] {E : 类型}
+  结论: [有限类型 n] [DecidableEq n] {E : 类型}
   证明: by
   have : FiniteDimensional 𝕜 E := b.toBasis.finiteDimensional_of_finite
   simp_rw [LinearMap.IsSymmetric, ← LinearMap.adjoint_inner_left, ← toLin_conjTranspose]
@@ -123,7 +123,7 @@ lemma isSymmetric_toEuclideanLin_iff
 
 中文:
 引理 isSymmetric_toEuclideanLin_iff
-  条件: [Fintype n] [DecidableEq n]
+  条件: [有限类型 n] [DecidableEq n]
   证明: isSymmetric_toLin_iff (EuclideanSpace.basisFun n 𝕜)
 
 @[deprecated isSymmetric_toEuclideanLin_iff "use isSymmetric_toEuclideanLin_iff.symm"
@@ -147,7 +147,7 @@ lemma isHermitian_iff_isSymmetric
 
 中文:
 引理 isHermitian_iff_isSymmetric
-  条件: [Fintype n] [DecidableEq n]
+  条件: [有限类型 n] [DecidableEq n]
   证明: isSymmetric_toEuclideanLin_iff.symm
 
 Depends on / 依赖: isSymmetric_toEuclideanLin_iff, isSymmetric_toEuclideanLin_iff.symm
@@ -167,7 +167,7 @@ lemma IsHermitian.im_star_dotProduct_mulVec_self
 
 中文:
 引理 IsHermitian.im_star_dotProduct_mulVec_self
-  条件: [Fintype n] (hA : A.IsHermitian) (x : n -> 𝕜)
+  条件: [有限类型 n] (hA : A.IsHermitian) (x : n -> 𝕜)
   证明: by
   classical
   simpa [dotProduct_comm] using! (isSymmetric_toEuclideanLin_iff.mpr hA).im_inner_self_apply _
@@ -194,8 +194,8 @@ lemma LinearMap.isHermitian_toMatrix_iff
   rw [← Matrix.isSymmetric_toLin_iff b]; rw [Matrix.toLin_toMatrix]
 
 中文:
-引理 LinearMap.isHermitian_toMatrix_iff
-  结论: {n 𝕜 E : 类型} [Fintype n] [DecidableEq n] [RCLike 𝕜]
+引理 线性映射.isHermitian_toMatrix_iff
+  结论: {n 𝕜 E : 类型} [有限类型 n] [DecidableEq n] [RCLike 𝕜]
   证明: by
   rw [← Matrix.isSymmetric_toLin_iff b]; rw [Matrix.toLin_toMatrix]
 

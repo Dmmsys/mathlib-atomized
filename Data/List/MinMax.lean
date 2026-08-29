@@ -48,7 +48,7 @@ definition argAux
 
 中文:
 定义 argAux
-  签名: (a : Option α) (b : α)
+  签名: (a : 选项类型 α) (b : α)
   定义体: Option.casesOn a (some b) fun c => if r b c then some b else some c
 
 @[simp]
@@ -163,7 +163,7 @@ theorem not_of_mem_foldl_argAux
 
 中文:
 定理 not_of_mem_foldl_argAux
-  条件: (hr₀ : Std.Irrefl r) (hr₁ : IsTrans α r)
+  条件: (hr₀ : Std.Irrefl r) (hr₁ : 是Trans α r)
   证明: by
   induction l using List.reverseRecOn with
   | nil => simp
@@ -216,7 +216,7 @@ definition argmax
 
 中文:
 定义 argmax
-  签名: (f : α -> β) (l : List α)
+  签名: (f : α -> β) (l : 列表 α)
   定义体: l.foldl (argAux fun b c => f c < f b) none
 
 @[to_dual (attr := simp)]
@@ -312,7 +312,7 @@ theorem argmax_concat
 
 中文:
 定理 argmax_concat
-  条件: (f : α -> β) (a : α) (l : List α)
+  条件: (f : α -> β) (a : α) (l : 列表 α)
   证明: by
   rw [argmax]; rw [argmax]; simp [argAux]
 
@@ -335,7 +335,7 @@ theorem argmax_mem
 
 中文:
 定理 argmax_mem
-  结论: 对任意 {l : List α} {m : α}, m in argmax f l -> m in l
+  结论: 对任意 {l : 列表 α} {m : α}, m in argmax f l -> m in l
 -/
 theorem argmax_mem : forall {l : List α} {m : α}, m in argmax f l -> m in l
   | [], m => by simp
@@ -405,7 +405,7 @@ theorem argmax_cons
 
 中文:
 定理 argmax_cons
-  条件: (f : α -> β) (a : α) (l : List α)
+  条件: (f : α -> β) (a : α) (l : 列表 α)
   证明: List.reverseRecOn l rfl fun hd tl ih => by
     rw [← cons_append]; rw [argmax_concat]; rw [ih]; rw [argmax_concat]
     rcases h : argmax f hd with - | m
@@ -561,7 +561,7 @@ definition maximum
 
 中文:
 定义 maximum
-  签名: (l : List α)
+  签名: (l : 列表 α)
   定义体: argmax id l
 
 @[to_dual (attr := simp)]
@@ -584,7 +584,7 @@ theorem maximum_nil
 
 中文:
 定理 maximum_nil
-  结论: maximum ([] : List α) = ⊥
+  结论: maximum ([] : 列表 α) = ⊥
   证明: rfl
 
 @[to_dual (attr := simp)]
@@ -629,7 +629,7 @@ theorem maximum_mem
 
 中文:
 定理 maximum_mem
-  条件: {l : List α} {m : α}
+  条件: {l : 列表 α} {m : α}
   结论: (maximum l : WithTop α) = m -> m in l
   证明: argmax_mem
 
@@ -654,7 +654,7 @@ theorem maximum_eq_bot
 
 中文:
 定理 maximum_eq_bot
-  条件: {l : List α}
+  条件: {l : 列表 α}
   结论: l.maximum = ⊥ ↔ l = []
   证明: argmax_eq_none
 
@@ -736,8 +736,8 @@ theorem maximum_concat
 
 中文:
 定理 maximum_concat
-  条件: (a : α) (l : List α)
-  结论: maximum (l ++ [a]) = max (maximum l) a
+  条件: (a : α) (l : 列表 α)
+  结论: maximum (l ++ [a]) = 最大值 (maximum l) a
   证明: by
   simp only [maximum, argmax_concat, id]
   cases argmax id l
@@ -817,8 +817,8 @@ theorem maximum_cons
 
 中文:
 定理 maximum_cons
-  条件: (a : α) (l : List α)
-  结论: maximum (a :: l) = max ↑a (maximum l)
+  条件: (a : α) (l : 列表 α)
+  结论: maximum (a :: l) = 最大值 ↑a (maximum l)
   证明: List.reverseRecOn l (by simp) fun tl hd ih => by
     rw [← cons_append]; rw [maximum_concat]; rw [ih]; rw [maximum_concat]; rw [max_assoc]
 
@@ -847,8 +847,8 @@ lemma maximum_append
 
 中文:
 引理 maximum_append
-  条件: (l₁ l₂ : List α)
-  结论: (l₁ ++ l₂).maximum = max l₁.maximum l₂.maximum
+  条件: (l₁ l₂ : 列表 α)
+  结论: (l₁ ++ l₂).maximum = 最大值 l₁.maximum l₂.maximum
   证明: by
   induction l₁ with
   | nil => simp
@@ -881,7 +881,7 @@ theorem maximum_le_of_forall_le
 @[to_dual minimum_anti]
 
 中文:
-定理 maximum_le_of_forall_le
+定理 maximum_le_of_对任意_le
   条件: {b : WithBot α} (h : 对任意 a in l, a <= b)
   结论: l.maximum <= b
   证明: by
@@ -914,7 +914,7 @@ theorem maximum_mono
 
 中文:
 定理 maximum_mono
-  条件: {l₁ l₂ : List α} (h : l₁ subseteq l₂)
+  条件: {l₁ l₂ : 列表 α} (h : l₁ subseteq l₂)
   结论: l₁.maximum <= l₂.maximum
   证明: maximum_le_of_forall_le fun _ => (le_maximum_of_mem' <| h ·)
 
@@ -1202,8 +1202,8 @@ theorem Perm.maximum_eq
 @[to_dual]
 
 中文:
-定理 Perm.maximum_eq
-  条件: {l l' : List α} (h : l ~ l')
+定理 置换.maximum_eq
+  条件: {l l' : 列表 α} (h : l ~ l')
   证明: by
   induction h with grind [maximum_cons]
 
@@ -1238,8 +1238,8 @@ lemma getD_max?_eq_unbotD_maximum
 
 中文:
 引理 getD_max?_eq_unbotD_maximum
-  条件: (l : List α) (d : α)
-  结论: l.max?.getD d = l.maximum.unbotD d
+  条件: (l : 列表 α) (d : α)
+  结论: l.最大值?.getD d = l.maximum.unbotD d
   证明: by
   cases hy : l.maximum with
   | bot => simp [List.maximum_eq_bot.mp hy]
@@ -1301,7 +1301,7 @@ theorem foldr_max_of_ne_nil
 中文:
 定理 foldr_max_of_ne_nil
   条件: (h : l != [])
-  结论: ↑(l.foldr max ⊥) = l.maximum
+  结论: ↑(l.foldr 最大值 ⊥) = l.maximum
   证明: by
   induction l with
   | nil => contradiction
@@ -1340,9 +1340,9 @@ theorem max_le_of_forall_le
 @[to_dual min_le_of_le]
 
 中文:
-定理 max_le_of_forall_le
-  条件: (l : List α) (a : α) (h : 对任意 x in l, x <= a)
-  结论: l.foldr max ⊥ <= a
+定理 max_le_of_对任意_le
+  条件: (l : 列表 α) (a : α) (h : 对任意 x in l, x <= a)
+  结论: l.foldr 最大值 ⊥ <= a
   证明: by
   induction l with
   | nil => simp
@@ -1376,8 +1376,8 @@ theorem le_max_of_le
 
 中文:
 定理 le_max_of_le
-  条件: {l : List α} {a x : α} (hx : x in l) (h : a <= x)
-  结论: a <= l.foldr max ⊥
+  条件: {l : 列表 α} {a x : α} (hx : x in l) (h : a <= x)
+  结论: a <= l.foldr 最大值 ⊥
   证明: by
   induction l with
   | nil => exact absurd hx not_mem_nil
@@ -1419,7 +1419,7 @@ theorem le_max_of_le'
 
 中文:
 定理 le_max_of_le'
-  条件: {l : List α} {a x : α} (b : α) (hx : x in l) (h : a <= x)
+  条件: {l : 列表 α} {a x : α} (b : α) (hx : x in l) (h : a <= x)
   证明: by
   induction l with
   | nil => exact absurd hx List.not_mem_nil

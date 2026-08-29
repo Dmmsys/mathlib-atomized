@@ -82,7 +82,7 @@ theorem ker_evalRingHom
 中文:
 定理 ker_evalRingHom
   条件: (x : R)
-  结论: RingHom.ker (evalRingHom x) = Ideal.span {X - C x}
+  结论: 环态射.ker (evalRingHom x) = 理想.span {X - C x}
   证明: by
   ext y
   simp [Ideal.mem_span_singleton, dvd_iff_isRoot, RingHom.mem_ker]
@@ -133,7 +133,7 @@ lemma ker_constantCoeff
 
 中文:
 引理 ker_constantCoeff
-  结论: RingHom.ker constantCoeff = .span {(X : R[X])}
+  结论: 环态射.ker constantCoeff = .span {(X : R[X])}
   证明: by
   refine le_antisymm (fun p hp => ?_) (by simp [Ideal.span_le])
   simp only [RingHom.mem_ker, constantCoeff_apply, ← Polynomial.X_dvd_iff] at hp
@@ -171,7 +171,7 @@ lemma mem_ideal_map_adjoin
 
 中文:
 引理 mem_ideal_map_adjoin
-  结论: [CommSemiring R] [Semiring S] [Algebra R S] (x : S) (I : Ideal R)
+  结论: [交换半环 R] [半环 S] [代数 R S] (x : S) (I : 理想 R)
   证明: by
   constructor
   · intro H
@@ -232,8 +232,8 @@ lemma exists_aeval_invOf_eq_zero_of_idealMap_adjoin_sup_span_eq_top
   have 
 
 中文:
-引理 exists_aeval_invOf_eq_zero_of_idealMap_adjoin_sup_span_eq_top
-  结论: [CommRing R] [CommRing S]
+引理 存在_aeval_invOf_eq_zero_of_idealMap_adjoin_sup_span_eq_top
+  结论: [交换环 R] [交换环 S]
   证明: by
   rw [← Ideal.one_eq_top]; rw [← Ideal.add_eq_sup]; rw [Ideal.add_eq_one_iff] at h
   have ⟨y, hy, z, hz, eq⟩ := h

@@ -47,7 +47,7 @@ definition ofSection
 
 中文:
 定义 ofSection
-  签名: : Subfunctor F where
+  签名: : 子函子 F where
   定义体: Set.ofPred (fun u => exists (f : X ⟶ U), F.map f x = u)
   map {U V} g := by
     rintro _ ⟨f, rfl⟩
@@ -98,7 +98,7 @@ lemma ofSection_le_iff
 
 中文:
 引理 ofSection_le_iff
-  条件: (G : Subfunctor F)
+  条件: (G : 子函子 F)
   证明: by
   constructor
   · intro hx
@@ -134,7 +134,7 @@ lemma ofSection_image
 
 中文:
 引理 ofSection_image
-  条件: {F' : Cᵒᵖ ⥤ Type w} (f : F ⟶ F')
+  条件: {F' : Cᵒᵖ ⥤ 类型 w} (f : F ⟶ F')
   证明: by
   apply le_antisymm
   · rw [image_le_iff, ofSection_le_iff, preimage_obj, Set.mem_preimage]

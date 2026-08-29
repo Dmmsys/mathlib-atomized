@@ -88,9 +88,9 @@ theorem MulEquiv.decompositionMonoid
       h.2.2, map_mul, EquivLike.apply_i
 
 中文:
-定理 MulEquiv.decompositionMonoid
-  条件: (f : F) [DecompositionMonoid β]
-  结论: DecompositionMonoid α where
+定理 乘法等价.decompositionMonoid
+  条件: (f : F) [分解幺半群 β]
+  结论: 分解幺半群 α where
   证明: by
     rw [← map_dvd_iff f]; rw [map_mul] at h
     obtain ⟨a₁, a₂, h⟩ := DecompositionMonoid.primal _ h
@@ -125,7 +125,7 @@ definition noncomputable
 
 中文:
 定义 noncomputable
-  签名: def Equiv.dvd {G : 类型} [LeftCancelSemigroup G] (g : G)
+  签名: def 等价.dvd {G : 类型} [左消去半群 G] (g : G)
   定义体: fun a => ⟨g * a, ⟨a, rfl⟩⟩
   invFun := fun ⟨_, h⟩ => h.choose
   left_inv := fun _ => by simp
@@ -154,8 +154,8 @@ theorem Equiv.dvd_apply
   proof: rfl
 
 中文:
-定理 Equiv.dvd_apply
-  条件: {G : 类型} [LeftCancelSemigroup G] (g a : G)
+定理 等价.dvd_apply
+  条件: {G : 类型} [左消去半群 G] (g a : G)
   证明: rfl
 -/
 theorem Equiv.dvd_apply {G : Type*} [LeftCancelSemigroup G] (g a : G) :
@@ -180,7 +180,7 @@ alias Dvd.dvd.add := dvd_add
 
 中文:
 定理 dvd_add
-  条件: [LeftDistribClass α] {a b c : α} (h₁ : a ∣ b) (h₂ : a ∣ c)
+  条件: [LeftDistrib类 α] {a b c : α} (h₁ : a ∣ b) (h₂ : a ∣ c)
   结论: a ∣ b + c
   证明: Dvd.elim h₁ fun d hd => Dvd.elim h₂ fun e he => Dvd.intro (d + e) (by simp [left_distrib, hd, he])
 
@@ -210,7 +210,7 @@ lemma min_pow_dvd_add
 中文:
 引理 min_pow_dvd_add
   条件: (ha : c ^ m ∣ a) (hb : c ^ n ∣ b)
-  结论: c ^ min m n ∣ a + b
+  结论: c ^ 最小值 m n ∣ a + b
   证明: ((pow_dvd_pow c (m.min_le_left n)).trans ha).add ((pow_dvd_pow c (m.min_le_right n)).trans hb)
 
 Depends on / 依赖: m.min_le_left, m.min_le_right, min_le_left, min_le_right, pow_dvd_pow

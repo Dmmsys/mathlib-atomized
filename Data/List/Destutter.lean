@@ -235,7 +235,7 @@ theorem isChain_destutter'
 
 中文:
 定理 isChain_destutter'
-  条件: (l : List α) (a : α)
+  条件: (l : 列表 α) (a : α)
   结论: (l.destutter' R a).IsChain R
   证明: by
   induction l using twoStepInduction generalizing a with
@@ -271,7 +271,7 @@ theorem isChain_cons_destutter'_of_rel
 
 中文:
 定理 isChain_cons_destutter'_of_rel
-  条件: (l : List α) {a b} (hab : R a b)
+  条件: (l : 列表 α) {a b} (hab : R a b)
   证明: by
   simpa [destutter'_cons, hab] using isChain_destutter' R (b :: l) a
 
@@ -373,7 +373,7 @@ theorem destutter_nil
 
 中文:
 定理 destutter_nil
-  结论: ([] : List α).destutter R = []
+  结论: ([] : 列表 α).destutter R = []
   证明: rfl
 -/
 theorem destutter_nil : ([] : List α).destutter R = [] :=
@@ -463,7 +463,7 @@ theorem destutter_sublist
 
 中文:
 定理 destutter_sublist
-  结论: 对任意 l : List α, l.destutter R <+ l
+  结论: 对任意 l : 列表 α, l.destutter R <+ l
 -/
 theorem destutter_sublist : forall l : List α, l.destutter R <+ l
   | [] => Sublist.slnil
@@ -478,7 +478,7 @@ theorem isChain_destutter
 
 中文:
 定理 isChain_destutter
-  结论: 对任意 l : List α, (l.destutter R).IsChain R
+  结论: 对任意 l : 列表 α, (l.destutter R).IsChain R
 -/
 theorem isChain_destutter : forall l : List α, (l.destutter R).IsChain R
   | [] => .nil
@@ -493,7 +493,7 @@ theorem destutter_of_isChain
 
 中文:
 定理 destutter_of_isChain
-  结论: 对任意 l : List α, l.IsChain R -> l.destutter R = l
+  结论: 对任意 l : 列表 α, l.IsChain R -> l.destutter R = l
 -/
 theorem destutter_of_isChain : forall l : List α, l.IsChain R -> l.destutter R = l
   | [], _ => rfl
@@ -509,7 +509,7 @@ theorem destutter_eq_self_iff
 
 中文:
 定理 destutter_eq_self_iff
-  结论: 对任意 l : List α, l.destutter R = l ↔ l.IsChain R
+  结论: 对任意 l : 列表 α, l.destutter R = l ↔ l.IsChain R
 -/
 theorem destutter_eq_self_iff : forall l : List α, l.destutter R = l ↔ l.IsChain R
   | [] => by simp
@@ -547,7 +547,7 @@ theorem destutter_eq_nil
 
 中文:
 定理 destutter_eq_nil
-  结论: 对任意 {l : List α}, destutter R l = [] ↔ l = []
+  结论: 对任意 {l : 列表 α}, destutter R l = [] ↔ l = []
 -/
 theorem destutter_eq_nil : forall {l : List α}, destutter R l = [] ↔ l = []
   | [] => Iff.rfl
@@ -572,7 +572,7 @@ theorem map_destutter
 中文:
 定理 map_destutter
   条件: {f : α -> β}
-  结论: 对任意 {l : List α}, (对任意 a in l, 对任意 b in l, R a b ↔ R₂ (f a) (f b)) ->
+  结论: 对任意 {l : 列表 α}, (对任意 a in l, 对任意 b in l, R a b ↔ R₂ (f a) (f b)) ->
   证明: hl a (by simp) b (by simp)
     simp_rw [map_cons, destutter_cons_cons, ← this]
     by_cases hr : R a b <;>
@@ -602,7 +602,7 @@ theorem map_destutter_ne
 
 中文:
 定理 map_destutter_ne
-  条件: {f : α -> β} (h : Injective f) [DecidableEq α] [DecidableEq β]
+  条件: {f : α -> β} (h : 单射 f) [DecidableEq α] [DecidableEq β]
   证明: map_destutter fun _ _ _ _ => h.ne_iff.symm
 
 Depends on / 依赖: h.ne_iff.symm, map_destutter, ne_iff
@@ -628,7 +628,7 @@ theorem length_destutter'_cotrans_ge
 
 中文:
 定理 length_destutter'_cotrans_ge
-  条件: [i : IsTrans α Rᶜ]
+  条件: [i : 是Trans α Rᶜ]
   证明: (mt (_root_.trans hba)) (not_not.2 hbc)
       simp_rw [destutter', if_pos (not_not.1 hac), if_pos hbc, length_cons, le_refl]
     case neg =>
@@ -668,7 +668,7 @@ theorem length_destutter'_congr
 
 中文:
 定理 length_destutter'_congr
-  条件: [IsEquiv α Rᶜ] (hab : ¬R a b)
+  条件: [Is等价 α Rᶜ] (hab : ¬R a b)
   证明: (length_destutter'_cotrans_ge hab).antisymm length_destutter'_cotrans_ge (symm hab : Rᶜ b a)
 -/
 theorem length_destutter'_congr [IsEquiv α Rᶜ] (hab : ¬R a b) :
@@ -692,7 +692,7 @@ theorem le_length_destutter'_cons
 
 中文:
 定理 le_length_destutter'_cons
-  条件: [IsEquiv α Rᶜ]
+  条件: [Is等价 α Rᶜ]
   证明: em _
     · have hbc : ¬Rᶜ b c := mt (_root_.trans hab) (not_not.2 hac)
       simp [destutter', if_pos hac, if_pos (not_not.1 hbc), if_neg hab]
@@ -722,7 +722,7 @@ theorem length_destutter_le_length_destutter_cons
 
 中文:
 定理 length_destutter_le_length_destutter_cons
-  条件: [IsEquiv α Rᶜ]
+  条件: [Is等价 α Rᶜ]
 -/
 theorem length_destutter_le_length_destutter_cons [IsEquiv α Rᶜ] :
     forall {l : List α}, (l.destutter R).length <= ((a :: l).destutter R).length
@@ -766,7 +766,7 @@ lemma IsChain.length_le_length_destutter
 
 中文:
 引理 IsChain.length_le_length_destutter
-  条件: [IsEquiv α Rᶜ]
+  条件: [Is等价 α Rᶜ]
   证明: []`, `l₂ := []`
   | [], [], _, _ => by simp
   -- `l₁ := l₁`, `l₂ := a :: l₂`
@@ -826,8 +826,8 @@ lemma Pairwise.destutter_eq_dedup
       rw [if_pos hxy]; rw [dedup_cons_of_notMem (a := x) (by simp [*])]
 
 中文:
-引理 Pairwise.destutter_eq_dedup
-  条件: [DecidableEq α] {r : α -> α -> 命题} [Std.Antisymm r]
+引理 两两.destutter_eq_dedup
+  条件: [DecidableEq α] {r : α -> α -> 命题} [Std.反对称 r]
   证明: eq_or_ne x y
     · simpa using h.2.destutter_eq_dedup
     · simp only [mem_cons, forall_eq_or_imp, pairwise_cons] at h

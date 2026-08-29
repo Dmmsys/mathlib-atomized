@@ -48,7 +48,7 @@ theorem circleAverage_sub_sub_inv_smul_of_differentiable_on_off_countable
 
 中文:
 定理 circleAverage_sub_sub_inv_smul_of_differentiable_on_off_countable
-  结论: (hs : s.Countable)
+  结论: (hs : s.可数)
   证明: by
   rw [← circleAverage_abs_radius]
   rcases le_or_gt |R| 0 with hR | hR
@@ -98,7 +98,7 @@ theorem DiffContOnCl.circleAverage_smul_div
 
 中文:
 定理 DiffContOnCl.circleAverage_smul_div
-  结论: (hf : DiffContOnCl Complex f (ball c |R|))
+  结论: (hf : DiffContOnCl 复形 f (ball c |R|))
   证明: by
   by_cases hR : |R| <= 0
   · simp_all [ball_eq_empty.2 hR]
@@ -148,7 +148,7 @@ theorem circleAverage_of_differentiable_on_off_countable
 
 中文:
 定理 circleAverage_of_differentiable_on_off_countable
-  结论: (hs : s.Countable)
+  结论: (hs : s.可数)
   证明: by
   by_cases hR : R = 0
   · simp [hR]
@@ -188,7 +188,7 @@ alias circleAverage_of_differentiable_on := DiffContOnCl
 
 中文:
 定理 DiffContOnCl.circleAverage
-  条件: (hf : DiffContOnCl Complex f (ball c |R|))
+  条件: (hf : DiffContOnCl 复形 f (ball c |R|))
   证明: by
   by_cases hR : R = 0
   · simp [hR]

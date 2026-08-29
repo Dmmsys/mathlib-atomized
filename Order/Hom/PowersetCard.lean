@@ -46,7 +46,7 @@ definition ofFinEmbEquiv
 
 中文:
 定义 ofFinEmbEquiv
-  签名: : (Fin n ↪o I) ≃ powersetCard I n where
+  签名: : (有限集 n ↪o I) ≃ powersetCard I n where
   定义体: ofFinEmb n I f.toEmbedding
   invFun s := Finset.orderEmbOfFin s.val s.prop
   left_inv f := by symm; apply Finset.orderEmbOfFin_unique'; simp
@@ -70,7 +70,7 @@ lemma ofFinEmbEquiv_apply
 
 中文:
 引理 ofFinEmbEquiv_apply
-  条件: (f : Fin n ↪o I)
+  条件: (f : 有限集 n ↪o I)
   证明: rfl
 -/
 lemma ofFinEmbEquiv_apply (f : Fin n ↪o I) :
@@ -109,7 +109,7 @@ lemma mem_ofFinEmbEquiv_iff_mem_range
 
 中文:
 引理 mem_ofFinEmbEquiv_iff_mem_range
-  条件: (f : Fin n ↪o I) (i : I)
+  条件: (f : 有限集 n ↪o I) (i : I)
   证明: by
   simp [ofFinEmbEquiv_apply]
 
@@ -151,7 +151,7 @@ definition orderIsoOfFin
 
 中文:
 定义 orderIsoOfFin
-  签名: {n : 自然数} {I : 类型} [LinearOrder I] (s : powersetCard I n)
+  签名: {n : 自然数} {I : 类型} [线性序 I] (s : powersetCard I n)
   定义体: s.val.orderIsoOfFin s.prop
 -/
 @[simps!] def orderIsoOfFin {n : Nat} {I : Type*} [LinearOrder I] (s : powersetCard I n) :
@@ -171,7 +171,7 @@ definition permOfDisjoint
 
 中文:
 定义 permOfDisjoint
-  签名: {m n : 自然数} {I : 类型} [LinearOrder I]
+  签名: {m n : 自然数} {I : 类型} [线性序 I]
   定义体: letI e₁ : Fin (m + n) ≃ Fin m oplus Fin n := finSumFinEquiv.symm
   letI e₂ : Fin m oplus Fin n ≃ s.val oplus t.val := (orderIsoOfFin s).sumCongr (orderIsoOfFin t)
   letI e₃ : s.val oplus t.val ≃ disjUnion h := Equiv.Finset.disjUnionEquiv _ _ h

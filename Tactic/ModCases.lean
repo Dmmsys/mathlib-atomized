@@ -32,7 +32,7 @@ definition OnModCases
 
 中文:
 定义 OnModCases
-  签名: (n : 自然数) (a : 整数) (lb : 自然数) (p : Sort*)
+  签名: (n : 自然数) (a : 整数) (lb : 自然数) (p : 类型层*)
   定义体: forall z, lb <= z ∧ z < n ∧ a ≡ ↑z [ZMOD ↑n] -> p
 -/
 @[expose] def OnModCases (n : Nat) (a : Int) (lb : Nat) (p : Sort*) :=
@@ -53,7 +53,7 @@ have nonneg := emod_nonneg a Int.ne_of_gt this
 
 中文:
 定义 onModCases_start
-  签名: (p : Sort*) (a : 整数) (n : 自然数) (hn : 自然数.ble 1 n = true)
+  签名: (p : 类型层*) (a : 整数) (n : 自然数) (hn : 自然数.ble 1 n = true)
   定义体: H (a % ↑n).toNat by
 have := natCast_pos.2 Nat.le_of_ble_eq_true hn
 have nonneg := emod_nonneg a Int.ne_of_gt this
@@ -80,7 +80,7 @@ definition onModCases_stop
 
 中文:
 定义 onModCases_stop
-  签名: (p : Sort*) (n : 自然数) (a : 整数)
+  签名: (p : 类型层*) (n : 自然数) (a : 整数)
   定义体: fun _ h => (Nat.not_lt.2 h.1 h.2.1).elim
 -/
 @[inline] def onModCases_stop (p : Sort*) (n : Nat) (a : Int) : OnModCases n a n p :=
@@ -96,7 +96,7 @@ definition onModCases_succ
 
 中文:
 定义 onModCases_succ
-  签名: {p : Sort*} {n : 自然数} {a : 整数} (b : 自然数)
+  签名: {p : 类型层*} {n : 自然数} {a : 整数} (b : 自然数)
   定义体: fun z ⟨h₁, h₂⟩ => if e : b = z then h (e ▸ h₂.2) else H _ ⟨Nat.lt_of_le_of_ne h₁ e, h₂⟩
 -/
 @[inline] def onModCases_succ {p : Sort*} {n : Nat} {a : Int} (b : Nat)
@@ -152,7 +152,7 @@ definition OnModCases
 
 中文:
 定义 OnModCases
-  签名: (n : 自然数) (a : 自然数) (lb : 自然数) (p : Sort _)
+  签名: (n : 自然数) (a : 自然数) (lb : 自然数) (p : 类型层 _)
   定义体: forall m, lb <= m ∧ m < n ∧ a ≡ m [MOD n] -> p
 -/
 @[expose] def OnModCases (n : Nat) (a : Nat) (lb : Nat) (p : Sort _) :=
@@ -171,7 +171,7 @@ definition onModCases_start
 
 中文:
 定义 onModCases_start
-  签名: (p : Sort _) (a : 自然数) (n : 自然数) (hn : 自然数.ble 1 n = true)
+  签名: (p : 类型层 _) (a : 自然数) (n : 自然数) (hn : 自然数.ble 1 n = true)
   定义体: H (a % n) by
     refine ⟨Nat.zero_le _, ?_, ?_⟩
     · exact Nat.mod_lt _ (Nat.le_of_ble_eq_true hn)
@@ -195,7 +195,7 @@ definition onModCases_stop
 
 中文:
 定义 onModCases_stop
-  签名: (p : Sort _) (n : 自然数) (a : 自然数)
+  签名: (p : 类型层 _) (n : 自然数) (a : 自然数)
   定义体: fun _ h => (Nat.not_lt.2 h.1 h.2.1).elim
 -/
 @[inline] def onModCases_stop (p : Sort _) (n : Nat) (a : Nat) : OnModCases n a n p :=
@@ -211,7 +211,7 @@ definition onModCases_succ
 
 中文:
 定义 onModCases_succ
-  签名: {p : Sort _} {n : 自然数} {a : 自然数} (b : 自然数)
+  签名: {p : 类型层 _} {n : 自然数} {a : 自然数} (b : 自然数)
   定义体: fun z ⟨h₁, h₂⟩ => if e : b = z then h (e ▸ h₂.2) else H _ ⟨Nat.lt_of_le_of_ne h₁ e, h₂⟩
 -/
 @[inline] def onModCases_succ {p : Sort _} {n : Nat} {a : Nat} (b : Nat)

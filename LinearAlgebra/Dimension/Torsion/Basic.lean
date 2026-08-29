@@ -40,7 +40,7 @@ theorem rank_quotient_eq_of_le_torsion
 
 中文:
 定理 rank_quotient_eq_of_le_torsion
-  结论: {R M : 类型} [CommRing R] [AddCommGroup M] [Module R M]
+  结论: {R M : 类型} [交换环 R] [加法交换群 M] [模 R M]
   证明: (rank_quotient_le M').antisymm by
     nontriviality R
     rw [Module.rank]
@@ -73,7 +73,7 @@ theorem finrank_quotient_eq_of_le_torsion
 
 中文:
 定理 finrank_quotient_eq_of_le_torsion
-  结论: {R M : 类型} [CommRing R] [AddCommGroup M] [Module R M]
+  结论: {R M : 类型} [交换环 R] [加法交换群 M] [模 R M]
   证明: congr_arg Cardinal.toNat (rank_quotient_eq_of_le_torsion hN)
 
 Depends on / 依赖: Cardinal, Cardinal.toNat, _congr_enorm_ae, congr_arg, eLpNorm, fun_comp, hfg.fun_comp, rank_quotient_eq_of_le_torsion
@@ -94,7 +94,7 @@ theorem finrank_quotient_torsion_eq
 
 中文:
 定理 finrank_quotient_torsion_eq
-  条件: {M : 类型} [AddCommGroup M]
+  条件: {M : 类型} [加法交换群 M]
   证明: finrank_quotient_eq_of_le_torsion le_of_eq by
     rw [← Submodule.torsion_int]; rw [Submodule.toAddSubgroup_toIntSubmodule]
 

@@ -56,7 +56,7 @@ theorem lmul_algebraMap
 中文:
 定理 lmul_algebraMap
   条件: (x : R)
-  结论: Algebra.lmul R A (algebraMap R A x) = Algebra.lsmul R R A x
+  结论: 代数.lmul R A (algebraMap R A x) = 代数.lsmul R R A x
   证明: Eq.symm LinearMap.ext smul_def x
 
 Depends on / 依赖: Eq.symm, LinearMap, LinearMap.ext, smul_def
@@ -83,7 +83,7 @@ instance subalgebra
 
 中文:
 实例 subalgebra
-  签名: (S₀ : Subalgebra R S)
+  签名: (S₀ : 子代数 R S)
   定义体: of_algebraMap_eq fun _ => rfl
 
 Depends on / 依赖: of_algebraMap_eq
@@ -104,7 +104,7 @@ instance subalgebra'
 
 中文:
 实例 subalgebra'
-  签名: (S₀ : Subalgebra R S)
+  签名: (S₀ : 子代数 R S)
   定义体: @IsScalarTower.of_algebraMap_eq R S₀ A _ _ _ _ _ _ fun _ =>
     (IsScalarTower.algebraMap_apply R S A _ :)
 
@@ -143,7 +143,7 @@ definition restrictScalars
 
 中文:
 定义 restrictScalars
-  签名: (U : Subalgebra S A)
+  签名: (U : 子代数 S A)
   定义体: { U with
     algebraMap_mem' := fun x => by
       rw [IsScalarTower.algebraMap_apply R S A]
@@ -173,8 +173,8 @@ theorem coe_restrictScalars
 
 中文:
 定理 coe_restrictScalars
-  条件: {U : Subalgebra S A}
-  结论: (restrictScalars R U : Set A) = (U : Set A)
+  条件: {U : 子代数 S A}
+  结论: (restrictScalars R U : 集合 A) = (U : 集合 A)
   证明: rfl
 
 @[simp]
@@ -197,7 +197,7 @@ SetLike.coe_injective by dsimp
 
 中文:
 定理 restrictScalars_top
-  结论: restrictScalars R (⊤ : Subalgebra S A) = ⊤
+  结论: restrictScalars R (⊤ : 子代数 S A) = ⊤
   证明: -- Porting note: `by dsimp` used to be `rfl`. This appears to work but causes
   -- this theorem to timeout in the kernel after minutes of thinking.
 SetLike.coe_injective by dsimp
@@ -222,7 +222,7 @@ theorem restrictScalars_toSubmodule
 
 中文:
 定理 restrictScalars_toSubmodule
-  条件: {U : Subalgebra S A}
+  条件: {U : 子代数 S A}
   证明: SetLike.coe_injective rfl
 
 @[simp]
@@ -245,7 +245,7 @@ theorem mem_restrictScalars
 
 中文:
 定理 mem_restrictScalars
-  条件: {U : Subalgebra S A} {x : A}
+  条件: {U : 子代数 S A} {x : A}
   结论: x in restrictScalars R U ↔ x in U
   证明: Iff.rfl
 
@@ -285,7 +285,7 @@ definition ofRestrictScalars
 
 中文:
 定义 ofRestrictScalars
-  签名: (U : Subalgebra S A) (f : U ->ₐ[S] B)
+  签名: (U : 子代数 S A) (f : U ->ₐ[S] B)
   定义体: f.restrictScalars R
 
 Depends on / 依赖: f.restrictScalars, restrictScalars
@@ -328,7 +328,7 @@ theorem codisjoint_one_iff
 
 中文:
 定理 codisjoint_one_iff
-  条件: (I : Ideal A)
+  条件: (I : 理想 A)
   证明: by
   simp [← Submodule.codisjoint_restrictScalars_iff R]
 
@@ -352,7 +352,7 @@ theorem disjoint_one_iff
 
 中文:
 定理 disjoint_one_iff
-  条件: (I : Ideal A)
+  条件: (I : 理想 A)
   证明: by
   simp [← Submodule.disjoint_restrictScalars_iff R]
 
@@ -411,7 +411,7 @@ theorem adjoin_range_toAlgHom
 
 中文:
 定理 adjoin_range_toAlgHom
-  条件: (t : Set A)
+  条件: (t : 集合 A)
   证明: Subalgebra.ext fun z =>
     show z in Subsemiring.closure (Set.range (algebraMap (toAlgHom R S A).range A) union t : Set A) ↔
          z in Subsemiring.closure (Set.range (algebraMap S A) union t : Set A) by simp

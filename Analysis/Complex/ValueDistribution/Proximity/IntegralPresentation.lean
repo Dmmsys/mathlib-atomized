@@ -49,7 +49,7 @@ definition cartanKernel
 
 中文:
 定义 cartanKernel
-  签名: (f : Complex -> Complex) (R : 实数) (α β : 实数)
+  签名: (f : 复形 -> 复形) (R : 实数) (α β : 实数)
   定义体: log ‖f (circleMap 0 R β) - circleMap 0 1 α‖
 
 Depends on / 依赖: circleMap
@@ -69,7 +69,7 @@ lemma integrableOn_cartanKernel_left
 
 中文:
 引理 integrableOn_cartanKernel_left
-  条件: (f : Complex -> Complex) (R : 实数) (β : 实数)
+  条件: (f : 复形 -> 复形) (R : 实数) (β : 实数)
   证明: by
   apply (intervalIntegrable_iff_integrableOn_Ioc_of_le two_pi_pos.le).1
   simpa [cartanKernel, norm_sub_rev, CircleIntegrable] using circleIntegrable_log_norm_sub_const 1
@@ -97,7 +97,7 @@ theorem measurable_cartanKernel
 
 中文:
 定理 measurable_cartanKernel
-  条件: (hf : Measurable f)
+  条件: (hf : 可测 f)
   证明: by
   unfold cartanKernel; fun_prop
 
@@ -122,7 +122,7 @@ lemma integral_norm_cartanKernel_eq
 
 中文:
 引理 integral_norm_cartanKernel_eq
-  条件: (f : Complex -> Complex) (R β : 实数)
+  条件: (f : 复形 -> 复形) (R β : 实数)
   证明: by
   let μ : Measure Real := volume.restrict (Ioc 0 (2 * π))
   calc ∫ α, ‖cartanKernel f R α β‖ ∂μ
@@ -160,7 +160,7 @@ lemma integrable_integral_norm_cartanKernel
 
 中文:
 引理 integrable_integral_norm_cartanKernel
-  条件: (h : Meromorphic f)
+  条件: (h : 亚纯 f)
   证明: by
   let μ : Measure Real := volume.restrict (Ioc 0 (2 * π))
   have h_meas_K : Measurable (fun a : Real × Real => (cartanKernel f R a.1 a.2)⁺) := by fun_prop
@@ -219,7 +219,7 @@ theorem integrableOn_cartanKernel
 
 中文:
 定理 integrableOn_cartanKernel
-  条件: (h : Meromorphic f)
+  条件: (h : 亚纯 f)
   证明: by
   rw [IntegrableOn]; rw [Measure.volume_eq_prod]; rw [← Measure.prod_restrict]
   have := h.measurable
@@ -251,8 +251,8 @@ lemma integrableOn_intervalIntegral_cartanKernel_left
     using h_int.integra
 
 中文:
-引理 integrableOn_intervalIntegral_cartanKernel_left
-  条件: (h : Meromorphic f)
+引理 integrableOn_interval整数egral_cartanKernel_left
+  条件: (h : 亚纯 f)
   证明: by
   have h_int := Cartan.integrableOn_cartanKernel (R := R) h
   rw [uIoc_of_le two_pi_pos.le]; rw [IntegrableOn]; rw [Measure.volume_eq_prod]; rw [← Measure.prod_restrict]
@@ -284,8 +284,8 @@ lemma integrableOn_intervalIntegral_cartanKernel_right
     using h_int.integra
 
 中文:
-引理 integrableOn_intervalIntegral_cartanKernel_right
-  条件: (h : Meromorphic f)
+引理 integrableOn_interval整数egral_cartanKernel_right
+  条件: (h : 亚纯 f)
   证明: by
   have h_int := Cartan.integrableOn_cartanKernel (R := R) h
   rw [uIoc_of_le two_pi_pos.le]; rw [IntegrableOn]; rw [Measure.volume_eq_prod]; rw [← Measure.prod_restrict]
@@ -321,7 +321,7 @@ theorem circleAverage_circleAverage_eq_proximity_top
 
 中文:
 定理 circleAverage_circleAverage_eq_proximity_top
-  条件: (h : Meromorphic f)
+  条件: (h : 亚纯 f)
   证明: by
   ext R
   let F : Real -> Real -> Real := Cartan.cartanKernel f R
@@ -370,8 +370,8 @@ theorem circleIntegrable_circleAverage_log_norm_sub
     ((Cartan.integrableOn_intervalIntegral_cartanKernel_right (R := R
 
 中文:
-定理 circleIntegrable_circleAverage_log_norm_sub
-  条件: (h : Meromorphic f)
+定理 circle整数egrable_circleAverage_log_norm_sub
+  条件: (h : 亚纯 f)
   证明: by
   by_cases hR : R = 0
   · simp [hR, circleAverage_zero, norm_sub_rev, circleIntegrable_log_norm_sub_const]

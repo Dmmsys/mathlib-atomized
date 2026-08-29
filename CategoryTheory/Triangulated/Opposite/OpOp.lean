@@ -246,7 +246,7 @@ instance :
 
 中文:
 实例 :
-  签名: (opOp C).CommShift 整数
+  签名: (opOp C).交换Shift 整数
   定义体: iso _
   commShiftIso_zero := by
     ext X
@@ -298,7 +298,7 @@ instance :
 
 中文:
 实例 :
-  签名: (unopUnop C).CommShift 整数
+  签名: (unopUnop C).交换Shift 整数
   定义体: iso _
   commShiftIso_zero := by
     ext X
@@ -442,7 +442,7 @@ instance :
 
 中文:
 实例 :
-  签名: (opOpEquivalence C).functor.CommShift 整数
+  签名: (opOpEquivalence C).functor.交换Shift 整数
   定义体: inferInstanceAs ((unopUnop C).CommShift Int)
 
 Depends on / 依赖: CommShift, unopUnop
@@ -460,7 +460,7 @@ instance :
 
 中文:
 实例 :
-  签名: (opOpEquivalence C).inverse.CommShift 整数
+  签名: (opOpEquivalence C).inverse.交换Shift 整数
   定义体: inferInstanceAs ((opOp C).CommShift Int)
 
 Depends on / 依赖: CommShift
@@ -486,7 +486,7 @@ instance :
 
 中文:
 实例 :
-  签名: (opOpEquivalence C).CommShift 整数
+  签名: (opOpEquivalence C).交换Shift 整数
   定义体: Equivalence.CommShift.mk'' _ _
     { shift_comm n := by
         ext X
@@ -526,7 +526,7 @@ instance :
 
 中文:
 实例 :
-  签名: (opOp C).IsTriangulated
+  签名: (opOp C).是三角
   定义体: by
     refine isomorphic_distinguished _ (op_distinguished _ (op_distinguished _ hT)) _
       (Triangle.isoMk _ _ (Iso.refl _) (Iso.refl _) (Iso.refl _) (by simp) (by simp)
@@ -561,7 +561,7 @@ instance :
 
 中文:
 实例 :
-  签名: (opOpEquivalence C).IsTriangulated
+  签名: (opOpEquivalence C).是三角
   定义体: .mk'' _ inferInstanceAs (opOp C).IsTriangulated
 
 Depends on / 依赖: IsTriangulated
@@ -579,7 +579,7 @@ instance :
 
 中文:
 实例 :
-  签名: (unopUnop C).IsTriangulated
+  签名: (unopUnop C).是三角
   定义体: inferInstanceAs ((opOpEquivalence C).functor.IsTriangulated)
 
 Depends on / 依赖: IsTriangulated, functor, functor.IsTriangulated, opOpEquivalence

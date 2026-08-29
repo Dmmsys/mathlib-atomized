@@ -53,7 +53,7 @@ class IsDense
     - isDenseAt((F) (Y : D)) : F.isDenseAt Y
 
 中文:
-类 IsDense
+类 是稠密
   参数: (F : C ⥤ D)
   公理与运算 (1 个):
     - isDenseAt((F) (Y : D)) : F.isDenseAt Y
@@ -71,7 +71,7 @@ definition denseAt
 
 中文:
 定义 denseAt
-  签名: (F : C ⥤ D) [F.IsDense] (Y : D)
+  签名: (F : C ⥤ D) [F.是稠密] (Y : D)
   定义体: (IsDense.isDenseAt F Y).some
 
 Depends on / 依赖: IsDense, IsDense.isDenseAt, isDenseAt
@@ -116,8 +116,8 @@ lemma IsDense.of_iso
     exact ⟨F.denseAt Y⟩
 
 中文:
-引理 IsDense.of_iso
-  条件: {F G : C ⥤ D} (e : F ≅ G) [F.IsDense]
+引理 是稠密.of_iso
+  条件: {F G : C ⥤ D} (e : F ≅ G) [F.是稠密]
   证明: by
     rw [← Functor.congr_isDenseAt e]
     exact ⟨F.denseAt Y⟩
@@ -139,7 +139,7 @@ lemma IsDense.iff_of_iso
   proof: ⟨fun _ => of_iso e, fun _ => of_iso e.symm⟩
 
 中文:
-引理 IsDense.iff_of_iso
+引理 是稠密.iff_of_iso
   条件: {F G : C ⥤ D} (e : F ≅ G)
   证明: ⟨fun _ => of_iso e, fun _ => of_iso e.symm⟩
 
@@ -168,8 +168,8 @@ lemma IsDense.comp_left_iff_of_isEquivalence
   exact of_iso e
 
 中文:
-引理 IsDense.comp_left_iff_of_isEquivalence
-  条件: (G : C' ⥤ C) [G.IsEquivalence]
+引理 是稠密.comp_left_iff_of_isEquivalence
+  条件: (G : C' ⥤ C) [G.是等价]
   证明: by
   refine ⟨fun _ => ?_, fun _ => inferInstance⟩
   let e : G.inv ⋙ G ⋙ F ≅ F := (associator _ _ _).symm ≪≫
@@ -204,8 +204,8 @@ lemma IsDense.comp_right_iff_of_isEquivalence
   exact of_iso e
 
 中文:
-引理 IsDense.comp_right_iff_of_isEquivalence
-  条件: (G : D ⥤ C') [G.IsEquivalence]
+引理 是稠密.comp_right_iff_of_isEquivalence
+  条件: (G : D ⥤ C') [G.是等价]
   证明: by
   refine ⟨fun _ => ?_, fun _ => inferInstance⟩
   let e : (F ⋙ G) ⋙ G.inv ≅ F := associator .. ≪≫
@@ -233,8 +233,8 @@ instance [F.IsDense]
         (NatTrans.congr_app h (op X)) (ULift.up p)))
 
 中文:
-实例 [F.IsDense]
-  签名: : (restrictedULiftYoneda.{w} F).Faithful where
+实例 [F.是稠密]
+  签名: : (restrictedULiftYoneda.{w} F).忠实 where
   定义体: (F.denseAt _).hom_ext' (fun X p => by
       simpa using! ULift.up_injective (ConcreteCategory.congr_hom (CC := fun X => X)
         (NatTrans.congr_app h (op X)) (ULift.up p)))
@@ -266,8 +266,8 @@ instance [F.IsDense]
 
 
 中文:
-实例 [F.IsDense]
-  签名: : (restrictedULiftYoneda.{w} F).Full where
+实例 [F.是稠密]
+  签名: : (restrictedULiftYoneda.{w} F).满 where
   定义体: by
     let c : Cocone (CostructuredArrow.proj F Y ⋙ F) :=
       { pt := Z
@@ -315,8 +315,8 @@ lemma IsDense.of_fullyFaithful_restrictedULiftYoneda
           let α 
 
 中文:
-引理 IsDense.of_fullyFaithful_restrictedULiftYoneda
-  结论: [F.Full]
+引理 是稠密.of_fullyFaithful_restrictedULiftYoneda
+  结论: [F.满]
   证明: by
     let φ (s : Cocone (CostructuredArrow.proj F Y ⋙ F)) :
         (restrictedULiftYoneda.{w} F).obj Y ⟶ (restrictedULiftYoneda F).obj s.pt :=
@@ -367,7 +367,7 @@ lemma isDense_iff_fullyFaithful_restrictedULiftYoneda
 
 中文:
 引理 isDense_iff_fullyFaithful_restrictedULiftYoneda
-  条件: [F.Full]
+  条件: [F.满]
   证明: ⟨fun _ => ⟨FullyFaithful.ofFullyFaithful _⟩,
     fun ⟨h⟩ => IsDense.of_fullyFaithful_restrictedULiftYoneda h⟩
 
@@ -395,7 +395,7 @@ lemma isStrongGenerator_of_isDense
 
 中文:
 引理 isStrongGenerator_of_isDense
-  条件: [F.IsDense]
+  条件: [F.是稠密]
   证明: (IsStrongGenerator.mk_of_exists_colimitsOfShape.{max u₁ u₂ v₁ v₂,
       max u₁ v₁ v₂} (fun Y => ⟨_, _, ⟨{
     ι := _
@@ -427,8 +427,8 @@ definition IsDense.leftKanExtensionIso
 @[reassoc (attr := simp)]
 
 中文:
-定义 IsDense.leftKanExtensionIso
-  签名: (F : C ⥤ D) [F.IsDense]
+定义 是稠密.leftKanExtensionIso
+  签名: (F : C ⥤ D) [F.是稠密]
   定义体: Functor.leftKanExtensionUnique _ (F.leftKanExtensionUnit F) _ F.rightUnitor.inv
 
 @[reassoc (attr := simp)]
@@ -452,8 +452,8 @@ lemma IsDense.leftKanExtensionUnit_leftKanExtensionIso_hom
 @[reassoc (attr := simp)]
 
 中文:
-引理 IsDense.leftKanExtensionUnit_leftKanExtensionIso_hom
-  条件: (F : C ⥤ D) [F.IsDense]
+引理 是稠密.leftKanExtensionUnit_leftKanExtensionIso_hom
+  条件: (F : C ⥤ D) [F.是稠密]
   证明: by
   simp [Functor.IsDense.leftKanExtensionIso]
 
@@ -476,8 +476,8 @@ lemma IsDense.leftKanExtensionUnit_leftKanExtensionIso_hom_app
   proof: congr($(Functor.IsDense.leftKanExtensionUnit_leftKanExtensionIso_hom _).app _)
 
 中文:
-引理 IsDense.leftKanExtensionUnit_leftKanExtensionIso_hom_app
-  条件: [F.IsDense] (X : C)
+引理 是稠密.leftKanExtensionUnit_leftKanExtensionIso_hom_app
+  条件: [F.是稠密] (X : C)
   证明: congr($(Functor.IsDense.leftKanExtensionUnit_leftKanExtensionIso_hom _).app _)
 
 Depends on / 依赖: Functor, Functor.IsDense.leftKanExtensionUnit_leftKanExtensionIso_hom, IsDense, leftKanExtensionUnit_leftKanExtensionIso_hom
@@ -517,7 +517,7 @@ instance :
 
 中文:
 实例 :
-  签名: (yoneda (C := C)).IsDense
+  签名: (yoneda (C := C)).是稠密
   定义体: ⟨denseAtYoneda X⟩
 
 Depends on / 依赖: IsDense
@@ -535,7 +535,7 @@ definition denseAtUliftYoneda
 
 中文:
 定义 denseAtUliftYoneda
-  签名: (X : Cᵒᵖ ⥤ Type max w v₁)
+  签名: (X : Cᵒᵖ ⥤ 类型 最大值 w v₁)
   定义体: Presheaf.isColimitTautologicalCocone' X
 
 Depends on / 依赖: Presheaf, Presheaf.isColimitTautologicalCocone, isColimitTautologicalCocone
@@ -553,7 +553,7 @@ instance :
 
 中文:
 实例 :
-  签名: (uliftYoneda.{w} (C := C)).IsDense
+  签名: (uliftYoneda.{w} (C := C)).是稠密
   定义体: ⟨denseAtUliftYoneda X⟩
 
 Depends on / 依赖: IsDense

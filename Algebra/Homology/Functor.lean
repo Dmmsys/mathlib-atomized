@@ -57,7 +57,7 @@ definition asFunctor
 
 中文:
 定义 asFunctor
-  签名: (C : HomologicalComplex (T ⥤ V) c)
+  签名: (C : 同调复形 (T ⥤ V) c)
   定义体: { X := fun i => (C.X i).obj t
       d := fun i j => (C.d i j).app t
       d_comp_d' := fun i j k _ _ => by

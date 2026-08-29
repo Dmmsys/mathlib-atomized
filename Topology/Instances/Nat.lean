@@ -105,7 +105,7 @@ Int.pairwise_one_le_dist mod_cast hne
 
 中文:
 定理 pairwise_one_le_dist
-  结论: Pairwise fun m n : 自然数 => 1 <= dist m n
+  结论: 两两 fun m n : 自然数 => 1 <= dist m n
   证明: fun _ _ hne =>
 Int.pairwise_one_le_dist mod_cast hne
 -/
@@ -122,7 +122,7 @@ theorem isUniformEmbedding_coe_real
 
 中文:
 定理 isUniformEmbedding_coe_real
-  结论: IsUniformEmbedding ((↑) : 自然数 -> 实数)
+  结论: 是一致嵌入 ((↑) : 自然数 -> 实数)
   证明: isUniformEmbedding_bot_of_pairwise_le_dist zero_lt_one pairwise_one_le_dist
 
 Depends on / 依赖: isUniformEmbedding_bot_of_pairwise_le_dist, pairwise_one_le_dist, zero_lt_one
@@ -140,7 +140,7 @@ theorem isClosedEmbedding_coe_real
 
 中文:
 定理 isClosedEmbedding_coe_real
-  结论: IsClosedEmbedding ((↑) : 自然数 -> 实数)
+  结论: 是闭嵌入 ((↑) : 自然数 -> 实数)
   证明: isClosedEmbedding_of_pairwise_le_dist zero_lt_one pairwise_one_le_dist
 
 Depends on / 依赖: isClosedEmbedding_of_pairwise_le_dist, pairwise_one_le_dist, zero_lt_one
@@ -158,7 +158,7 @@ instance :
 
 中文:
 实例 :
-  签名: MetricSpace 自然数
+  签名: 度量空间 自然数
   定义体: Nat.isUniformEmbedding_coe_real.comapMetricSpace _
 -/
 instance : MetricSpace Nat := Nat.isUniformEmbedding_coe_real.comapMetricSpace _
@@ -216,7 +216,7 @@ calc ⌊(x : Real) + r⌋₊ <= ⌊(x : Real)⌋₊ := floor_mono by linarith
 中文:
 定理 closedBall_eq_Icc
   条件: (x : 自然数) (r : 实数)
-  结论: closedBall x r = Icc ⌈↑x - r⌉₊ ⌊↑x + r⌋₊
+  结论: closedBall x r = 闭区间 ⌈↑x - r⌉₊ ⌊↑x + r⌋₊
   证明: by
   rcases le_or_gt 0 r with (hr | hr)
   · rw [← preimage_closedBall, Real.closedBall_eq_Icc, preimage_Icc]
@@ -250,7 +250,7 @@ instance :
 
 中文:
 实例 :
-  签名: 命题erSpace 自然数
+  签名: 真空间 自然数
   定义体: ⟨fun x r => by
     rw [closedBall_eq_Icc]
     exact (Set.finite_Icc _ _).isCompact⟩
@@ -272,7 +272,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsOrderBornology 自然数
+  签名: 是OrderBornology 自然数
   定义体: .of_isCompactIcc 0 (by simp) (by simp [Nat.closedBall_eq_Icc])
 
 Depends on / 依赖: Nat.closedBall_eq_Icc, closedBall_eq_Icc, of_isCompactIcc
@@ -289,7 +289,7 @@ instance :
 
 中文:
 实例 :
-  签名: NoncompactSpace 自然数
+  签名: Noncompact空间 自然数
   定义体: noncompactSpace_of_neBot by simp only [Filter.cocompact_eq_cofinite, Filter.cofinite_neBot]
 
 Depends on / 依赖: Filter, Filter.cocompact_eq_cofinite, Filter.cofinite_neBot, cocompact_eq_cofinite, cofinite_neBot, noncompactSpace_of_neBot

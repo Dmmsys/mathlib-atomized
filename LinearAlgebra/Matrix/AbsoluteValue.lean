@@ -54,7 +54,7 @@ theorem det_le
 
 中文:
 定理 det_le
-  条件: {A : Matrix n n R} {abv : AbsoluteValue R S} {x : S} (hx : 对任意 i j, abv (A i j) <= x)
+  条件: {A : 矩阵 n n R} {abv : 绝对值 R S} {x : S} (hx : 对任意 i j, abv (A i j) <= x)
   证明: calc
     abv A.det = abv (∑ σ : Perm n, Perm.sign σ • ∏ i, A (σ i) i) := congr_arg abv (det_apply _)
     _ <= ∑ σ : Perm n, abv (Perm.sign σ • ∏ i, A (σ i) i) := abv.sum_le _ _
@@ -89,7 +89,7 @@ theorem det_sum_le
 
 中文:
 定理 det_sum_le
-  结论: {ι : 类型} (s : Finset ι) {A : ι -> Matrix n n R} {abv : AbsoluteValue R S}
+  结论: {ι : 类型} (s : 有限集 ι) {A : ι -> 矩阵 n n R} {abv : 绝对值 R S}
   证明: det_le fun i j =>
     calc
       abv ((∑ k in s, A k) i j) = abv (∑ k in s, A k i j) := by simp only [sum_apply]
@@ -124,7 +124,7 @@ theorem det_sum_smul_le
 
 中文:
 定理 det_sum_smul_le
-  结论: {ι : 类型} (s : Finset ι) {c : ι -> R} {A : ι -> Matrix n n R}
+  结论: {ι : 类型} (s : 有限集 ι) {c : ι -> R} {A : ι -> 矩阵 n n R}
   证明: by
   simpa only [smul_mul_assoc] using!
     det_sum_le s fun k i j =>

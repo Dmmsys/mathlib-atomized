@@ -52,8 +52,8 @@ definition LinearMap.clmOfExistsBoundedImage
     rcases (h hU).exists_pos wi
 
 中文:
-定义 LinearMap.clmOfExistsBoundedImage
-  签名: [IsTopologicalAddGroup F] (f : E ->ₛₗ[σ] F)
+定义 线性映射.clmOfExistsBoundedImage
+  签名: [是拓扑加群 F] (f : E ->ₛₗ[σ] F)
   定义体: ⟨f, by
     -- It suffices to show that `f` is continuous at `0`.
     refine continuous_of_continuousAt_zero f ?_
@@ -98,8 +98,8 @@ theorem LinearMap.clmOfExistsBoundedImage_coe
 @[simp]
 
 中文:
-定理 LinearMap.clmOfExistsBoundedImage_coe
-  结论: [IsTopologicalAddGroup F] {f : E ->ₛₗ[σ] F}
+定理 线性映射.clmOfExistsBoundedImage_coe
+  结论: [是拓扑加群 F] {f : E ->ₛₗ[σ] F}
   证明: rfl
 
 @[simp]
@@ -119,8 +119,8 @@ theorem LinearMap.clmOfExistsBoundedImage_apply
   proof: rfl
 
 中文:
-定理 LinearMap.clmOfExistsBoundedImage_apply
-  结论: [IsTopologicalAddGroup F] {f : E ->ₛₗ[σ] F}
+定理 线性映射.clmOfExistsBoundedImage_apply
+  结论: [是拓扑加群 F] {f : E ->ₛₗ[σ] F}
   证明: rfl
 -/
 theorem LinearMap.clmOfExistsBoundedImage_apply [IsTopologicalAddGroup F] {f : E ->ₛₗ[σ] F}
@@ -145,7 +145,7 @@ theorem LinearMap.continuousAt_zero_of_locally_bounded
   rcases (nhds_basis_balanced 𝕜 E).exists_antito
 
 中文:
-定理 LinearMap.continuousAt_zero_of_locally_bounded
+定理 线性映射.continuousAt_zero_of_locally_bounded
   结论: (f : E ->ₛₗ[σ] F)
   证明: by
   -- We pick `c : 𝕜` nonzero of norm `< 1`.
@@ -208,8 +208,8 @@ theorem LinearMap.continuous_of_locally_bounded
   proof: continuous_of_continuousAt_zero f (f.continuousAt_zero_of_locally_bounded hf)
 
 中文:
-定理 LinearMap.continuous_of_locally_bounded
-  结论: [IsTopologicalAddGroup F] (f : E ->ₛₗ[σ] F)
+定理 线性映射.continuous_of_locally_bounded
+  结论: [是拓扑加群 F] (f : E ->ₛₗ[σ] F)
   证明: continuous_of_continuousAt_zero f (f.continuousAt_zero_of_locally_bounded hf)
 
 Depends on / 依赖: continuousAt_zero_of_locally_bounded, continuous_of_continuousAt_zero, f.continuousAt_zero_of_locally_bounded

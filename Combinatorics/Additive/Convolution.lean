@@ -42,7 +42,7 @@ definition convolution
 
 中文:
 定义 convolution
-  签名: (A B : Finset G)
+  签名: (A B : 有限集 G)
   定义体: fun x => #{ab in A ×ˢ B | ab.1 * ab.2 = x}
 
 @[to_additive]
@@ -64,7 +64,7 @@ lemma card_smul_inter_smul
 
 中文:
 引理 card_smul_inter_smul
-  条件: (A B : Finset G) (x y : G)
+  条件: (A B : 有限集 G) (x y : G)
   证明: card_nbij' (fun z => (x⁻¹ * z, z⁻¹ * y)) (fun ab' => x • ab'.1)
     (by simp +contextual [Set.MapsTo, Set.mem_smul_set_iff_inv_smul_mem, mul_assoc])
     (by simp +contextual [Set.MapsTo, Set.mem_smul_set_iff_inv_smul_mem]
@@ -97,7 +97,7 @@ lemma card_inter_smul
 
 中文:
 引理 card_inter_smul
-  条件: (A B : Finset G) (x : G)
+  条件: (A B : 有限集 G) (x : G)
   结论: #(A inter (x • B)) = A.convolution B⁻¹ x
   证明: by
   simpa using card_smul_inter_smul _ _ 1 x
@@ -124,7 +124,7 @@ lemma card_smul_inter
 
 中文:
 引理 card_smul_inter
-  条件: (A B : Finset G) (x : G)
+  条件: (A B : 有限集 G) (x : G)
   结论: #((x • A) inter B) = A.convolution B⁻¹ x⁻¹
   证明: by
   simpa using card_smul_inter_smul _ _ x 1
@@ -151,7 +151,7 @@ lemma card_inter_smul_inv
 
 中文:
 引理 card_inter_smul_inv
-  条件: (A B : Finset G) (x : G)
+  条件: (A B : 有限集 G) (x : G)
   结论: #(A inter (x • B⁻¹)) = A.convolution B x
   证明: by
   simp [card_inter_smul]
@@ -176,7 +176,7 @@ lemma card_mul_eq
 
 中文:
 引理 card_mul_eq
-  条件: (A B : Finset G) (x : G)
+  条件: (A B : 有限集 G) (x : G)
   证明: rfl
 
 @[to_additive]
@@ -197,7 +197,7 @@ lemma card_div_eq
 
 中文:
 引理 card_div_eq
-  条件: (A B : Finset G) (x : G)
+  条件: (A B : 有限集 G) (x : G)
   证明: Finset.card_equiv ((Equiv.refl _).prodCongr (.inv _)) (by simp [div_eq_mul_inv])
 
 @[to_additive card_add_neg_eq_addConvolution_neg]
@@ -223,7 +223,7 @@ lemma card_mul_inv_eq_convolution_inv
 
 中文:
 引理 card_mul_inv_eq_convolution_inv
-  条件: (A B : Finset G) (x : G)
+  条件: (A B : 有限集 G) (x : G)
   证明: card_nbij' (fun ab => (ab.1, ab.2⁻¹)) (fun ab => (ab.1, ab.2⁻¹))
     (by simp [Set.MapsTo]) (by simp [Set.MapsTo])
     (by simp [Set.LeftInvOn]) (by simp [Set.LeftInvOn])
@@ -388,7 +388,7 @@ lemma convolution_inv
 
 中文:
 引理 convolution_inv
-  条件: (A B : Finset G) (x : G)
+  条件: (A B : 有限集 G) (x : G)
   结论: A.convolution B x⁻¹ = B⁻¹.convolution A⁻¹ x
   证明: by
   nth_rw 1 [← inv_inv B]
@@ -418,7 +418,7 @@ lemma op_smul_convolution_eq_convolution_smul
 
 中文:
 引理 op_smul_convolution_eq_convolution_smul
-  条件: (A B : Finset G) (s : G)
+  条件: (A B : 有限集 G) (s : G)
   证明: funext fun x => by
   nth_rw 1 [← inv_inv B, ← inv_inv (s • B), inv_smul_finset_distrib s B, ← card_inter_smul,
     ← card_inter_smul, smul_comm]
@@ -449,7 +449,7 @@ lemma smul_convolution_eq_convolution_inv_mul
 
 中文:
 引理 smul_convolution_eq_convolution_inv_mul
-  条件: (A B : Finset G) (s x : G)
+  条件: (A B : 有限集 G) (s x : G)
   证明: by
   nth_rw 1 [← inv_inv x, ← inv_inv (s⁻¹ * x)]
   rw [← inv_inv B]; rw [← card_smul_inter]; rw [← card_smul_inter]; rw [mul_inv_rev]; rw [inv_inv]; rw [smul_smul]
@@ -476,7 +476,7 @@ lemma convolution_op_smul_eq_convolution_mul_inv
 
 中文:
 引理 convolution_op_smul_eq_convolution_mul_inv
-  条件: (A B : Finset G) (s x : G)
+  条件: (A B : 有限集 G) (s x : G)
   证明: by
   nth_rw 2 [← inv_inv B]
   rw [← inv_inv (B <• s)]; rw [inv_op_smul_finset_distrib]; rw [← card_inter_smul]; rw [← card_inter_smul]; rw [smul_smul]
@@ -505,7 +505,7 @@ lemma univ_convolution
 
 中文:
 引理 univ_convolution
-  条件: (B : Finset G) (a : G)
+  条件: (B : 有限集 G) (a : G)
   结论: univ.convolution B a = #B
   证明: by
   simp [← card_inter_smul_inv]
@@ -530,7 +530,7 @@ lemma convolution_univ
 
 中文:
 引理 convolution_univ
-  条件: (A : Finset G) (a : G)
+  条件: (A : 有限集 G) (a : G)
   结论: A.convolution univ a = #A
   证明: by
   simp [← card_inter_smul_inv]

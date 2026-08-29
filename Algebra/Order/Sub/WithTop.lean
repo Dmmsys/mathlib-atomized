@@ -60,7 +60,7 @@ instance :
 
 中文:
 实例 :
-  签名: Sub (WithTop α)
+  签名: 减法 (WithTop α)
   定义体: ⟨WithTop.sub⟩
 
 @[simp, norm_cast]
@@ -193,7 +193,7 @@ theorem map_sub
 
 中文:
 定理 map_sub
-  条件: [Sub β] [Bot β] {f : α -> β} (h : 对任意 x y, f (x - y) = f x - f y) (h₀ : f ⊥ = ⊥)
+  条件: [减法 β] [底元素 β] {f : α -> β} (h : 对任意 x y, f (x - y) = f x - f y) (h₀ : f ⊥ = ⊥)
 -/
 theorem map_sub [Sub β] [Bot β] {f : α -> β} (h : forall x y, f (x - y) = f x - f y) (h₀ : f ⊥ = ⊥) :
     forall x y : WithTop α, (x - y).map f = x.map f - y.map f

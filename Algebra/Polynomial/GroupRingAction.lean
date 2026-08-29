@@ -44,7 +44,7 @@ theorem smul_eq_map
 
 中文:
 定理 smul_eq_map
-  条件: [MulSemiringAction M R] (m : M)
+  条件: [MulSemiring作用 M R] (m : M)
   证明: by
   ext
   simp
@@ -67,8 +67,8 @@ instance [MulSemiringAction
       smul_eq_map R m ▸ Polynomial.map_mul (MulSemiringAction.toRingHom M R m) }
 
 中文:
-实例 [MulSemiringAction
-  签名: M R] : MulSemiringAction M R[X]
+实例 [MulSemiring作用
+  签名: M R] : MulSemiring作用 M R[X]
   定义体: { Polynomial.distribMulAction with
     smul_one := fun m =>
       smul_eq_map R m ▸ Polynomial.map_one (MulSemiringAction.toRingHom M R m)
@@ -149,7 +149,7 @@ theorem eval_smul'
 
 中文:
 定理 eval_smul'
-  条件: [MulSemiringAction G S] (g : G) (f : S[X]) (x : S)
+  条件: [MulSemiring作用 G S] (g : G) (f : S[X]) (x : S)
   证明: by
   rw [← smul_eval_smul]; rw [smul_inv_smul]
 
@@ -170,7 +170,7 @@ theorem smul_eval
 
 中文:
 定理 smul_eval
-  条件: [MulSemiringAction G S] (g : G) (f : S[X]) (x : S)
+  条件: [MulSemiring作用 G S] (g : G) (f : S[X]) (x : S)
   证明: by
   rw [← smul_eval_smul]; rw [smul_inv_smul]
 

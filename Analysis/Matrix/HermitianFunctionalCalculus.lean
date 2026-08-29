@@ -62,7 +62,7 @@ definition cfcAux
 
 中文:
 定义 cfcAux
-  签名: : C(spectrum 实数 A, 实数) ->⋆ₐ[实数] (Matrix n n 𝕜) where
+  签名: : C(spectrum 实数 A, 实数) ->⋆ₐ[实数] (矩阵 n n 𝕜) where
   定义体: conjStarAlgAut 𝕜 _ hA.eigenvectorUnitary
     diagonal (RCLike.ofReal ∘ g ∘ fun i => ⟨hA.eigenvalues i, hA.eigenvalues_mem_spectrum_real i⟩)
   map_zero' := by simp [Pi.zero_def, Function.comp_def]
@@ -106,7 +106,7 @@ lemma isClosedEmbedding_cfcAux
 
 中文:
 引理 isClosedEmbedding_cfcAux
-  结论: IsClosedEmbedding hA.cfcAux
+  结论: 是闭嵌入 hA.cfcAux
   证明: by
   have h0 : FiniteDimensional Real C(spectrum Real A, Real) :=
     FiniteDimensional.of_injective (ContinuousMap.coeFnLinearMap Real (M := Real)) DFunLike.coe_injective

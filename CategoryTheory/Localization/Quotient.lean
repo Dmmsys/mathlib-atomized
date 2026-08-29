@@ -41,7 +41,7 @@ definition FactorsThroughLocalization
 
 中文:
 定义 FactorsThroughLocalization
-  签名: (W : Morphism命题erty C)
+  签名: (W : MorphismProperty C)
   定义体: forall ⦃X Y : C⦄ ⦃f g : X ⟶ Y⦄, homRel f g -> AreEqualizedByLocalization W f g
 
 Depends on / 依赖: AreEqualizedByLocalization, F.isoShift, additive_of_iso, homRel, isoShift
@@ -78,7 +78,7 @@ definition strictUniversalPropertyFixedTarget
 
 中文:
 定义 strictUniversalPropertyFixedTarget
-  签名: (L' : Quotient homRel ⥤ D)
+  签名: (L' : 商 homRel ⥤ D)
   定义体: univ.inverts _ (by rwa [hW] at hf)
   lift F hF :=
     univ.lift (CategoryTheory.Quotient.lift _ F

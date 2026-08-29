@@ -42,7 +42,7 @@ instance one
 
 中文:
 实例 one
-  签名: : One (WithTop α)
+  签名: : 幺 (WithTop α)
   定义体: ⟨(1 : α)⟩
 
 @[to_additive (attr := simp, norm_cast)]
@@ -340,7 +340,7 @@ theorem map_eq_one_iff
 
 中文:
 定理 map_eq_one_iff
-  条件: {α} {f : α -> β} {v : WithTop α} [One β]
+  条件: {α} {f : α -> β} {v : WithTop α} [幺 β]
   证明: map_eq_some_iff
 
 @[to_additive]
@@ -361,7 +361,7 @@ theorem one_eq_map_iff
 
 中文:
 定理 one_eq_map_iff
-  条件: {α} {f : α -> β} {v : WithTop α} [One β]
+  条件: {α} {f : α -> β} {v : WithTop α} [幺 β]
   证明: some_eq_map_iff
 
 Depends on / 依赖: some_eq_map_iff
@@ -381,7 +381,7 @@ instance zeroLEOneClass
 
 中文:
 实例 zeroLEOneClass
-  签名: [Zero α] [LE α] [ZeroLEOneClass α]
+  签名: [零 α] [LE α] [ZeroLEOne类 α]
   定义体: ⟨coe_le_coe.2 zero_le_one⟩
 
 @[to_additive]
@@ -402,7 +402,7 @@ instance [LE
 
 中文:
 实例 [LE
-  签名: α] [IsBotOneClass α] : IsBotOneClass (WithTop α) where
+  签名: α] [是BotOne类 α] : 是BotOne类 (WithTop α) where
   定义体: by cases x <;> simp
 -/
 instance [LE α] [IsBotOneClass α] : IsBotOneClass (WithTop α) where
@@ -424,7 +424,7 @@ instance add
 
 中文:
 实例 add
-  签名: : Add (WithTop α)
+  签名: : 加法 (WithTop α)
   定义体: ⟨WithTop.map₂ (· + ·)⟩
 
 Depends on / 依赖: WithTop, WithTop.map
@@ -673,7 +673,7 @@ lemma add_right_inj
 
 中文:
 引理 add_right_inj
-  条件: [IsRightCancelAdd α] (hz : z != ⊤)
+  条件: [是右消去加法 α] (hz : z != ⊤)
   结论: x + z = y + z ↔ x = y
   证明: by
   lift z to α using hz; exact (IsAddRightRegular.all _).withTop.eq_iff
@@ -694,7 +694,7 @@ lemma add_right_cancel
 
 中文:
 引理 add_right_cancel
-  条件: [IsRightCancelAdd α] (hz : z != ⊤) (h : x + z = y + z)
+  条件: [是右消去加法 α] (hz : z != ⊤) (h : x + z = y + z)
   结论: x = y
   证明: (WithTop.add_right_inj hz).1 h
 
@@ -715,7 +715,7 @@ lemma add_left_inj
 
 中文:
 引理 add_left_inj
-  条件: [IsLeftCancelAdd α] (hx : x != ⊤)
+  条件: [是左消去加法 α] (hx : x != ⊤)
   结论: x + y = x + z ↔ y = z
   证明: by
   lift x to α using hx; exact (IsAddLeftRegular.all _).withTop.eq_iff
@@ -736,7 +736,7 @@ lemma add_left_cancel
 
 中文:
 引理 add_left_cancel
-  条件: [IsLeftCancelAdd α] (hx : x != ⊤) (h : x + y = x + z)
+  条件: [是左消去加法 α] (hx : x != ⊤) (h : x + y = x + z)
   结论: y = z
   证明: (WithTop.add_left_inj hx).1 h
 
@@ -840,7 +840,7 @@ lemma le_of_add_le_add_left
 
 中文:
 引理 le_of_add_le_add_left
-  条件: [LE α] [AddLeftReflectLE α] (hx : x != ⊤)
+  条件: [LE α] [加法LeftReflectLE α] (hx : x != ⊤)
   证明: by
   lift x to α using hx; cases y <;> cases z <;> simp [← coe_add]; simpa using le_of_add_le_add_left
 -/
@@ -859,7 +859,7 @@ lemma le_of_add_le_add_right
 
 中文:
 引理 le_of_add_le_add_right
-  条件: [LE α] [AddRightReflectLE α] (hz : z != ⊤)
+  条件: [LE α] [加法RightReflectLE α] (hz : z != ⊤)
   证明: by
   lift z to α using hz; cases x <;> cases y <;> simp [← coe_add]; simpa using le_of_add_le_add_right
 -/
@@ -924,7 +924,7 @@ theorem add_lt_add
 
 中文:
 定理 add_lt_add
-  结论: [Preorder α] [AddLeftStrictMono α] [AddRightStrictMono α]
+  结论: [预序 α] [AddLeftStrictMono α] [AddRightStrictMono α]
   证明: by
   apply (WithTop.add_lt_add_left xz.ne_top yw).trans_le
   cases w
@@ -948,7 +948,7 @@ lemma add_le_add_iff_left
 
 中文:
 引理 add_le_add_iff_left
-  条件: [LE α] [AddLeftMono α] [AddLeftReflectLE α] (hx : x != ⊤)
+  条件: [LE α] [AddLeftMono α] [加法LeftReflectLE α] (hx : x != ⊤)
   证明: ⟨WithTop.le_of_add_le_add_left hx, fun _ => by gcongr⟩
 -/
 protected lemma add_le_add_iff_left [LE α] [AddLeftMono α] [AddLeftReflectLE α] (hx : x != ⊤) :
@@ -964,7 +964,7 @@ lemma add_le_add_iff_right
 
 中文:
 引理 add_le_add_iff_right
-  条件: [LE α] [AddRightMono α] [AddRightReflectLE α] (hz : z != ⊤)
+  条件: [LE α] [AddRightMono α] [加法RightReflectLE α] (hz : z != ⊤)
   证明: ⟨WithTop.le_of_add_le_add_right hz, fun _ => by gcongr⟩
 -/
 protected lemma add_le_add_iff_right [LE α] [AddRightMono α] [AddRightReflectLE α] (hz : z != ⊤) :
@@ -1012,7 +1012,7 @@ theorem add_lt_add_of_le_of_lt
 
 中文:
 定理 add_lt_add_of_le_of_lt
-  结论: [Preorder α] [AddLeftStrictMono α]
+  结论: [预序 α] [AddLeftStrictMono α]
   证明: (WithTop.add_lt_add_left hw hxz).trans_le by gcongr
 -/
 protected theorem add_lt_add_of_le_of_lt [Preorder α] [AddLeftStrictMono α]
@@ -1030,7 +1030,7 @@ theorem add_lt_add_of_lt_of_le
 
 中文:
 定理 add_lt_add_of_lt_of_le
-  结论: [Preorder α] [AddLeftMono α]
+  结论: [预序 α] [AddLeftMono α]
   证明: (WithTop.add_lt_add_right hx hwy).trans_le by gcongr
 -/
 protected theorem add_lt_add_of_lt_of_le [Preorder α] [AddLeftMono α]
@@ -1048,7 +1048,7 @@ lemma addLECancellable_of_ne_top
 
 中文:
 引理 addLECancellable_of_ne_top
-  结论: [LE α] [AddLeftReflectLE α]
+  结论: [LE α] [加法LeftReflectLE α]
   证明: fun _b _c => WithTop.le_of_add_le_add_left hx
 
 Depends on / 依赖: WithTop, WithTop.le_of_add_le_add_left, le_of_add_le_add_left
@@ -1066,7 +1066,7 @@ lemma addLECancellable_of_lt_top
 
 中文:
 引理 addLECancellable_of_lt_top
-  结论: [Preorder α] [AddLeftReflectLE α]
+  结论: [预序 α] [加法LeftReflectLE α]
   证明: addLECancellable_of_ne_top hx.ne
 
 Depends on / 依赖: addLECancellable_of_ne_top, hx.ne
@@ -1084,7 +1084,7 @@ lemma addLECancellable_coe
 
 中文:
 引理 addLECancellable_coe
-  条件: [LE α] [AddLeftReflectLE α] (a : α)
+  条件: [LE α] [加法LeftReflectLE α] (a : α)
   证明: addLECancellable_of_ne_top coe_ne_top
 
 Depends on / 依赖: addLECancellable_of_ne_top, coe_ne_top
@@ -1103,7 +1103,7 @@ lemma addLECancellable_iff_ne_top
 
 中文:
 引理 addLECancellable_iff_ne_top
-  结论: [Nonempty α] [Preorder α]
+  结论: [非空 α] [预序 α]
   证明: by rintro h rfl; exact (coe_lt_top <| Classical.arbitrary _).not_ge h by simp
   mpr := addLECancellable_of_ne_top
 
@@ -1132,7 +1132,7 @@ theorem map_add
 
 中文:
 定理 map_add
-  结论: {F} [Add β] [FunLike F α β] [AddHomClass F α β]
+  结论: {F} [加法 β] [函数状 F α β] [加法态射类 F α β]
   证明: by
   induction a
   · exact (top_add _).symm
@@ -1164,7 +1164,7 @@ instance addSemigroup
 
 中文:
 实例 addSemigroup
-  签名: [AddSemigroup α]
+  签名: [加法半群 α]
   定义体: { WithTop.add with
     add_assoc := fun _ _ _ => Option.map₂_assoc add_assoc }
 
@@ -1185,7 +1185,7 @@ instance addCommSemigroup
 
 中文:
 实例 addCommSemigroup
-  签名: [AddCommSemigroup α]
+  签名: [加法交换半群 α]
   定义体: { WithTop.addSemigroup with
     add_comm := fun _ _ => Option.map₂_comm add_comm }
 
@@ -1207,7 +1207,7 @@ instance addZeroClass
 
 中文:
 实例 addZeroClass
-  签名: [AddZeroClass α]
+  签名: [加法零类 α]
   定义体: { WithTop.zero, WithTop.add with
     zero_add := Option.map₂_left_identity zero_add
     add_zero := Option.map₂_right_identity add_zero }
@@ -1241,7 +1241,7 @@ instance addMonoid
 
 中文:
 实例 addMonoid
-  签名: : AddMonoid (WithTop α) where
+  签名: : 加法幺半群 (WithTop α) where
   定义体: WithTop.addSemigroup
   __ := WithTop.addZeroClass
   nsmul n a := match a, n with
@@ -1335,7 +1335,7 @@ instance addCommMonoid
 
 中文:
 实例 addCommMonoid
-  签名: [AddCommMonoid α]
+  签名: [加法交换幺半群 α]
   定义体: { WithTop.addMonoid, WithTop.addCommSemigroup with }
 
 Depends on / 依赖: WithTop, WithTop.addCommSemigroup, WithTop.addMonoid, addCommSemigroup, addMonoid
@@ -1353,7 +1353,7 @@ instance natCast
 
 中文:
 实例 natCast
-  签名: [自然数Cast α]
+  签名: [自然数嵌入 α]
   定义体: ⟨fun n => ↑(n : α)⟩
 -/
 instance natCast [NatCast α] : NatCast (WithTop α) :=
@@ -1373,7 +1373,7 @@ instance addMonoidWithOne
 
 中文:
 实例 addMonoidWithOne
-  签名: : AddMonoidWithOne (WithTop α) where
+  签名: : 加法带幺幺半群 (WithTop α) where
   定义体: by simp [NatCast.natCast]
   natCast_succ := fun n => by simp [NatCast.natCast]
 
@@ -1458,7 +1458,7 @@ lemma coe_ofNat
   proof: rfl
 
 中文:
-引理 coe_ofNat
+引理 coe_of自然数
   条件: (n : 自然数) [n.AtLeastTwo]
   证明: rfl
 -/
@@ -1473,7 +1473,7 @@ lemma coe_eq_ofNat
   proof: coe_eq_coe
 
 中文:
-引理 coe_eq_ofNat
+引理 coe_eq_of自然数
   条件: (n : 自然数) [n.AtLeastTwo] (m : α)
   证明: coe_eq_coe
 -/
@@ -1489,7 +1489,7 @@ lemma ofNat_eq_coe
   proof: coe_eq_coe
 
 中文:
-引理 ofNat_eq_coe
+引理 of自然数_eq_coe
   条件: (n : 自然数) [n.AtLeastTwo] (m : α)
   证明: coe_eq_coe
 -/
@@ -1506,7 +1506,7 @@ lemma ofNat_ne_top
   proof: natCast_ne_top n
 
 中文:
-引理 ofNat_ne_top
+引理 of自然数_ne_top
   条件: (n : 自然数) [n.AtLeastTwo]
   结论: (of自然数(n) : WithTop α) != ⊤
   证明: natCast_ne_top n
@@ -1523,7 +1523,7 @@ lemma top_ne_ofNat
   proof: top_ne_natCast n
 
 中文:
-引理 top_ne_ofNat
+引理 top_ne_of自然数
   条件: (n : 自然数) [n.AtLeastTwo]
   结论: (⊤ : WithTop α) != of自然数(n)
   证明: top_ne_natCast n
@@ -1540,7 +1540,7 @@ lemma map_ofNat
   proof: map_coe f n
 
 中文:
-引理 map_ofNat
+引理 map_of自然数
   条件: {f : α -> β} (n : 自然数) [n.AtLeastTwo]
   证明: map_coe f n
 -/
@@ -1572,7 +1572,7 @@ lemma map_eq_ofNat_iff
   proof: map_eq_some_iff
 
 中文:
-引理 map_eq_ofNat_iff
+引理 map_eq_of自然数_iff
   条件: {f : β -> α} {n : 自然数} [n.AtLeastTwo] {a : WithTop β}
   证明: map_eq_some_iff
 
@@ -1590,7 +1590,7 @@ lemma ofNat_eq_map_iff
   proof: some_eq_map_iff
 
 中文:
-引理 ofNat_eq_map_iff
+引理 of自然数_eq_map_iff
   条件: {f : β -> α} {n : 自然数} [n.AtLeastTwo] {a : WithTop β}
   证明: some_eq_map_iff
 
@@ -1648,7 +1648,7 @@ instance charZero
 
 中文:
 实例 charZero
-  签名: [AddMonoidWithOne α] [CharZero α]
+  签名: [加法带幺幺半群 α] [特征零 α]
   定义体: { cast_injective := Function.Injective.comp (f := Nat.cast (R := α))
       (fun _ _ => WithTop.coe_eq_coe.1) Nat.cast_injective }
 
@@ -1668,7 +1668,7 @@ instance addCommMonoidWithOne
 
 中文:
 实例 addCommMonoidWithOne
-  签名: [AddCommMonoidWithOne α]
+  签名: [加法交换带幺幺半群 α]
   定义体: { WithTop.addMonoidWithOne, WithTop.addCommMonoid with }
 
 Depends on / 依赖: WithTop, WithTop.addCommMonoid, WithTop.addMonoidWithOne, addCommMonoid, addMonoidWithOne
@@ -1700,8 +1700,8 @@ instance existsAddOfLE
     | ⊤, (b : α) => fun h => (not_top_le_coe _ h).elim⟩
 
 中文:
-实例 existsAddOfLE
-  签名: [LE α] [Add α] [ExistsAddOfLE α]
+实例 存在AddOfLE
+  签名: [LE α] [加法 α] [ExistsAddOfLE α]
   定义体: ⟨fun {a} {b} =>
     match a, b with
     | ⊤, ⊤ => by simp
@@ -1749,7 +1749,7 @@ theorem one_lt_top
 
 中文:
 定理 one_lt_top
-  条件: [One α] [LT α]
+  条件: [幺 α] [LT α]
   结论: (1 : WithTop α) < ⊤
   证明: coe_lt_top _
 
@@ -1770,8 +1770,8 @@ definition _root_.OneHom.withTopMap
   map_one' := by rw [WithTop.map_one, map_one, coe_one]
 
 中文:
-定义 _root_.OneHom.withTopMap
-  签名: {M N : 类型} [One M] [One N] (f : OneHom M N)
+定义 _root_.幺态射.withTopMap
+  签名: {M N : 类型} [幺 M] [幺 N] (f : 幺态射 M N)
   定义体: WithTop.map f
   map_one' := by rw [WithTop.map_one, map_one, coe_one]
 -/
@@ -1792,8 +1792,8 @@ definition _root_.AddHom.withTopMap
   map_add' := WithTop.map_add f
 
 中文:
-定义 _root_.AddHom.withTopMap
-  签名: {M N : 类型} [Add M] [Add N] (f : AddHom M N)
+定义 _root_.加法半群态射.withTopMap
+  签名: {M N : 类型} [加法 M] [加法 N] (f : 加法半群态射 M N)
   定义体: WithTop.map f
   map_add' := WithTop.map_add f
 -/
@@ -1813,8 +1813,8 @@ definition _root_.AddMonoidHom.withTopMap
   body: { ZeroHom.withTopMap f.toZeroHom, AddHom.withTopMap f.toAddHom with toFun := WithTop.map f }
 
 中文:
-定义 _root_.AddMonoidHom.withTopMap
-  签名: {M N : 类型} [AddZeroClass M] [AddZeroClass N]
+定义 _root_.加法幺半群态射.withTopMap
+  签名: {M N : 类型} [加法零类 M] [加法零类 N]
   定义体: { ZeroHom.withTopMap f.toZeroHom, AddHom.withTopMap f.toAddHom with toFun := WithTop.map f }
 -/
 protected def _root_.AddMonoidHom.withTopMap {M N : Type*} [AddZeroClass M] [AddZeroClass N]
@@ -1837,7 +1837,7 @@ instance one
 
 中文:
 实例 one
-  签名: : One (WithBot α)
+  签名: : 幺 (WithBot α)
   定义体: ⟨(1 : α)⟩
 -/
 @[to_additive] instance one : One (WithBot α) := ⟨(1 : α)⟩
@@ -2134,7 +2134,7 @@ theorem map_eq_one_iff
 
 中文:
 定理 map_eq_one_iff
-  条件: {α} {f : α -> β} {v : WithBot α} [One β]
+  条件: {α} {f : α -> β} {v : WithBot α} [幺 β]
   证明: map_eq_some_iff
 
 @[to_additive]
@@ -2155,7 +2155,7 @@ theorem one_eq_map_iff
 
 中文:
 定理 one_eq_map_iff
-  条件: {α} {f : α -> β} {v : WithBot α} [One β]
+  条件: {α} {f : α -> β} {v : WithBot α} [幺 β]
   证明: some_eq_map_iff
 
 Depends on / 依赖: some_eq_map_iff
@@ -2173,7 +2173,7 @@ instance zeroLEOneClass
 
 中文:
 实例 zeroLEOneClass
-  签名: [Zero α] [LE α] [ZeroLEOneClass α]
+  签名: [零 α] [LE α] [ZeroLEOne类 α]
   定义体: ⟨coe_le_coe.2 zero_le_one⟩
 
 Depends on / 依赖: coe_le_coe, zero_le_one
@@ -2196,7 +2196,7 @@ instance add
 
 中文:
 实例 add
-  签名: : Add (WithBot α)
+  签名: : 加法 (WithBot α)
   定义体: ⟨WithBot.map₂ (· + ·)⟩
 
 Depends on / 依赖: WithBot, WithBot.map
@@ -2445,7 +2445,7 @@ lemma add_right_inj
 
 中文:
 引理 add_right_inj
-  条件: [IsRightCancelAdd α] (hz : z != ⊥)
+  条件: [是右消去加法 α] (hz : z != ⊥)
   结论: x + z = y + z ↔ x = y
   证明: by
   lift z to α using hz; cases x <;> cases y <;> simp [← coe_add]
@@ -2466,7 +2466,7 @@ lemma add_right_cancel
 
 中文:
 引理 add_right_cancel
-  条件: [IsRightCancelAdd α] (hz : z != ⊥) (h : x + z = y + z)
+  条件: [是右消去加法 α] (hz : z != ⊥) (h : x + z = y + z)
   结论: x = y
   证明: (WithBot.add_right_inj hz).1 h
 
@@ -2487,7 +2487,7 @@ lemma add_left_inj
 
 中文:
 引理 add_left_inj
-  条件: [IsLeftCancelAdd α] (hx : x != ⊥)
+  条件: [是左消去加法 α] (hx : x != ⊥)
   结论: x + y = x + z ↔ y = z
   证明: by
   lift x to α using hx; cases y <;> cases z <;> simp [← coe_add]
@@ -2508,7 +2508,7 @@ lemma add_left_cancel
 
 中文:
 引理 add_left_cancel
-  条件: [IsLeftCancelAdd α] (hx : x != ⊥) (h : x + y = x + z)
+  条件: [是左消去加法 α] (hx : x != ⊥) (h : x + y = x + z)
   结论: y = z
   证明: (WithBot.add_left_inj hx).1 h
 
@@ -2612,7 +2612,7 @@ lemma le_of_add_le_add_left
 
 中文:
 引理 le_of_add_le_add_left
-  条件: [LE α] [AddLeftReflectLE α] (hx : x != ⊥)
+  条件: [LE α] [加法LeftReflectLE α] (hx : x != ⊥)
   证明: by
   lift x to α using hx; cases y <;> cases z <;> simp [← coe_add]; simpa using le_of_add_le_add_left
 -/
@@ -2631,7 +2631,7 @@ lemma le_of_add_le_add_right
 
 中文:
 引理 le_of_add_le_add_right
-  条件: [LE α] [AddRightReflectLE α] (hz : z != ⊥)
+  条件: [LE α] [加法RightReflectLE α] (hz : z != ⊥)
   证明: by
   lift z to α using hz; cases x <;> cases y <;> simp [← coe_add]; simpa using le_of_add_le_add_right
 -/
@@ -2687,7 +2687,7 @@ lemma add_le_add_iff_left
 
 中文:
 引理 add_le_add_iff_left
-  条件: [LE α] [AddLeftMono α] [AddLeftReflectLE α] (hx : x != ⊥)
+  条件: [LE α] [AddLeftMono α] [加法LeftReflectLE α] (hx : x != ⊥)
   证明: ⟨WithBot.le_of_add_le_add_left hx, fun _ => by gcongr⟩
 -/
 protected lemma add_le_add_iff_left [LE α] [AddLeftMono α] [AddLeftReflectLE α] (hx : x != ⊥) :
@@ -2703,7 +2703,7 @@ lemma add_le_add_iff_right
 
 中文:
 引理 add_le_add_iff_right
-  条件: [LE α] [AddRightMono α] [AddRightReflectLE α] (hz : z != ⊥)
+  条件: [LE α] [AddRightMono α] [加法RightReflectLE α] (hz : z != ⊥)
   证明: ⟨WithBot.le_of_add_le_add_right hz, fun _ => by gcongr⟩
 -/
 protected lemma add_le_add_iff_right [LE α] [AddRightMono α] [AddRightReflectLE α] (hz : z != ⊥) :
@@ -2751,7 +2751,7 @@ theorem add_lt_add_of_le_of_lt
 
 中文:
 定理 add_lt_add_of_le_of_lt
-  结论: [Preorder α] [AddLeftStrictMono α]
+  结论: [预序 α] [AddLeftStrictMono α]
   证明: (WithBot.add_lt_add_left hw hxz).trans_le by gcongr
 -/
 protected theorem add_lt_add_of_le_of_lt [Preorder α] [AddLeftStrictMono α]
@@ -2769,7 +2769,7 @@ theorem add_lt_add_of_lt_of_le
 
 中文:
 定理 add_lt_add_of_lt_of_le
-  结论: [Preorder α] [AddLeftMono α]
+  结论: [预序 α] [AddLeftMono α]
   证明: (WithBot.add_lt_add_right hx hwy).trans_le by gcongr
 -/
 protected theorem add_lt_add_of_lt_of_le [Preorder α] [AddLeftMono α]
@@ -2787,7 +2787,7 @@ lemma addLECancellable_of_ne_bot
 
 中文:
 引理 addLECancellable_of_ne_bot
-  结论: [LE α] [AddLeftReflectLE α]
+  结论: [LE α] [加法LeftReflectLE α]
   证明: fun _b _c => WithBot.le_of_add_le_add_left hx
 
 Depends on / 依赖: WithBot, WithBot.le_of_add_le_add_left, le_of_add_le_add_left
@@ -2805,7 +2805,7 @@ lemma addLECancellable_of_lt_bot
 
 中文:
 引理 addLECancellable_of_lt_bot
-  结论: [Preorder α] [AddLeftReflectLE α]
+  结论: [预序 α] [加法LeftReflectLE α]
   证明: addLECancellable_of_ne_bot hx.ne
 
 Depends on / 依赖: addLECancellable_of_ne_bot, hx.ne
@@ -2823,7 +2823,7 @@ lemma addLECancellable_coe
 
 中文:
 引理 addLECancellable_coe
-  条件: [LE α] [AddLeftReflectLE α] (a : α)
+  条件: [LE α] [加法LeftReflectLE α] (a : α)
   证明: addLECancellable_of_ne_bot coe_ne_bot
 
 Depends on / 依赖: addLECancellable_of_ne_bot, coe_ne_bot
@@ -2842,7 +2842,7 @@ lemma addLECancellable_iff_ne_bot
 
 中文:
 引理 addLECancellable_iff_ne_bot
-  结论: [Nonempty α] [Preorder α]
+  结论: [非空 α] [预序 α]
   证明: by rintro h rfl; exact (bot_lt_coe <| Classical.arbitrary _).not_ge h by simp
   mpr := addLECancellable_of_ne_bot
 
@@ -2865,7 +2865,7 @@ lemma add_le_add_iff_right'
 
 中文:
 引理 add_le_add_iff_right'
-  结论: {α : 类型} [Add α] [LE α]
+  结论: {α : 类型} [加法 α] [LE α]
   证明: by
   induction a <;> induction b <;> induction c <;> norm_cast at * <;>
     aesop (add simp WithTop.add_le_add_iff_right)
@@ -2897,7 +2897,7 @@ theorem map_add
 
 中文:
 定理 map_add
-  结论: {F} [Add β] [FunLike F α β] [AddHomClass F α β]
+  结论: {F} [加法 β] [函数状 F α β] [加法态射类 F α β]
   证明: by
   induction a
   · exact (bot_add _).symm
@@ -2928,7 +2928,7 @@ instance addSemigroup
 
 中文:
 实例 addSemigroup
-  签名: [AddSemigroup α]
+  签名: [加法半群 α]
   定义体: inferInstanceAs AddSemigroup (WithTop α)
 
 Depends on / 依赖: AddSemigroup, WithTop
@@ -2946,7 +2946,7 @@ instance addCommSemigroup
 
 中文:
 实例 addCommSemigroup
-  签名: [AddCommSemigroup α]
+  签名: [加法交换半群 α]
   定义体: inferInstanceAs AddCommSemigroup (WithTop α)
 
 Depends on / 依赖: AddCommSemigroup, WithTop
@@ -2964,7 +2964,7 @@ instance addZeroClass
 
 中文:
 实例 addZeroClass
-  签名: [AddZeroClass α]
+  签名: [加法零类 α]
   定义体: inferInstanceAs AddZeroClass (WithTop α)
 
 Depends on / 依赖: AddZeroClass, WithTop
@@ -2985,7 +2985,7 @@ instance addMonoid
 
 中文:
 实例 addMonoid
-  签名: : AddMonoid (WithBot α)
+  签名: : 加法幺半群 (WithBot α)
   定义体: inferInstanceAs AddMonoid (WithTop α)
 
 Depends on / 依赖: AddMonoid, WithTop
@@ -3069,7 +3069,7 @@ instance addCommMonoid
 
 中文:
 实例 addCommMonoid
-  签名: [AddCommMonoid α]
+  签名: [加法交换幺半群 α]
   定义体: inferInstanceAs AddCommMonoid (WithTop α)
 
 Depends on / 依赖: AddCommMonoid, WithTop
@@ -3090,7 +3090,7 @@ instance :
 
 中文:
 实例 :
-  签名: 自然数Cast (WithBot α)
+  签名: 自然数嵌入 (WithBot α)
   定义体: (n : α)
 -/
 instance : NatCast (WithBot α) where natCast n := (n : α)
@@ -3127,7 +3127,7 @@ lemma unbotD_ofNat
   proof: rfl
 
 中文:
-引理 unbotD_ofNat
+引理 unbotD_of自然数
   条件: (d : α) (n : 自然数) [n.AtLeastTwo]
   结论: unbotD d of自然数(n) = of自然数(n)
   证明: rfl
@@ -3149,7 +3149,7 @@ instance addMonoidWithOne
 
 中文:
 实例 addMonoidWithOne
-  签名: : AddMonoidWithOne (WithBot α)
+  签名: : 加法带幺幺半群 (WithBot α)
   定义体: inferInstanceAs AddMonoidWithOne (WithTop α)
 
 Depends on / 依赖: AddMonoidWithOne, WithTop
@@ -3217,7 +3217,7 @@ lemma coe_ofNat
   proof: rfl
 
 中文:
-引理 coe_ofNat
+引理 coe_of自然数
   条件: (n : 自然数) [n.AtLeastTwo]
   证明: rfl
 -/
@@ -3232,7 +3232,7 @@ lemma coe_eq_ofNat
   proof: coe_eq_coe
 
 中文:
-引理 coe_eq_ofNat
+引理 coe_eq_of自然数
   条件: (n : 自然数) [n.AtLeastTwo] (m : α)
   证明: coe_eq_coe
 -/
@@ -3248,7 +3248,7 @@ lemma ofNat_eq_coe
   proof: coe_eq_coe
 
 中文:
-引理 ofNat_eq_coe
+引理 of自然数_eq_coe
   条件: (n : 自然数) [n.AtLeastTwo] (m : α)
   证明: coe_eq_coe
 -/
@@ -3265,7 +3265,7 @@ lemma ofNat_ne_bot
   proof: natCast_ne_bot n
 
 中文:
-引理 ofNat_ne_bot
+引理 of自然数_ne_bot
   条件: (n : 自然数) [n.AtLeastTwo]
   结论: (of自然数(n) : WithBot α) != ⊥
   证明: natCast_ne_bot n
@@ -3282,7 +3282,7 @@ lemma bot_ne_ofNat
   proof: bot_ne_natCast n
 
 中文:
-引理 bot_ne_ofNat
+引理 bot_ne_of自然数
   条件: (n : 自然数) [n.AtLeastTwo]
   结论: (⊥ : WithBot α) != of自然数(n)
   证明: bot_ne_natCast n
@@ -3299,7 +3299,7 @@ lemma map_ofNat
   proof: map_coe f n
 
 中文:
-引理 map_ofNat
+引理 map_of自然数
   条件: {f : α -> β} (n : 自然数) [n.AtLeastTwo]
   证明: map_coe f n
 -/
@@ -3331,7 +3331,7 @@ lemma map_eq_ofNat_iff
   proof: map_eq_some_iff
 
 中文:
-引理 map_eq_ofNat_iff
+引理 map_eq_of自然数_iff
   条件: {f : β -> α} {n : 自然数} [n.AtLeastTwo] {a : WithBot β}
   证明: map_eq_some_iff
 
@@ -3349,7 +3349,7 @@ lemma ofNat_eq_map_iff
   proof: some_eq_map_iff
 
 中文:
-引理 ofNat_eq_map_iff
+引理 of自然数_eq_map_iff
   条件: {f : β -> α} {n : 自然数} [n.AtLeastTwo] {a : WithBot β}
   证明: some_eq_map_iff
 
@@ -3424,7 +3424,7 @@ instance charZero
 
 中文:
 实例 charZero
-  签名: [AddMonoidWithOne α] [CharZero α]
+  签名: [加法带幺幺半群 α] [特征零 α]
   定义体: inferInstanceAs CharZero (WithTop α)
 
 Depends on / 依赖: CharZero, WithTop
@@ -3442,7 +3442,7 @@ instance addCommMonoidWithOne
 
 中文:
 实例 addCommMonoidWithOne
-  签名: [AddCommMonoidWithOne α]
+  签名: [加法交换带幺幺半群 α]
   定义体: inferInstanceAs AddCommMonoidWithOne (WithTop α)
 
 Depends on / 依赖: AddCommMonoidWithOne, WithTop
@@ -3463,8 +3463,8 @@ definition _root_.OneHom.withBotMap
   map_one' := by rw [WithBot.map_one, map_one, coe_one]
 
 中文:
-定义 _root_.OneHom.withBotMap
-  签名: {M N : 类型} [One M] [One N] (f : OneHom M N)
+定义 _root_.幺态射.withBotMap
+  签名: {M N : 类型} [幺 M] [幺 N] (f : 幺态射 M N)
   定义体: WithBot.map f
   map_one' := by rw [WithBot.map_one, map_one, coe_one]
 -/
@@ -3485,8 +3485,8 @@ definition _root_.AddHom.withBotMap
   map_add' := WithBot.map_add f
 
 中文:
-定义 _root_.AddHom.withBotMap
-  签名: {M N : 类型} [Add M] [Add N] (f : AddHom M N)
+定义 _root_.加法半群态射.withBotMap
+  签名: {M N : 类型} [加法 M] [加法 N] (f : 加法半群态射 M N)
   定义体: WithBot.map f
   map_add' := WithBot.map_add f
 -/
@@ -3506,8 +3506,8 @@ definition _root_.AddMonoidHom.withBotMap
   body: { ZeroHom.withBotMap f.toZeroHom, AddHom.withBotMap f.toAddHom with toFun := WithBot.map f }
 
 中文:
-定义 _root_.AddMonoidHom.withBotMap
-  签名: {M N : 类型} [AddZeroClass M] [AddZeroClass N]
+定义 _root_.加法幺半群态射.withBotMap
+  签名: {M N : 类型} [加法零类 M] [加法零类 N]
   定义体: { ZeroHom.withBotMap f.toZeroHom, AddHom.withBotMap f.toAddHom with toFun := WithBot.map f }
 -/
 protected def _root_.AddMonoidHom.withBotMap {M N : Type*} [AddZeroClass M] [AddZeroClass N]
@@ -3600,7 +3600,7 @@ lemma withBotCongr_toAddHom
 
 中文:
 引理 withBotCongr_toAddHom
-  结论: e.withBotCongr = (e : AddHom α β).withBotMap
+  结论: e.withBotCongr = (e : 加法半群态射 α β).withBotMap
   证明: rfl
 
 @[to_dual (attr := simp)]
@@ -3620,7 +3620,7 @@ lemma withBotCongr_refl
 
 中文:
 引理 withBotCongr_refl
-  结论: (AddEquiv.refl α).withBotCongr = AddEquiv.refl _
+  结论: (加法等价.refl α).withBotCongr = 加法等价.refl _
   证明: AddEquiv.ext congr_fun WithBot.map_id
 
 @[to_dual (attr := simp)]

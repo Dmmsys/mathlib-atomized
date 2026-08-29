@@ -53,8 +53,8 @@ theorem inv_coe_set
 
 中文:
 定理 inv_coe_set
-  条件: [InvolutiveInv G] [SetLike S G] [InvMemClass S G] {H : S}
-  结论: (H : Set G)⁻¹ = H
+  条件: [InvolutiveInv G] [集合状 S G] [InvMem类 S G] {H : S}
+  结论: (H : 集合 G)⁻¹ = H
   证明: Set.ext fun _ => inv_mem_iff
 
 @[to_additive (attr := simp)]
@@ -78,7 +78,7 @@ lemma smul_coe_set
 
 中文:
 引理 smul_coe_set
-  条件: [Group G] [SetLike S G] [SubgroupClass S G] {s : S} {a : G} (ha : a in s)
+  条件: [群 G] [集合状 S G] [子群类 S G] {s : S} {a : G} (ha : a in s)
   证明: by
   ext; simp [Set.mem_smul_set_iff_inv_smul_mem, mul_mem_cancel_left, ha]
 
@@ -104,8 +104,8 @@ lemma coe_set_eq_one
 
 中文:
 引理 coe_set_eq_one
-  条件: [Group G] {s : Subgroup G}
-  结论: (s : Set G) = 1 ↔ s = ⊥
+  条件: [群 G] {s : 子群 G}
+  结论: (s : 集合 G) = 1 ↔ s = ⊥
   证明: (SetLike.ext'_iff.trans (by rfl)).symm
 
 @[to_additive (attr := simp)]
@@ -129,7 +129,7 @@ lemma op_smul_coe_set
 
 中文:
 引理 op_smul_coe_set
-  条件: [Group G] [SetLike S G] [SubgroupClass S G] {s : S} {a : G} (ha : a in s)
+  条件: [群 G] [集合状 S G] [子群类 S G] {s : S} {a : G} (ha : a in s)
   证明: by
   ext; simp [Set.mem_smul_set_iff_inv_smul_mem, mul_mem_cancel_right, ha]
 
@@ -152,7 +152,7 @@ lemma coe_div_coe
 
 中文:
 引理 coe_div_coe
-  条件: [SetLike S G] [DivisionMonoid G] [SubgroupClass S G] (H : S)
+  条件: [集合状 S G] [Division幺半群 G] [子群类 S G] (H : S)
   证明: by simp [div_eq_mul_inv]
 
 Depends on / 依赖: div_eq_mul_inv
@@ -182,7 +182,7 @@ smul_coe_set subset_closure ha
 
 中文:
 引理 mul_subgroupClosure
-  条件: (hs : s.Nonempty)
+  条件: (hs : s.非空)
   结论: s * closure s = closure s
   证明: by
   rw [← smul_eq_mul]; rw [← Set.iUnion_smul_set]
@@ -217,7 +217,7 @@ op_smul_coe_set subset_closure ha
 
 中文:
 引理 subgroupClosure_mul
-  条件: (hs : s.Nonempty)
+  条件: (hs : s.非空)
   结论: closure s * s = closure s
   证明: by
   rw [← Set.iUnion_op_smul_set]
@@ -246,7 +246,7 @@ lemma pow_mul_subgroupClosure
 
 中文:
 引理 pow_mul_subgroupClosure
-  条件: (hs : s.Nonempty)
+  条件: (hs : s.非空)
   结论: 对任意 n, s ^ n * closure s = closure s
 -/
 lemma pow_mul_subgroupClosure (hs : s.Nonempty) : forall n, s ^ n * closure s = closure s
@@ -264,7 +264,7 @@ lemma subgroupClosure_mul_pow
 
 中文:
 引理 subgroupClosure_mul_pow
-  条件: (hs : s.Nonempty)
+  条件: (hs : s.非空)
   结论: 对任意 n, closure s * s ^ n = closure s
 -/
 lemma subgroupClosure_mul_pow (hs : s.Nonempty) : forall n, closure s * s ^ n = closure s
@@ -291,7 +291,7 @@ theorem inv_subset_closure
 
 中文:
 定理 inv_subset_closure
-  条件: (S : Set G)
+  条件: (S : 集合 G)
   结论: S⁻¹ subseteq closure S
   证明: fun s hs => by
   rw [SetLike.mem_coe]; rw [← Subgroup.inv_mem_iff]
@@ -322,7 +322,7 @@ theorem closure_toSubmonoid
 
 中文:
 定理 closure_toSubmonoid
-  条件: (S : Set G)
+  条件: (S : 集合 G)
   证明: by
   refine le_antisymm (fun x hx => ?_) (Submonoid.closure_le.2 ?_)
   · refine
@@ -381,7 +381,7 @@ lemma _root_.Submonoid.powers_le_zpowers
   exact le_sup_left
 
 中文:
-引理 _root_.Submonoid.powers_le_zpowers
+引理 _root_.子幺半群.powers_le_zpowers
   条件: (g : G)
   证明: by
   rw [toSubmonoid_zpowers]
@@ -506,7 +506,7 @@ theorem closure_inv
 
 中文:
 定理 closure_inv
-  条件: (s : Set G)
+  条件: (s : 集合 G)
   结论: closure s⁻¹ = closure s
   证明: by
   simp only [← toSubmonoid_inj, closure_toSubmonoid, inv_inv, union_comm]
@@ -600,7 +600,7 @@ theorem iSup_induction
 
 中文:
 定理 iSup_induction
-  结论: {ι : Sort*} (S : ι -> Subgroup G) {C : G -> 命题} {x : G} (hx : x in ⨆ i, S i)
+  结论: {ι : 类型层*} (S : ι -> 子群 G) {C : G -> 命题} {x : G} (hx : x in ⨆ i, S i)
   证明: by
   rw [iSup_eq_closure] at hx
   induction hx using closure_induction'' with
@@ -648,7 +648,7 @@ theorem iSup_induction'
 
 中文:
 定理 iSup_induction'
-  结论: {ι : Sort*} (S : ι -> Subgroup G) {C : 对任意 x, (x in ⨆ i, S i) -> 命题}
+  结论: {ι : 类型层*} (S : ι -> 子群 G) {C : 对任意 x, (x in ⨆ i, S i) -> 命题}
   证明: by
   suffices exists h, C x h from this.snd
   refine iSup_induction S (C := fun x => exists h, C x h) hx (fun i x hx => ?_) ?_ fun x y => ?_
@@ -686,7 +686,7 @@ theorem mul_subset
 
 中文:
 定理 mul_subset
-  条件: {t : Set G} {H : Subgroup G} (hs : s subseteq H) (ht : t subseteq H)
+  条件: {t : 集合 G} {H : 子群 G} (hs : s subseteq H) (ht : t subseteq H)
   结论: s * t subseteq H
   证明: Submonoid.mul_subset hs ht
 
@@ -712,7 +712,7 @@ lemma pow_subset
 
 中文:
 引理 pow_subset
-  条件: {H : Subgroup G} {n : 自然数} (hs : s subseteq H)
+  条件: {H : 子群 G} {n : 自然数} (hs : s subseteq H)
   结论: s ^ n subseteq H
   证明: by
   induction n <;> simp [pow_succ, *]
@@ -740,7 +740,7 @@ theorem closure_mul_le
 
 中文:
 定理 closure_mul_le
-  条件: (S T : Set G)
+  条件: (S T : 集合 G)
   结论: closure (S * T) <= closure S ⊔ closure T
   证明: sInf_le fun _x ⟨_s, hs, _t, ht, hx⟩ => hx ▸
     (closure S ⊔ closure T).mul_mem (SetLike.le_def.mp le_sup_left <| subset_closure hs)
@@ -849,8 +849,8 @@ theorem sup_eq_closure_mul
 
 中文:
 定理 sup_eq_closure_mul
-  条件: (H K : Subgroup G)
-  结论: H ⊔ K = closure ((H : Set G) * (K : Set G))
+  条件: (H K : 子群 G)
+  结论: H ⊔ K = closure ((H : 集合 G) * (K : 集合 G))
   证明: le_antisymm
     (sup_le (fun h hh => subset_closure ⟨h, hh, 1, K.one_mem, mul_one h⟩) fun k hk =>
       subset_closure ⟨1, H.one_mem, k, hk, one_mul k⟩)
@@ -883,7 +883,7 @@ theorem set_mul_normalizer_comm
 
 中文:
 定理 set_mul_normalizer_comm
-  条件: (S : Set G) (N : Subgroup G) (hLE : S subseteq normalizer (N : Set G))
+  条件: (S : 集合 G) (N : 子群 G) (hLE : S subseteq normalizer (N : 集合 G))
   证明: by
   rw [← iUnion_mul_left_image]; rw [← iUnion_mul_right_image]
   simp only [image_mul_left, image_mul_right, Set.preimage]
@@ -912,7 +912,7 @@ theorem set_mul_normal_comm
 
 中文:
 定理 set_mul_normal_comm
-  条件: (S : Set G) (N : Subgroup G) [hN : N.Normal]
+  条件: (S : 集合 G) (N : 子群 G) [hN : N.正规]
   证明: set_mul_normalizer_comm S N subset_normalizer_of_normal
 
 Depends on / 依赖: set_mul_normalizer_comm, subset_normalizer_of_normal
@@ -942,7 +942,7 @@ theorem coe_mul_of_left_le_normalizer_right
 
 中文:
 定理 coe_mul_of_left_le_normalizer_right
-  条件: (H N : Subgroup G) (hLE : H <= normalizer N)
+  条件: (H N : 子群 G) (hLE : H <= normalizer N)
   证明: by
   rw [sup_eq_closure_mul]
   refine Set.Subset.antisymm (fun x hx => ?_) subset_closure
@@ -988,7 +988,7 @@ theorem coe_mul_of_right_le_normalizer_left
 
 中文:
 定理 coe_mul_of_right_le_normalizer_left
-  条件: (N H : Subgroup G) (hLE : H <= normalizer N)
+  条件: (N H : 子群 G) (hLE : H <= normalizer N)
   证明: by
   rw [← set_mul_normalizer_comm _ _ hLE]; rw [sup_comm]; rw [coe_mul_of_left_le_normalizer_right _ _ hLE]
 
@@ -1012,8 +1012,8 @@ theorem mul_normal
 
 中文:
 定理 mul_normal
-  条件: (H N : Subgroup G) [hN : N.Normal]
-  结论: (↑(H ⊔ N) : Set G) = H * N
+  条件: (H N : 子群 G) [hN : N.正规]
+  结论: (↑(H ⊔ N) : 集合 G) = H * N
   证明: coe_mul_of_left_le_normalizer_right H N le_normalizer_of_normal
 
 Depends on / 依赖: coe_mul_of_left_le_normalizer_right, le_normalizer_of_normal
@@ -1037,8 +1037,8 @@ theorem normal_mul
 
 中文:
 定理 normal_mul
-  条件: (N H : Subgroup G) [N.Normal]
-  结论: (↑(N ⊔ H) : Set G) = N * H
+  条件: (N H : 子群 G) [N.正规]
+  结论: (↑(N ⊔ H) : 集合 G) = N * H
   证明: coe_mul_of_right_le_normalizer_left N H le_normalizer_of_normal
 
 @[to_additive]
@@ -1069,7 +1069,7 @@ theorem mul_inf_assoc
 
 中文:
 定理 mul_inf_assoc
-  条件: (A B C : Subgroup G) (h : A <= C)
+  条件: (A B C : 子群 G) (h : A <= C)
   证明: by
   ext
   simp only [coe_inf, Set.mem_mul, Set.mem_inter_iff]
@@ -1118,7 +1118,7 @@ theorem inf_mul_assoc
 
 中文:
 定理 inf_mul_assoc
-  条件: (A B C : Subgroup G) (h : C <= A)
+  条件: (A B C : 子群 G) (h : C <= A)
   证明: by
   ext
   simp only [coe_inf, Set.mem_mul, Set.mem_inter_iff]
@@ -1161,7 +1161,7 @@ lemma normalizer_inf_normalizer_le_normalizer_sup
 
 中文:
 引理 normalizer_inf_normalizer_le_normalizer_sup
-  条件: (H K : Subgroup G)
+  条件: (H K : 子群 G)
   证明: by
   intro g hg
   simp_rw [mem_inf, mem_normalizer_iff_map_conj_eq, map_sup, hg.1, hg.2] at hg ⊢
@@ -1190,7 +1190,7 @@ theorem iInf_normalizer_le_normalizer_iSup
 
 中文:
 定理 iInf_normalizer_le_normalizer_iSup
-  条件: {ι : Sort*} (H : ι -> Subgroup G)
+  条件: {ι : 类型层*} (H : ι -> 子群 G)
   证明: by
   intro g hg
   simp_rw [mem_iInf, mem_normalizer_iff_map_conj_eq, map_iSup, hg] at hg ⊢
@@ -1265,7 +1265,7 @@ lemma normalizer_le_normalizer_sup_of_normalizer_le_right
 
 中文:
 引理 normalizer_le_normalizer_sup_of_normalizer_le_right
-  结论: {H K : Subgroup G}
+  结论: {H K : 子群 G}
   证明: by
   rw [sup_comm]
   exact normalizer_le_normalizer_sup_of_normalizer_le_left hHnK
@@ -1293,7 +1293,7 @@ lemma normalizer_le_normalizer_sup_normal
 
 中文:
 引理 normalizer_le_normalizer_sup_normal
-  条件: {H K : Subgroup G} [hK : K.Normal]
+  条件: {H K : 子群 G} [hK : K.正规]
   证明: normalizer_le_normalizer_sup_of_normalizer_le_left le_normalizer_of_normal
 
 @[to_additive]
@@ -1321,7 +1321,7 @@ instance sup_normal
 
 中文:
 实例 sup_normal
-  签名: (H K : Subgroup G) [hH : H.Normal] [hK : K.Normal]
+  签名: (H K : 子群 G) [hH : H.正规] [hK : K.正规]
   定义体: by
     rw [← SetLike.mem_coe]; rw [normal_mul] at hmem ⊢
     rcases hmem with ⟨h, hh, k, hk, rfl⟩
@@ -1354,7 +1354,7 @@ instance iSup_normal
 
 中文:
 实例 iSup_normal
-  签名: {ι : Sort*} (H : ι -> Subgroup G) [对任意 i, (H i).Normal]
+  签名: {ι : 类型层*} (H : ι -> 子群 G) [对任意 i, (H i).正规]
   定义体: by ⨆ i, H i
   grw [← normalizer_eq_top_iff, eq_top_iff, ← iInf_normalizer_le_normalizer_iSup]
   simp [normalizer_eq_top]
@@ -1389,7 +1389,7 @@ theorem biSup_normal
 
 中文:
 定理 biSup_normal
-  条件: {ι : 类型} (s : Set ι) (H : ι -> Subgroup G) (h : 对任意 i in s, (H i).Normal)
+  条件: {ι : 类型} (s : 集合 ι) (H : ι -> 子群 G) (h : 对任意 i in s, (H i).正规)
   证明: by ⨆ i in s, H i
   rw [← iSup_subtype'']
   have : forall i : s, (H i).Normal := fun i => h i i.property
@@ -1433,7 +1433,7 @@ theorem smul_mem_of_mem_closure_of_mem
 
 中文:
 定理 smul_mem_of_mem_closure_of_mem
-  结论: {X : 类型} [MulAction G X] {s : Set G} {t : Set X}
+  结论: {X : 类型} [乘法作用 G X] {s : 集合 G} {t : 集合 X}
   证明: by
   induction hg using Subgroup.closure_induction'' generalizing x with
   | one => simpa
@@ -1466,7 +1466,7 @@ theorem smul_opposite_image_mul_preimage'
 
 中文:
 定理 smul_opposite_image_mul_preimage'
-  条件: (g : G) (h : Gᵐᵒᵖ) (s : Set G)
+  条件: (g : G) (h : Gᵐᵒᵖ) (s : 集合 G)
   证明: by
   simp [preimage_preimage, mul_assoc]
 
@@ -1488,7 +1488,7 @@ theorem smul_opposite_image_mul_preimage
 
 中文:
 定理 smul_opposite_image_mul_preimage
-  条件: {H : Subgroup G} (g : G) (h : H.op) (s : Set G)
+  条件: {H : 子群 G} (g : G) (h : H.op) (s : 集合 G)
   证明: smul_opposite_image_mul_preimage' g h s
 
 Depends on / 依赖: smul_opposite_image_mul_preimage
@@ -1526,7 +1526,7 @@ scoped[Pointwise] attribute [instance] Subgroup.poi
 
 中文:
 定义 pointwiseMulAction
-  签名: : MulAction α (Subgroup G) where
+  签名: : 乘法作用 α (子群 G) where
   定义体: S.map (MulDistribMulAction.toMonoidEnd _ _ a)
   one_smul S := by
     change S.map _ = S
@@ -1560,7 +1560,7 @@ theorem pointwise_smul_def
 
 中文:
 定理 pointwise_smul_def
-  条件: {a : α} (S : Subgroup G)
+  条件: {a : α} (S : 子群 G)
   证明: rfl
 
 @[simp, norm_cast]
@@ -1583,8 +1583,8 @@ theorem coe_pointwise_smul
 
 中文:
 定理 coe_pointwise_smul
-  条件: (a : α) (S : Subgroup G)
-  结论: ↑(a • S) = a • (S : Set G)
+  条件: (a : α) (S : 子群 G)
+  结论: ↑(a • S) = a • (S : 集合 G)
   证明: rfl
 
 @[simp]
@@ -1603,7 +1603,7 @@ theorem pointwise_smul_toSubmonoid
 
 中文:
 定理 pointwise_smul_toSubmonoid
-  条件: (a : α) (S : Subgroup G)
+  条件: (a : α) (S : 子群 G)
   证明: rfl
 -/
 theorem pointwise_smul_toSubmonoid (a : α) (S : Subgroup G) :
@@ -1621,7 +1621,7 @@ theorem smul_mem_pointwise_smul
 
 中文:
 定理 smul_mem_pointwise_smul
-  条件: (m : G) (a : α) (S : Subgroup G)
+  条件: (m : G) (a : α) (S : 子群 G)
   结论: m in S -> a • m in a • S
   证明: (Set.smul_mem_smul_set : _ -> _ in a • (S : Set G))
 
@@ -1640,7 +1640,7 @@ instance :
 
 中文:
 实例 :
-  签名: CovariantClass α (Subgroup G) HSMul.hSMul LE.le
+  签名: 协变类 α (子群 G) 异质标量乘法.hSMul LE.le
   定义体: ⟨fun _ _ => image_mono⟩
 
 Depends on / 依赖: image_mono
@@ -1659,8 +1659,8 @@ theorem mem_smul_pointwise_iff_exists
 @[simp]
 
 中文:
-定理 mem_smul_pointwise_iff_exists
-  条件: (m : G) (a : α) (S : Subgroup G)
+定理 mem_smul_pointwise_iff_存在
+  条件: (m : G) (a : α) (S : 子群 G)
   证明: (Set.mem_smul_set : m in a • (S : Set G) ↔ _)
 
 @[simp]
@@ -1684,7 +1684,7 @@ theorem smul_bot
 中文:
 定理 smul_bot
   条件: (a : α)
-  结论: a • (⊥ : Subgroup G) = ⊥
+  结论: a • (⊥ : 子群 G) = ⊥
   证明: map_bot _
 
 Depends on / 依赖: map_bot
@@ -1703,7 +1703,7 @@ theorem smul_sup
 
 中文:
 定理 smul_sup
-  条件: (a : α) (S T : Subgroup G)
+  条件: (a : α) (S T : 子群 G)
   结论: a • (S ⊔ T) = a • S ⊔ a • T
   证明: map_sup _ _ _
 
@@ -1723,7 +1723,7 @@ theorem smul_closure
 
 中文:
 定理 smul_closure
-  条件: (a : α) (s : Set G)
+  条件: (a : α) (s : 集合 G)
   结论: a • closure s = closure (a • s)
   证明: MonoidHom.map_closure _ _
 
@@ -1742,7 +1742,7 @@ instance pointwise_isCentralScalar
 
 中文:
 实例 pointwise_isCentralScalar
-  签名: [MulDistribMulAction αᵐᵒᵖ G] [IsCentralScalar α G]
+  签名: [MulDistribMul作用 αᵐᵒᵖ G] [中心标量 α G]
   定义体: ⟨fun _ S => (congr_arg fun f => S.map f) MonoidHom.ext op_smul_eq_smul _⟩
 
 Depends on / 依赖: MonoidHom, MonoidHom.ext, S.map, congr_arg, op_smul_eq_smul
@@ -1769,7 +1769,7 @@ theorem smul_mem_pointwise_smul_iff
 
 中文:
 定理 smul_mem_pointwise_smul_iff
-  条件: {a : α} {S : Subgroup G} {x : G}
+  条件: {a : α} {S : 子群 G} {x : G}
   结论: a • x in a • S ↔ x in S
   证明: smul_mem_smul_set_iff
 
@@ -1788,7 +1788,7 @@ theorem mem_pointwise_smul_iff_inv_smul_mem
 
 中文:
 定理 mem_pointwise_smul_iff_inv_smul_mem
-  条件: {a : α} {S : Subgroup G} {x : G}
+  条件: {a : α} {S : 子群 G} {x : G}
   证明: mem_smul_set_iff_inv_smul_mem
 
 Depends on / 依赖: mem_smul_set_iff_inv_smul_mem
@@ -1810,7 +1810,7 @@ theorem mem_inv_pointwise_smul_iff
 
 中文:
 定理 mem_inv_pointwise_smul_iff
-  条件: {a : α} {S : Subgroup G} {x : G}
+  条件: {a : α} {S : 子群 G} {x : G}
   结论: x in a⁻¹ • S ↔ a • x in S
   证明: mem_inv_smul_set_iff
 
@@ -1833,7 +1833,7 @@ theorem pointwise_smul_le_pointwise_smul_iff
 
 中文:
 定理 pointwise_smul_le_pointwise_smul_iff
-  条件: {a : α} {S T : Subgroup G}
+  条件: {a : α} {S T : 子群 G}
   结论: a • S <= a • T ↔ S <= T
   证明: smul_set_subset_smul_set_iff
 
@@ -1853,7 +1853,7 @@ theorem pointwise_smul_subset_iff
 
 中文:
 定理 pointwise_smul_subset_iff
-  条件: {a : α} {S T : Subgroup G}
+  条件: {a : α} {S T : 子群 G}
   结论: a • S <= T ↔ S <= a⁻¹ • T
   证明: smul_set_subset_iff_subset_inv_smul_set
 
@@ -1873,7 +1873,7 @@ theorem subset_pointwise_smul_iff
 
 中文:
 定理 subset_pointwise_smul_iff
-  条件: {a : α} {S T : Subgroup G}
+  条件: {a : α} {S T : 子群 G}
   结论: S <= a • T ↔ a⁻¹ • S <= T
   证明: subset_smul_set_iff
 
@@ -1894,7 +1894,7 @@ theorem conj_smul_le_of_le
 
 中文:
 定理 conj_smul_le_of_le
-  条件: {P H : Subgroup G} (hP : P <= H) (h : H)
+  条件: {P H : 子群 G} (hP : P <= H) (h : H)
   证明: by
   rintro - ⟨g, hg, rfl⟩
   exact H.mul_mem (H.mul_mem h.2 (hP hg)) (H.inv_mem h.2)
@@ -1920,7 +1920,7 @@ theorem conj_smul_eq_self_of_mem
 
 中文:
 定理 conj_smul_eq_self_of_mem
-  条件: {H : Subgroup G} {h : G} (hh : h in H)
+  条件: {H : 子群 G} {h : G} (hh : h in H)
   证明: by
   refine le_antisymm ?_ ?_
   · exact (conj_smul_le_of_le (le_refl H) ⟨h, hh⟩)
@@ -1953,7 +1953,7 @@ theorem conj_smul_subgroupOf
 
 中文:
 定理 conj_smul_subgroupOf
-  条件: {P H : Subgroup G} (hP : P <= H) (h : H)
+  条件: {P H : 子群 G} (hP : P <= H) (h : H)
   证明: by
   refine le_antisymm ?_ ?_
   · rintro - ⟨g, hg, rfl⟩
@@ -1986,7 +1986,7 @@ theorem smul_inf
 
 中文:
 定理 smul_inf
-  条件: (a : α) (S T : Subgroup G)
+  条件: (a : α) (S T : 子群 G)
   结论: a • (S ⊓ T) = a • S ⊓ a • T
   证明: by
   simp [SetLike.ext_iff, mem_pointwise_smul_iff_inv_smul_mem]
@@ -2008,7 +2008,7 @@ definition equivSMul
 
 中文:
 定义 equivSMul
-  签名: (a : α) (H : Subgroup G)
+  签名: (a : α) (H : 子群 G)
   定义体: (MulDistribMulAction.toMulEquiv G a).subgroupMap H
 
 Depends on / 依赖: MulDistribMulAction, MulDistribMulAction.toMulEquiv, subgroupMap, toMulEquiv
@@ -2028,8 +2028,8 @@ theorem subgroup_mul_singleton
 
 中文:
 定理 subgroup_mul_singleton
-  条件: {H : Subgroup G} {h : G} (hh : h in H)
-  结论: (H : Set G) * {h} = H
+  条件: {H : 子群 G} {h : G} (hh : h in H)
+  结论: (H : 集合 G) * {h} = H
   证明: by
   simp [preimage, mul_mem_cancel_right (inv_mem hh)]
 
@@ -2050,8 +2050,8 @@ theorem singleton_mul_subgroup
 
 中文:
 定理 singleton_mul_subgroup
-  条件: {H : Subgroup G} {h : G} (hh : h in H)
-  结论: {h} * (H : Set G) = H
+  条件: {H : 子群 G} {h : G} (hh : h in H)
+  结论: {h} * (H : 集合 G) = H
   证明: by
   simp [preimage, mul_mem_cancel_left (inv_mem hh)]
 
@@ -2074,8 +2074,8 @@ theorem Normal.conjAct
 @[simp]
 
 中文:
-定理 Normal.conjAct
-  条件: {H : Subgroup G} (hH : H.Normal) (g : ConjAct G)
+定理 正规.conjAct
+  条件: {H : 子群 G} (hH : H.正规) (g : ConjAct G)
   结论: g • H = H
   证明: have : forall g : ConjAct G, g • H <= H :=
     fun _ => map_le_iff_le_comap.2 fun _ h => hH.conj_mem _ h _
@@ -2101,8 +2101,8 @@ theorem Normal.conj_smul_eq_self
   proof: h.conjAct g
 
 中文:
-定理 Normal.conj_smul_eq_self
-  条件: (g : G) (H : Subgroup G) [h : Normal H]
+定理 正规.conj_smul_eq_self
+  条件: (g : G) (H : 子群 G) [h : 正规 H]
   结论: MulAut.conj g • H = H
   证明: h.conjAct g
 
@@ -2124,8 +2124,8 @@ theorem Normal.of_conjugate_fixed
   exact 
 
 中文:
-定理 Normal.of_conjugate_fixed
-  条件: {H : Subgroup G} (h : 对任意 g : G, (MulAut.conj g) • H = H)
+定理 正规.of_conjugate_fixed
+  条件: {H : 子群 G} (h : 对任意 g : G, (MulAut.conj g) • H = H)
   证明: by
   constructor
   intro n hn g
@@ -2156,7 +2156,7 @@ theorem normalCore_eq_iInf_conjAct
 
 中文:
 定理 normalCore_eq_iInf_conjAct
-  条件: (H : Subgroup G)
+  条件: (H : 子群 G)
   证明: by
   ext g
   simp only [Subgroup.normalCore, Subgroup.mem_iInf, Subgroup.mem_pointwise_smul_iff_inv_smul_mem]
@@ -2185,7 +2185,7 @@ lemma conjAct_pointwise_smul_iff
 
 中文:
 引理 conjAct_pointwise_smul_iff
-  条件: {H : Subgroup G} {g : G}
+  条件: {H : 子群 G} {g : G}
   证明: by
   rw [← (normalizer H : Subgroup G).inv_mem_iff]
   simp only [Subgroup.ext_iff, mem_pointwise_smul_iff_inv_smul_mem,
@@ -2209,7 +2209,7 @@ lemma conjAct_pointwise_smul_eq_self
 
 中文:
 引理 conjAct_pointwise_smul_eq_self
-  条件: {H : Subgroup G} {g : G} (hg : g in normalizer H)
+  条件: {H : 子群 G} {g : G} (hg : g in normalizer H)
   证明: conjAct_pointwise_smul_iff.2 hg
 
 Depends on / 依赖: conjAct_pointwise_smul_iff

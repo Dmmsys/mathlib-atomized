@@ -45,7 +45,7 @@ definition Booleanisation
   body: α oplus α
 
 中文:
-定义 Booleanisation
+定义 布尔eanisation
   签名: (α : 类型)
   定义体: α oplus α
 -/
@@ -110,7 +110,7 @@ instance instCompl
 
 中文:
 实例 instCompl
-  签名: : Compl (布尔eanisation α) where
+  签名: : 补集 (布尔eanisation α) where
 -/
 instance instCompl : Compl (Booleanisation α) where
   compl
@@ -251,7 +251,7 @@ instance instSup
 
 中文:
 实例 instSup
-  签名: : Max (布尔eanisation α) where
+  签名: : 最大值 (布尔eanisation α) where
 -/
 instance instSup : Max (Booleanisation α) where
   max
@@ -269,7 +269,7 @@ instance instInf
 
 中文:
 实例 instInf
-  签名: : Min (布尔eanisation α) where
+  签名: : 最小值 (布尔eanisation α) where
 -/
 instance instInf : Min (Booleanisation α) where
   min
@@ -288,7 +288,7 @@ instance instBot
 
 中文:
 实例 instBot
-  签名: : Bot (布尔eanisation α) where
+  签名: : 底元素 (布尔eanisation α) where
   定义体: lift ⊥
 -/
 instance instBot : Bot (Booleanisation α) where
@@ -304,7 +304,7 @@ instance instTop
 
 中文:
 实例 instTop
-  签名: : Top (布尔eanisation α) where
+  签名: : 顶元素 (布尔eanisation α) where
   定义体: comp ⊥
 -/
 instance instTop : Top (Booleanisation α) where
@@ -319,7 +319,7 @@ instance instSDiff
 
 中文:
 实例 instSDiff
-  签名: : SDiff (布尔eanisation α) where
+  签名: : 对称差 (布尔eanisation α) where
 -/
 instance instSDiff : SDiff (Booleanisation α) where
   sdiff
@@ -688,7 +688,7 @@ instance instPreorder
 
 中文:
 实例 instPreorder
-  签名: : Preorder (布尔eanisation α) where
+  签名: : 预序 (布尔eanisation α) where
   定义体: (· < ·)
   lt_iff_le_not_ge
     | lift a, lift b => by simp [lt_iff_le_not_ge]
@@ -726,7 +726,7 @@ instance instPartialOrder
 
 中文:
 实例 instPartialOrder
-  签名: : PartialOrder (布尔eanisation α) where
+  签名: : 偏序 (布尔eanisation α) where
 -/
 instance instPartialOrder : PartialOrder (Booleanisation α) where
   le_antisymm
@@ -851,7 +851,7 @@ instance instDistribLattice
 
 中文:
 实例 instDistribLattice
-  签名: : DistribLattice (布尔eanisation α) where
+  签名: : Distrib格 (布尔eanisation α) where
   定义体: x ⊓ y
   inf_le_left _ _ := inf_le_left
   inf_le_right _ _ := inf_le_right
@@ -889,7 +889,7 @@ instance instBoundedOrder
 
 中文:
 实例 instBoundedOrder
-  签名: : BoundedOrder (布尔eanisation α) where
+  签名: : 有界序 (布尔eanisation α) where
 -/
 instance instBoundedOrder : BoundedOrder (Booleanisation α) where
   le_top
@@ -920,8 +920,8 @@ instance instBooleanAlgebra
     | comp a, comp b => by simp
 
 中文:
-实例 instBooleanAlgebra
-  签名: : 布尔eanAlgebra (布尔eanisation α) where
+实例 inst布尔eanAlgebra
+  签名: : 布尔代数 (布尔eanisation α) where
   定义体: le_top
   bot_le _ := bot_le
   inf_compl_le_bot
@@ -965,7 +965,7 @@ definition liftLatticeHom
 
 中文:
 定义 liftLatticeHom
-  签名: : LatticeHom α (布尔eanisation α) where
+  签名: : 格态射 α (布尔eanisation α) where
   定义体: lift
   map_sup' _ _ := rfl
   map_inf' _ _ := rfl
@@ -985,7 +985,7 @@ lemma liftLatticeHom_injective
 
 中文:
 引理 liftLatticeHom_injective
-  结论: Injective (liftLatticeHom (α := α))
+  结论: 单射 (liftLatticeHom (α := α))
   证明: Sum.inl_injective
 
 Depends on / 依赖: Sum.inl_injective, inl_injective

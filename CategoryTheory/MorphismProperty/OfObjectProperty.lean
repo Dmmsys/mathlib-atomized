@@ -32,7 +32,7 @@ definition ofObjectProperty
 
 中文:
 定义 ofObjectProperty
-  签名: (P Q : Object命题erty C)
+  签名: (P Q : ObjectProperty C)
   定义体: fun X Y _ => P X ∧ Q Y
 -/
 def ofObjectProperty (P Q : ObjectProperty C) : MorphismProperty C := fun X Y _ => P X ∧ Q Y
@@ -70,7 +70,7 @@ lemma monotone_ofObjectProperty_left
 
 中文:
 引理 monotone_ofObjectProperty_left
-  条件: {P' : Object命题erty C} (h : P <= P')
+  条件: {P' : ObjectProperty C} (h : P <= P')
   证明: by
   intro _ _ _ ⟨hX, hY⟩
   exact ⟨h _ hX, hY⟩
@@ -93,7 +93,7 @@ lemma monotone_ofObjectProperty_right
 
 中文:
 引理 monotone_ofObjectProperty_right
-  条件: {Q' : Object命题erty C} (h : Q <= Q')
+  条件: {Q' : ObjectProperty C} (h : Q <= Q')
   证明: by
   intro _ _ _ ⟨hX, hY⟩
   exact ⟨hX, h _ hY⟩
@@ -114,7 +114,7 @@ lemma ofObjectProperty_inverseImage
 
 中文:
 引理 ofObjectProperty_inverseImage
-  条件: {D : 类型} [Category* D] (F : D ⥤ C)
+  条件: {D : 类型} [范畴* D] (F : D ⥤ C)
   证明: by
   rfl
 -/
@@ -135,7 +135,7 @@ lemma ofObjectProperty_map_le
 
 中文:
 引理 ofObjectProperty_map_le
-  条件: {D : 类型} [Category* D] (F : C ⥤ D)
+  条件: {D : 类型} [范畴* D] (F : C ⥤ D)
   证明: by
   intro X Y f ⟨X', Y', f', ⟨hX', hY'⟩, ⟨i⟩⟩
   exact ⟨⟨X', hX', ⟨Comma.leftIso i⟩⟩, ⟨Y', hY', ⟨Comma.rightIso i⟩⟩⟩
@@ -159,8 +159,8 @@ instance [P.IsClosedUnderIsomorphisms]
     exact ⟨(P.prop_iff_of_isIso i).mpr hY, hZ⟩
 
 中文:
-实例 [P.IsClosedUnderIsomorphisms]
-  签名: : (ofObject命题erty P Q).RespectsLeft (isomorphisms C) where
+实例 [P.在同构下封闭]
+  签名: : (ofObjectProperty P Q).RespectsLeft (isomorphisms C) where
   定义体: by
     intro X Y Z i hi f ⟨hY, hZ⟩
     rw [isomorphisms.iff] at hi
@@ -186,8 +186,8 @@ instance [Q.IsClosedUnderIsomorphisms]
     exact ⟨hY, (Q.prop_iff_of_isIso i).mp hZ⟩
 
 中文:
-实例 [Q.IsClosedUnderIsomorphisms]
-  签名: : (ofObject命题erty P Q).RespectsRight (isomorphisms C) where
+实例 [Q.在同构下封闭]
+  签名: : (ofObjectProperty P Q).RespectsRight (isomorphisms C) where
   定义体: by
     intro X Y Z i hi f ⟨hY, hZ⟩
     rw [isomorphisms.iff] at hi

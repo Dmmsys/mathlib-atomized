@@ -517,7 +517,7 @@ abbreviation _root_.CategoryTheory.GradedObject.HasGoodTensor₁₂Tensor
   body: HasGoodTrifunctor₁₂Obj (curriedTensor C) (curriedTensor C) ρ₁₂ X₁ X₂ X₃
 
 中文:
-缩写 _root_.CategoryTheory.GradedObject.HasGoodTensor₁₂Tensor
+缩写 _root_.范畴论.GradedObject.HasGoodTensor₁₂Tensor
   签名: (X₁ X₂ X₃ : GradedObject I C)
   定义体: HasGoodTrifunctor₁₂Obj (curriedTensor C) (curriedTensor C) ρ₁₂ X₁ X₂ X₃
 
@@ -535,7 +535,7 @@ abbreviation _root_.CategoryTheory.GradedObject.HasGoodTensorTensor₂₃
   body: HasGoodTrifunctor₂₃Obj (curriedTensor C) (curriedTensor C) ρ₂₃ X₁ X₂ X₃
 
 中文:
-缩写 _root_.CategoryTheory.GradedObject.HasGoodTensorTensor₂₃
+缩写 _root_.范畴论.GradedObject.HasGoodTensorTensor₂₃
   签名: (X₁ X₂ X₃ : GradedObject I C)
   定义体: HasGoodTrifunctor₂₃Obj (curriedTensor C) (curriedTensor C) ρ₂₃ X₁ X₂ X₃
 
@@ -893,7 +893,7 @@ abbreviation _root_.CategoryTheory.GradedObject.HasLeftTensor₃ObjExt
     ((curriedTensor C).obj Z)
 
 中文:
-缩写 _root_.CategoryTheory.GradedObject.HasLeftTensor₃ObjExt
+缩写 _root_.范畴论.GradedObject.HasLeftTensor₃ObjExt
   签名: (j : I)
   定义体: PreservesColimit
   (Discrete.functor fun (i : { i : (I × I × I) | i.1 + i.2.1 + i.2.2 = j }) =>
@@ -1015,7 +1015,7 @@ abbreviation _root_.CategoryTheory.GradedObject.HasTensor₄ObjExt
   body: forall (i₁ i₂₃₄ : I), HasLeftTensor₃ObjExt (X₁ i₁) X₂ X₃ X₄ i₂₃₄
 
 中文:
-缩写 _root_.CategoryTheory.GradedObject.HasTensor₄ObjExt
+缩写 _root_.范畴论.GradedObject.HasTensor₄ObjExt
   定义体: forall (i₁ i₂₃₄ : I), HasLeftTensor₃ObjExt (X₁ i₁) X₂ X₃ X₄ i₂₃₄
 -/
 abbrev _root_.CategoryTheory.GradedObject.HasTensor₄ObjExt :=
@@ -1516,7 +1516,7 @@ instance monoidalCategory
 
 中文:
 实例 monoidalCategory
-  签名: : MonoidalCategory (GradedObject I C) where
+  签名: : 幺半群范畴 (GradedObject I C) where
   定义体: Monoidal.tensorObj X Y
   tensorHom f g := Monoidal.tensorHom f g
   tensorHom_def f g := Monoidal.tensorHom_def f g

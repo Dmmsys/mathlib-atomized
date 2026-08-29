@@ -84,7 +84,7 @@ theorem house_sum_le_sum_house
 
 中文:
 定理 house_sum_le_sum_house
-  条件: {ι : 类型} (s : Finset ι) (α : ι -> K)
+  条件: {ι : 类型} (s : 有限集 ι) (α : ι -> K)
   证明: by
   simp only [house, map_sum]; apply norm_sum_le_of_le; intros; rfl
 
@@ -147,7 +147,7 @@ lemma house_prod_le
 
 中文:
 引理 house_prod_le
-  条件: (s : Finset K)
+  条件: (s : 有限集 K)
   结论: house (∏ x in s, x) <= ∏ x in s, house x
   证明: by
   simpa [house, map_prod] using Finset.norm_prod_le _ _
@@ -265,7 +265,7 @@ lemma exists_conjugate_one_le_norm
   rwa [InfinitePla
 
 中文:
-引理 exists_conjugate_one_le_norm
+引理 存在_conjugate_one_le_norm
   条件: {α : 𝓞 K} (hα0 : α != 0)
   证明: by
   obtain ⟨w, hw⟩ : exists w : InfinitePlace K, 1 <= w α := by
@@ -301,7 +301,7 @@ lemma norm_embedding_le_house
 
 中文:
 引理 norm_embedding_le_house
-  条件: (α : K) (σ : K ->+* Complex)
+  条件: (α : K) (σ : K ->+* 复形)
   结论: ‖σ α‖ <= house α
   证明: by
   rw [house_eq_sup']
@@ -327,8 +327,8 @@ lemma one_le_house_of_isIntegral
   apply hσ.trans (norm_embedding_le_house α σ)
 
 中文:
-引理 one_le_house_of_isIntegral
-  条件: {α : K} (hα : Is整数egral 整数 α) (hα0 : α != 0)
+引理 one_le_house_of_is整数egral
+  条件: {α : K} (hα : 是整 整数 α) (hα0 : α != 0)
   证明: by
   have ⟨σ, hσ⟩ : exists σ : K ->+* Complex, 1 <= ‖σ α‖ := by
     apply exists_conjugate_one_le_norm (K := K) (α := ⟨α, hα⟩)
@@ -360,7 +360,7 @@ lemma norm_norm_le_norm_mul_house_pow
 
 中文:
 引理 norm_norm_le_norm_mul_house_pow
-  条件: (α : K) (σ : K ->+* Complex)
+  条件: (α : K) (σ : K ->+* 复形)
   证明: by
   classical
   set σ' := σ.toRatAlgHom
@@ -458,7 +458,7 @@ theorem basis_repr_norm_le_const_mul_house
 
 中文:
 定理 basis_repr_norm_le_const_mul_house
-  条件: (α : 𝓞 K) (i : K ->+* Complex)
+  条件: (α : 𝓞 K) (i : K ->+* 复形)
   证明: by
   let σ := canonicalEmbedding K
   calc
@@ -554,7 +554,7 @@ definition a'
 
 中文:
 定义 a'
-  签名: : α -> β -> (K ->+* Complex) -> (K ->+* Complex) -> 整数
+  签名: : α -> β -> (K ->+* 复形) -> (K ->+* 复形) -> 整数
   定义体: fun k l r =>
   (newBasis K).repr (a k l * (newBasis K) r)
 -/
@@ -572,7 +572,7 @@ definition asiegel
 
 中文:
 定义 asiegel
-  签名: : Matrix (α × (K ->+* Complex)) (β × (K ->+* Complex)) 整数
+  签名: : 矩阵 (α × (K ->+* 复形)) (β × (K ->+* 复形)) 整数
   定义体: fun k l => a' K a k.1 l.1 l.2 k.2
 -/
 private def asiegel : Matrix (α × (K ->+* Complex)) (β × (K ->+* Complex)) Int := fun k l => a' K a k.1 l.1 l.2 k.2
@@ -952,7 +952,7 @@ theorem exists_ne_zero_int_vec_house_le
     rw [Fintype.card_prod]; rw [cardα]; rw [Embeddings.card]
 
 中文:
-定理 exists_ne_zero_int_vec_house_le
+定理 存在_ne_zero_int_vec_house_le
   证明: by
   let h := finrank Rat K
   have hphqh : p * h < q * h := by gcongr; exact finrank_pos

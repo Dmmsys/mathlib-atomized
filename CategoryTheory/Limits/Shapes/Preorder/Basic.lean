@@ -41,7 +41,7 @@ instance :
 
 中文:
 实例 :
-  签名: HasLimitsOfShape J C
+  签名: 有形状极限 J C
   定义体: ⟨fun _ => by infer_instance⟩
 
 Depends on / 依赖: infer_instance
@@ -64,7 +64,7 @@ instance :
 
 中文:
 实例 :
-  签名: HasColimitsOfShape J C
+  签名: 有形状余极限 J C
   定义体: ⟨fun _ => by infer_instance⟩
 
 Depends on / 依赖: infer_instance

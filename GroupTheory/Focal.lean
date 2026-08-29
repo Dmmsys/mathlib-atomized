@@ -65,7 +65,7 @@ definition focalSubgroup
 
 中文:
 定义 focalSubgroup
-  签名: : Subgroup G
+  签名: : 子群 G
   定义体: closure { g | g in H ∧ exists x in H, exists u : G, g = ⁅x, u⁆ }
 
 Depends on / 依赖: closure
@@ -91,7 +91,7 @@ definition focalSubgroupOf
 
 中文:
 定义 focalSubgroupOf
-  签名: : Subgroup H
+  签名: : 子群 H
   定义体: (focalSubgroup H).subgroupOf H
 
 @[to_additive]
@@ -207,7 +207,7 @@ instance :
 
 中文:
 实例 :
-  签名: Normal (focalSubgroupOf H)
+  签名: 正规 (focalSubgroupOf H)
   定义体: by
   rw [focalSubgroupOf_def]; rw [normal_subgroupOf_iff (focalSubgroup_le H)]
   intro n g hn hg
@@ -407,7 +407,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsMulCommutative (H ⧸ focalSubgroupOf H)
+  签名: 是MulCommutative (H ⧸ focalSubgroupOf H)
   定义体: Normal.quotient_commutative_iff_commutator_le.mpr H.commutator_le_focalSubgroupOf
 
 Depends on / 依赖: H.commutator_le_focalSubgroupOf, Normal, Normal.quotient_commutative_iff_commutator_le.mpr, commutator_le_focalSubgroupOf, quotient_commutative_iff_commutator_le
@@ -510,7 +510,7 @@ lemma transferFocal_surjective
 
 中文:
 引理 transferFocal_surjective
-  结论: Surjective P.transferFocal
+  结论: 满射 P.transferFocal
   证明: by
   intro x
   obtain ⟨x, rfl⟩ := focalSubgroupOf.pow_index_surjective P x

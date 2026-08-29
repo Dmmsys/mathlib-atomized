@@ -34,8 +34,8 @@ theorem MeasurableSet.const_smul
   exact measurable_const_smul _ hs
 
 中文:
-定理 MeasurableSet.const_smul
-  结论: {G α : 类型} [Group G] [MulAction G α]
+定理 可测集.const_smul
+  结论: {G α : 类型} [群 G] [乘法作用 G α]
   证明: by
   rw [← preimage_smul_inv]
   exact measurable_const_smul _ hs
@@ -59,8 +59,8 @@ theorem MeasurableSet.const_smul_of_ne_zero
   exact measurable_const_smul _ hs
 
 中文:
-定理 MeasurableSet.const_smul_of_ne_zero
-  结论: {G₀ α : 类型} [GroupWithZero G₀] [MulAction G₀ α]
+定理 可测集.const_smul_of_ne_zero
+  结论: {G₀ α : 类型} [带零群 G₀] [乘法作用 G₀ α]
   证明: by
   rw [← preimage_smul_inv₀ ha]
   exact measurable_const_smul _ hs
@@ -84,8 +84,8 @@ theorem MeasurableSet.const_smul₀
   exacts [(subsingleton_zero_smul_set s).measurableSet, hs.const_smul_of_ne_zero ha]
 
 中文:
-定理 MeasurableSet.const_smul₀
-  结论: {G₀ α : 类型} [GroupWithZero G₀] [Zero α]
+定理 可测集.const_smul₀
+  结论: {G₀ α : 类型} [带零群 G₀] [零 α]
   证明: by
   rcases eq_or_ne a 0 with (rfl | ha)
   exacts [(subsingleton_zero_smul_set s).measurableSet, hs.const_smul_of_ne_zero ha]

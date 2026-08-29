@@ -99,7 +99,7 @@ lemma turanGraph_adj
 中文:
 引理 turanGraph_adj
   条件: {v w}
-  结论: (turanGraph n r).Adj v w ↔ v % r != w % r
+  结论: (turanGraph n r).伴随 v w ↔ v % r != w % r
   证明: .rfl
 -/
 lemma turanGraph_adj {v w} : (turanGraph n r).Adj v w ↔ v % r != w % r :=
@@ -117,7 +117,7 @@ instance :
 
 中文:
 实例 :
-  签名: DecidableRel (turanGraph n r).Adj
+  签名: DecidableRel (turanGraph n r).伴随
   定义体: inferInstanceAs (DecidableRel fun v w : Fin n => v % r != w % r)
 
 @[simp]
@@ -275,7 +275,7 @@ lemma exists_isTuranMaximal
   simpa [IsTuranMaximal, exists_isExtremal_iff_exists] using ⟨⊥, cliqueFree_bot (by lia)⟩
 
 中文:
-引理 exists_isTuranMaximal
+引理 存在_isTuranMaximal
   条件: (hr : 0 < r)
   证明: by
   simpa [IsTuranMaximal, exists_isExtremal_iff_exists] using ⟨⊥, cliqueFree_bot (by lia)⟩
@@ -308,7 +308,7 @@ lemma degree_eq_of_not_adj
 
 中文:
 引理 degree_eq_of_not_adj
-  条件: (h : G.IsTuranMaximal r) (hn : ¬G.Adj s t)
+  条件: (h : G.IsTuranMaximal r) (hn : ¬G.伴随 s t)
   证明: by
   rw [IsTuranMaximal]; rw [IsExtremal] at h; contrapose! h; intro cf
   wlog hd : G.degree t < G.degree s generalizing G t s
@@ -347,7 +347,7 @@ lemma not_adj_trans
 
 中文:
 引理 not_adj_trans
-  条件: (h : G.IsTuranMaximal r) (hts : ¬G.Adj t s) (hsu : ¬G.Adj s u)
+  条件: (h : G.IsTuranMaximal r) (hts : ¬G.伴随 t s) (hsu : ¬G.伴随 s u)
   证明: by
   have hst : ¬G.Adj s t := fun a => hts a.symm
   have dst := h.degree_eq_of_not_adj hst
@@ -401,7 +401,7 @@ theorem equivalence_not_adj
 
 中文:
 定理 equivalence_not_adj
-  结论: Equivalence (¬G.Adj · ·) where
+  结论: 等价 (¬G.伴随 · ·) where
   证明: by simp
   symm := by simp [adj_comm]
   trans := h.not_adj_trans
@@ -426,7 +426,7 @@ definition setoid
 
 中文:
 定义 setoid
-  签名: : Setoid V
+  签名: : 集合等价关系 V
   定义体: ⟨_, h.equivalence_not_adj⟩
 
 Depends on / 依赖: equivalence_not_adj, h.equivalence_not_adj
@@ -655,7 +655,7 @@ theorem card_parts
 中文:
 定理 card_parts
   条件: [DecidableEq V]
-  结论: #h.finpartition.parts = min (card V) r
+  结论: #h.finpartition.parts = 最小值 (card V) r
   证明: by
   set fp := h.finpartition
   apply le_antisymm (le_min fp.card_parts_le_card h.card_parts_le)
@@ -777,7 +777,7 @@ theorem IsTuranMaximal.iso
 
 中文:
 定理 IsTuranMaximal.iso
-  结论: {W : 类型} [Fintype W] {H : SimpleGraph W}
+  结论: {W : 类型} [有限类型 W] {H : 简单图 W}
   证明: isTuranMaximal_of_iso (h.nonempty_iso_turanGraph.some.comp f.symm) hr
 
 Depends on / 依赖: f.symm, h.nonempty_iso_turanGraph.some.comp, isTuranMaximal_of_iso, nonempty_iso_turanGraph

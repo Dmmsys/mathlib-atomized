@@ -54,10 +54,10 @@ class IsAffineHom
     - isAffine_preimage : forall U : Y.Opens, IsAffineOpen U -> IsAffineOpen (f ⁻¹ᵁ U)
 
 中文:
-类 IsAffineHom
-  参数: {X Y : Scheme} (f : X ⟶ Y)
+类 是仿射态射
+  参数: {X Y : 概形} (f : X ⟶ Y)
   公理与运算 (1 个):
-    - isAffine_preimage : 对任意 U : Y.Opens, IsAffineOpen U -> IsAffineOpen (f ⁻¹ᵁ U)
+    - isAffine_preimage : 对任意 U : Y.Opens, 是仿射开集 U -> 是仿射开集 (f ⁻¹ᵁ U)
 -/
 class IsAffineHom {X Y : Scheme} (f : X ⟶ Y) : Prop where
   isAffine_preimage : forall U : Y.Opens, IsAffineOpen U -> IsAffineOpen (f ⁻¹ᵁ U)
@@ -71,8 +71,8 @@ lemma IsAffineOpen.preimage
   proof: IsAffineHom.isAffine_preimage _ hU
 
 中文:
-引理 IsAffineOpen.preimage
-  结论: {X Y : Scheme} {U : Y.Opens} (hU : IsAffineOpen U)
+引理 是仿射开集.原像
+  结论: {X Y : 概形} {U : Y.Opens} (hU : 是仿射开集 U)
   证明: IsAffineHom.isAffine_preimage _ hU
 
 Depends on / 依赖: IsAffineHom, IsAffineHom.isAffine_preimage, isAffine_preimage
@@ -103,8 +103,8 @@ instance [IsAffineHom
   exact hU
 
 中文:
-实例 [IsAffineHom
-  签名: f] [IsAffineHom g] : IsAffineHom (f ≫ g)
+实例 [是仿射态射
+  签名: f] [是仿射态射 g] : 是仿射态射 (f ≫ g)
   定义体: by
   constructor
   intro U hU
@@ -134,7 +134,7 @@ instance :
 
 中文:
 实例 :
-  签名: Morphism命题erty.IsMultiplicative @IsAffineHom
+  签名: MorphismProperty.是Multiplicative @是仿射态射
   定义体: inferInstance
   comp_mem _ _ _ _ := inferInstance
 -/
@@ -188,7 +188,7 @@ lemma isAffine_of_isAffineOpen_basicOpen_aux
 
 中文:
 引理 isAffine_of_isAffineOpen_basicOpen_aux
-  结论: (s : Set Γ(X, ⊤))
+  结论: (s : 集合 Γ(X, ⊤))
   证明: by
   rw [quasiSeparatedSpace_iff_forall_affineOpens]
   intro U V
@@ -230,7 +230,7 @@ lemma isAffine_of_isAffineOpen_basicOpen
 
 中文:
 引理 isAffine_of_isAffineOpen_basicOpen
-  结论: (s : Set Γ(X, ⊤))
+  结论: (s : 集合 Γ(X, ⊤))
   证明: by
   have : QuasiSeparatedSpace X := isAffine_of_isAffineOpen_basicOpen_aux s hs hs₂
   have : CompactSpace X := by
@@ -280,7 +280,7 @@ lemma isAffineOpen_of_isAffineOpen_basicOpen
 
 中文:
 引理 isAffineOpen_of_isAffineOpen_basicOpen
-  结论: (U) (s : Set Γ(X, U))
+  结论: (U) (s : 集合 Γ(X, U))
   证明: by
   apply isAffine_of_isAffineOpen_basicOpen (U.topIso.inv '' s)
   · rw [← Ideal.map_span U.topIso.inv.hom, hs, Ideal.map_top]
@@ -319,7 +319,7 @@ instance :
 
 中文:
 实例 :
-  签名: HasAffine命题erty @IsAffineHom fun X _ _ _ => IsAffine X
+  签名: 有AffineProperty @是仿射态射 fun X _ _ _ => 是仿射 X
   定义体: by
     constructor
     · apply AffineTargetMorphismProperty.respectsIso_mk
@@ -409,8 +409,8 @@ lemma isAffine_of_isAffineHom
 
 中文:
 引理 isAffine_of_isAffineHom
-  条件: [IsAffineHom f] [IsAffine Y]
-  结论: IsAffine X
+  条件: [是仿射态射 f] [是仿射 Y]
+  结论: 是仿射 X
   证明: (HasAffineProperty.iff_of_isAffine (P := @IsAffineHom) (f := f)).mp inferInstance
 
 Depends on / 依赖: HasAffineProperty, HasAffineProperty.iff_of_isAffine, IsAffineHom, iff_of_isAffine
@@ -431,7 +431,7 @@ lemma isAffineHom_of_forall_exists_isAffineOpen
   · exact top_le_iff.mp (fun x _ => by simpa using ⟨x, hxU x⟩)
 
 中文:
-引理 isAffineHom_of_forall_exists_isAffineOpen
+引理 isAffineHom_of_对任意_存在_isAffineOpen
   证明: by
   choose U hxU hU hfU using H
   rw [HasAffineProperty.iff_of_iSup_eq_top (P := @IsAffineHom) fun i => ⟨U i]; rw [hU i⟩]
@@ -469,8 +469,8 @@ lemma IsAffine.of_isPullback
   proof: .of_isIso h.isoPullback.hom
 
 中文:
-引理 IsAffine.of_isPullback
-  结论: {P : Scheme.{u}} {fst : P ⟶ X} {snd : P ⟶ Y} {f : X ⟶ Z} {g : Y ⟶ Z}
+引理 是仿射.of_isPullback
+  结论: {P : 概形.{u}} {fst : P ⟶ X} {snd : P ⟶ Y} {f : X ⟶ Z} {g : Y ⟶ Z}
   证明: .of_isIso h.isoPullback.hom
 
 Depends on / 依赖: h.isoPullback.hom, isoPullback, of_isIso
@@ -495,7 +495,7 @@ lemma isPushout_appTop_of_isPullback
 
 中文:
 引理 isPushout_appTop_of_isPullback
-  结论: {P : Scheme.{u}} {fst : P ⟶ X} {snd : P ⟶ Y} {f : X ⟶ Z}
+  结论: {P : 概形.{u}} {fst : P ⟶ X} {snd : P ⟶ Y} {f : X ⟶ Z}
   证明: by
   have : IsAffine P := .of_isPullback h
   have : IsPullback (AffineScheme.ofHom fst) (AffineScheme.ofHom snd) (AffineScheme.ofHom f)
@@ -608,8 +608,8 @@ IsOpenImmersion.lift W.ι (Scheme.Opens.ι _ ≫ g) by simpa [Set.range_comp]
   let p
 
 中文:
-引理 IsAffineOpen.isCompact_pullback_inf
-  结论: {X Y Z : Scheme.{u}} {f : X ⟶ Z} {g : Y ⟶ Z}
+引理 是仿射开集.isCompact_pullback_inf
+  结论: {X Y Z : 概形.{u}} {f : X ⟶ Z} {g : Y ⟶ Z}
   证明: by
   have : IsAffine U.toScheme := hU
   have : IsAffine W.toScheme := hW
@@ -653,7 +653,7 @@ refine (HasAffineProperty.iff_of_isAffine (P := .isomorphisms _)).trans
 
 中文:
 引理 isIso_morphismRestrict_iff_isIso_app
-  条件: [IsAffineHom f] {U : Y.Opens} (hU : IsAffineOpen U)
+  条件: [是仿射态射 f] {U : Y.Opens} (hU : 是仿射开集 U)
   证明: by
   have : IsAffine U := hU
 refine (HasAffineProperty.iff_of_isAffine (P := .isomorphisms _)).trans
@@ -691,8 +691,8 @@ theorem diagonal_isAffine_iff_forall_isAffineOpen_inf
     have := IsOpenImmersion.isPullback (X.homOfLE inf_le_left) (X.homOfLE inf_le_righ
 
 中文:
-定理 diagonal_isAffine_iff_forall_isAffineOpen_inf
-  条件: [IsAffine Y] (f : X ⟶ Y)
+定理 diagonal_isAffine_iff_对任意_isAffineOpen_inf
+  条件: [是仿射 Y] (f : X ⟶ Y)
   证明: by
   delta AffineTargetMorphismProperty.diagonal
   constructor
@@ -774,8 +774,8 @@ lemma IsAffineOpen.inf
   proof: isAffineHom_diagonal_iff.mp ‹_› ⊤ (isAffineOpen_top _) U (by simp) V (by simp) hU hV
 
 中文:
-引理 IsAffineOpen.inf
-  结论: [IsAffineHom (pullback.diagonal (terminal.from X))]
+引理 是仿射开集.下确界
+  结论: [是仿射态射 (pullback.diagonal (terminal.from X))]
   证明: isAffineHom_diagonal_iff.mp ‹_› ⊤ (isAffineOpen_top _) U (by simp) V (by simp) hU hV
 
 Depends on / 依赖: isAffineHom_diagonal_iff, isAffineHom_diagonal_iff.mp, isAffineOpen_top
@@ -793,8 +793,8 @@ lemma IsAffineOpen.iInf
   proof: InfClosed.iInf_mem_of_nonempty (s := Set.ofPred IsAffineOpen) (fun _ h _ h' => h.inf h') hU
 
 中文:
-引理 IsAffineOpen.iInf
-  结论: [IsAffineHom (pullback.diagonal (terminal.from X))]
+引理 是仿射开集.iInf
+  结论: [是仿射态射 (pullback.diagonal (terminal.from X))]
   证明: InfClosed.iInf_mem_of_nonempty (s := Set.ofPred IsAffineOpen) (fun _ h _ h' => h.inf h') hU
 
 Depends on / 依赖: InfClosed, InfClosed.iInf_mem_of_nonempty, IsAffineOpen, Set.ofPred, h.inf, iInf_mem_of_nonempty, ofPred
@@ -813,8 +813,8 @@ lemma IsAffineOpen.biInf
   proof: InfClosed.biInf_mem_of_nonempty (s := Set.ofPred IsAffineOpen) (fun _ h _ h' => h.inf h') hs hs' hU
 
 中文:
-引理 IsAffineOpen.biInf
-  结论: [IsAffineHom (pullback.diagonal (terminal.from X))]
+引理 是仿射开集.biInf
+  结论: [是仿射态射 (pullback.diagonal (terminal.from X))]
   证明: InfClosed.biInf_mem_of_nonempty (s := Set.ofPred IsAffineOpen) (fun _ h _ h' => h.inf h') hs hs' hU
 
 Depends on / 依赖: InfClosed, InfClosed.biInf_mem_of_nonempty, IsAffineOpen, Set.ofPred, biInf_mem_of_nonempty, h.inf, ofPred

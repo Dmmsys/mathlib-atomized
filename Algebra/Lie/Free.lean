@@ -88,15 +88,15 @@ inductive Rel
     - mul_right: {a b : lib R X} (c : lib R X) : Rel a b -> Rel (a * c) (b * c)
 
 中文:
-归纳类型 Rel
+归纳类型 关系
   参数: : lib R X -> lib R X -> 命题
   构造子 (6 个):
-    - lie_self: (a : lib R X) : Rel (a * a) 0
-    - leibniz_lie: (a b c : lib R X) : Rel (a * (b * c)) (a * b * c + b * (a * c))
-    - smul: (t : R) {a b : lib R X} : Rel a b -> Rel (t • a) (t • b)
-    - add_right: {a b : lib R X} (c : lib R X) : Rel a b -> Rel (a + c) (b + c)
-    - mul_left: (a : lib R X) {b c : lib R X} : Rel b c -> Rel (a * b) (a * c)
-    - mul_right: {a b : lib R X} (c : lib R X) : Rel a b -> Rel (a * c) (b * c)
+    - lie_self: (a : lib R X) : 关系 (a * a) 0
+    - leibniz_lie: (a b c : lib R X) : 关系 (a * (b * c)) (a * b * c + b * (a * c))
+    - smul: (t : R) {a b : lib R X} : 关系 a b -> 关系 (t • a) (t • b)
+    - add_right: {a b : lib R X} (c : lib R X) : 关系 a b -> 关系 (a + c) (b + c)
+    - mul_left: (a : lib R X) {b c : lib R X} : 关系 b c -> 关系 (a * b) (a * c)
+    - mul_right: {a b : lib R X} (c : lib R X) : 关系 a b -> 关系 (a * c) (b * c)
 -/
 inductive Rel : lib R X -> lib R X -> Prop
   | lie_self (a : lib R X) : Rel (a * a) 0
@@ -119,9 +119,9 @@ theorem Rel.addLeft
   rw [add_comm _ b]; rw [add_comm _ c]; exact h.add_right _
 
 中文:
-定理 Rel.addLeft
-  条件: (a : lib R X) {b c : lib R X} (h : Rel R X b c)
-  结论: Rel R X (a + b) (a + c)
+定理 关系.addLeft
+  条件: (a : lib R X) {b c : lib R X} (h : 关系 R X b c)
+  结论: 关系 R X (a + b) (a + c)
   证明: by
   rw [add_comm _ b]; rw [add_comm _ c]; exact h.add_right _
 
@@ -141,9 +141,9 @@ theorem Rel.neg
   simpa only [neg_one_smul] using h.smul (-1)
 
 中文:
-定理 Rel.neg
-  条件: {a b : lib R X} (h : Rel R X a b)
-  结论: Rel R X (-a) (-b)
+定理 关系.neg
+  条件: {a b : lib R X} (h : 关系 R X a b)
+  结论: 关系 R X (-a) (-b)
   证明: by
   simpa only [neg_one_smul] using h.smul (-1)
 -/
@@ -161,9 +161,9 @@ theorem Rel.subLeft
   simpa only [sub_eq_add_neg] using h.neg.addLeft a
 
 中文:
-定理 Rel.subLeft
-  条件: (a : lib R X) {b c : lib R X} (h : Rel R X b c)
-  结论: Rel R X (a - b) (a - c)
+定理 关系.subLeft
+  条件: (a : lib R X) {b c : lib R X} (h : 关系 R X b c)
+  结论: 关系 R X (a - b) (a - c)
   证明: by
   simpa only [sub_eq_add_neg] using h.neg.addLeft a
 
@@ -183,9 +183,9 @@ theorem Rel.subRight
   simpa only [sub_eq_add_neg] using h.add_right (-c)
 
 中文:
-定理 Rel.subRight
-  条件: {a b : lib R X} (c : lib R X) (h : Rel R X a b)
-  结论: Rel R X (a - c) (b - c)
+定理 关系.subRight
+  条件: {a b : lib R X} (c : lib R X) (h : 关系 R X a b)
+  结论: 关系 R X (a - c) (b - c)
   证明: by
   simpa only [sub_eq_add_neg] using h.add_right (-c)
 
@@ -205,8 +205,8 @@ theorem Rel.smulOfTower
   exact h.smul _
 
 中文:
-定理 Rel.smulOfTower
-  结论: {S : 类型} [Monoid S] [DistribMulAction S R] [IsScalarTower S R R] (t : S)
+定理 关系.smulOfTower
+  结论: {S : 类型} [幺半群 S] [分配乘法作用 S R] [标量塔 S R R] (t : S)
   证明: by
   rw [← smul_one_smul R t a]; rw [← smul_one_smul R t b]
   exact h.smul _
@@ -246,7 +246,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (FreeLieAlgebra R X)
+  签名: 可居 (FreeLieAlgebra R X)
   定义体: by rw [FreeLieAlgebra]; infer_instance
 
 Depends on / 依赖: FreeLieAlgebra, infer_instance
@@ -272,7 +272,7 @@ instance :
 
 中文:
 实例 :
-  签名: Zero (FreeLieAlgebra R X)
+  签名: 零 (FreeLieAlgebra R X)
   定义体: Quot.mk _ 0
 
 Depends on / 依赖: Quot.mk
@@ -289,7 +289,7 @@ instance :
 
 中文:
 实例 :
-  签名: Add (FreeLieAlgebra R X)
+  签名: 加法 (FreeLieAlgebra R X)
   定义体: Quot.map₂ (· + ·) (fun _ _ _ => Rel.addLeft _) fun _ _ _ => Rel.add_right _
 
 Depends on / 依赖: Quot.map, Rel.addLeft, Rel.add_right, addLeft, add_right
@@ -307,7 +307,7 @@ instance :
 
 中文:
 实例 :
-  签名: Neg (FreeLieAlgebra R X)
+  签名: 取负 (FreeLieAlgebra R X)
   定义体: Quot.map Neg.neg fun _ _ => Rel.neg
 
 Depends on / 依赖: Neg.neg, Quot.map, Rel.neg
@@ -324,7 +324,7 @@ instance :
 
 中文:
 实例 :
-  签名: Sub (FreeLieAlgebra R X)
+  签名: 减法 (FreeLieAlgebra R X)
   定义体: Quot.map₂ Sub.sub (fun _ _ _ => Rel.subLeft _) fun _ _ _ => Rel.subRight _
 
 Depends on / 依赖: Quot.map, Rel.subLeft, Rel.subRight, Sub.sub, subLeft, subRight
@@ -343,7 +343,7 @@ instance :
 
 中文:
 实例 :
-  签名: AddGroup (FreeLieAlgebra R X)
+  签名: 加法群 (FreeLieAlgebra R X)
   定义体: Function.Surjective.addGroup (Quot.mk _) Quot.mk_surjective rfl (fun _ _ => rfl)
     (fun _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl) fun _ _ => rfl
 
@@ -363,7 +363,7 @@ instance :
 
 中文:
 实例 :
-  签名: AddCommSemigroup (FreeLieAlgebra R X)
+  签名: 加法交换半群 (FreeLieAlgebra R X)
   定义体: Function.Surjective.addCommSemigroup (Quot.mk _) Quot.mk_surjective fun _ _ => rfl
 
 Depends on / 依赖: Function, Function.Surjective.addCommSemigroup, Quot.mk, Quot.mk_surjective, Surjective, addCommSemigroup, mk_surjective
@@ -382,7 +382,7 @@ instance :
 
 中文:
 实例 :
-  签名: AddCommGroup (FreeLieAlgebra R X)
+  签名: 加法交换群 (FreeLieAlgebra R X)
   定义体: { (inferInstance : AddGroup (FreeLieAlgebra R X)),
     (inferInstance : AddCommSemigroup (FreeLieAlgebra R X)) with }
 
@@ -410,7 +410,7 @@ instance :
 
 中文:
 实例 :
-  签名: LieRing (FreeLieAlgebra R X)
+  签名: Lie环 (FreeLieAlgebra R X)
   定义体: Quot.map₂ (· * ·) (fun _ _ _ => Rel.mul_left _) fun _ _ _ => Rel.mul_right _
   add_lie := by rintro ⟨a⟩ ⟨b⟩ ⟨c⟩; change Quot.mk _ _ = Quot.mk _ _; simp_rw [add_mul]
   lie_add := by rintro ⟨a⟩ ⟨b⟩ ⟨c⟩; change Quot.mk _ _ = Quot.mk _ _; simp_rw [mul_add]
@@ -438,7 +438,7 @@ instance :
 
 中文:
 实例 :
-  签名: LieAlgebra R (FreeLieAlgebra R X)
+  签名: Lie代数 R (FreeLieAlgebra R X)
   定义体: by
     rintro t ⟨a⟩ ⟨c⟩
     change Quot.mk _ (a • t • c) = Quot.mk _ (t • a • c)
@@ -564,7 +564,7 @@ theorem liftAux_spec
 
 中文:
 定理 liftAux_spec
-  条件: (f : X -> L) (a b : lib R X) (h : FreeLieAlgebra.Rel R X a b)
+  条件: (f : X -> L) (a b : lib R X) (h : FreeLieAlgebra.关系 R X a b)
   证明: by
   induction h with
   | lie_self a' => simp only [liftAux_map_mul, map_zero, lie_self]

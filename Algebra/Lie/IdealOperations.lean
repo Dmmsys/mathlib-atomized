@@ -175,7 +175,7 @@ instance hasBracket
 
 中文:
 实例 hasBracket
-  签名: : Bracket (LieIdeal R L) (LieSubmodule R L M)
+  签名: : Bracket (LieIdeal R L) (Lie子模 R L M)
   定义体: ⟨fun I N => lieSpan R L { ⁅(x : L), (n : M)⁆ | (x : I) (n : N) }⟩
 
 Depends on / 依赖: lieSpan
@@ -214,7 +214,7 @@ theorem lieIdeal_oper_eq_linear_span
 
 中文:
 定理 lieIdeal_oper_eq_linear_span
-  条件: [LieModule R L M]
+  条件: [Lie模 R L M]
   证明: by
   apply le_antisymm
   · let s := { ⁅(x : L), (n : M)⁆ | (x : I) (n : N) }
@@ -263,7 +263,7 @@ theorem lieIdeal_oper_eq_linear_span'
 
 中文:
 定理 lieIdeal_oper_eq_linear_span'
-  条件: [LieModule R L M]
+  条件: [Lie模 R L M]
   证明: by
   rw [lieIdeal_oper_eq_linear_span]
   congr
@@ -466,7 +466,7 @@ theorem lie_bot
 
 中文:
 定理 lie_bot
-  结论: ⁅I, (⊥ : LieSubmodule R L M)⁆ = ⊥
+  结论: ⁅I, (⊥ : Lie子模 R L M)⁆ = ⊥
   证明: by rw [eq_bot_iff]; apply lie_le_right
 
 @[simp]
@@ -757,7 +757,7 @@ theorem map_bracket_eq
 
 中文:
 定理 map_bracket_eq
-  条件: [LieModule R L M]
+  条件: [Lie模 R L M]
   结论: map f ⁅I, N⁆ = ⁅I, map f N⁆
   证明: by
   rw [← toSubmodule_inj]; rw [toSubmodule_map]; rw [lieIdeal_oper_eq_linear_span]; rw [lieIdeal_oper_eq_linear_span]; rw [Submodule.map_span]
@@ -785,7 +785,7 @@ theorem comap_bracket_eq
 
 中文:
 定理 comap_bracket_eq
-  条件: [LieModule R L M] (hf₁ : f.ker = ⊥) (hf₂ : N₂ <= f.range)
+  条件: [Lie模 R L M] (hf₁ : f.ker = ⊥) (hf₂ : N₂ <= f.range)
   证明: by
   conv_lhs => rw [← map_comap_eq N₂ f hf₂]
   rw [← map_bracket_eq]; rw [comap_map_eq _ f hf₁]
@@ -864,7 +864,7 @@ theorem map_bracket_eq
 
 中文:
 定理 map_bracket_eq
-  条件: {I₁ I₂ : LieIdeal R L} (h : Function.Surjective f)
+  条件: {I₁ I₂ : LieIdeal R L} (h : 函数.满射 f)
   证明: by
   suffices ⁅map f I₁, map f I₂⁆ <= map f ⁅I₁, I₂⁆ by exact le_antisymm (map_bracket_le f) this
   rw [← LieSubmodule.toSubmodule_le_toSubmodule]; rw [coe_map_of_surjective h]; rw [LieSubmodule.lieIdeal_oper_eq_linear_span]; rw [LieSubmodule.lieIdeal_oper_eq_linear_span]; rw [LinearMap.map_span]

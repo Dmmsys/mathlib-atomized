@@ -123,7 +123,7 @@ definition isColimitCokernelCofork
 
 中文:
 定义 isColimitCokernelCofork
-  签名: : IsColimit (CokernelCofork.ofπ _ Φ.ι_π)
+  签名: : 是余极限 (余核余叉.ofπ _ Φ.ι_π)
   定义体: cokernelIsCokernel _
 
 Depends on / 依赖: cokernelIsCokernel
@@ -145,7 +145,7 @@ definition shortComplex
 
 中文:
 定义 shortComplex
-  签名: : ShortComplex (C ⥤ C) where
+  签名: : 短复形 (C ⥤ C) where
   定义体: Φ.ι
   g := Φ.π
 -/
@@ -164,7 +164,7 @@ instance :
 
 中文:
 实例 :
-  签名: Mono Φ.shortComplex.f
+  签名: 单态射 Φ.shortComplex.f
   定义体: by dsimp; infer_instance
 
 Depends on / 依赖: L.obj, infer_instance, isIso_hom_app, isPointwiseRightKanExtensionRanCounit
@@ -180,7 +180,7 @@ instance :
 
 中文:
 实例 :
-  签名: Epi Φ.shortComplex.g
+  签名: 满态射 Φ.shortComplex.g
   定义体: by dsimp; infer_instance
 
 Depends on / 依赖: NatIso, NatIso.isIso_of_isIso_app, infer_instance, isIso_of_isIso_app
@@ -197,7 +197,7 @@ lemma shortExact_shortComplex
 
 中文:
 引理 shortExact_shortComplex
-  结论: Φ.shortComplex.ShortExact where
+  结论: Φ.shortComplex.短正合 where
   证明: ShortComplex.exact_of_g_is_cokernel _ (cokernelIsCokernel _)
 
 Depends on / 依赖: ShortComplex, ShortComplex.exact_of_g_is_cokernel, cokernelIsCokernel, exact_of_g_is_cokernel
@@ -217,7 +217,7 @@ definition isLimitKernelFork
 
 中文:
 定义 isLimitKernelFork
-  签名: : IsLimit (KernelFork.ofι _ Φ.ι_π)
+  签名: : 是极限 (核叉.ofι _ Φ.ι_π)
   定义体: Φ.shortExact_shortComplex.fIsKernel
 
 @[reassoc (attr := simp)]
@@ -288,7 +288,7 @@ lemma shortExact_shortComplexObj
 中文:
 引理 shortExact_shortComplexObj
   条件: (X : C)
-  结论: (Φ.shortComplexObj X).ShortExact where
+  结论: (Φ.shortComplexObj X).短正合 where
   证明: (ShortComplex.ShortExact.map_of_exact Φ.shortExact_shortComplex ((evaluation C C).obj X)).exact
 
 Depends on / 依赖: ShortComplex, ShortComplex.ShortExact.map_of_exact, ShortExact, evaluation, map_of_exact, shortExact_shortComplex
@@ -385,7 +385,7 @@ instance :
 
 中文:
 实例 :
-  签名: Epi (colonπ Φ Ψ)
+  签名: 满态射 (colonπ Φ Ψ)
   定义体: by dsimp [colonπ]; infer_instance
 
 Depends on / 依赖: infer_instance

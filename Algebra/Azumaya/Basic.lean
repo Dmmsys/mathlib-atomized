@@ -49,8 +49,8 @@ lemma AlgHom.mulLeftRight_bij
   proof: h.bij
 
 中文:
-引理 AlgHom.mulLeftRight_bij
-  条件: [h : IsAzumaya R A]
+引理 代数态射.mulLeftRight_bij
+  条件: [h : 是Azumaya R A]
   证明: h.bij
 
 Depends on / 依赖: h.bij
@@ -68,7 +68,7 @@ abbreviation tensorEquivEnd
 
 中文:
 缩写 tensorEquivEnd
-  签名: : R otimes[R] Rᵐᵒᵖ ≃ₐ[R] Module.End R R
+  签名: : R otimes[R] Rᵐᵒᵖ ≃ₐ[R] 模.End R R
   定义体: .trans .moduleEndSelf R Algebra.TensorProduct.lid R Rᵐᵒᵖ
 
 Depends on / 依赖: Algebra, Algebra.TensorProduct.lid, TensorProduct, moduleEndSelf
@@ -87,7 +87,7 @@ lemma coe_tensorEquivEnd
 
 中文:
 引理 coe_tensorEquivEnd
-  结论: tensorEquivEnd R = AlgHom.mulLeftRight R R
+  结论: tensorEquivEnd R = 代数态射.mulLeftRight R R
   证明: by
   ext; simp
 -/
@@ -104,7 +104,7 @@ instance id
 
 中文:
 实例 id
-  签名: : IsAzumaya R R where
+  签名: : 是Azumaya R R where
   定义体: by rw [← coe_tensorEquivEnd]; exact tensorEquivEnd R
 
 Depends on / 依赖: coe_tensorEquivEnd, tensorEquivEnd
@@ -148,8 +148,8 @@ theorem of_AlgEquiv
 
 中文:
 定理 of_AlgEquiv
-  条件: (e : A ≃ₐ[R] B) [IsAzumaya R A]
-  结论: IsAzumaya R B
+  条件: (e : A ≃ₐ[R] B) [是Azumaya R A]
+  结论: 是Azumaya R B
   证明: let _ : Module.Projective R B := .of_equiv e.toLinearEquiv
   let _ : FaithfulSMul R B := .of_injective e e.injective
   let _ : Module.Finite R B := .equiv e.toLinearEquiv
@@ -180,8 +180,8 @@ instance Algebra.IsCentral.instIsAzumaya
 left_of_tensor R A Aᵐᵒᵖ FaithfulSMul.algebraMap_injective _ _
 
 中文:
-实例 Algebra.IsCentral.instIsAzumaya
-  签名: {R A : 类型} [CommSemiring R] [Semiring A]
+实例 代数.是中心.instIsAzumaya
+  签名: {R A : 类型} [交换半环 R] [半环 A]
   定义体: have := of_algEquiv R _ _ (AlgEquiv.ofBijective (.mulLeftRight R A) IsAzumaya.bij).symm
 left_of_tensor R A Aᵐᵒᵖ FaithfulSMul.algebraMap_injective _ _
 

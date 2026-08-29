@@ -56,7 +56,7 @@ lemma triangle_congruent_iff_dist_eq
 
 中文:
 引理 triangle_congruent_iff_dist_eq
-  条件: {t₁ : Fin 3 -> P₁} {t₂ : Fin 3 -> P₂}
+  条件: {t₁ : 有限集 3 -> P₁} {t₂ : 有限集 3 -> P₂}
   证明: congruent_iff_dist_eq
 
 Depends on / 依赖: congruent_iff_dist_eq

@@ -55,7 +55,7 @@ definition ofMulDiscriminant
 
 中文:
 定义 ofMulDiscriminant
-  签名: (f : ModularForm 𝒮ℒ (k - 12))
+  签名: (f : 模形式 𝒮ℒ (k - 12))
   定义体: CuspForm.mcast (by ring) (CuspForm.discriminant.mulModularForm f)
 
 @[simp]
@@ -76,7 +76,7 @@ lemma ofMulDiscriminant_apply
 
 中文:
 引理 ofMulDiscriminant_apply
-  条件: (f : ModularForm 𝒮ℒ (k - 12)) (z : ℍ)
+  条件: (f : 模形式 𝒮ℒ (k - 12)) (z : ℍ)
   证明: rfl
 -/
 lemma ofMulDiscriminant_apply (f : ModularForm 𝒮ℒ (k - 12)) (z : ℍ) :
@@ -95,7 +95,7 @@ lemma divByDiscriminant_slash_eq
 
 中文:
 引理 divByDiscriminant_slash_eq
-  条件: (f : CuspForm 𝒮ℒ k) (γ : SL(2, 整数))
+  条件: (f : 尖点形式 𝒮ℒ k) (γ : SL(2, 整数))
   证明: by
   have hγ : (γ : GL (Fin 2) Real) in 𝒮ℒ := ⟨γ, rfl⟩
   change (⇑f / ⇑CuspForm.discriminant) ∣[k - 12] γ = ⇑f / ⇑CuspForm.discriminant
@@ -124,7 +124,7 @@ definition discriminantEquiv
 
 中文:
 定义 discriminantEquiv
-  签名: : CuspForm 𝒮ℒ k ≃ₗ[Complex] ModularForm 𝒮ℒ (k - 12) where
+  签名: : 尖点形式 𝒮ℒ k ≃ₗ[复形] 模形式 𝒮ℒ (k - 12) where
   定义体: { toFun z := f z / Δ z
       slash_action_eq' := fun _ ⟨γ, hγ⟩ => hγ ▸ divByDiscriminant_slash_eq f γ
       holo' := f.holo'.div CuspForm.discriminant.holo' discriminant_ne_zero
@@ -171,7 +171,7 @@ lemma discriminantEquiv_apply
 
 中文:
 引理 discriminantEquiv_apply
-  条件: (f : CuspForm 𝒮ℒ k) (z : ℍ)
+  条件: (f : 尖点形式 𝒮ℒ k) (z : ℍ)
   证明: rfl
 -/
 lemma discriminantEquiv_apply (f : CuspForm 𝒮ℒ k) (z : ℍ) :
@@ -191,7 +191,7 @@ definition divDiscriminant
 
 中文:
 定义 divDiscriminant
-  签名: (f : CuspForm 𝒮ℒ k)
+  签名: (f : 尖点形式 𝒮ℒ k)
   定义体: discriminantEquiv f
 
 @[deprecated discriminantEquiv_apply (since := "2026-05-18")]
@@ -211,7 +211,7 @@ lemma divDiscriminant_apply
 
 中文:
 引理 divDiscriminant_apply
-  条件: (f : CuspForm 𝒮ℒ k) (z : ℍ)
+  条件: (f : 尖点形式 𝒮ℒ k) (z : ℍ)
   证明: rfl
 -/
 lemma divDiscriminant_apply (f : CuspForm 𝒮ℒ k) (z : ℍ) :
@@ -235,7 +235,7 @@ lemma discriminant_mul_discriminantEquiv_apply
 
 中文:
 引理 discriminant_mul_discriminantEquiv_apply
-  条件: (f : CuspForm 𝒮ℒ k) (z : ℍ)
+  条件: (f : 尖点形式 𝒮ℒ k) (z : ℍ)
   证明: by
   rw [CuspForm.discriminantEquiv_apply]; rw [mul_div_cancel₀ _ (discriminant_ne_zero z)]
 
@@ -259,7 +259,7 @@ lemma discriminant_mul_discriminantEquiv
 
 中文:
 引理 discriminant_mul_discriminantEquiv
-  条件: (f : CuspForm 𝒮ℒ k)
+  条件: (f : 尖点形式 𝒮ℒ k)
   证明: by
   grind [Pi.mul_apply, discriminant_mul_discriminantEquiv_apply]
 
@@ -314,7 +314,7 @@ lemma qExpansion_eq_qExpansion_discriminant_mul
 
 中文:
 引理 qExpansion_eq_qExpansion_discriminant_mul
-  结论: (f : ModularForm 𝒮ℒ k)
+  结论: (f : 模形式 𝒮ℒ k)
   证明: by
   rw [show (f : ℍ -> Complex) = discriminant * (toCuspForm f hcusp).discriminantEquiv from
       (discriminant_mul_discriminantEquiv (toCuspForm f hcusp)).symm]; rw [← CuspForm.coe_discriminant]
@@ -348,8 +348,8 @@ lemma ModularForm.levelOne_odd_weight_eq_zero
   proof: ModularForm.eq_zero_of_neg_one_mem (show (-1 : GL (Fin 2) Real) in 𝒮ℒ from ⟨-1, by ext; simp⟩) hk f
 
 中文:
-引理 ModularForm.levelOne_odd_weight_eq_zero
-  条件: (hk : Odd k) (f : ModularForm 𝒮ℒ k)
+引理 模形式.levelOne_odd_weight_eq_zero
+  条件: (hk : Odd k) (f : 模形式 𝒮ℒ k)
   结论: f = 0
   证明: ModularForm.eq_zero_of_neg_one_mem (show (-1 : GL (Fin 2) Real) in 𝒮ℒ from ⟨-1, by ext; simp⟩) hk f
 
@@ -367,7 +367,7 @@ lemma ModularForm.levelOne_odd_weight_rank_zero
   proof: rank_zero_iff_forall_zero.mpr (levelOne_odd_weight_eq_zero hk)
 
 中文:
-引理 ModularForm.levelOne_odd_weight_rank_zero
+引理 模形式.levelOne_odd_weight_rank_zero
   条件: (hk : Odd k)
   证明: rank_zero_iff_forall_zero.mpr (levelOne_odd_weight_eq_zero hk)
 
@@ -386,7 +386,7 @@ lemma CuspForm.rank_eq_zero_of_weight_lt_twelve
   proof: CuspForm.discriminantEquiv.rank_eq.trans (levelOne_neg_weight_rank_zero (by lia))
 
 中文:
-引理 CuspForm.rank_eq_zero_of_weight_lt_twelve
+引理 尖点形式.rank_eq_zero_of_weight_lt_twelve
   条件: (hk : k < 12)
   证明: CuspForm.discriminantEquiv.rank_eq.trans (levelOne_neg_weight_rank_zero (by lia))
 
@@ -406,8 +406,8 @@ lemma CuspForm.rank_eq_one_of_weight_eq_twelve
   simpa [CuspForm.discriminantEquiv.rank_eq] using! levelOne_weight_zero_rank_one
 
 中文:
-引理 CuspForm.rank_eq_one_of_weight_eq_twelve
-  结论: Module.rank Complex (CuspForm 𝒮ℒ 12) = 1
+引理 尖点形式.rank_eq_one_of_weight_eq_twelve
+  结论: 模.rank 复形 (尖点形式 𝒮ℒ 12) = 1
   证明: by
   simpa [CuspForm.discriminantEquiv.rank_eq] using! levelOne_weight_zero_rank_one
 
@@ -426,8 +426,8 @@ lemma CuspForm.exists_smul_discriminant_of_weight_eq_twelve
     (Module.rank_eq_one_iff_finrank_eq_one.mp CuspForm.rank_eq_one_of_weight_eq_twelve) f
 
 中文:
-引理 CuspForm.exists_smul_discriminant_of_weight_eq_twelve
-  条件: (f : CuspForm 𝒮ℒ 12)
+引理 尖点形式.存在_smul_discriminant_of_weight_eq_twelve
+  条件: (f : 尖点形式 𝒮ℒ 12)
   证明: (finrank_eq_one_iff_of_nonzero' _ (DFunLike.ne_iff.mpr ⟨I, discriminant_ne_zero _⟩)).mp
     (Module.rank_eq_one_iff_finrank_eq_one.mp CuspForm.rank_eq_one_of_weight_eq_twelve) f
 
@@ -452,7 +452,7 @@ lemma ModularForm.rank_eq_one_add_rank_cuspForm
     have hE := E_qE
 
 中文:
-引理 ModularForm.rank_eq_one_add_rank_cuspForm
+引理 模形式.rank_eq_one_add_rank_cuspForm
   条件: {k : 自然数} (hk : 3 <= k) (hk2 : Even k)
   证明: by
   suffices Module.rank Complex (ModularForm 𝒮ℒ k ⧸ cuspFormSubmodule 𝒮ℒ k) = 1 by
@@ -494,7 +494,7 @@ lemma levelOne_weight_four_rank_one
 
 中文:
 引理 levelOne_weight_four_rank_one
-  结论: Module.rank Complex (ModularForm 𝒮ℒ 4) = 1
+  结论: 模.rank 复形 (模形式 𝒮ℒ 4) = 1
   证明: (rank_eq_one_add_rank_cuspForm (by norm_num) ⟨2, rfl⟩).trans
     ((congrArg (1 + ·) (CuspForm.rank_eq_zero_of_weight_lt_twelve (by norm_num))).trans
       (by norm_cast))
@@ -518,7 +518,7 @@ lemma levelOne_weight_six_rank_one
 
 中文:
 引理 levelOne_weight_six_rank_one
-  结论: Module.rank Complex (ModularForm 𝒮ℒ 6) = 1
+  结论: 模.rank 复形 (模形式 𝒮ℒ 6) = 1
   证明: (rank_eq_one_add_rank_cuspForm (by norm_num) ⟨3, rfl⟩).trans
     ((congrArg (1 + ·) (CuspForm.rank_eq_zero_of_weight_lt_twelve (by norm_num))).trans
       (by norm_cast))
@@ -585,7 +585,7 @@ lemma eq_zero_of_pow_eq_smul
 
 中文:
 引理 eq_zero_of_pow_eq_smul
-  结论: {p p4 p6 : PowerSeries Complex} {c4 c6 : Complex}
+  结论: {p p4 p6 : 幂级数 复形} {c4 c6 : 复形}
   证明: by
   simp_all only [PowerSeries.coeff_zero_eq_constantCoeff]
   let D := (c4 • p4) ^ 3 - (c6 • p6) ^ 2
@@ -621,7 +621,7 @@ lemma weight_two_qExpansion_eq_zero
 
 中文:
 引理 weight_two_qExpansion_eq_zero
-  条件: (f : ModularForm 𝒮ℒ 2)
+  条件: (f : 模形式 𝒮ℒ 2)
   结论: qExpansion 1 f = 0
   证明: by
   obtain ⟨c4, hc4⟩ : exists c4, c4 • E₄ = f.mul f :=
@@ -656,7 +656,7 @@ theorem levelOne_weight_two_rank_zero
 
 中文:
 定理 levelOne_weight_two_rank_zero
-  结论: Module.rank Complex (ModularForm 𝒮ℒ 2) = 0
+  结论: 模.rank 复形 (模形式 𝒮ℒ 2) = 0
   证明: by
   simpa [rank_zero_iff_forall_zero, ModularForm.qExpansion_eq_zero_iff]
     using weight_two_qExpansion_eq_zero
@@ -746,7 +746,7 @@ theorem sturm_bound_levelOne_nat
 
 中文:
 定理 sturm_bound_levelOne_nat
-  结论: {k : 自然数} {f : ModularForm 𝒮ℒ (k : 整数)}
+  结论: {k : 自然数} {f : 模形式 𝒮ℒ (k : 整数)}
   证明: by
   induction k using Nat.strong_induction_on with | _ k ih =>
   have h0 : (qExpansion 1 f).coeff 0 = 0 :=
@@ -785,7 +785,7 @@ theorem sturm_bound_levelOne
 
 中文:
 定理 sturm_bound_levelOne
-  结论: {k : 整数} {f : ModularForm 𝒮ℒ k}
+  结论: {k : 整数} {f : 模形式 𝒮ℒ k}
   证明: by
   rcases lt_or_ge k 0 with hk | hk
   · exact rank_zero_iff_forall_zero.mp (levelOne_neg_weight_rank_zero hk) f

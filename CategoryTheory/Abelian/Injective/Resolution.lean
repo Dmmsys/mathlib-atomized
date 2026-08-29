@@ -62,7 +62,7 @@ definition descFZero
 
 中文:
 定义 descFZero
-  签名: {Y Z : C} (f : Z ⟶ Y) (I : InjectiveResolution Y) (J : InjectiveResolution Z)
+  签名: {Y Z : C} (f : Z ⟶ Y) (I : 单射消解 Y) (J : 单射消解 Z)
   定义体: factorThru (f ≫ I.ι.f 0) (J.ι.f 0)
 
 Depends on / 依赖: factorThru
@@ -87,7 +87,7 @@ lemma exact₀
 
 中文:
 引理 exact₀
-  条件: {Z : C} (I : InjectiveResolution Z)
+  条件: {Z : C} (I : 单射消解 Z)
   证明: ShortComplex.exact_of_f_is_kernel _ I.isLimitKernelFork
 
 Depends on / 依赖: I.isLimitKernelFork, ShortComplex, ShortComplex.exact_of_f_is_kernel, exact_of_f_is_kernel, isLimitKernelFork
@@ -110,7 +110,7 @@ definition descFOne
 
 中文:
 定义 descFOne
-  签名: {Y Z : C} (f : Z ⟶ Y) (I : InjectiveResolution Y) (J : InjectiveResolution Z)
+  签名: {Y Z : C} (f : Z ⟶ Y) (I : 单射消解 Y) (J : 单射消解 Z)
   定义体: J.exact₀.descToInjective (descFZero f I J ≫ I.cocomplex.d 0 1)
     (by dsimp; simp only [← assoc, descFZero]; simp [assoc])
 
@@ -135,7 +135,7 @@ theorem descFOne_zero_comm
 
 中文:
 定理 descFOne_zero_comm
-  结论: {Y Z : C} (f : Z ⟶ Y) (I : InjectiveResolution Y)
+  结论: {Y Z : C} (f : Z ⟶ Y) (I : 单射消解 Y)
   证明: by
   apply J.exact₀.comp_descToInjective
 
@@ -158,7 +158,7 @@ definition descFSucc
 
 中文:
 定义 descFSucc
-  签名: {Y Z : C} (I : InjectiveResolution Y) (J : InjectiveResolution Z) (n : 自然数)
+  签名: {Y Z : C} (I : 单射消解 Y) (J : 单射消解 Z) (n : 自然数)
   定义体: ⟨(J.exact_succ n).descToInjective
     (g' ≫ I.cocomplex.d (n + 1) (n + 2)) (by simp [reassoc_of% w]),
       (J.exact_succ n).comp_descToInjective _ _⟩
@@ -185,7 +185,7 @@ definition desc
 
 中文:
 定义 desc
-  签名: {Y Z : C} (f : Z ⟶ Y) (I : InjectiveResolution Y) (J : InjectiveResolution Z)
+  签名: {Y Z : C} (f : Z ⟶ Y) (I : 单射消解 Y) (J : 单射消解 Z)
   定义体: CochainComplex.mkHom _ _ (descFZero f _ _) (descFOne f _ _) (descFOne_zero_comm f I J).symm
     fun n ⟨g, g', w⟩ => ⟨(descFSucc I J n g g' w.symm).1, (descFSucc I J n g g' w.symm).2.symm⟩
 
@@ -213,7 +213,7 @@ theorem desc_commutes
 
 中文:
 定理 desc_commutes
-  结论: {Y Z : C} (f : Z ⟶ Y) (I : InjectiveResolution Y)
+  结论: {Y Z : C} (f : Z ⟶ Y) (I : 单射消解 Y)
   证明: by
   ext
   simp [desc, descFOne, descFZero]
@@ -261,7 +261,7 @@ definition descHomotopyZeroZero
 
 中文:
 定义 descHomotopyZeroZero
-  签名: {Y Z : C} {I : InjectiveResolution Y} {J : InjectiveResolution Z}
+  签名: {Y Z : C} {I : 单射消解 Y} {J : 单射消解 Z}
   定义体: I.exact₀.descToInjective (f.f 0) (congr_fun (congr_arg HomologicalComplex.Hom.f comm) 0)
 
 @[reassoc (attr := simp)]
@@ -283,7 +283,7 @@ lemma comp_descHomotopyZeroZero
 
 中文:
 引理 comp_descHomotopyZeroZero
-  结论: {Y Z : C} {I : InjectiveResolution Y} {J : InjectiveResolution Z}
+  结论: {Y Z : C} {I : 单射消解 Y} {J : 单射消解 Z}
   证明: I.exact₀.comp_descToInjective _ _
 
 Depends on / 依赖: I.exact, comp_descToInjective
@@ -307,7 +307,7 @@ definition descHomotopyZeroOne
 
 中文:
 定义 descHomotopyZeroOne
-  签名: {Y Z : C} {I : InjectiveResolution Y} {J : InjectiveResolution Z}
+  签名: {Y Z : C} {I : 单射消解 Y} {J : 单射消解 Z}
   定义体: (I.exact_succ 0).descToInjective (f.f 1 - descHomotopyZeroZero f comm ≫ J.cocomplex.d 0 1)
     (by rw [Preadditive.comp_sub, comp_descHomotopyZeroZero_assoc f comm,
           HomologicalComplex.Hom.comm, sub_self])
@@ -334,7 +334,7 @@ lemma comp_descHomotopyZeroOne
 
 中文:
 引理 comp_descHomotopyZeroOne
-  结论: {Y Z : C} {I : InjectiveResolution Y} {J : InjectiveResolution Z}
+  结论: {Y Z : C} {I : 单射消解 Y} {J : 单射消解 Z}
   证明: (I.exact_succ 0).comp_descToInjective _ _
 
 Depends on / 依赖: I.exact_succ, comp_descToInjective, exact_succ
@@ -357,7 +357,7 @@ definition descHomotopyZeroSucc
 
 中文:
 定义 descHomotopyZeroSucc
-  签名: {Y Z : C} {I : InjectiveResolution Y} {J : InjectiveResolution Z}
+  签名: {Y Z : C} {I : 单射消解 Y} {J : 单射消解 Z}
   定义体: (I.exact_succ (n + 1)).descToInjective (f.f (n + 2) - g' ≫ J.cocomplex.d _ _) (by
       dsimp
       rw [Preadditive.comp_sub]; rw [← HomologicalComplex.Hom.comm]; rw [w]; rw [Preadditive.add_comp]; rw [Category.assoc]; rw [Category.assoc]; rw [HomologicalComplex.d_comp_d]; rw [comp_zero]; rw [add_ze
@@ -384,7 +384,7 @@ lemma comp_descHomotopyZeroSucc
 
 中文:
 引理 comp_descHomotopyZeroSucc
-  结论: {Y Z : C} {I : InjectiveResolution Y} {J : InjectiveResolution Z}
+  结论: {Y Z : C} {I : 单射消解 Y} {J : 单射消解 Z}
   证明: (I.exact_succ (n + 1)).comp_descToInjective _ _
 
 Depends on / 依赖: I.exact_succ, comp_descToInjective, exact_succ
@@ -409,7 +409,7 @@ definition descHomotopyZero
 
 中文:
 定义 descHomotopyZero
-  签名: {Y Z : C} {I : InjectiveResolution Y} {J : InjectiveResolution Z}
+  签名: {Y Z : C} {I : 单射消解 Y} {J : 单射消解 Z}
   定义体: Homotopy.mkCoinductive _ (descHomotopyZeroZero f comm) (by simp)
     (descHomotopyZeroOne f comm) (by simp) (fun n ⟨g, g', w⟩ =>
     ⟨descHomotopyZeroSucc f n g g' (by simp only [w, add_comm]), by simp⟩)
@@ -432,7 +432,7 @@ definition descHomotopy
 
 中文:
 定义 descHomotopy
-  签名: {Y Z : C} (f : Y ⟶ Z) {I : InjectiveResolution Y} {J : InjectiveResolution Z}
+  签名: {Y Z : C} (f : Y ⟶ Z) {I : 单射消解 Y} {J : 单射消解 Z}
   定义体: Homotopy.equivSubZero.invFun (descHomotopyZero _ (by simp [g_comm, h_comm]))
 
 Depends on / 依赖: Homotopy, Homotopy.equivSubZero.invFun, descHomotopyZero, equivSubZero, g_comm, h_comm, invFun
@@ -453,7 +453,7 @@ definition descIdHomotopy
 
 中文:
 定义 descIdHomotopy
-  签名: (X : C) (I : InjectiveResolution X)
+  签名: (X : C) (I : 单射消解 X)
   定义体: by
   apply descHomotopy (𝟙 X) <;> simp
 
@@ -474,7 +474,7 @@ definition descCompHomotopy
 
 中文:
 定义 descCompHomotopy
-  签名: {X Y Z : C} (f : X ⟶ Y) (g : Y ⟶ Z) (I : InjectiveResolution X)
+  签名: {X Y Z : C} (f : X ⟶ Y) (g : Y ⟶ Z) (I : 单射消解 X)
   定义体: by
   apply descHomotopy (f ≫ g) <;> simp
 
@@ -503,7 +503,7 @@ homotopyInvHomId := (descCompHomotopy (𝟙 X) (𝟙 X) J I J).symm.trans by
 
 中文:
 定义 homotopyEquiv
-  签名: {X : C} (I J : InjectiveResolution X)
+  签名: {X : C} (I J : 单射消解 X)
   定义体: desc (𝟙 X) J I
   inv := desc (𝟙 X) I J
 homotopyHomInvId := (descCompHomotopy (𝟙 X) (𝟙 X) I J I).symm.trans by
@@ -535,7 +535,7 @@ theorem homotopyEquiv_hom_ι
 
 中文:
 定理 homotopyEquiv_hom_ι
-  条件: {X : C} (I J : InjectiveResolution X)
+  条件: {X : C} (I J : 单射消解 X)
   证明: by simp [homotopyEquiv]
 
 @[reassoc (attr := simp)]
@@ -556,7 +556,7 @@ theorem homotopyEquiv_inv_ι
 
 中文:
 定理 homotopyEquiv_inv_ι
-  条件: {X : C} (I J : InjectiveResolution X)
+  条件: {X : C} (I J : 单射消解 X)
   证明: by simp [homotopyEquiv]
 
 Depends on / 依赖: homotopyEquiv
@@ -582,7 +582,7 @@ abbreviation injectiveResolution
 
 中文:
 缩写 injectiveResolution
-  签名: (Z : C) [HasInjectiveResolution Z]
+  签名: (Z : C) [有单射消解 Z]
   定义体: (HasInjectiveResolution.out (Z := Z)).some
 
 Depends on / 依赖: HasInjectiveResolution, HasInjectiveResolution.out
@@ -608,7 +608,7 @@ definition injectiveResolutions
 
 中文:
 定义 injectiveResolutions
-  签名: : C ⥤ HomotopyCategory C (ComplexShape.up 自然数) where
+  签名: : C ⥤ HomotopyCategory C (余mplexShape.up 自然数) where
   定义体: (HomotopyCategory.quotient _ _).obj (injectiveResolution X).cocomplex
   map f := (HomotopyCategory.quotient _ _).map (InjectiveResolution.desc f _ _)
   map_id X := by
@@ -640,8 +640,8 @@ definition InjectiveResolution.iso
   body: HomotopyCategory.isoOfHomotopyEquiv (homotopyEquiv _ _)
 
 中文:
-定义 InjectiveResolution.iso
-  签名: {X : C} (I : InjectiveResolution X)
+定义 单射消解.iso
+  签名: {X : C} (I : 单射消解 X)
   定义体: HomotopyCategory.isoOfHomotopyEquiv (homotopyEquiv _ _)
 
 Depends on / 依赖: HomotopyCategory, HomotopyCategory.isoOfHomotopyEquiv, homotopyEquiv, isoOfHomotopyEquiv
@@ -667,7 +667,7 @@ lemma InjectiveResolution.iso_hom_naturality
 @[reassoc]
 
 中文:
-引理 InjectiveResolution.iso_hom_naturality
+引理 单射消解.iso_hom_naturality
   结论: {X Y : C} (f : X ⟶ Y)
   证明: by
   apply HomotopyCategory.eq_of_homotopy
@@ -698,7 +698,7 @@ lemma InjectiveResolution.iso_inv_naturality
   rw [← cancel_mono (J.iso).hom]; rw [Category.assoc]; rw [iso_hom_naturality f I J φ comm]; rw [Iso.inv_hom_id_assoc]; rw [Category.assoc]; rw [Iso.inv_hom_id]; rw [Category.comp_id]
 
 中文:
-引理 InjectiveResolution.iso_inv_naturality
+引理 单射消解.iso_inv_naturality
   结论: {X Y : C} (f : X ⟶ Y)
   证明: by
   rw [← cancel_mono (J.iso).hom]; rw [Category.assoc]; rw [iso_hom_naturality f I J φ comm]; rw [Iso.inv_hom_id_assoc]; rw [Category.assoc]; rw [Iso.inv_hom_id]; rw [Category.comp_id]
@@ -789,7 +789,7 @@ definition ofCocomplex
 
 中文:
 定义 ofCocomplex
-  签名: : CochainComplex C 自然数
+  签名: : 上链复形 C 自然数
   定义体: CochainComplex.mk' (Injective.under Z) (Injective.syzygies (Injective.ι Z))
     (Injective.d (Injective.ι Z)) fun f => ⟨_, Injective.d f, by simp⟩
 
@@ -896,7 +896,7 @@ abbreviation InjectivePresentation.shortComplex
   body: ShortComplex.mk ip.f (Limits.cokernel.π ip.f) (Limits.cokernel.condition ip.f)
 
 中文:
-缩写 InjectivePresentation.shortComplex
+缩写 单射呈现.shortComplex
   定义体: ShortComplex.mk ip.f (Limits.cokernel.π ip.f) (Limits.cokernel.condition ip.f)
 
 Depends on / 依赖: Limits, Limits.cokernel, Limits.cokernel.condition, ShortComplex, ShortComplex.mk, cokernel, condition, ip.f
@@ -914,7 +914,7 @@ theorem InjectivePresentation.shortExact_shortComplex
   proof: { exact := ShortComplex.exact_cokernel ip.f }
 
 中文:
-定理 InjectivePresentation.shortExact_shortComplex
+定理 单射呈现.shortExact_shortComplex
   结论: {X : C}
   证明: { exact := ShortComplex.exact_cokernel ip.f }
 

@@ -58,7 +58,7 @@ definition semivariation
 
 中文:
 定义 semivariation
-  签名: (μ : VectorMeasure X E) (s : Set X)
+  签名: (μ : 向量测度 X E) (s : 集合 X)
   定义体: ⨆ ℓ in {ℓ : StrongDual Real E | ‖ℓ‖ₑ <= 1}, (μ.mapRange (ℓ : E ->+ Real) ℓ.continuous).variation s
 
 Depends on / 依赖: StrongDual, continuous, mapRange, variation
@@ -235,8 +235,8 @@ lemma exists_subset_lt_enorm_apply_of_lt_semivariation
     Sig
 
 中文:
-引理 exists_subset_lt_enorm_apply_of_lt_semivariation
-  结论: (hs : MeasurableSet s)
+引理 存在_subset_lt_enorm_apply_of_lt_semivariation
+  结论: (hs : 可测集 s)
   证明: by
   obtain ⟨ℓ, hℓ, h'ℓ⟩ : exists ℓ in {ℓ : StrongDual Real E | ‖ℓ‖ₑ <= 1},
     a < (μ.mapRange (ℓ : E ->+ Real) ℓ.continuous).variation s := lt_biSup_iff.1 ha
@@ -272,7 +272,7 @@ lemma exists_one_le_enorm_apply_of_semivariation_eq_top
     apply (ENNReal.mul_le_mul_iff_right (a := 2) (by simp) (by 
 
 中文:
-引理 exists_one_le_enorm_apply_of_semivariation_eq_top
+引理 存在_one_le_enorm_apply_of_semivariation_eq_top
   证明: by
   obtain ⟨t, ts, t_meas, ht⟩ : exists t subseteq s, MeasurableSet t ∧ 2 * ‖μ s‖ₑ + 2 < 2 * ‖μ t‖ₑ := by
     apply exists_subset_lt_enorm_apply_of_lt_semivariation hs

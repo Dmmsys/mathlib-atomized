@@ -108,7 +108,7 @@ theorem exists_eq_gaussNorm
 @[simp]
 
 中文:
-定理 exists_eq_gaussNorm
+定理 存在_eq_gaussNorm
   结论: 存在 i, p.gaussNorm v c = v (p.coeff i) * c ^ i
   证明: by
   by_cases h_supp : p.support.Nonempty
@@ -194,8 +194,8 @@ lemma sup'_nonneg_of_ne_zero
   positivity
 
 中文:
-引理 sup'_nonneg_of_ne_zero
-  结论: [NonnegHomClass F R 实数] {p : R[X]} (h : p.support.Nonempty)
+引理 上确界'_nonneg_of_ne_zero
+  结论: [Nonneg态射类 F R 实数] {p : R[X]} (h : p.support.非空)
   证明: by
   simp only [Finset.le_sup'_iff, mem_support_iff]
   use p.natDegree
@@ -453,7 +453,7 @@ lemma exists_min_eq_gaussNorm
   simp only [Nat.lt_find_iff, Set.mem_ofPred_eq] at hj
 
 中文:
-引理 exists_min_eq_gaussNorm
+引理 存在_min_eq_gaussNorm
   条件: (p : R[X]) (hc : 0 <= c)
   证明: by
   have h_nonempty : {i | gaussNorm v c p = v (p.coeff i) * c ^ i}.Nonempty := by
@@ -549,7 +549,7 @@ have h_supp_q : q.support.Nonempty := support_nonempty.mpr right_ne_zero_of_mul 
 
 中文:
 定理 gaussNorm_mul_le
-  条件: [MulHomClass F R 实数] (hna : IsNonarchimedean v) (p q : R[X]) (hc : 0 <= c)
+  条件: [乘法态射类 F R 实数] (hna : IsNonarchimedean v) (p q : R[X]) (hc : 0 <= c)
   证明: by
   rcases eq_or_ne (p * q) 0 with hpq | hpq
   · simp [hpq, hc, gaussNorm_nonneg, mul_nonneg]
@@ -741,7 +741,7 @@ theorem gaussNorm_C
 
 中文:
 定理 gaussNorm_C
-  条件: [ZeroHomClass F R 实数] [NonnegHomClass F R 实数] (hc : 0 <= c)
+  条件: [保零态射类 F R 实数] [Nonneg态射类 F R 实数] (hc : 0 <= c)
   证明: by
   simp [← Polynomial.coe_C, hc]
 
@@ -765,7 +765,7 @@ theorem gaussNorm_monomial
 
 中文:
 定理 gaussNorm_monomial
-  条件: [ZeroHomClass F R 实数] [NonnegHomClass F R 实数] (hc : 0 <= c) (n : 自然数)
+  条件: [保零态射类 F R 实数] [Nonneg态射类 F R 实数] (hc : 0 <= c) (n : 自然数)
   证明: by
   simp [← Polynomial.coe_monomial, hc]
 

@@ -44,7 +44,7 @@ theorem isReduced_localizationPreserves
 
 中文:
 定理 isReduced_localizationPreserves
-  结论: LocalizationPreserves fun R _ => IsReduced R
+  结论: LocalizationPreserves fun R _ => 是既约 R
   证明: by
   introv R _ _
   constructor
@@ -97,7 +97,7 @@ theorem isReduced_ofLocalizationMaximal
 
 中文:
 定理 isReduced_ofLocalizationMaximal
-  结论: OfLocalizationMaximal fun R _ => IsReduced R
+  结论: OfLocalizationMaximal fun R _ => 是既约 R
   证明: by
   introv R h
   constructor

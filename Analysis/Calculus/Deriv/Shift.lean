@@ -33,8 +33,8 @@ lemma HasDerivAt.comp_const_add
 simpa [Function.comp_def] using HasDerivAt.scomp (𝕜 := 𝕜) x hf .const_add a hasDerivAt_id' x
 
 中文:
-引理 HasDerivAt.comp_const_add
-  条件: (a x : 𝕜) (hf : HasDerivAt f f' (a + x))
+引理 在点处可导.comp_const_add
+  条件: (a x : 𝕜) (hf : 在点处可导 f f' (a + x))
   证明: by
 simpa [Function.comp_def] using HasDerivAt.scomp (𝕜 := 𝕜) x hf .const_add a hasDerivAt_id' x
 
@@ -54,8 +54,8 @@ lemma HasDerivAt.comp_add_const
 simpa [Function.comp_def] using HasDerivAt.scomp (𝕜 := 𝕜) x hf .add_const a hasDerivAt_id' x
 
 中文:
-引理 HasDerivAt.comp_add_const
-  条件: (x a : 𝕜) (hf : HasDerivAt f f' (x + a))
+引理 在点处可导.comp_add_const
+  条件: (x a : 𝕜) (hf : 在点处可导 f f' (x + a))
   证明: by
 simpa [Function.comp_def] using HasDerivAt.scomp (𝕜 := 𝕜) x hf .add_const a hasDerivAt_id' x
 
@@ -75,8 +75,8 @@ lemma HasDerivAt.comp_const_sub
 simpa [Function.comp_def] using HasDerivAt.scomp (𝕜 := 𝕜) x hf .const_sub a hasDerivAt_id' x
 
 中文:
-引理 HasDerivAt.comp_const_sub
-  条件: (a x : 𝕜) (hf : HasDerivAt f f' (a - x))
+引理 在点处可导.comp_const_sub
+  条件: (a x : 𝕜) (hf : 在点处可导 f f' (a - x))
   证明: by
 simpa [Function.comp_def] using HasDerivAt.scomp (𝕜 := 𝕜) x hf .const_sub a hasDerivAt_id' x
 
@@ -96,8 +96,8 @@ lemma HasDerivAt.comp_sub_const
 simpa [Function.comp_def] using HasDerivAt.scomp (𝕜 := 𝕜) x hf .sub_const a hasDerivAt_id' x
 
 中文:
-引理 HasDerivAt.comp_sub_const
-  条件: (x a : 𝕜) (hf : HasDerivAt f f' (x - a))
+引理 在点处可导.comp_sub_const
+  条件: (x a : 𝕜) (hf : 在点处可导 f f' (x - a))
   证明: by
 simpa [Function.comp_def] using HasDerivAt.scomp (𝕜 := 𝕜) x hf .sub_const a hasDerivAt_id' x
 

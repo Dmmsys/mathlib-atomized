@@ -72,7 +72,7 @@ theorem proj_map
 
 中文:
 定理 proj_map
-  条件: (i : I) (x₀ x₁ : πₓ (TopCat.of (对任意 i, X i))) (p : x₀ ⟶ x₁)
+  条件: (i : I) (x₀ x₁ : πₓ (顶元素范畴.of (对任意 i, X i))) (p : x₀ ⟶ x₁)
   证明: rfl
 -/
 theorem proj_map (i : I) (x₀ x₁ : πₓ (TopCat.of (forall i, X i))) (p : x₀ ⟶ x₁) :
@@ -99,7 +99,7 @@ definition piToPiTop
 
 中文:
 定义 piToPiTop
-  签名: : (对任意 i, πₓ (X i)) ⥤ πₓ (TopCat.of (对任意 i, X i)) where
+  签名: : (对任意 i, πₓ (X i)) ⥤ πₓ (顶元素范畴.of (对任意 i, X i)) where
   定义体: ⟨fun i => (g i).as⟩
   map p := Path.Homotopic.pi p
   map_id x := by
@@ -140,7 +140,7 @@ definition piIso
 
 中文:
 定义 piIso
-  签名: : CategoryTheory.Grpd.of (对任意 i : I, πₓ (X i)) ≅ πₓ (TopCat.of (对任意 i, X i)) where
+  签名: : 范畴论.Grpd.of (对任意 i : I, πₓ (X i)) ≅ πₓ (顶元素范畴.of (对任意 i, X i)) where
   定义体: piToPiTop X
   inv := CategoryTheory.Functor.pi' (proj X)
   hom_inv_id := by
@@ -239,7 +239,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsIso (piTopToPiCone X)
+  签名: 是同构 (piTopToPiCone X)
   定义体: haveI : IsIso (piTopToPiCone X).hom := (inferInstance : IsIso (piIso X).inv)
   Limits.Cone.cone_iso_of_hom_iso (piTopToPiCone X)
 
@@ -264,7 +264,7 @@ lemma preservesProduct
 
 中文:
 引理 preservesProduct
-  结论: Limits.PreservesLimit (Discrete.functor X) π
+  结论: Limits.保持极限 (离散.functor X) π
   证明: by
   apply Limits.preservesLimit_of_preserves_limit_cone (TopCat.piFanIsLimit X)
   apply (Limits.IsLimit.ofConeEquiv (coneDiscreteComp X)).toFun
@@ -299,7 +299,7 @@ definition projLeft
 
 中文:
 定义 projLeft
-  签名: : πₓ (TopCat.of (A × B)) ⥤ πₓ A
+  签名: : πₓ (顶元素范畴.of (A × B)) ⥤ πₓ A
   定义体: FundamentalGroupoid.map .fst
 
 Depends on / 依赖: FundamentalGroupoid, FundamentalGroupoid.map
@@ -319,7 +319,7 @@ definition projRight
 
 中文:
 定义 projRight
-  签名: : πₓ (TopCat.of (A × B)) ⥤ πₓ B
+  签名: : πₓ (顶元素范畴.of (A × B)) ⥤ πₓ B
   定义体: FundamentalGroupoid.map .snd
 
 @[simp]
@@ -342,7 +342,7 @@ theorem projLeft_map
 
 中文:
 定理 projLeft_map
-  条件: (x₀ x₁ : πₓ (TopCat.of (A × B))) (p : x₀ ⟶ x₁)
+  条件: (x₀ x₁ : πₓ (顶元素范畴.of (A × B))) (p : x₀ ⟶ x₁)
   证明: rfl
 
 @[simp]
@@ -362,7 +362,7 @@ theorem projRight_map
 
 中文:
 定理 projRight_map
-  条件: (x₀ x₁ : πₓ (TopCat.of (A × B))) (p : x₀ ⟶ x₁)
+  条件: (x₀ x₁ : πₓ (顶元素范畴.of (A × B))) (p : x₀ ⟶ x₁)
   证明: rfl
 -/
 theorem projRight_map (x₀ x₁ : πₓ (TopCat.of (A × B))) (p : x₀ ⟶ x₁) :
@@ -394,7 +394,7 @@ definition prodToProdTop
 
 中文:
 定义 prodToProdTop
-  签名: : πₓ A × πₓ B ⥤ πₓ (TopCat.of (A × B)) where
+  签名: : πₓ A × πₓ B ⥤ πₓ (顶元素范畴.of (A × B)) where
   定义体: ⟨g.fst.as, g.snd.as⟩
   map {x y} p :=
     match x, y, p with
@@ -462,7 +462,7 @@ definition prodIso
 
 中文:
 定义 prodIso
-  签名: : CategoryTheory.Grpd.of (πₓ A × πₓ B) ≅ πₓ (TopCat.of (A × B)) where
+  签名: : 范畴论.Grpd.of (πₓ A × πₓ B) ≅ πₓ (顶元素范畴.of (A × B)) where
   定义体: prodToProdTop A B
   inv := (projLeft A B).prod' (projRight A B)
   hom_inv_id := by

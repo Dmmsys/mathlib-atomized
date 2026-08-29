@@ -76,14 +76,14 @@ class PreGaloisCategory
     - monoInducesIsoOnDirectSummand({X Y : C} (i : X ⟶ Y) [Mono i]) : exists (Z : C) (u : Z ⟶ Y), Nonempty (IsColimit (BinaryCofan.mk i u))
 
 中文:
-类 PreGaloisCategory
-  参数: (C : 类型u₁) [Category.{u₂, u₁} C]
+类 PreGalois范畴
+  参数: (C : 类型u₁) [范畴.{u₂, u₁} C]
   公理与运算 (5 个):
-    - hasTerminal : HasTerminal C  [默认: by infer_instance]
-    - hasPullbacks : HasPullbacks C  [默认: by infer_instance]
-    - hasFiniteCoproducts : HasFiniteCoproducts C  [默认: by infer_instance]
-    - hasQuotientsByFiniteGroups((G : 类型u₂) [Group G] [Finite G]) : HasColimitsOfShape (SingleObj G) C  [默认: by infer_instance]
-    - monoInducesIsoOnDirectSummand({X Y : C} (i : X ⟶ Y) [Mono i]) : 存在 (Z : C) (u : Z ⟶ Y), Nonempty (IsColimit (BinaryCofan.mk i u))
+    - hasTerminal : 有终止 C  [默认: by infer_instance]
+    - hasPullbacks : 有Pullbacks C  [默认: by infer_instance]
+    - hasFiniteCoproducts : 有FiniteCoproducts C  [默认: by infer_instance]
+    - hasQuotientsByFiniteGroups((G : 类型u₂) [群 G] [有限 G]) : 有形状余极限 (SingleObj G) C  [默认: by infer_instance]
+    - monoInducesIsoOnDirectSummand({X Y : C} (i : X ⟶ Y) [单态射 i]) : 存在 (Z : C) (u : Z ⟶ Y), 非空 (是余极限 (BinaryCofan.mk i u))
 
 Depends on / 依赖: infer_instance
 -/
@@ -118,15 +118,15 @@ class FiberFunctor
     - reflectsIsos : F.ReflectsIsomorphisms  [default: by infer_instance]
 
 中文:
-类 FiberFunctor
-  参数: {C : 类型u₁} [Category.{u₂, u₁} C] [PreGaloisCategory C]
+类 Fiber函子
+  参数: {C : 类型u₁} [范畴.{u₂, u₁} C] [PreGalois范畴 C]
   公理与运算 (6 个):
-    - preservesTerminalObjects : PreservesLimitsOfShape (CategoryTheory.Discrete PEmpty.{1}) F  [默认: by infer_instance]
-    - preservesPullbacks : PreservesLimitsOfShape WalkingCospan F  [默认: by infer_instance]
-    - preservesFiniteCoproducts : PreservesFiniteCoproducts F  [默认: by infer_instance]
-    - preservesEpis : Functor.PreservesEpimorphisms F  [默认: by infer_instance]
-    - preservesQuotientsByFiniteGroups((G : 类型u₂) [Group G] [Finite G]) : PreservesColimitsOfShape (SingleObj G) F  [默认: by infer_instance]
-    - reflectsIsos : F.ReflectsIsomorphisms  [默认: by infer_instance]
+    - preservesTerminalObjects : 保持形状极限 (范畴论.离散 命题空.{1}) F  [默认: by infer_instance]
+    - preservesPullbacks : 保持形状极限 WalkingCospan F  [默认: by infer_instance]
+    - preservesFiniteCoproducts : 保持FiniteCoproducts F  [默认: by infer_instance]
+    - preservesEpis : 函子.保持Epimorphisms F  [默认: by infer_instance]
+    - preservesQuotientsByFiniteGroups((G : 类型u₂) [群 G] [有限 G]) : 保持形状余极限 (SingleObj G) F  [默认: by infer_instance]
+    - reflectsIsos : F.反映同构  [默认: by infer_instance]
 
 Depends on / 依赖: infer_instance
 -/
@@ -158,11 +158,11 @@ class IsConnected
     - noTrivialComponent((Y : C) (i : Y ⟶ X) [Mono i]) : (IsInitial Y -> False) -> IsIso i
 
 中文:
-类 IsConnected
-  参数: {C : 类型u₁} [Category.{u₂, u₁} C] (X : C)
+类 是连通
+  参数: {C : 类型u₁} [范畴.{u₂, u₁} C] (X : C)
   公理与运算 (2 个):
-    - notInitial : IsInitial X -> False
-    - noTrivialComponent((Y : C) (i : Y ⟶ X) [Mono i]) : (IsInitial Y -> False) -> IsIso i
+    - notInitial : IsInitial X -> 假
+    - noTrivialComponent((Y : C) (i : Y ⟶ X) [单态射 i]) : (IsInitial Y -> 假) -> 是同构 i
 -/
 class IsConnected {C : Type u₁} [Category.{u₂, u₁} C] (X : C) : Prop where
   /-- `X` is not an initial object. -/
@@ -180,10 +180,10 @@ class PreservesIsConnected
     - preserves : forall {X : C} [IsConnected X], IsConnected (F.obj X)
 
 中文:
-类 PreservesIsConnected
-  参数: {C : 类型u₁} [Category.{u₂, u₁} C] {D : 类型v₁}
+类 保持是连通
+  参数: {C : 类型u₁} [范畴.{u₂, u₁} C] {D : 类型v₁}
   公理与运算 (1 个):
-    - preserves : 对任意 {X : C} [IsConnected X], IsConnected (F.obj X)
+    - preserves : 对任意 {X : C} [是连通 X], 是连通 (F.obj X)
 -/
 class PreservesIsConnected {C : Type u₁} [Category.{u₂, u₁} C] {D : Type v₁}
     [Category.{v₂, v₁} D] (F : C ⥤ D) : Prop where
@@ -205,7 +205,7 @@ instance :
 
 中文:
 实例 :
-  签名: HasFiniteLimits C
+  签名: 有有限极限 C
   定义体: hasFiniteLimits_of_hasTerminal_and_pullbacks
 
 Depends on / 依赖: hasFiniteLimits_of_hasTerminal_and_pullbacks
@@ -271,7 +271,7 @@ instance :
 
 中文:
 实例 :
-  签名: ReflectsLimitsOfShape (Discrete PEmpty.{1}) F
+  签名: 反映形状极限 (离散 命题空.{1}) F
   定义体: reflectsLimitsOfShape_of_reflectsIsomorphisms
 
 Depends on / 依赖: reflectsLimitsOfShape_of_reflectsIsomorphisms
@@ -289,7 +289,7 @@ instance :
 
 中文:
 实例 :
-  签名: ReflectsColimitsOfShape (Discrete PEmpty.{1}) F
+  签名: 反映形状余极限 (离散 命题空.{1}) F
   定义体: reflectsColimitsOfShape_of_reflectsIsomorphisms
 
 Depends on / 依赖: reflectsColimitsOfShape_of_reflectsIsomorphisms
@@ -307,7 +307,7 @@ instance :
 
 中文:
 实例 :
-  签名: PreservesFiniteLimits F
+  签名: 保持FiniteLimits F
   定义体: preservesFiniteLimits_of_preservesTerminal_and_pullbacks F
 
 Depends on / 依赖: preservesFiniteLimits_of_preservesTerminal_and_pullbacks
@@ -338,7 +338,7 @@ instance :
 
 中文:
 实例 :
-  签名: ReflectsMonomorphisms F
+  签名: 反映单态射 F
   定义体: ReflectsMonomorphisms.mk by
   intro X Y f _
   have : IsIso (pullback.fst (F.map f) (F.map f)) :=
@@ -376,7 +376,7 @@ instance :
 
 中文:
 实例 :
-  签名: F.Faithful
+  签名: F.忠实
   定义体: by
     have : IsIso (equalizer.ι (F.map f) (F.map g)) := equalizer.ι_of_eq h
     have : IsIso (F.map (equalizer.ι f g)) := by
@@ -408,7 +408,7 @@ instance comp_right
 
 中文:
 实例 comp_right
-  签名: (E : FintypeCat.{w} ⥤ FintypeCat.{t}) [E.IsEquivalence]
+  签名: (E : FintypeCat.{w} ⥤ FintypeCat.{t}) [E.是等价]
   定义体: comp_preservesColimitsOfShape F E
 
 Depends on / 依赖: comp_preservesColimitsOfShape
@@ -478,7 +478,7 @@ lemma has_non_trivial_subobject_of_not_isConnected_of_not_initial
 
 中文:
 引理 has_non_trivial_subobject_of_not_isConnected_of_not_initial
-  结论: (X : C) (hc : ¬ IsConnected X)
+  结论: (X : C) (hc : ¬ 是连通 X)
   证明: by
   contrapose! hc
   exact ⟨hi, fun Y i hm hni => hc Y i hni hm⟩
@@ -532,7 +532,7 @@ lemma initial_iff_fiber_empty
 中文:
 引理 initial_iff_fiber_empty
   条件: (X : C)
-  结论: Nonempty (IsInitial X) ↔ IsEmpty (F.obj X)
+  结论: 非空 (IsInitial X) ↔ 是空 (F.obj X)
   证明: by
   rw [(IsInitial.isInitialIffObj F X).nonempty_congr]
   exact Concrete.initial_iff_empty_of_preserves_of_reflects (F.obj X)
@@ -558,7 +558,7 @@ refine ⟨fun h he => ?_, fun h hin => h (initial_iff_fiber_empty F X).mp ⟨hin
 中文:
 引理 not_initial_iff_fiber_nonempty
   条件: (X : C)
-  结论: (IsInitial X -> False) ↔ Nonempty (F.obj X)
+  结论: (IsInitial X -> 假) ↔ 非空 (F.obj X)
   证明: by
   rw [← not_isEmpty_iff]
 refine ⟨fun h he => ?_, fun h hin => h (initial_iff_fiber_empty F X).mp ⟨hin⟩⟩
@@ -583,7 +583,7 @@ lemma not_initial_of_inhabited
 中文:
 引理 not_initial_of_inhabited
   条件: {X : C} (x : F.obj X) (h : IsInitial X)
-  结论: False
+  结论: 假
   证明: ((initial_iff_fiber_empty F X).mp ⟨h⟩).false x
 
 Depends on / 依赖: initial_iff_fiber_empty
@@ -604,7 +604,7 @@ instance nonempty_fiber_of_isConnected
 
 中文:
 实例 nonempty_fiber_of_isConnected
-  签名: (X : C) [IsConnected X]
+  签名: (X : C) [是连通 X]
   定义体: by
   by_contra h
   have ⟨hin⟩ : Nonempty (IsInitial X) := (initial_iff_fiber_empty F X).mpr (not_nonempty_iff.mp h)
@@ -882,7 +882,7 @@ lemma evaluation_injective_of_isConnected
 
 中文:
 引理 evaluation_injective_of_isConnected
-  条件: (A X : C) [IsConnected A] (a : F.obj A)
+  条件: (A X : C) [是连通 A] (a : F.obj A)
   证明: by
   intro f g (h : F.map f a = F.map g a)
   have : IsIso (equalizer.ι f g) := by
@@ -914,7 +914,7 @@ lemma evaluation_aut_injective_of_isConnected
 
 中文:
 引理 evaluation_aut_injective_of_isConnected
-  条件: (A : C) [IsConnected A] (a : F.obj A)
+  条件: (A : C) [是连通 A] (a : F.obj A)
   证明: by
   change Function.Injective ((fun f : A ⟶ A => F.map f a) ∘ (fun f : Aut A => f.hom))
   apply Function.Injective.comp
@@ -942,7 +942,7 @@ lemma epi_of_nonempty_of_isConnected
 
 中文:
 引理 epi_of_nonempty_of_isConnected
-  结论: {X A : C} [IsConnected A] [h : Nonempty (F.obj X)]
+  结论: {X A : C} [是连通 A] [h : 非空 (F.obj X)]
   证明: Epi.mk fun {Z} u v huv => by
   apply evaluation_injective_of_isConnected F A Z (F.map f (Classical.arbitrary _))
   simpa using ConcreteCategory.congr_hom (F.congr_map huv) _
@@ -965,8 +965,8 @@ lemma surjective_on_fiber_of_epi
 
 中文:
 引理 surjective_on_fiber_of_epi
-  条件: {X Y : C} (f : X ⟶ Y) [Epi f]
-  结论: Function.Surjective (F.map f)
+  条件: {X Y : C} (f : X ⟶ Y) [满态射 f]
+  结论: 函数.满射 (F.map f)
   证明: surjective_of_epi (FintypeCat.incl.map (F.map f))
 
 Depends on / 依赖: F.map, FintypeCat, FintypeCat.incl.map, surjective_of_epi
@@ -986,7 +986,7 @@ lemma surjective_of_nonempty_fiber_of_isConnected
 
 中文:
 引理 surjective_of_nonempty_fiber_of_isConnected
-  结论: {X A : C} [Nonempty (F.obj X)]
+  结论: {X A : C} [非空 (F.obj X)]
   证明: by
   have : Epi f := epi_of_nonempty_of_isConnected F f
   exact surjective_on_fiber_of_epi F f
@@ -1013,7 +1013,7 @@ instance nonempty_fiber_pi_of_nonempty_of_finite
 
 中文:
 实例 nonempty_fiber_pi_of_nonempty_of_finite
-  签名: {ι : 类型} [Finite ι] (X : ι -> C)
+  签名: {ι : 类型} [有限 ι] (X : ι -> C)
   定义体: by
   cases nonempty_fintype ι
   let f (i : ι) : FintypeCat.{w} := F.obj (X i)
@@ -1050,7 +1050,7 @@ lemma isIso_of_mono_of_eq_card_fiber
 
 中文:
 引理 isIso_of_mono_of_eq_card_fiber
-  结论: {X Y : C} (f : X ⟶ Y) [Mono f]
+  结论: {X Y : C} (f : X ⟶ Y) [单态射 f]
   证明: by
   have : IsIso (F.map f) := by
     apply (ConcreteCategory.isIso_iff_bijective (F.map f)).mpr
@@ -1086,7 +1086,7 @@ lemma lt_card_fiber_of_mono_of_notIso
 
 中文:
 引理 lt_card_fiber_of_mono_of_notIso
-  结论: {X Y : C} (f : X ⟶ Y) [Mono f]
+  结论: {X Y : C} (f : X ⟶ Y) [单态射 f]
   证明: by
   by_contra hlt
   apply h
@@ -1120,7 +1120,7 @@ lemma non_zero_card_fiber_of_not_initial
 
 中文:
 引理 non_zero_card_fiber_of_not_initial
-  条件: (X : C) (h : IsInitial X -> False)
+  条件: (X : C) (h : IsInitial X -> 假)
   证明: by
   intro hzero
   refine Nonempty.elim ?_ h
@@ -1181,7 +1181,7 @@ lemma card_hom_le_card_fiber_of_connected
 
 中文:
 引理 card_hom_le_card_fiber_of_connected
-  条件: (A X : C) [IsConnected A]
+  条件: (A X : C) [是连通 A]
   证明: by
   apply Nat.card_le_card_of_injective
   exact evaluation_injective_of_isConnected F A X (Classical.arbitrary _)
@@ -1207,7 +1207,7 @@ lemma card_aut_le_card_fiber_of_connected
 
 中文:
 引理 card_aut_le_card_fiber_of_connected
-  条件: (A : C) [IsConnected A]
+  条件: (A : C) [是连通 A]
   证明: by
   have h : Nonempty (F.obj A) := inferInstance
   obtain ⟨a⟩ := h
@@ -1238,11 +1238,11 @@ class GaloisCategory
     - hasFiberFunctor : exists F : C ⥤ FintypeCat.{u₂}, Nonempty (PreGaloisCategory.FiberFunctor F)
 
 中文:
-类 GaloisCategory
-  参数: (C : 类型u₁) [Category.{u₂, u₁} C]
-  继承: PreGaloisCategory C
+类 Galois范畴
+  参数: (C : 类型u₁) [范畴.{u₂, u₁} C]
+  继承: PreGalois范畴 C
   公理与运算 (1 个):
-    - hasFiberFunctor : 存在 F : C ⥤ FintypeCat.{u₂}, Nonempty (PreGaloisCategory.FiberFunctor F)
+    - hasFiberFunctor : 存在 F : C ⥤ FintypeCat.{u₂}, 非空 (PreGalois范畴.Fiber函子 F)
 -/
 class GaloisCategory (C : Type u₁) [Category.{u₂, u₁} C] : Prop
     extends PreGaloisCategory C where
@@ -1261,7 +1261,7 @@ definition GaloisCategory.getFiberFunctor
   body: Classical.choose @GaloisCategory.hasFiberFunctor C _ _
 
 中文:
-定义 GaloisCategory.getFiberFunctor
+定义 Galois范畴.getFiberFunctor
   签名: : C ⥤ FintypeCat.{u₂}
   定义体: Classical.choose @GaloisCategory.hasFiberFunctor C _ _
 
@@ -1280,7 +1280,7 @@ instance :
 
 中文:
 实例 :
-  签名: FiberFunctor (GaloisCategory.getFiberFunctor C)
+  签名: Fiber函子 (Galois范畴.getFiberFunctor C)
   定义体: Classical.choice Classical.choose_spec (@GaloisCategory.hasFiberFunctor C _ _)
 
 Depends on / 依赖: Classical, Classical.choice, Classical.choose_spec, GaloisCategory, GaloisCategory.hasFiberFunctor, choice, choose_spec, hasFiberFunctor

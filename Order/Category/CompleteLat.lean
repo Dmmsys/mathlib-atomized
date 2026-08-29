@@ -33,12 +33,12 @@ structure CompleteLat
     - [str : CompleteLattice carrier]
 
 中文:
-结构 CompleteLat
+结构 余mpleteLat
   参数: where
   公理与运算 (3 个):
     - of : :
     - (carrier : 类型)
-    - [str : CompleteLattice carrier]
+    - [str : 完备格 carrier]
 -/
 structure CompleteLat where
   /-- Construct a bundled `CompleteLat` from the underlying type and typeclass. -/
@@ -63,7 +63,7 @@ instance :
 
 中文:
 实例 :
-  签名: CoeSort CompleteLat (Type _)
+  签名: CoeSort 余mpleteLat (类型 _)
   定义体: ⟨CompleteLat.carrier⟩
 
 Depends on / 依赖: CompleteLat, CompleteLat.carrier, carrier
@@ -84,7 +84,7 @@ theorem coe_of
 
 中文:
 定理 coe_of
-  条件: (α : 类型) [CompleteLattice α]
+  条件: (α : 类型) [完备格 α]
   结论: ↥(of α) = α
   证明: rfl
 -/
@@ -101,7 +101,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited CompleteLat
+  签名: 可居 余mpleteLat
   定义体: ⟨of PUnit⟩
 -/
 instance : Inhabited CompleteLat :=
@@ -119,7 +119,7 @@ instance :
 
 中文:
 实例 :
-  签名: LargeCategory.{u} CompleteLat
+  签名: 大范畴.{u} 余mpleteLat
   定义体: CompleteLatticeHom X Y
   id X := CompleteLatticeHom.id X
   comp f g := g.comp f
@@ -142,7 +142,7 @@ instance :
 
 中文:
 实例 :
-  签名: ConcreteCategory CompleteLat (CompleteLatticeHom · ·)
+  签名: 余ncrete范畴 余mpleteLat (完备格态射 · ·)
   定义体: f
   ofHom f := f
 -/
@@ -161,7 +161,7 @@ instance hasForgetToBddLat
 
 中文:
 实例 hasForgetToBddLat
-  签名: : HasForget₂ CompleteLat BddLat where
+  签名: : 有Forget₂ 余mpleteLat 有界格 where
   定义体: .of X
   forget₂.map f := BddLat.ofHom (CompleteLatticeHom.toBoundedLatticeHom f)
 -/
@@ -183,8 +183,8 @@ definition Iso.mk
   inv_hom_id := by ext; exact e.apply_symm_apply _
 
 中文:
-定义 Iso.mk
-  签名: {α β : CompleteLat.{u}} (e : α ≃o β)
+定义 同构.mk
+  签名: {α β : 余mpleteLat.{u}} (e : α ≃o β)
   定义体: ConcreteCategory.ofHom e
   inv := ConcreteCategory.ofHom e.symm
   hom_inv_id := by ext; exact e.symm_apply_apply _
@@ -209,7 +209,7 @@ definition dual
 
 中文:
 定义 dual
-  签名: : CompleteLat ⥤ CompleteLat where
+  签名: : 余mpleteLat ⥤ 余mpleteLat where
   定义体: of Xᵒᵈ
   map {_ _} := CompleteLatticeHom.dual
 -/
@@ -232,7 +232,7 @@ counitIso := NatIso.ofComponents fun X => Iso.mk OrderIso.dualDual X
 
 中文:
 定义 dualEquiv
-  签名: : CompleteLat ≌ CompleteLat where
+  签名: : 余mpleteLat ≌ 余mpleteLat where
   定义体: dual
   inverse := dual
 unitIso := NatIso.ofComponents fun X => Iso.mk OrderIso.dualDual X

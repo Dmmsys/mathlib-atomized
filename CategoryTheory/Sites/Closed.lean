@@ -72,7 +72,7 @@ definition close
 
 中文:
 定义 close
-  签名: {X : C} (S : Sieve X)
+  签名: {X : C} (S : 筛 X)
   定义体: J₁.Covers S f
   downward_closed hS := J₁.arrow_stable _ _ hS
 
@@ -93,7 +93,7 @@ theorem le_close
 
 中文:
 定理 le_close
-  条件: {X : C} (S : Sieve X)
+  条件: {X : C} (S : 筛 X)
   结论: S <= J₁.close S
   证明: fun _ _ hg => J₁.covering_of_eq_top (S.pullback_eq_top_of_mem hg)
 
@@ -111,8 +111,8 @@ definition IsClosed
   body: forall ⦃Y : C⦄ (f : Y ⟶ X), J₁.Covers S f -> S f
 
 中文:
-定义 IsClosed
-  签名: {X : C} (S : Sieve X)
+定义 是闭集
+  签名: {X : C} (S : 筛 X)
   定义体: forall ⦃Y : C⦄ (f : Y ⟶ X), J₁.Covers S f -> S f
 
 Depends on / 依赖: Covers
@@ -130,7 +130,7 @@ theorem covers_iff_mem_of_isClosed
 
 中文:
 定理 covers_iff_mem_of_isClosed
-  条件: {X : C} {S : Sieve X} (h : J₁.IsClosed S) {Y : C} (f : Y ⟶ X)
+  条件: {X : C} {S : 筛 X} (h : J₁.是闭集 S) {Y : C} (f : Y ⟶ X)
   证明: ⟨h _, J₁.arrow_max _ _⟩
 
 Depends on / 依赖: arrow_max
@@ -149,7 +149,7 @@ theorem isClosed_pullback
 
 中文:
 定理 isClosed_pullback
-  条件: {X Y : C} (f : Y ⟶ X) (S : Sieve X)
+  条件: {X Y : C} (f : Y ⟶ X) (S : 筛 X)
   证明: fun hS Z g hg => hS (g ≫ f) (by rwa [J₁.covers_iff, Sieve.pullback_comp])
 
 Depends on / 依赖: Sieve.pullback_comp, covers_iff, pullback_comp
@@ -168,7 +168,7 @@ theorem le_close_of_isClosed
 
 中文:
 定理 le_close_of_isClosed
-  条件: {X : C} {S T : Sieve X} (h : S <= T) (hT : J₁.IsClosed T)
+  条件: {X : C} {S T : 筛 X} (h : S <= T) (hT : J₁.是闭集 T)
   证明: fun _ f hf => hT _ (J₁.superset_covering (Sieve.pullback_monotone f h) hf)
 
 Depends on / 依赖: Sieve.pullback_monotone, pullback_monotone, superset_covering
@@ -188,8 +188,8 @@ theorem close_isClosed
 
 中文:
 定理 close_isClosed
-  条件: {X : C} (S : Sieve X)
-  结论: J₁.IsClosed (J₁.close S)
+  条件: {X : C} (S : 筛 X)
+  结论: J₁.是闭集 (J₁.close S)
   证明: fun _ g hg => J₁.arrow_trans g _ S hg fun _ hS => hS
 
 Depends on / 依赖: arrow_trans
@@ -228,8 +228,8 @@ theorem isClosed_iff_close_eq_self
 
 中文:
 定理 isClosed_iff_close_eq_self
-  条件: {X : C} (S : Sieve X)
-  结论: J₁.IsClosed S ↔ J₁.close S = S
+  条件: {X : C} (S : 筛 X)
+  结论: J₁.是闭集 S ↔ J₁.close S = S
   证明: (J₁.closureOperator _).isClosed_iff
 
 Depends on / 依赖: closureOperator, isClosed_iff
@@ -248,7 +248,7 @@ theorem close_eq_self_of_isClosed
 
 中文:
 定理 close_eq_self_of_isClosed
-  条件: {X : C} {S : Sieve X} (hS : J₁.IsClosed S)
+  条件: {X : C} {S : 筛 X} (hS : J₁.是闭集 S)
   结论: J₁.close S = S
   证明: (J₁.isClosed_iff_close_eq_self S).1 hS
 
@@ -276,7 +276,7 @@ theorem pullback_close
 
 中文:
 定理 pullback_close
-  条件: {X Y : C} (f : Y ⟶ X) (S : Sieve X)
+  条件: {X Y : C} (f : Y ⟶ X) (S : 筛 X)
   证明: by
   apply le_antisymm
   · refine J₁.le_close_of_isClosed (Sieve.pullback_monotone _ (J₁.le_close S)) ?_
@@ -315,7 +315,7 @@ theorem monotone_close
 中文:
 定理 monotone_close
   条件: {X : C}
-  结论: Monotone (J₁.close : Sieve X -> Sieve X)
+  结论: 递增 (J₁.close : 筛 X -> 筛 X)
   证明: (J₁.closureOperator _).monotone
 
 @[simp]
@@ -337,7 +337,7 @@ theorem close_close
 
 中文:
 定理 close_close
-  条件: {X : C} (S : Sieve X)
+  条件: {X : C} (S : 筛 X)
   结论: J₁.close (J₁.close S) = J₁.close S
   证明: (J₁.closureOperator _).idempotent _
 
@@ -367,7 +367,7 @@ theorem close_eq_top_iff_mem
 
 中文:
 定理 close_eq_top_iff_mem
-  条件: {X : C} (S : Sieve X)
+  条件: {X : C} (S : 筛 X)
   结论: J₁.close S = ⊤ ↔ S in J₁ X
   证明: by
   constructor
@@ -411,8 +411,8 @@ definition Functor.sieves
   map f := ↾fun S => S.pullback f.unop
 
 中文:
-定义 Functor.sieves
-  签名: : Cᵒᵖ ⥤ Type max v u where
+定义 函子.sieves
+  签名: : Cᵒᵖ ⥤ 类型 最大值 v u where
   定义体: Sieve X.unop
   map f := ↾fun S => S.pullback f.unop
 
@@ -437,8 +437,8 @@ definition Functor.closedSieves
   map f _ := J₁.isClosed_pullback f.unop _
 
 中文:
-定义 Functor.closedSieves
-  签名: : Subfunctor (Functor.sieves C) where
+定义 函子.closedSieves
+  签名: : 子函子 (函子.sieves C) where
   定义体: {S : Sieve X.unop | J₁.IsClosed S}
   map f _ := J₁.isClosed_pullback f.unop _
 
@@ -469,7 +469,7 @@ theorem classifier_isSheaf
 
 中文:
 定理 classifier_isSheaf
-  结论: Presieve.IsSheaf J₁ (Functor.closedSieves J₁).toFunctor
+  结论: Presieve.是层 J₁ (函子.closedSieves J₁).toFunctor
   证明: by
   intro X S hS
   rw [← Presieve.isSeparatedFor_and_exists_isAmalgamation_iff_isSheafFor]
@@ -547,7 +547,7 @@ lemma GrothendieckTopology.mem_iff_isSheafFor_closedSieves
   refine H.isSepa
 
 中文:
-引理 GrothendieckTopology.mem_iff_isSheafFor_closedSieves
+引理 Grothendieck拓扑.mem_iff_isSheafFor_closedSieves
   证明: by
   refine ⟨fun hS => classifier_isSheaf _ _ hS, fun H => ?_⟩
   rw [← J.close_eq_top_iff_mem]
@@ -592,7 +592,7 @@ theorem le_topology_of_closedSieves_isSheaf
 
 中文:
 定理 le_topology_of_closedSieves_isSheaf
-  结论: {J₁ J₂ : GrothendieckTopology C}
+  结论: {J₁ J₂ : Grothendieck拓扑 C}
   证明: by
   intro X S hS
   rw [GrothendieckTopology.mem_iff_isSheafFor_closedSieves]
@@ -628,7 +628,7 @@ theorem topology_eq_iff_same_sheaves
 
 中文:
 定理 topology_eq_iff_same_sheaves
-  条件: {J₁ J₂ : GrothendieckTopology C}
+  条件: {J₁ J₂ : Grothendieck拓扑 C}
   证明: by
   constructor
   · rintro rfl
@@ -683,7 +683,7 @@ definition topologyOfClosureOperator
 
 中文:
 定义 topologyOfClosureOperator
-  签名: (c : 对任意 X : C, ClosureOperator (Sieve X))
+  签名: (c : 对任意 X : C, 闭包算子 (筛 X))
   定义体: { S | c X S = ⊤ }
   top_mem' X := top_unique ((c X).le_closure _)
   pullback_stable' X Y S f hS := by
@@ -744,7 +744,7 @@ theorem topologyOfClosureOperator_close
 
 中文:
 定理 topologyOfClosureOperator_close
-  结论: (c : 对任意 X : C, ClosureOperator (Sieve X))
+  结论: (c : 对任意 X : C, 闭包算子 (筛 X))
   证明: by
   ext Y f
   change c _ (Sieve.pullback f S) = ⊤ ↔ c _ S f

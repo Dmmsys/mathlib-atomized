@@ -45,7 +45,7 @@ instance :
 
 中文:
 实例 :
-  签名: Monoid (r ->r r)
+  签名: 幺半群 (r ->r r)
   定义体: .id r
   mul := .comp
   mul_assoc _ _ _ := rfl
@@ -172,7 +172,7 @@ instance :
 
 中文:
 实例 :
-  签名: Monoid (r ↪r r)
+  签名: 幺半群 (r ↪r r)
   定义体: .refl r
   mul f g := g.trans f
   mul_assoc _ _ _ := rfl
@@ -301,7 +301,7 @@ instance :
 
 中文:
 实例 :
-  签名: Group (r ≃r r)
+  签名: 群 (r ≃r r)
   定义体: .refl r
   mul f₁ f₂ := f₂.trans f₁
   inv := .symm
@@ -480,7 +480,7 @@ instance :
 
 中文:
 实例 :
-  签名: Mul (α ->o α)
+  签名: 乘法 (α ->o α)
   定义体: f.comp g
 
 Depends on / 依赖: f.comp
@@ -496,7 +496,7 @@ instance :
 
 中文:
 实例 :
-  签名: One (α ->o α)
+  签名: 幺 (α ->o α)
   定义体: .id
 -/
 instance : One (α ->o α) where one := .id
@@ -510,7 +510,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsMulApplyEqComp (α ->o α) α
+  签名: 是MulApplyEqComp (α ->o α) α
   定义体: rfl
 -/
 instance : IsMulApplyEqComp (α ->o α) α where mul_apply_eq_comp _ _ _ := rfl
@@ -524,7 +524,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsOneApplyEqSelf (α ->o α) α
+  签名: 是OneApplyEqSelf (α ->o α) α
   定义体: rfl
 -/
 instance : IsOneApplyEqSelf (α ->o α) α where one_apply_eq_self _ := rfl
@@ -572,7 +572,7 @@ instance :
 
 中文:
 实例 :
-  签名: Monoid (α ->o α)
+  签名: 幺半群 (α ->o α)
   定义体: by simp [DFunLike.ext_iff]
   one_mul f := by simp [DFunLike.ext_iff]
   mul_one f := by simp [DFunLike.ext_iff]

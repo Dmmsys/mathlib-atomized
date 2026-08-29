@@ -103,7 +103,7 @@ definition equivNatTrans
   invFun := mk T L R B
 
 中文:
-定义 equivNatTrans
+定义 equiv自然数Trans
   签名: : TwoSquare T L R B ≃ (T ⋙ R ⟶ L ⋙ B) where
   定义体: natTrans
   invFun := mk T L R B

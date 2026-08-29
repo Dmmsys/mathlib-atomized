@@ -38,7 +38,7 @@ theorem isUnit_of_isIntegral_of_nonZeroDivisor
  
 
 中文:
-定理 isUnit_of_isIntegral_of_nonZeroDivisor
+定理 isUnit_of_is整数egral_of_nonZeroDivisor
   结论: {a : A}
   证明: let B := Algebra.adjoin R {a}
   let b : B := ⟨a, Algebra.self_mem_adjoin_singleton R a⟩
@@ -68,7 +68,7 @@ theorem isUnit_iff_nonZeroDivisor_of_isIntegral
   proof: ⟨IsUnit.mem_nonZeroDivisors, isUnit_of_isIntegral_of_nonZeroDivisor hi⟩
 
 中文:
-定理 isUnit_iff_nonZeroDivisor_of_isIntegral
+定理 isUnit_iff_nonZeroDivisor_of_is整数egral
   结论: {a : A}
   证明: ⟨IsUnit.mem_nonZeroDivisors, isUnit_of_isIntegral_of_nonZeroDivisor hi⟩
 
@@ -87,8 +87,8 @@ theorem isUnit_of_nonZeroDivisor_of_isIntegral'
   proof: isUnit_of_isIntegral_of_nonZeroDivisor (R := R) (Algebra.IsIntegral.isIntegral a) ha
 
 中文:
-定理 isUnit_of_nonZeroDivisor_of_isIntegral'
-  结论: [Algebra.Is整数egral R A] {a : A}
+定理 isUnit_of_nonZeroDivisor_of_is整数egral'
+  结论: [代数.是整 R A] {a : A}
   证明: isUnit_of_isIntegral_of_nonZeroDivisor (R := R) (Algebra.IsIntegral.isIntegral a) ha
 
 Depends on / 依赖: Algebra, Algebra.IsIntegral.isIntegral, IsIntegral, isIntegral, isUnit_of_isIntegral_of_nonZeroDivisor
@@ -106,8 +106,8 @@ theorem isUnit_iff_nonZeroDivisor_of_isIntegral'
   proof: isUnit_iff_nonZeroDivisor_of_isIntegral (R := R) (Algebra.IsIntegral.isIntegral a)
 
 中文:
-定理 isUnit_iff_nonZeroDivisor_of_isIntegral'
-  条件: [Algebra.Is整数egral R A] {a : A}
+定理 isUnit_iff_nonZeroDivisor_of_is整数egral'
+  条件: [代数.是整 R A] {a : A}
   证明: isUnit_iff_nonZeroDivisor_of_isIntegral (R := R) (Algebra.IsIntegral.isIntegral a)
 
 Depends on / 依赖: Algebra, Algebra.IsIntegral.isIntegral, IsIntegral, isIntegral, isUnit_iff_nonZeroDivisor_of_isIntegral
@@ -127,9 +127,9 @@ theorem isUnit_submonoid_eq_of_isIntegral
   ext; simpa [IsUnit.mem_submonoid_iff] using isUnit_iff_nonZeroDivisor_of_isIntegral' (R := R)
 
 中文:
-定理 isUnit_submonoid_eq_of_isIntegral
-  条件: [Algebra.Is整数egral R A]
-  结论: IsUnit.submonoid A = A⁰
+定理 isUnit_submonoid_eq_of_is整数egral
+  条件: [代数.是整 R A]
+  结论: 是单位.submonoid A = A⁰
   证明: by
   ext; simpa [IsUnit.mem_submonoid_iff] using isUnit_iff_nonZeroDivisor_of_isIntegral' (R := R)
 

@@ -31,7 +31,7 @@ definition ringEquiv
 
 中文:
 定义 ringEquiv
-  签名: [Add α] [Mul α]
+  签名: [加法 α] [乘法 α]
   定义体: (equivShrink α).symm.ringEquiv
 
 Depends on / 依赖: equivShrink, ringEquiv, symm.ringEquiv
@@ -47,8 +47,8 @@ instance [NonUnitalNonAssocSemiring
   body: (equivShrink α).symm.nonUnitalNonAssocSemiring
 
 中文:
-实例 [NonUnitalNonAssocSemiring
-  签名: α] : NonUnitalNonAssocSemiring (Shrink.{v} α)
+实例 [非幺非结合半环
+  签名: α] : 非幺非结合半环 (Shrink.{v} α)
   定义体: (equivShrink α).symm.nonUnitalNonAssocSemiring
 -/
 instance [NonUnitalNonAssocSemiring α] : NonUnitalNonAssocSemiring (Shrink.{v} α) :=
@@ -63,8 +63,8 @@ instance [NonUnitalSemiring
   body: (equivShrink α).symm.nonUnitalSemiring
 
 中文:
-实例 [NonUnitalSemiring
-  签名: α] : NonUnitalSemiring (Shrink.{v} α)
+实例 [非幺半环
+  签名: α] : 非幺半环 (Shrink.{v} α)
   定义体: (equivShrink α).symm.nonUnitalSemiring
 
 Depends on / 依赖: equivShrink, nonUnitalSemiring, symm.nonUnitalSemiring
@@ -81,8 +81,8 @@ instance [AddMonoidWithOne
   body: (equivShrink α).symm.addMonoidWithOne
 
 中文:
-实例 [AddMonoidWithOne
-  签名: α] : AddMonoidWithOne (Shrink.{v} α)
+实例 [加法带幺幺半群
+  签名: α] : 加法带幺幺半群 (Shrink.{v} α)
   定义体: (equivShrink α).symm.addMonoidWithOne
 
 Depends on / 依赖: addMonoidWithOne, equivShrink, symm.addMonoidWithOne
@@ -99,8 +99,8 @@ instance [AddGroupWithOne
   body: (equivShrink α).symm.addGroupWithOne
 
 中文:
-实例 [AddGroupWithOne
-  签名: α] : AddGroupWithOne (Shrink.{v} α)
+实例 [加法带幺群
+  签名: α] : 加法带幺群 (Shrink.{v} α)
   定义体: (equivShrink α).symm.addGroupWithOne
 
 Depends on / 依赖: Scheme, Scheme.homOfLE, addGroupWithOne, equivShrink, homOfLE, infer_instance, symm.addGroupWithOne
@@ -117,8 +117,8 @@ instance [NonAssocSemiring
   body: (equivShrink α).symm.nonAssocSemiring
 
 中文:
-实例 [NonAssocSemiring
-  签名: α] : NonAssocSemiring (Shrink.{v} α)
+实例 [非结合半环
+  签名: α] : 非结合半环 (Shrink.{v} α)
   定义体: (equivShrink α).symm.nonAssocSemiring
 
 Depends on / 依赖: equivShrink, nonAssocSemiring, symm.nonAssocSemiring
@@ -135,8 +135,8 @@ instance [Semiring
   body: (equivShrink α).symm.semiring
 
 中文:
-实例 [Semiring
-  签名: α] : Semiring (Shrink.{v} α)
+实例 [半环
+  签名: α] : 半环 (Shrink.{v} α)
   定义体: (equivShrink α).symm.semiring
 
 Depends on / 依赖: equivShrink, semiring, symm.semiring
@@ -152,8 +152,8 @@ instance [NonUnitalCommSemiring
   body: (equivShrink α).symm.nonUnitalCommSemiring
 
 中文:
-实例 [NonUnitalCommSemiring
-  签名: α] : NonUnitalCommSemiring (Shrink.{v} α)
+实例 [非幺交换半环
+  签名: α] : 非幺交换半环 (Shrink.{v} α)
   定义体: (equivShrink α).symm.nonUnitalCommSemiring
 
 Depends on / 依赖: equivShrink, nonUnitalCommSemiring, symm.nonUnitalCommSemiring
@@ -170,8 +170,8 @@ instance [CommSemiring
   body: (equivShrink α).symm.commSemiring
 
 中文:
-实例 [CommSemiring
-  签名: α] : CommSemiring (Shrink.{v} α)
+实例 [交换半环
+  签名: α] : 交换半环 (Shrink.{v} α)
   定义体: (equivShrink α).symm.commSemiring
 
 Depends on / 依赖: commSemiring, equivShrink, symm.commSemiring
@@ -187,8 +187,8 @@ instance [NonUnitalNonAssocRing
   body: (equivShrink α).symm.nonUnitalNonAssocRing
 
 中文:
-实例 [NonUnitalNonAssocRing
-  签名: α] : NonUnitalNonAssocRing (Shrink.{v} α)
+实例 [非幺非结合环
+  签名: α] : 非幺非结合环 (Shrink.{v} α)
   定义体: (equivShrink α).symm.nonUnitalNonAssocRing
 
 Depends on / 依赖: equivShrink, nonUnitalNonAssocRing, symm.nonUnitalNonAssocRing
@@ -205,8 +205,8 @@ instance [NonUnitalRing
   body: (equivShrink α).symm.nonUnitalRing
 
 中文:
-实例 [NonUnitalRing
-  签名: α] : NonUnitalRing (Shrink.{v} α)
+实例 [非幺环
+  签名: α] : 非幺环 (Shrink.{v} α)
   定义体: (equivShrink α).symm.nonUnitalRing
 
 Depends on / 依赖: equivShrink, nonUnitalRing, symm.nonUnitalRing
@@ -221,8 +221,8 @@ instance [NonAssocRing
   body: (equivShrink α).symm.nonAssocRing
 
 中文:
-实例 [NonAssocRing
-  签名: α] : NonAssocRing (Shrink.{v} α)
+实例 [非结合环
+  签名: α] : 非结合环 (Shrink.{v} α)
   定义体: (equivShrink α).symm.nonAssocRing
 
 Depends on / 依赖: equivShrink, nonAssocRing, symm.nonAssocRing
@@ -237,8 +237,8 @@ instance [Ring
   body: (equivShrink α).symm.ring
 
 中文:
-实例 [Ring
-  签名: α] : Ring (Shrink.{v} α)
+实例 [环
+  签名: α] : 环 (Shrink.{v} α)
   定义体: (equivShrink α).symm.ring
 
 Depends on / 依赖: equivShrink, symm.ring
@@ -254,8 +254,8 @@ instance [NonUnitalCommRing
   body: (equivShrink α).symm.nonUnitalCommRing
 
 中文:
-实例 [NonUnitalCommRing
-  签名: α] : NonUnitalCommRing (Shrink.{v} α)
+实例 [非幺交换环
+  签名: α] : 非幺交换环 (Shrink.{v} α)
   定义体: (equivShrink α).symm.nonUnitalCommRing
 
 Depends on / 依赖: equivShrink, nonUnitalCommRing, symm.nonUnitalCommRing
@@ -272,8 +272,8 @@ instance [CommRing
   body: (equivShrink α).symm.commRing
 
 中文:
-实例 [CommRing
-  签名: α] : CommRing (Shrink.{v} α)
+实例 [交换环
+  签名: α] : 交换环 (Shrink.{v} α)
   定义体: (equivShrink α).symm.commRing
 
 Depends on / 依赖: commRing, equivShrink, symm.commRing
@@ -288,8 +288,8 @@ instance [Semiring
   body: (Shrink.ringEquiv α).isDomain
 
 中文:
-实例 [Semiring
-  签名: α] [IsDomain α] : IsDomain (Shrink.{v} α)
+实例 [半环
+  签名: α] [是整环 α] : 是整环 (Shrink.{v} α)
   定义体: (Shrink.ringEquiv α).isDomain
 
 Depends on / 依赖: Shrink, Shrink.ringEquiv, isDomain, ringEquiv

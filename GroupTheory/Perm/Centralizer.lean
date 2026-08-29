@@ -128,8 +128,8 @@ lemma Subgroup.Centralizer.toConjAct_smul_mem_cycleFactorsFinset
   rw [ConjAct.toConj
 
 中文:
-引理 Subgroup.Centralizer.toConjAct_smul_mem_cycleFactorsFinset
-  结论: {k c : Perm α}
+引理 子群.中心化子.toConjAct_smul_mem_cycleFactorsFinset
+  结论: {k c : 置换 α}
   证明: by
   suffices (g.cycleFactorsFinset : Set (Perm α)) =
     (ConjAct.toConjAct k) • g.cycleFactorsFinset by
@@ -172,7 +172,7 @@ definition Subgroup.Centralizer.cycleFactorsFinset_mulAction
     simp only [← Subtype
 
 中文:
-定义 Subgroup.Centralizer.cycleFactorsFinset_mulAction
+定义 子群.中心化子.cycleFactorsFinset_mulAction
   签名: :
   定义体: ⟨ConjAct.toConjAct (k : Perm α) • c.val,
     Subgroup.Centralizer.toConjAct_smul_mem_cycleFactorsFinset k.prop c.prop⟩
@@ -251,7 +251,7 @@ theorem val_centralizer_smul
 
 中文:
 定理 val_centralizer_smul
-  条件: (k : Subgroup.centralizer {g}) (c : g.cycleFactorsFinset)
+  条件: (k : 子群.centralizer {g}) (c : g.cycleFactorsFinset)
   证明: rfl
 -/
 theorem val_centralizer_smul (k : Subgroup.centralizer {g}) (c : g.cycleFactorsFinset) :
@@ -308,7 +308,7 @@ definition range_toPermHom'
 
 中文:
 定义 range_toPermHom'
-  签名: : Subgroup (Perm g.cycleFactorsFinset) where
+  签名: : 子群 (置换 g.cycleFactorsFinset) where
   定义体: {τ | forall c, #(τ c).val.support = #c.val.support}
   one_mem' := by simp
   mul_mem' hσ hτ := by
@@ -346,7 +346,7 @@ theorem mem_range_toPermHom'_iff
 
 中文:
 定理 mem_range_toPermHom'_iff
-  条件: {τ : Perm g.cycleFactorsFinset}
+  条件: {τ : 置换 g.cycleFactorsFinset}
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -397,8 +397,8 @@ structure Basis
     - (mem_support_self' : forall (c : g.cycleFactorsFinset), toFun c in c.val.support)
 
 中文:
-结构 Basis
-  参数: (g : Equiv.Perm α)
+结构 基
+  参数: (g : 等价.置换 α)
   公理与运算 (2 个):
     - (toFun : g.cycleFactorsFinset -> α)
     - (mem_support_self' : 对任意 (c : g.cycleFactorsFinset), toFun c in c.val.support)
@@ -429,8 +429,8 @@ theorem nonempty
 
 中文:
 定理 nonempty
-  条件: (g : Perm α)
-  结论: Nonempty (Basis g)
+  条件: (g : 置换 α)
+  结论: 非空 (基 g)
   证明: by
   have (c : g.cycleFactorsFinset) : c.val.support.Nonempty :=
     IsCycle.nonempty_support (mem_cycleFactorsFinset_iff.mp c.prop).1
@@ -478,7 +478,7 @@ theorem injective
 
 中文:
 定理 injective
-  结论: Function.Injective a
+  结论: 函数.单射 a
   证明: by
   intro c d h
   rw [← Subtype.coe_inj]
@@ -583,7 +583,7 @@ theorem mem_fixedPoints_or_exists_zpow_eq
   sim
 
 中文:
-定理 mem_fixedPoints_or_exists_zpow_eq
+定理 mem_fixedPoints_or_存在_zpow_eq
   条件: (x : α)
   证明: by
   rw [Classical.or_iff_not_imp_left]
@@ -665,7 +665,7 @@ theorem ofPermHomFun_apply_of_mem_fixedPoints
 
 中文:
 定理 ofPermHomFun_apply_of_mem_fixedPoints
-  条件: {x : α} (hx : x in Function.fixedPoints g)
+  条件: {x : α} (hx : x in 函数.fixedPoints g)
   证明: by
   rw [ofPermHomFun]; rw [dif_neg]
   rw [cycleOf_mem_cycleFactorsFinset_iff]; rw [notMem_support]
@@ -851,7 +851,7 @@ definition ofPermHom
 
 中文:
 定义 ofPermHom
-  签名: : range_toPermHom' g ->* Perm α where
+  签名: : range_toPermHom' g ->* 置换 α where
   定义体: {
     toFun := ofPermHomFun a τ
     invFun := ofPermHomFun a τ⁻¹
@@ -1030,7 +1030,7 @@ theorem toCentralizer_apply
 中文:
 定理 toCentralizer_apply
   条件: (x)
-  结论: (toCentralizer a τ : Perm α) x = ofPermHomFun a τ x
+  结论: (toCentralizer a τ : 置换 α) x = ofPermHomFun a τ x
   证明: rfl
 -/
 theorem toCentralizer_apply (x) : (toCentralizer a τ : Perm α) x = ofPermHomFun a τ x := rfl
@@ -1257,7 +1257,7 @@ definition kerParam
 
 中文:
 定义 kerParam
-  签名: : (Perm (Function.fixedPoints g)) ×
+  签名: : (置换 (函数.fixedPoints g)) ×
   定义体: MonoidHom.noncommCoprod ofSubtype (Subgroup.noncommPiCoprod g.pairwise_commute_of_mem_zpowers)
     g.commute_ofSubtype_noncommPiCoprod
 
@@ -1283,7 +1283,7 @@ theorem kerParam_apply
 
 中文:
 定理 kerParam_apply
-  结论: {u : Perm (Function.fixedPoints g)}
+  结论: {u : 置换 (函数.fixedPoints g)}
   证明: by
   split_ifs with hx
   · have hx' := hx
@@ -1336,8 +1336,8 @@ theorem kerParam_injective
 
 中文:
 定理 kerParam_injective
-  条件: (g : Perm α)
-  结论: Function.Injective (kerParam g)
+  条件: (g : 置换 α)
+  结论: 函数.单射 (kerParam g)
   证明: by
   rw [kerParam]; rw [MonoidHom.noncommCoprod_injective]
   refine ⟨ofSubtype_injective, ?_, ?_⟩
@@ -1469,7 +1469,7 @@ theorem kerParam_range_card
 
 中文:
 定理 kerParam_range_card
-  条件: (g : Equiv.Perm α)
+  条件: (g : 等价.置换 α)
   证明: by
   rw [Fintype.card_coeSort_range (kerParam_injective g)]
   rw [Fintype.card_prod]; rw [Fintype.card_perm]; rw [Fintype.card_pi]; rw [card_fixedPoints]

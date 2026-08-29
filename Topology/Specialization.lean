@@ -188,7 +188,7 @@ definition rec
 
 中文:
 定义 rec
-  签名: {β : Specialization α -> Sort*} (h : 对任意 a, β (toEquiv a)) (a : Specialization α)
+  签名: {β : Specialization α -> 类型层*} (h : 对任意 a, β (toEquiv a)) (a : Specialization α)
   定义体: h (ofEquiv a)
 -/
 protected def rec {β : Specialization α -> Sort*} (h : forall a, β (toEquiv a)) (a : Specialization α) :
@@ -207,7 +207,7 @@ instance instPreorder
 
 中文:
 实例 instPreorder
-  签名: : Preorder (Specialization α)
+  签名: : 预序 (Specialization α)
   定义体: fast_instance% specializationPreorder α
 
 Depends on / 依赖: fast_instance, specializationPreorder
@@ -225,7 +225,7 @@ instance instPartialOrder
 
 中文:
 实例 instPartialOrder
-  签名: [T0Space α]
+  签名: [T0空间 α]
   定义体: fast_instance% specializationOrder α
 
 Depends on / 依赖: fast_instance, specializationOrder
@@ -275,7 +275,7 @@ lemma isOpen_toEquiv_preimage
 
 中文:
 引理 isOpen_toEquiv_preimage
-  条件: [AlexandrovDiscrete α] {s : Set (Specialization α)}
+  条件: [AlexandrovDiscrete α] {s : 集合 (Specialization α)}
   证明: isOpen_iff_forall_specializes.trans forall_comm
 -/
 @[simp] lemma isOpen_toEquiv_preimage [AlexandrovDiscrete α] {s : Set (Specialization α)} :
@@ -291,7 +291,7 @@ lemma isUpperSet_ofEquiv_preimage
 
 中文:
 引理 isUpperSet_ofEquiv_preimage
-  条件: [AlexandrovDiscrete α] {s : Set α}
+  条件: [AlexandrovDiscrete α] {s : 集合 α}
   证明: isOpen_toEquiv_preimage.symm
 -/
 @[simp] lemma isUpperSet_ofEquiv_preimage [AlexandrovDiscrete α] {s : Set α} :
@@ -328,7 +328,7 @@ lemma map_id
 
 中文:
 引理 map_id
-  结论: map (ContinuousMap.id α) = OrderHom.id
+  结论: map (连续映射.id α) = 序态射.id
   证明: rfl
 -/
 @[simp] lemma map_id : map (ContinuousMap.id α) = OrderHom.id := rfl
@@ -364,7 +364,7 @@ definition orderIsoSpecializationWithUpperSetTopology
 
 中文:
 定义 orderIsoSpecializationWithUpperSetTopology
-  签名: (α : 类型) [Preorder α]
+  签名: (α : 类型) [预序 α]
   定义体: toUpperSet.trans toEquiv
   map_rel_iff' := by simp
 
@@ -385,7 +385,7 @@ definition homeoWithUpperSetTopologyorderIso
 
 中文:
 定义 homeoWithUpperSetTopologyorderIso
-  签名: (α : 类型) [TopologicalSpace α] [AlexandrovDiscrete α]
+  签名: (α : 类型) [拓扑空间 α] [AlexandrovDiscrete α]
   定义体: (toEquiv.trans toUpperSet).toHomeomorph fun s => by simp [Set.preimage_comp]
 
 Depends on / 依赖: Set.preimage_comp, preimage_comp, toEquiv, toEquiv.trans, toHomeomorph, toUpperSet
@@ -407,7 +407,7 @@ map f := Preord.ofHom Specialization.map f.hom
 
 中文:
 定义 topToPreord
-  签名: : TopCat ⥤ Preord where
+  签名: : 顶元素范畴 ⥤ 预序 where
   定义体: .of Specialization X
 map f := Preord.ofHom Specialization.map f.hom
 

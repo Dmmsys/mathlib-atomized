@@ -48,7 +48,7 @@ class OverClass
     - hom : X ⟶ S
 
 中文:
-类 OverClass
+类 Over类
   参数: (X S : C)
   公理与运算 (2 个):
     - ofHom : :
@@ -69,7 +69,7 @@ definition over
 
 中文:
 定义 over
-  签名: (X S : C) (_ : OverClass X S := by infer_instance)
+  签名: (X S : C) (_ : Over类 X S := by infer_instance)
   定义体: OverClass.hom
 
 Depends on / 依赖: OverClass, OverClass.hom, infer_instance
@@ -90,8 +90,8 @@ definition OverClass.Simps.over
 initialize_simps_projections OverClass (hom -> over)
 
 中文:
-定义 OverClass.Simps.over
-  签名: (X S : C) [OverClass X S]
+定义 Over类.Simps.over
+  签名: (X S : C) [Over类 X S]
   定义体: X ↘ S
 
 initialize_simps_projections OverClass (hom -> over)
@@ -110,9 +110,9 @@ class CanonicallyOverClass
   (no additional axioms)
 
 中文:
-类 CanonicallyOverClass
+类 CanonicallyOver类
   参数: (X : C) (S : semiOutParam C)
-  继承: OverClass X S
+  继承: Over类 X S
   (无附加公理)
 -/
 class CanonicallyOverClass (X : C) (S : semiOutParam C) extends OverClass X S where
@@ -130,8 +130,8 @@ initialize_simps_projections CanonicallyOverClass (hom -> over)
 @[simps]
 
 中文:
-定义 CanonicallyOverClass.Simps.over
-  签名: (X S : C) [CanonicallyOverClass X S]
+定义 CanonicallyOver类.Simps.over
+  签名: (X S : C) [CanonicallyOver类 X S]
   定义体: X ↘ S
 
 initialize_simps_projections CanonicallyOverClass (hom -> over)
@@ -153,7 +153,7 @@ instance :
 
 中文:
 实例 :
-  签名: OverClass X X
+  签名: Over类 X X
   定义体: ⟨𝟙 _⟩
 -/
 instance : OverClass X X := ⟨𝟙 _⟩
@@ -168,7 +168,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsIso (S ↘ S)
+  签名: 是同构 (S ↘ S)
   定义体: inferInstanceAs (IsIso (𝟙 S))
 -/
 instance : IsIso (S ↘ S) := inferInstanceAs (IsIso (𝟙 S))
@@ -191,7 +191,7 @@ class HomIsOver
 
 中文:
 类 HomIsOver
-  参数: (f : X ⟶ Y) (S : C) [OverClass X S] [OverClass Y S]
+  参数: (f : X ⟶ Y) (S : C) [Over类 X S] [Over类 Y S]
   公理与运算 (1 个):
     - comp_over : f ≫ Y ↘ S = X ↘ S  [默认: by aesop]
 -/
@@ -209,7 +209,7 @@ lemma comp_over
 
 中文:
 引理 comp_over
-  条件: [OverClass X S] [OverClass Y S] [HomIsOver f S]
+  条件: [Over类 X S] [Over类 Y S] [HomIsOver f S]
   证明: HomIsOver.comp_over
 
 Depends on / 依赖: HomIsOver, HomIsOver.comp_over, comp_over
@@ -226,7 +226,7 @@ instance [OverClass
   signature: X S] : HomIsOver (𝟙 X) S where
 
 中文:
-实例 [OverClass
+实例 [Over类
   签名: X S] : HomIsOver (𝟙 X) S where
 -/
 instance [OverClass X S] : HomIsOver (𝟙 X) S where
@@ -239,8 +239,8 @@ instance [OverClass
   signature: X S] [OverClass Y S] [OverClass Z S]
 
 中文:
-实例 [OverClass
-  签名: X S] [OverClass Y S] [OverClass Z S]
+实例 [Over类
+  签名: X S] [Over类 Y S] [Over类 Z S]
 -/
 instance [OverClass X S] [OverClass Y S] [OverClass Z S]
     (f : X ⟶ Y) (g : Y ⟶ Z) [HomIsOver f S] [HomIsOver g S] :
@@ -256,7 +256,7 @@ abbreviation IsOverTower
 
 中文:
 缩写 IsOverTower
-  签名: (X Y S : C) [OverClass X S] [OverClass Y S] [OverClass X Y]
+  签名: (X Y S : C) [Over类 X S] [Over类 Y S] [Over类 X Y]
   定义体: HomIsOver (X ↘ Y) S
 
 Depends on / 依赖: HomIsOver
@@ -272,7 +272,7 @@ instance [OverClass
   signature: X S] : IsOverTower X X S where
 
 中文:
-实例 [OverClass
+实例 [Over类
   签名: X S] : IsOverTower X X S where
 -/
 instance [OverClass X S] : IsOverTower X X S where
@@ -284,7 +284,7 @@ instance [OverClass
   signature: X S] : IsOverTower X S S where
 
 中文:
-实例 [OverClass
+实例 [Over类
   签名: X S] : IsOverTower X S S where
 -/
 instance [OverClass X S] : IsOverTower X S S where
@@ -298,8 +298,8 @@ instance [CanonicallyOverClass
   body: ⟨rfl⟩
 
 中文:
-实例 [CanonicallyOverClass
-  签名: X Y] [OverClass Y S] : IsOverTower X Y S
+实例 [CanonicallyOver类
+  签名: X Y] [Over类 Y S] : IsOverTower X Y S
   定义体: ⟨rfl⟩
 -/
 instance [CanonicallyOverClass X Y] [OverClass Y S] : IsOverTower X Y S :=
@@ -317,7 +317,7 @@ lemma homIsOver_of_isOverTower
 
 中文:
 引理 homIsOver_of_isOverTower
-  结论: [OverClass X S] [OverClass X S'] [OverClass Y S]
+  结论: [Over类 X S] [Over类 X S'] [Over类 Y S]
   证明: by
   constructor
   rw [← comp_over (Y ↘ S)]; rw [comp_over_assoc f]; rw [comp_over]
@@ -339,7 +339,7 @@ instance [CanonicallyOverClass
   body: homIsOver_of_isOverTower f S S'
 
 中文:
-实例 [CanonicallyOverClass
+实例 [CanonicallyOver类
   签名: X S]
   定义体: homIsOver_of_isOverTower f S S'
 
@@ -359,7 +359,7 @@ instance [OverClass
   body: homIsOver_of_isOverTower f S S'
 
 中文:
-实例 [OverClass
+实例 [Over类
   签名: X S]
   定义体: homIsOver_of_isOverTower f S S'
 
@@ -382,8 +382,8 @@ definition OverClass.asOver
   body: Over.mk (X ↘ S)
 
 中文:
-定义 OverClass.asOver
-  签名: [OverClass X S]
+定义 Over类.asOver
+  签名: [Over类 X S]
   定义体: Over.mk (X ↘ S)
 
 Depends on / 依赖: Over.mk
@@ -403,8 +403,8 @@ definition OverClass.asOverHom
 @[simps]
 
 中文:
-定义 OverClass.asOverHom
-  签名: [OverClass X S] [OverClass Y S] (f : X ⟶ Y) [HomIsOver f S]
+定义 Over类.asOverHom
+  签名: [Over类 X S] [Over类 Y S] (f : X ⟶ Y) [HomIsOver f S]
   定义体: Over.homMk f (comp_over f S)
 
 @[simps]
@@ -425,7 +425,7 @@ instance OverClass.fromOver
   body: X.hom
 
 中文:
-实例 OverClass.fromOver
+实例 Over类.fromOver
   签名: {S : C} (X : Over S)
   定义体: X.hom
 
@@ -497,7 +497,7 @@ lemma asOverHom_inv
 
 中文:
 引理 asOverHom_inv
-  条件: (f : X ⟶ Y) [IsIso f] [HomIsOver f S]
+  条件: (f : X ⟶ Y) [是同构 f] [HomIsOver f S]
   证明: by simp [← hom_comp_eq_id, ← asOverHom_comp]
 -/
 @[simp] lemma asOverHom_inv (f : X ⟶ Y) [IsIso f] [HomIsOver f S] :
@@ -518,7 +518,7 @@ definition Iso.asOver
   inv := OverClass.asOverHom S e.inv
 
 中文:
-定义 Iso.asOver
+定义 同构.asOver
   签名: (e : X ≅ Y) [HomIsOver e.hom S]
   定义体: OverClass.asOverHom S e.hom
   inv := OverClass.asOverHom S e.inv

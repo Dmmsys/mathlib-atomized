@@ -40,7 +40,7 @@ theorem splitBy_nil
 
 中文:
 定理 splitBy_nil
-  条件: (r : α -> α -> 布尔)
+  条件: (r : α -> α -> 布尔值)
   结论: splitBy r [] = []
   证明: rfl
 -/
@@ -64,7 +64,7 @@ theorem splitByLoop_eq_append
 
 中文:
 定理 splitByLoop_eq_append
-  结论: {r : α -> α -> 布尔} {l : List α} {a : α} {g : List α}
+  结论: {r : α -> α -> 布尔值} {l : 列表 α} {a : α} {g : 列表 α}
   证明: by
   induction l generalizing a g gs with
   | nil => simp [splitBy.loop]
@@ -101,7 +101,7 @@ theorem flatten_splitByLoop
 
 中文:
 定理 flatten_splitByLoop
-  条件: {r : α -> α -> 布尔} {l : List α} {a : α} {g : List α}
+  条件: {r : α -> α -> 布尔值} {l : 列表 α} {a : α} {g : 列表 α}
   证明: by
   induction l generalizing a g with
   | nil => simp [splitBy.loop]
@@ -135,7 +135,7 @@ theorem flatten_splitBy
 
 中文:
 定理 flatten_splitBy
-  条件: (r : α -> α -> 布尔) (l : List α)
+  条件: (r : α -> α -> 布尔值) (l : 列表 α)
   结论: (l.splitBy r).flatten = l
   证明: match l with
   | nil => rfl
@@ -164,7 +164,7 @@ theorem splitBy_eq_nil
 
 中文:
 定理 splitBy_eq_nil
-  条件: {r : α -> α -> 布尔} {l : List α}
+  条件: {r : α -> α -> 布尔值} {l : 列表 α}
   结论: l.splitBy r = [] ↔ l = []
   证明: by
   have := flatten_splitBy r l
@@ -187,7 +187,7 @@ theorem splitBy_ne_nil
 
 中文:
 定理 splitBy_ne_nil
-  条件: {r : α -> α -> 布尔} {l : List α}
+  条件: {r : α -> α -> 布尔值} {l : 列表 α}
   结论: l.splitBy r != [] ↔ l != []
   证明: splitBy_eq_nil.not
 
@@ -216,7 +216,7 @@ theorem nil_notMem_splitByLoop
 
 中文:
 定理 nil_notMem_splitByLoop
-  条件: {r : α -> α -> 布尔} {l : List α} {a : α} {g : List α}
+  条件: {r : α -> α -> 布尔值} {l : 列表 α} {a : α} {g : 列表 α}
   证明: by
   induction l generalizing a g with
   | nil => simp [splitBy.loop]
@@ -254,7 +254,7 @@ theorem nil_notMem_splitBy
 
 中文:
 定理 nil_notMem_splitBy
-  条件: (r : α -> α -> 布尔) (l : List α)
+  条件: (r : α -> α -> 布尔值) (l : 列表 α)
   结论: [] ∉ l.splitBy r
   证明: match l with
   | nil => not_mem_nil
@@ -278,7 +278,7 @@ theorem ne_nil_of_mem_splitBy
 
 中文:
 定理 ne_nil_of_mem_splitBy
-  条件: {r : α -> α -> 布尔} {l : List α} (h : m in l.splitBy r)
+  条件: {r : α -> α -> 布尔值} {l : 列表 α} (h : m in l.splitBy r)
   结论: m != []
   证明: fun _ => by simp_all
 -/
@@ -296,7 +296,7 @@ theorem head_head_splitBy
 
 中文:
 定理 head_head_splitBy
-  条件: (r : α -> α -> 布尔) {l : List α} (hn : l != [])
+  条件: (r : α -> α -> 布尔值) {l : 列表 α} (hn : l != [])
   证明: by
   simp [head_head_eq_head_flatten]
 
@@ -318,7 +318,7 @@ theorem getLast_getLast_splitBy
 
 中文:
 定理 getLast_getLast_splitBy
-  条件: (r : α -> α -> 布尔) {l : List α} (hn : l != [])
+  条件: (r : α -> α -> 布尔值) {l : 列表 α} (hn : l != [])
   证明: by
   simp [getLast_getLast_eq_getLast_flatten]
 
@@ -347,7 +347,7 @@ theorem isChain_of_mem_splitByLoop
 
 中文:
 定理 isChain_of_mem_splitByLoop
-  结论: {r : α -> α -> 布尔} {l : List α} {a : α} {g : List α}
+  结论: {r : α -> α -> 布尔值} {l : 列表 α} {a : α} {g : 列表 α}
   证明: by
   induction l generalizing a g with
   | nil =>
@@ -393,7 +393,7 @@ theorem isChain_of_mem_splitBy
 
 中文:
 定理 isChain_of_mem_splitBy
-  条件: {r : α -> α -> 布尔} {l : List α} (h : m in l.splitBy r)
+  条件: {r : α -> α -> 布尔值} {l : 列表 α} (h : m in l.splitBy r)
   证明: by
   match l, h with
   | a::l, h => apply isChain_of_mem_splitByLoop _ _ h <;> simp
@@ -426,7 +426,7 @@ theorem isChain_getLast_head_splitByLoop
 
 中文:
 定理 isChain_getLast_head_splitByLoop
-  结论: {r : α -> α -> 布尔} (l : List α) {a : α}
+  结论: {r : α -> α -> 布尔值} (l : 列表 α) {a : α}
   证明: by
   induction l generalizing a g gs with
   | nil =>
@@ -478,7 +478,7 @@ theorem isChain_getLast_head_splitBy
 
 中文:
 定理 isChain_getLast_head_splitBy
-  条件: (r : α -> α -> 布尔) (l : List α)
+  条件: (r : α -> α -> 布尔值) (l : 列表 α)
   证明: by
   cases l with
   | nil => exact isChain_nil
@@ -513,7 +513,7 @@ theorem splitByLoop_append
 
 中文:
 定理 splitByLoop_append
-  结论: {r : α -> α -> 布尔} {l g : List α} {a : α}
+  结论: {r : α -> α -> 布尔值} {l g : 列表 α} {a : α}
   证明: by
   induction l generalizing a g with
   | nil =>
@@ -548,7 +548,7 @@ theorem splitBy_of_isChain
 
 中文:
 定理 splitBy_of_isChain
-  结论: {r : α -> α -> 布尔} {l : List α} (hn : l != [])
+  结论: {r : α -> α -> 布尔值} {l : 列表 α} (hn : l != [])
   证明: by
   cases l with
   | nil => contradiction
@@ -575,7 +575,7 @@ theorem splitBy_append_of_isChain
 
 中文:
 定理 splitBy_append_of_isChain
-  结论: {r : α -> α -> 布尔} {l : List α} (hn : l != [])
+  结论: {r : α -> α -> 布尔值} {l : 列表 α} (hn : l != [])
   证明: by
   cases l with
   | nil => contradiction
@@ -606,7 +606,7 @@ theorem splitBy_flatten
 
 中文:
 定理 splitBy_flatten
-  结论: {r : α -> α -> 布尔} {l : List (List α)} (hn : [] ∉ l)
+  结论: {r : α -> α -> 布尔值} {l : 列表 (列表 α)} (hn : [] ∉ l)
   证明: by
   induction l with
   | nil => rfl
@@ -651,7 +651,7 @@ theorem splitBy_eq_iff
 
 中文:
 定理 splitBy_eq_iff
-  条件: {r : α -> α -> 布尔} {l : List (List α)}
+  条件: {r : α -> α -> 布尔值} {l : 列表 (列表 α)}
   证明: by
   constructor
   · rintro rfl
@@ -690,7 +690,7 @@ theorem splitBy_append
 
 中文:
 定理 splitBy_append
-  结论: {r : α -> α -> 布尔} {l m : List α}
+  结论: {r : α -> α -> 布尔值} {l m : 列表 α}
   证明: by
   obtain rfl | hl := eq_or_ne l []
   · simp
@@ -733,7 +733,7 @@ theorem splitBy_append_cons
 
 中文:
 定理 splitBy_append_cons
-  结论: {r : α -> α -> 布尔} {l : List α} {a : α} (m : List α)
+  结论: {r : α -> α -> 布尔值} {l : 列表 α} {a : α} (m : 列表 α)
   证明: by
   apply splitBy_append
   simpa

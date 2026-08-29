@@ -42,8 +42,8 @@ class IsUnifLocDoublingMeasure
     - exists_measure_closedBall_le_mul'' : exists C : Real>=0, forallᶠ ε in 𝓝[>] 0, forall x, μ (closedBall x (2 * ε)) <= C * μ (closedBall x ε)
 
 中文:
-类 IsUnifLocDoublingMeasure
-  参数: {α : 类型} [PseudoMetricSpace α] [MeasurableSpace α]
+类 是UnifLocDoublingMeasure
+  参数: {α : 类型} [伪度量空间 α] [可测空间 α]
   公理与运算 (1 个):
     - exists_measure_closedBall_le_mul'' : 存在 C : 实数>=0, 对任意ᶠ ε in 𝓝[>] 0, 对任意 x, μ (closedBall x (2 * ε)) <= C * μ (closedBall x ε)
 -/
@@ -65,7 +65,7 @@ theorem exists_measure_closedBall_le_mul
   proof: exists_measure_closedBall_le_mul''
 
 中文:
-定理 exists_measure_closedBall_le_mul
+定理 存在_measure_closedBall_le_mul
   证明: exists_measure_closedBall_le_mul''
 
 Depends on / 依赖: exists_measure_closedBall_le_mul
@@ -124,7 +124,7 @@ theorem exists_eventually_forall_measure_closedBall_le_mul
     filter_upwards [eventually_mem_nhdsWithin, this n] with ε h
 
 中文:
-定理 exists_eventually_forall_measure_closedBall_le_mul
+定理 存在_eventually_对任意_measure_closedBall_le_mul
   条件: (K : 实数)
   证明: by
   let C := doublingConstant μ
@@ -341,7 +341,7 @@ theorem measure_mul_le_scalingConstantOf_mul
 
 中文:
 定理 measure_mul_le_scalingConstantOf_mul
-  结论: {K : 实数} {x : α} {t r : 实数} (ht : t in Ioc 0 K)
+  结论: {K : 实数} {x : α} {t r : 实数} (ht : t in 左开右闭区间 0 K)
   证明: (eventually_measure_mul_le_scalingConstantOf_mul μ K).choose_spec.2 x t r ht hr
 
 Depends on / 依赖: choose_spec, eventually_measure_mul_le_scalingConstantOf_mul

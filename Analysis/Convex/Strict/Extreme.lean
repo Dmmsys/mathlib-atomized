@@ -49,7 +49,7 @@ theorem disjoint_interior_extremePoints
 
 中文:
 定理 disjoint_interior_extremePoints
-  结论: {E : 类型} [AddCommGroup E] [Module 实数 E]
+  结论: {E : 类型} [加法交换群 E] [模 实数 E]
   证明: by
   refine Set.disjoint_iff.mpr fun x ⟨x_int, x_ext⟩ => ?_
   rw [mem_interior_iff_mem_nhds] at x_int
@@ -90,8 +90,8 @@ exact hx.2 hxab ▸ hc hy hz this ha hb hab
 alias StrictConvex.diff_interior_subset_extremePoints
 
 中文:
-引理 StrictConvex.sdiff_interior_subset_extremePoints
-  结论: {𝕜 A : 类型} [Semiring 𝕜]
+引理 严格凸.sdiff_interior_subset_extremePoints
+  结论: {𝕜 A : 类型} [半环 𝕜]
   证明: by
   refine fun x hx => ⟨hx.1, fun y hy z hz ⟨a, b, ha, hb, hab, hxab⟩ => ?_⟩
   have hyz : y = z := by
@@ -132,7 +132,7 @@ theorem extremePoints_closedBall_subset_sphere
 
 中文:
 定理 extremePoints_closedBall_subset_sphere
-  条件: [Nontrivial A] {x : A} {r : 实数}
+  条件: [非平凡 A] {x : A} {r : 实数}
   证明: by
   rw [← closedBall_sdiff_ball]; rw [subset_sdiff]; rw [← interior_closedBall' _]
 .symm⟩ exact ⟨extremePoints_subset, disjoint_interior_extremePoints _
@@ -157,8 +157,8 @@ theorem StrictConvex.extremePoints_eq_sdiff_interior
 alias StrictConvex.extremePoints_eq_diff_interior := StrictConvex.extremePoints_eq_sdiff_interior
 
 中文:
-定理 StrictConvex.extremePoints_eq_sdiff_interior
-  结论: [Nontrivial A] {S : Set A}
+定理 严格凸.extremePoints_eq_sdiff_interior
+  结论: [非平凡 A] {S : 集合 A}
   证明: antisymm (subset_sdiff.mpr ⟨extremePoints_subset, disjoint_interior_extremePoints _ |>.symm⟩)
     hS.sdiff_interior_subset_extremePoints
 
@@ -186,8 +186,8 @@ lemma StrictConvexSpace.sphere_subset_extremePoints_closedBall
   exact (_root_.strictConvex_closedBall Real _ _).sdiff_interior_subset_extremePoints hx
 
 中文:
-引理 StrictConvexSpace.sphere_subset_extremePoints_closedBall
-  结论: [StrictConvexSpace 实数 A]
+引理 严格凸空间.sphere_subset_extremePoints_closedBall
+  结论: [严格凸空间 实数 A]
   证明: fun _ hx => by
   rw [← frontier_closedBall _ hr]; rw [frontier]; rw [closure_closedBall] at hx
   exact (_root_.strictConvex_closedBall Real _ _).sdiff_interior_subset_extremePoints hx
@@ -209,8 +209,8 @@ theorem StrictConvexSpace.extremePoints_closedBall_eq_sphere
   rw [(_root_.strictConvex_closedBall Real x r).extremePoints_eq_sdiff_interior]; rw [interior_closedBall']; rw [closedBall_sdiff_ball]
 
 中文:
-定理 StrictConvexSpace.extremePoints_closedBall_eq_sphere
-  结论: [Nontrivial A] {x : A} {r : 实数}
+定理 严格凸空间.extremePoints_closedBall_eq_sphere
+  结论: [非平凡 A] {x : A} {r : 实数}
   证明: by
   rw [(_root_.strictConvex_closedBall Real x r).extremePoints_eq_sdiff_interior]; rw [interior_closedBall']; rw [closedBall_sdiff_ball]
 
@@ -233,7 +233,7 @@ lemma Set.extremePoints_Icc
   grind [Real.sphere_eq_pair]
 
 中文:
-引理 Set.extremePoints_Icc
+引理 集合.extremePoints_Icc
   条件: {a b : 实数} (hab : a <= b)
   证明: by
   rw [Real.Icc_eq_closedBall]; rw [StrictConvexSpace.extremePoints_closedBall_eq_sphere]

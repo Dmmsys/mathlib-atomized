@@ -55,7 +55,7 @@ definition aestabilizer
 
 中文:
 定义 aestabilizer
-  签名: (s : Set α)
+  签名: (s : 集合 α)
   定义体: {g | g • s =ᵐ[μ] s}
   one_mem' := by simp
   -- TODO: `calc` would be more readable but fails because of defeq abuse
@@ -105,7 +105,7 @@ lemma stabilizer_le_aestabilizer
 
 中文:
 引理 stabilizer_le_aestabilizer
-  条件: (s : Set α)
+  条件: (s : 集合 α)
   结论: stabilizer G s <= aestabilizer G μ s
   证明: by
   intro g hg
@@ -237,7 +237,7 @@ theorem smul_ae_eq_self_of_mem_zpowers
 
 中文:
 定理 smul_ae_eq_self_of_mem_zpowers
-  结论: (hs : (x • s : Set α) =ᵐ[μ] s)
+  结论: (hs : (x • s : 集合 α) =ᵐ[μ] s)
   证明: by
   rw [← MulAction.mem_aestabilizer]; rw [← Subgroup.zpowers_le] at hs
   exact hs hy
@@ -263,8 +263,8 @@ theorem inv_smul_ae_eq_self
 
 中文:
 定理 inv_smul_ae_eq_self
-  条件: (hs : (x • s : Set α) =ᵐ[μ] s)
-  结论: (x⁻¹ • s : Set α) =ᵐ[μ] s
+  条件: (hs : (x • s : 集合 α) =ᵐ[μ] s)
+  结论: (x⁻¹ • s : 集合 α) =ᵐ[μ] s
   证明: inv_mem (s := MulAction.aestabilizer G μ s) hs
 
 Depends on / 依赖: MulAction, MulAction.aestabilizer, aestabilizer, inv_mem

@@ -37,7 +37,7 @@ theorem mulSupport_comp_inv_smul
 
 中文:
 定理 mulSupport_comp_inv_smul
-  条件: [One γ] (c : α) (f : β -> γ)
+  条件: [幺 γ] (c : α) (f : β -> γ)
   证明: by
   ext x
   simp only [mem_smul_set_iff_inv_smul_mem, mem_mulSupport]
@@ -61,7 +61,7 @@ theorem support_comp_inv_smul
 
 中文:
 定理 support_comp_inv_smul
-  条件: [Zero γ] (c : α) (f : β -> γ)
+  条件: [零 γ] (c : α) (f : β -> γ)
   证明: by
   ext x
   simp only [mem_smul_set_iff_inv_smul_mem, mem_support]
@@ -91,7 +91,7 @@ theorem mulSupport_comp_inv_smul₀
 
 中文:
 定理 mulSupport_comp_inv_smul₀
-  条件: [One γ] {c : α} (hc : c != 0) (f : β -> γ)
+  条件: [幺 γ] {c : α} (hc : c != 0) (f : β -> γ)
   证明: by
   ext x
   simp only [mem_smul_set_iff_inv_smul_mem₀ hc, mem_mulSupport]
@@ -115,7 +115,7 @@ theorem support_comp_inv_smul₀
 
 中文:
 定理 support_comp_inv_smul₀
-  条件: [Zero γ] {c : α} (hc : c != 0) (f : β -> γ)
+  条件: [零 γ] {c : α} (hc : c != 0) (f : β -> γ)
   证明: by
   ext x
   simp only [mem_smul_set_iff_inv_smul_mem₀ hc, mem_support]

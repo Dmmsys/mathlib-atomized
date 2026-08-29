@@ -49,13 +49,13 @@ structure PresheafOfModules
     - map_comp({X Y Z : Cᵒᵖ} (f : X ⟶ Y) (g : Y ⟶ Z)) : map (f ≫ g) = map f ≫ (ModuleCat.restrictScalars _).map (map g) ≫ (ModuleCat.restrictScalarsComp' (R.map f).hom (R.map g).hom (R.map (f ≫ g)).hom (congrArg RingCat.Hom.hom <| R.map_comp f g)).inv.app _  [default: by cat_disch]
 
 中文:
-结构 PresheafOfModules
+结构 预模层
   参数: where
   公理与运算 (4 个):
-    - obj((X : Cᵒᵖ)) : ModuleCat.{v} (R.obj X)
-    - map({X Y : Cᵒᵖ} (f : X ⟶ Y)) : obj X ⟶ (ModuleCat.restrictScalars (R.map f).hom).obj (obj Y)
-    - map_id((X : Cᵒᵖ)) : map (𝟙 X) = (ModuleCat.restrictScalarsId' (R.map (𝟙 X)).hom (congrArg RingCat.Hom.hom (R.map_id X))).inv.app _  [默认: by cat_disch]
-    - map_comp({X Y Z : Cᵒᵖ} (f : X ⟶ Y) (g : Y ⟶ Z)) : map (f ≫ g) = map f ≫ (ModuleCat.restrictScalars _).map (map g) ≫ (ModuleCat.restrictScalarsComp' (R.map f).hom (R.map g).hom (R.map (f ≫ g)).hom (congrArg RingCat.Hom.hom <| R.map_comp f g)).inv.app _  [默认: by cat_disch]
+    - obj((X : Cᵒᵖ)) : 模范畴.{v} (R.obj X)
+    - map({X Y : Cᵒᵖ} (f : X ⟶ Y)) : obj X ⟶ (模范畴.restrictScalars (R.map f).hom).obj (obj Y)
+    - map_id((X : Cᵒᵖ)) : map (𝟙 X) = (模范畴.restrictScalarsId' (R.map (𝟙 X)).hom (congrArg 环范畴.态射.hom (R.map_id X))).inv.app _  [默认: by cat_disch]
+    - map_comp({X Y Z : Cᵒᵖ} (f : X ⟶ Y) (g : Y ⟶ Z)) : map (f ≫ g) = map f ≫ (模范畴.restrictScalars _).map (map g) ≫ (模范畴.restrictScalarsComp' (R.map f).hom (R.map g).hom (R.map (f ≫ g)).hom (congrArg 环范畴.态射.hom <| R.map_comp f g)).inv.app _  [默认: by cat_disch]
 
 Depends on / 依赖: ModuleCat, ModuleCat.restrictScalars, ModuleCat.restrictScalarsComp, R.map, R.map_comp, RingCat, RingCat.Hom.hom, cat_disch, inv.app, map_comp, restrictScalars, restrictScalarsComp
 -/
@@ -204,11 +204,11 @@ structure Hom
     - naturality({X Y : Cᵒᵖ} (f : X ⟶ Y)) : M₁.map f ≫ (ModuleCat.restrictScalars (R.map f).hom).map (app Y) = app X ≫ M₂.map f  [default: by cat_disch]
 
 中文:
-结构 Hom
+结构 态射
   参数: where
   公理与运算 (2 个):
     - app((X : Cᵒᵖ)) : M₁.obj X ⟶ M₂.obj X
-    - naturality({X Y : Cᵒᵖ} (f : X ⟶ Y)) : M₁.map f ≫ (ModuleCat.restrictScalars (R.map f).hom).map (app Y) = app X ≫ M₂.map f  [默认: by cat_disch]
+    - naturality({X Y : Cᵒᵖ} (f : X ⟶ Y)) : M₁.map f ≫ (模范畴.restrictScalars (R.map f).hom).map (app Y) = app X ≫ M₂.map f  [默认: by cat_disch]
 
 Depends on / 依赖: cat_disch
 -/
@@ -233,7 +233,7 @@ instance :
 
 中文:
 实例 :
-  签名: Category (PresheafOfModules.{v} R)
+  签名: 范畴 (预模层.{v} R)
   定义体: Hom
   id _ := { app := fun _ => 𝟙 _ }
   comp f g := { app := fun _ => f.app _ ≫ g.app _ }
@@ -283,8 +283,8 @@ lemma id_app
 
 中文:
 引理 id_app
-  条件: (M : PresheafOfModules R) (X : Cᵒᵖ)
-  结论: Hom.app (𝟙 M) X = 𝟙 _
+  条件: (M : 预模层 R) (X : Cᵒᵖ)
+  结论: 态射.app (𝟙 M) X = 𝟙 _
   证明: by
   rfl
 
@@ -305,7 +305,7 @@ lemma comp_app
 
 中文:
 引理 comp_app
-  条件: {M₁ M₂ M₃ : PresheafOfModules R} (f : M₁ ⟶ M₂) (g : M₂ ⟶ M₃) (X : Cᵒᵖ)
+  条件: {M₁ M₂ M₃ : 预模层 R} (f : M₁ ⟶ M₂) (g : M₂ ⟶ M₃) (X : Cᵒᵖ)
   证明: by
   rfl
 -/
@@ -483,7 +483,7 @@ definition toPresheaf
 
 中文:
 定义 toPresheaf
-  签名: : PresheafOfModules.{v} R ⥤ Cᵒᵖ ⥤ Ab where
+  签名: : 预模层.{v} R ⥤ Cᵒᵖ ⥤ Ab where
   定义体: M.presheaf
   map f :=
     { app := fun X => AddCommGrpCat.ofHom <| AddMonoidHom.mk' (Hom.app f X) (by simp)
@@ -550,7 +550,7 @@ instance :
 
 中文:
 实例 :
-  签名: (toPresheaf R).Faithful
+  签名: (toPresheaf R).忠实
   定义体: by
     ext X x
     exact ConcreteCategory.congr_hom (((evaluation _ _).obj X ⋙ forget Ab).congr_map h) x
@@ -588,7 +588,7 @@ definition ofPresheaf
 
 中文:
 定义 ofPresheaf
-  签名: : PresheafOfModules.{v} R where
+  签名: : 预模层.{v} R where
   定义体: ModuleCat.of _ (M.obj X)
   -- TODO: after https://github.com/leanprover-community/mathlib4/pull/19511 we need to hint `(Y := ...)`.
   -- This suggests `restrictScalars` needs to be redesigned.
@@ -678,7 +678,7 @@ instance :
 
 中文:
 实例 :
-  签名: Zero (M₁ ⟶ M₂)
+  签名: 零 (M₁ ⟶ M₂)
   定义体: { app := fun _ => 0 }
 -/
 instance : Zero (M₁ ⟶ M₂) where
@@ -715,7 +715,7 @@ instance :
 
 中文:
 实例 :
-  签名: Neg (M₁ ⟶ M₂)
+  签名: 取负 (M₁ ⟶ M₂)
   定义体: { app := fun X => -f.app X
       naturality := fun {X Y} h => by
         ext x
@@ -743,7 +743,7 @@ instance :
 
 中文:
 实例 :
-  签名: Add (M₁ ⟶ M₂)
+  签名: 加法 (M₁ ⟶ M₂)
   定义体: { app := fun X => f.app X + g.app X
       naturality := fun {X Y} h => by
         ext x
@@ -771,7 +771,7 @@ instance :
 
 中文:
 实例 :
-  签名: Sub (M₁ ⟶ M₂)
+  签名: 减法 (M₁ ⟶ M₂)
   定义体: { app := fun X => f.app X - g.app X
       naturality := fun {X Y} h => by
         ext x
@@ -849,7 +849,7 @@ instance :
 
 中文:
 实例 :
-  签名: AddCommGroup (M₁ ⟶ M₂)
+  签名: 加法交换群 (M₁ ⟶ M₂)
   定义体: by intros; ext1; simp only [add_app, add_assoc]
   zero_add := by intros; ext1; simp only [add_app, zero_app, zero_add]
   neg_add_cancel := by intros; ext1; simp only [add_app, neg_app, neg_add_cancel, zero_app]
@@ -877,7 +877,7 @@ instance :
 
 中文:
 实例 :
-  签名: Preadditive (PresheafOfModules R)
+  签名: 预加性 (预模层 R)
 -/
 instance : Preadditive (PresheafOfModules R) where
 
@@ -890,7 +890,7 @@ instance :
 
 中文:
 实例 :
-  签名: (toPresheaf R).Additive
+  签名: (toPresheaf R).加性
 -/
 instance : (toPresheaf R).Additive where
 
@@ -991,7 +991,7 @@ definition unit
 
 中文:
 定义 unit
-  签名: : PresheafOfModules R where
+  签名: : 预模层 R where
   定义体: ModuleCat.of _ (R.obj X)
   -- TODO: after https://github.com/leanprover-community/mathlib4/pull/19511 we need to hint `(Y := ...)`.
   -- This suggests `restrictScalars` needs to be redesigned.
@@ -1042,7 +1042,7 @@ definition sections
 
 中文:
 定义 sections
-  签名: (M : PresheafOfModules.{v} R)
+  签名: (M : 预模层.{v} R)
   定义体: (M.presheaf ⋙ forget _).sections
 
 Depends on / 依赖: M.presheaf, forget, presheaf, sections
@@ -1061,7 +1061,7 @@ abbreviation sections.eval
 
 中文:
 缩写 sections.eval
-  签名: {M : PresheafOfModules.{v} R} (s : M.sections) (X : Cᵒᵖ)
+  签名: {M : 预模层.{v} R} (s : M.sections) (X : Cᵒᵖ)
   定义体: s.1 X
 
 @[simp]
@@ -1079,7 +1079,7 @@ lemma sections_property
 
 中文:
 引理 sections_property
-  结论: {M : PresheafOfModules.{v} R} (s : M.sections)
+  结论: {M : 预模层.{v} R} (s : M.sections)
   证明: s.2 f
 -/
 lemma sections_property {M : PresheafOfModules.{v} R} (s : M.sections)
@@ -1100,7 +1100,7 @@ definition sectionsMk
 
 中文:
 定义 sectionsMk
-  签名: {M : PresheafOfModules.{v} R} (s : 对任意 X, M.obj X)
+  签名: {M : 预模层.{v} R} (s : 对任意 X, M.obj X)
   定义体: s
   property f := hs f
 
@@ -1122,7 +1122,7 @@ lemma sections_ext
 
 中文:
 引理 sections_ext
-  结论: {M : PresheafOfModules.{v} R} (s t : M.sections)
+  结论: {M : 预模层.{v} R} (s t : M.sections)
   证明: Subtype.ext (by ext; apply h)
 
 Depends on / 依赖: Subtype, Subtype.ext
@@ -1147,7 +1147,7 @@ definition sectionsMap
 
 中文:
 定义 sectionsMap
-  签名: {M N : PresheafOfModules.{v} R} (f : M ⟶ N) (s : M.sections)
+  签名: {M N : 预模层.{v} R} (f : M ⟶ N) (s : M.sections)
   定义体: N.sectionsMk (fun X => f.app X (s.1 _))
     (fun X Y g => by rw [← naturality_apply, sections_property])
 
@@ -1172,7 +1172,7 @@ lemma sectionsMap_comp
 
 中文:
 引理 sectionsMap_comp
-  条件: {M N P : PresheafOfModules.{v} R} (f : M ⟶ N) (g : N ⟶ P) (s : M.sections)
+  条件: {M N P : 预模层.{v} R} (f : M ⟶ N) (g : N ⟶ P) (s : M.sections)
   证明: rfl
 
 @[simp]
@@ -1191,7 +1191,7 @@ lemma sectionsMap_id
 
 中文:
 引理 sectionsMap_id
-  条件: {M : PresheafOfModules.{v} R} (s : M.sections)
+  条件: {M : 预模层.{v} R} (s : M.sections)
   证明: rfl
 -/
 lemma sectionsMap_id {M : PresheafOfModules.{v} R} (s : M.sections) :
@@ -1219,7 +1219,7 @@ definition unitHomEquiv
 
 中文:
 定义 unitHomEquiv
-  签名: (M : PresheafOfModules R)
+  签名: (M : 预模层 R)
   定义体: sectionsMk (fun X => Hom.app f X (1 : R.obj X))
     (by intros; rw [← naturality_apply, unit_map_one])
   invFun s :=

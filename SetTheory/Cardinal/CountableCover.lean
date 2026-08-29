@@ -42,7 +42,7 @@ lemma mk_subtype_le_of_countable_eventually_mem_aux
 
 中文:
 引理 mk_subtype_le_of_countable_eventually_mem_aux
-  结论: {α ι : 类型u} {a : Cardinal}
+  结论: {α ι : 类型u} {a : 基数}
   证明: by
   rcases lt_or_ge a ℵ₀ with ha | ha
   /- case `a` finite. In this case, it suffices to show that any finite subset `s` of `t` has
@@ -98,7 +98,7 @@ lemma mk_subtype_le_of_countable_eventually_mem
 
 中文:
 引理 mk_subtype_le_of_countable_eventually_mem
-  结论: {α : 类型u} {ι : 类型v} {a : Cardinal}
+  结论: {α : 类型u} {ι : 类型v} {a : 基数}
   证明: by
   let g : ULift.{u, v} ι -> Set (ULift.{v, u} α) := (ULift.down ⁻¹' ·) ∘ f ∘ ULift.down
   suffices #(ULift.down.{v} ⁻¹' t) <= Cardinal.lift.{v, u} a by simpa
@@ -132,7 +132,7 @@ lemma mk_le_of_countable_eventually_mem
 
 中文:
 引理 mk_le_of_countable_eventually_mem
-  结论: {α : 类型u} {ι : 类型v} {a : Cardinal}
+  结论: {α : 类型u} {ι : 类型v} {a : 基数}
   证明: by
   rw [← mk_univ]
   exact mk_subtype_le_of_countable_eventually_mem (l := l) (fun x _ => ht x) h'f
@@ -160,7 +160,7 @@ lemma mk_of_countable_eventually_mem
 
 中文:
 引理 mk_of_countable_eventually_mem
-  结论: {α : 类型u} {ι : 类型v} {a : Cardinal}
+  结论: {α : 类型u} {ι : 类型v} {a : 基数}
   证明: by
   apply le_antisymm
   · apply mk_le_of_countable_eventually_mem ht (fun i => (h'f i).le)

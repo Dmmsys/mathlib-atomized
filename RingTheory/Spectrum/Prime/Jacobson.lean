@@ -47,8 +47,8 @@ lemma exists_isClosed_singleton_of_isJacobsonRing
   rw [← Set.compl_univ]; rw [eq_compl_comm]
 
 中文:
-引理 exists_isClosed_singleton_of_isJacobsonRing
-  结论: [IsJacobsonRing R]
+引理 存在_isClosed_singleton_of_isJacobsonRing
+  结论: [是Jacobson环 R]
   证明: by
   simp_rw [isClosed_singleton_iff_isMaximal]
   obtain ⟨I, hI'⟩ := (isClosed_iff_zeroLocus_ideal _).mp hs.isClosed_compl
@@ -89,8 +89,8 @@ instance [IsJacobsonRing
     ← Set.disjoin
 
 中文:
-实例 [IsJacobsonRing
-  签名: R] : JacobsonSpace (PrimeSpectrum R)
+实例 [是Jacobson环
+  签名: R] : Jacobson空间 (素谱 R)
   定义体: by
   rw [jacobsonSpace_iff_locallyClosed]
   rintro S hS ⟨U, Z, hU, hZ, rfl⟩

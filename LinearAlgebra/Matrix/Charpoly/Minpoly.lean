@@ -66,7 +66,7 @@ theorem minpoly_toLin
 
 中文:
 定理 minpoly_toLin
-  条件: (b : Basis n R N) (M : Matrix n n R)
+  条件: (b : 基 n R N) (M : 矩阵 n n R)
   证明: minpoly.algEquiv_eq (toLinAlgEquiv b : Matrix n n R ≃ₐ[R] _) M
 
 Depends on / 依赖: Matrix, algEquiv_eq, minpoly, minpoly.algEquiv_eq, toLinAlgEquiv
@@ -84,8 +84,8 @@ theorem isIntegral
   proof: ⟨M.charpoly, ⟨charpoly_monic M, aeval_self_charpoly M⟩⟩
 
 中文:
-定理 isIntegral
-  结论: Is整数egral R M
+定理 is整数egral
+  结论: 是整 R M
   证明: ⟨M.charpoly, ⟨charpoly_monic M, aeval_self_charpoly M⟩⟩
 
 Depends on / 依赖: M.charpoly, aeval_self_charpoly, charpoly, charpoly_monic
@@ -104,7 +104,7 @@ theorem minpoly_dvd_charpoly
 
 中文:
 定理 minpoly_dvd_charpoly
-  条件: {K : 类型} [Field K] (M : Matrix n n K)
+  条件: {K : 类型} [域 K] (M : 矩阵 n n K)
   结论: minpoly K M ∣ M.charpoly
   证明: minpoly.dvd _ _ (aeval_self_charpoly M)
 
@@ -153,7 +153,7 @@ theorem minpoly_toMatrix
 
 中文:
 定理 minpoly_toMatrix
-  条件: (b : Basis n R N) (f : N ->ₗ[R] N)
+  条件: (b : 基 n R N) (f : N ->ₗ[R] N)
   证明: minpoly.algEquiv_eq (toMatrixAlgEquiv b : _ ≃ₐ[R] Matrix n n R) f
 
 Depends on / 依赖: Matrix, algEquiv_eq, minpoly, minpoly.algEquiv_eq, toMatrixAlgEquiv
@@ -184,7 +184,7 @@ theorem charpoly_leftMulMatrix
 
 中文:
 定理 charpoly_leftMulMatrix
-  条件: {S : 类型} [Ring S] [Algebra R S] (h : PowerBasis R S)
+  条件: {S : 类型} [环 S] [代数 R S] (h : PowerBasis R S)
   证明: by
   cases subsingleton_or_nontrivial R; · subsingleton
   apply minpoly.unique' R h.gen (charpoly_monic _)

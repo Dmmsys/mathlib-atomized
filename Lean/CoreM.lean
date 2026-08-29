@@ -32,7 +32,7 @@ Prod.fst < > (CoreM.toIO · ctx state) do
 
 中文:
 定义 CoreM.withImportModules
-  签名: {α : Type} (modules : Array Name) (run : CoreM α)
+  签名: {α : 类型} (modules : 数组 Name) (run : CoreM α)
   定义体: unsafe do
   if let some sp := searchPath then searchPathRef.set sp
   Lean.withImportModules (modules.map ({ module := · })) options (trustLevel := trustLevel)

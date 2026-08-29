@@ -331,7 +331,7 @@ instance :
 
 中文:
 实例 :
-  签名: HasShift (Triangle C) 整数
+  签名: 有Shift (Triangle C) 整数
   定义体: hasShiftMk (Triangle C) Int
     { F := Triangle.shiftFunctor C
       zero := Triangle.shiftFunctorZero C

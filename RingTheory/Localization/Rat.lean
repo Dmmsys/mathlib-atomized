@@ -28,8 +28,8 @@ theorem isLocalizationIsInteger_iff
   simp [IsLocalization.IsInteger]
 
 中文:
-定理 isLocalizationIsInteger_iff
-  条件: (q : Rat)
+定理 isLocalizationIs整数eger_iff
+  条件: (q : 有理数)
   证明: by
   simp [IsLocalization.IsInteger]
 
@@ -51,7 +51,7 @@ theorem associated_num_den
 
 中文:
 定理 associated_num_den
-  条件: (q : Rat)
+  条件: (q : 有理数)
   证明: num_den_unique Int q q.num ⟨q.den, by simp⟩
     (by simpa [isRelPrime_iff_isCoprime, Int.isCoprime_iff_nat_coprime] using q.reduced)
     (by simp [Rat.num_div_den])
@@ -76,7 +76,7 @@ theorem isFractionRingDen
 
 中文:
 定理 isFractionRingDen
-  条件: (q : Rat)
+  条件: (q : 有理数)
   结论: (IsFractionRing.den 整数 q : 整数).natAbs = q.den
   证明: by
   simpa [Int.associated_iff_natAbs] using q.associated_num_den.2
@@ -97,7 +97,7 @@ theorem isFractionRingNum
 
 中文:
 定理 isFractionRingNum
-  条件: (q : Rat)
+  条件: (q : 有理数)
   结论: Associated (IsFractionRing.num 整数 q : 整数) q.num
   证明: q.associated_num_den.1
 

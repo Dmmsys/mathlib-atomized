@@ -52,7 +52,7 @@ definition finsuppAntidiag
 
 中文:
 定义 finsuppAntidiag
-  签名: (s : Finset ι) (n : μ)
+  签名: (s : 有限集 ι) (n : μ)
   定义体: (piAntidiag s n).attach.map ⟨fun f => ⟨s.filter (f.1 · != 0), f.1, by
     simpa using (mem_piAntidiag.1 f.2).2⟩, fun _ _ hfg => Subtype.ext (congr_arg (⇑) hfg)⟩
 
@@ -74,7 +74,7 @@ lemma mem_finsuppAntidiag
 
 中文:
 引理 mem_finsuppAntidiag
-  结论: f in finsuppAntidiag s n ↔ s.sum f = n ∧ f.support subseteq s
+  结论: f in finsuppAntidiag s n ↔ s.求和 f = n ∧ f.support subseteq s
   证明: by
   simp [finsuppAntidiag, ← DFunLike.coe_fn_eq, subset_iff]
 -/
@@ -117,7 +117,7 @@ lemma finsuppAntidiag_empty_zero
 
 中文:
 引理 finsuppAntidiag_empty_zero
-  结论: finsuppAntidiag (∅ : Finset ι) (0 : μ) = {0}
+  结论: finsuppAntidiag (∅ : 有限集 ι) (0 : μ) = {0}
   证明: by
   ext f; simp
 -/
@@ -177,7 +177,7 @@ theorem mem_finsuppAntidiag_insert
 
 中文:
 定理 mem_finsuppAntidiag_insert
-  结论: {a : ι} {s : Finset ι}
+  结论: {a : ι} {s : 有限集 ι}
   证明: by
   simp only [mem_finsuppAntidiag, mem_antidiagonal, Prod.exists, sum_insert h]
   constructor
@@ -230,7 +230,7 @@ theorem finsuppAntidiag_insert
 
 中文:
 定理 finsuppAntidiag_insert
-  结论: {a : ι} {s : Finset ι}
+  结论: {a : ι} {s : 有限集 ι}
   证明: by
   ext f
   rw [mem_finsuppAntidiag_insert h]; rw [mem_biUnion]
@@ -276,7 +276,7 @@ theorem finsuppAntidiag_mono
 
 中文:
 定理 finsuppAntidiag_mono
-  条件: {s t : Finset ι} (h : s subseteq t) (n : μ)
+  条件: {s t : 有限集 ι} (h : s subseteq t) (n : μ)
   证明: by
   intro a
   simp_rw [mem_finsuppAntidiag']
@@ -313,7 +313,7 @@ lemma mapRange_finsuppAntidiag_subset
 
 中文:
 引理 mapRange_finsuppAntidiag_subset
-  条件: {e : μ ≃+ μ'} {s : Finset ι} {n : μ}
+  条件: {e : μ ≃+ μ'} {s : 有限集 ι} {n : μ}
   证明: by
   intro f
   simp only [mem_map, mem_finsuppAntidiag']
@@ -356,7 +356,7 @@ lemma mapRange_finsuppAntidiag_eq
 
 中文:
 引理 mapRange_finsuppAntidiag_eq
-  条件: {e : μ ≃+ μ'} {s : Finset ι} {n : μ}
+  条件: {e : μ ≃+ μ'} {s : 有限集 ι} {n : μ}
   证明: by
   ext f
   constructor
@@ -405,7 +405,7 @@ lemma finsuppAntidiag_zero
 
 中文:
 引理 finsuppAntidiag_zero
-  条件: (s : Finset ι)
+  条件: (s : 有限集 ι)
   结论: finsuppAntidiag s (0 : μ) = {0}
   证明: by
   ext f; simp [finsuppAntidiag, ← DFunLike.coe_fn_eq (g := f), eq_comm]

@@ -38,7 +38,7 @@ definition lineGraph
 
 中文:
 定义 lineGraph
-  签名: : SimpleGraph G.edgeSet where
+  签名: : 简单图 G.edgeSet where
   定义体: e₁ != e₂ ∧ (e₁ inter e₂ : Set V).Nonempty
   symm.symm e₁ e₂ hadj := by rwa [ne_comm, Set.inter_comm]
 
@@ -58,7 +58,7 @@ lemma lineGraph_adj_iff_exists
   simp [Set.Nonempty, lineGraph]
 
 中文:
-引理 lineGraph_adj_iff_exists
+引理 lineGraph_adj_iff_存在
   条件: {e₁ e₂ : G.edgeSet}
   证明: by
   simp [Set.Nonempty, lineGraph]
@@ -79,7 +79,7 @@ lemma lineGraph_bot
 
 中文:
 引理 lineGraph_bot
-  结论: (⊥ : SimpleGraph V).lineGraph = ⊥
+  结论: (⊥ : 简单图 V).lineGraph = ⊥
   证明: by aesop (add simp lineGraph)
 -/
 @[simp] lemma lineGraph_bot : (⊥ : SimpleGraph V).lineGraph = ⊥ := by aesop (add simp lineGraph)
@@ -99,8 +99,8 @@ refine .and ?_ Set.image_inter f.injective ▸ Set.image_nonempty
  
 
 中文:
-定义 Copy.toLineGraphEmbedding
-  签名: (f : Copy G G')
+定义 余py.toLineGraphEmbedding
+  签名: (f : 余py G G')
   定义体: ⟨e.val.map f, by rcases e with ⟨⟨⟩, h⟩; exact f.toHom.map_adj h⟩
 inj' _ _ h := SetCoe.ext Sym2.map.injective f.injective Subtype.mk.inj h
   map_rel_iff' := by
@@ -168,8 +168,8 @@ definition Copy.lineGraph
   body: f.toLineGraphEmbedding.toCopy
 
 中文:
-定义 Copy.lineGraph
-  签名: (f : Copy G G')
+定义 余py.lineGraph
+  签名: (f : 余py G G')
   定义体: f.toLineGraphEmbedding.toCopy
 
 Depends on / 依赖: f.toLineGraphEmbedding.toCopy, toCopy, toLineGraphEmbedding
@@ -210,7 +210,7 @@ definition Iso.lineGraph
 .map_rel_iff map_rel_iff' := Copy.toLineGraphEmbedding f.toCopy
 
 中文:
-定义 Iso.lineGraph
+定义 同构.lineGraph
   签名: (f : G ≃g G')
   定义体: f.toCopy.lineGraph
   invFun := f.symm.toCopy.lineGraph
@@ -242,7 +242,7 @@ theorem map_lineGraph_le_of_le
 
 中文:
 定理 map_lineGraph_le_of_le
-  条件: {G' : SimpleGraph V} (h : G <= G')
+  条件: {G' : 简单图 V} (h : G <= G')
   证明: by
   rintro _ _ ⟨hne', ⟨⟨⟩, h₁⟩, ⟨⟨⟩, h₂⟩, ⟨hne, hinter⟩, rfl, rfl⟩
   exact ⟨hne', ⟨⟨_, h h₁⟩, ⟨_, h h₂⟩, ⟨(hne <| Subtype.ext <| Subtype.mk.inj ·), hinter⟩, rfl, rfl⟩⟩

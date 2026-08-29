@@ -70,7 +70,7 @@ abbreviation ProdSpaceFun
 
 中文:
 缩写 ProdSpaceFun
-  签名: : Type _
+  签名: : 类型 _
   定义体: (X oplus Y) × (X oplus Y) -> Real
 -/
 private abbrev ProdSpaceFun : Type _ :=
@@ -87,7 +87,7 @@ abbreviation Cb
 
 中文:
 缩写 Cb
-  签名: : Type _
+  签名: : 类型 _
   定义体: BoundedContinuousFunction ((X oplus Y) × (X oplus Y)) Real
 -/
 private abbrev Cb : Type _ :=
@@ -149,7 +149,7 @@ definition candidates
 
 中文:
 定义 candidates
-  签名: : Set (ProdSpaceFun X Y)
+  签名: : 集合 (ProdSpaceFun X Y)
   定义体: { f | (((((forall x y : X, f (Sum.inl x, Sum.inl y) = dist x y) ∧
       forall x y : Y, f (Sum.inr x, Sum.inr y) = dist x y) ∧
       forall x y, f (x, y) = f (y, x)) ∧
@@ -178,7 +178,7 @@ definition candidatesB
 
 中文:
 定义 candidatesB
-  签名: : Set (Cb X Y)
+  签名: : 集合 (Cb X Y)
   定义体: { f : Cb X Y | (f : _ -> Real) in candidates X Y }
 -/
 private def candidatesB : Set (Cb X Y) :=
@@ -207,7 +207,7 @@ theorem maxVar_bound
 
 中文:
 定理 maxVar_bound
-  条件: [CompactSpace X] [Nonempty X] [CompactSpace Y] [Nonempty Y]
+  条件: [紧空间 X] [非空 X] [紧空间 Y] [非空 Y]
   证明: calc
     dist x y <= diam (univ : Set (X oplus Y)) :=
       dist_le_diam_of_mem isBounded_of_compactSpace (mem_univ _) (mem_univ _)
@@ -514,7 +514,7 @@ theorem closed_candidatesB
 
 中文:
 定理 closed_candidatesB
-  结论: IsClosed (candidatesB X Y)
+  结论: 是闭集 (candidatesB X Y)
   证明: by
   have I1 : forall x y, IsClosed { f : Cb X Y | f (inl x, inl y) = dist x y } := fun x y =>
     isClosed_eq (continuous_eval_const _) continuous_const
@@ -607,7 +607,7 @@ theorem HD_bound_aux1
 
 中文:
 定理 HD_bound_aux1
-  条件: [Nonempty Y] (f : Cb X Y) (C : 实数)
+  条件: [非空 Y] (f : Cb X Y) (C : 实数)
   证明: by
   obtain ⟨Cf, hCf⟩ := f.isBounded_range.bddAbove
   refine ⟨Cf + C, forall_mem_range.2 fun x => ?_⟩
@@ -662,7 +662,7 @@ theorem HD_bound_aux2
 
 中文:
 定理 HD_bound_aux2
-  条件: [Nonempty X] (f : Cb X Y) (C : 实数)
+  条件: [非空 X] (f : Cb X Y) (C : 实数)
   证明: by
   obtain ⟨Cf, hCf⟩ := f.isBounded_range.bddAbove
   refine ⟨Cf + C, forall_mem_range.2 fun y => ?_⟩
@@ -813,7 +813,7 @@ theorem HD_continuous
 
 中文:
 定理 HD_continuous
-  结论: Continuous (HD : Cb X Y -> 实数)
+  结论: 连续 (HD : Cb X Y -> 实数)
   证明: LipschitzWith.continuous (LipschitzWith.of_le_add HD_lipschitz_aux3)
 -/
 private theorem HD_continuous : Continuous (HD : Cb X Y -> Real) :=
@@ -839,7 +839,7 @@ theorem isCompact_candidatesB
 
 中文:
 定理 isCompact_candidatesB
-  结论: IsCompact (candidatesB X Y)
+  结论: 是紧集 (candidatesB X Y)
   证明: by
   refine arzela_ascoli₂
       (Icc 0 (maxVar X Y) : Set Real) isCompact_Icc (candidatesB X Y) closed_candidatesB ?_ ?_
@@ -938,7 +938,7 @@ definition candidatesBDist
 
 中文:
 定义 candidatesBDist
-  签名: (X : 类型u) (Y : 类型v) [MetricSpace X] [CompactSpace X] [Nonempty X]
+  签名: (X : 类型u) (Y : 类型v) [度量空间 X] [紧空间 X] [非空 X]
   定义体: candidatesBOfCandidates _ dist_mem_candidates
 
 Depends on / 依赖: candidatesBOfCandidates, dist_mem_candidates
@@ -976,7 +976,7 @@ theorem candidatesB_nonempty
 
 中文:
 定理 candidatesB_nonempty
-  结论: (candidatesB X Y).Nonempty
+  结论: (candidatesB X Y).非空
   证明: ⟨_, candidatesBDist_mem_candidatesB⟩
 -/
 private theorem candidatesB_nonempty : (candidatesB X Y).Nonempty :=
@@ -1041,7 +1041,7 @@ theorem exists_minimizer
   proof: isCompact_candidatesB.exists_isMinOn candidatesB_nonempty HD_continuous.continuousOn
 
 中文:
-定理 exists_minimizer
+定理 存在_minimizer
   结论: 存在 f in candidatesB X Y, 对任意 g in candidatesB X Y, HD f <= HD g
   证明: isCompact_candidatesB.exists_isMinOn candidatesB_nonempty HD_continuous.continuousOn
 -/
@@ -1126,7 +1126,7 @@ definition premetricOptimalGHDist
 
 中文:
 定义 premetricOptimalGHDist
-  签名: : PseudoMetricSpace (X oplus Y) where
+  签名: : 伪度量空间 (X oplus Y) where
   定义体: optimalGHDist X Y (p, q)
   dist_self _ := candidates_refl (optimalGHDist_mem_candidatesB X Y)
   dist_comm _ _ := candidates_symm (optimalGHDist_mem_candidatesB X Y)
@@ -1153,7 +1153,7 @@ deriving MetricSpace
 
 中文:
 定义 OptimalGHCoupling
-  签名: : Type _
+  签名: : 类型 _
   定义体: @SeparationQuotient (X oplus Y) (premetricOptimalGHDist X Y).toUniformSpace.toTopologicalSpace
 deriving MetricSpace
 
@@ -1191,7 +1191,7 @@ theorem isometry_optimalGHInjl
 
 中文:
 定理 isometry_optimalGHInjl
-  结论: Isometry (optimalGHInjl X Y)
+  结论: 等距 (optimalGHInjl X Y)
   证明: Isometry.of_dist_eq fun _ _ => candidates_dist_inl (optimalGHDist_mem_candidatesB X Y) _ _
 
 Depends on / 依赖: Isometry, Isometry.of_dist_eq, candidates_dist_inl, of_dist_eq, optimalGHDist_mem_candidatesB
@@ -1227,7 +1227,7 @@ theorem isometry_optimalGHInjr
 
 中文:
 定理 isometry_optimalGHInjr
-  结论: Isometry (optimalGHInjr X Y)
+  结论: 等距 (optimalGHInjr X Y)
   证明: Isometry.of_dist_eq fun _ _ => candidates_dist_inr (optimalGHDist_mem_candidatesB X Y) _ _
 
 Depends on / 依赖: Isometry, Isometry.of_dist_eq, candidates_dist_inr, of_dist_eq, optimalGHDist_mem_candidatesB
@@ -1249,7 +1249,7 @@ instance compactSpace_optimalGHCoupling
 
 中文:
 实例 compactSpace_optimalGHCoupling
-  签名: : CompactSpace (OptimalGHCoupling X Y)
+  签名: : 紧空间 (OptimalGHCoupling X Y)
   定义体: ⟨by
   rw [← range_quotient_mk']
   exact isCompact_range (continuous_sum_dom.2

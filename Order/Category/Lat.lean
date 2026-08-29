@@ -39,11 +39,11 @@ structure Lat
     - [str : Lattice carrier]
 
 中文:
-结构 Lat
+结构 格
   参数: where
   公理与运算 (2 个):
     - (carrier : 类型)
-    - [str : Lattice carrier]
+    - [str : 格 carrier]
 -/
 structure Lat where
   /-- The underlying lattices. -/
@@ -66,7 +66,7 @@ instance :
 
 中文:
 实例 :
-  签名: CoeSort Lat (Type _)
+  签名: CoeSort 格 (类型 _)
   定义体: ⟨Lat.carrier⟩
 
 Depends on / 依赖: Lat.carrier, carrier
@@ -86,7 +86,7 @@ abbreviation of
 
 中文:
 缩写 of
-  签名: (X : 类型) [Lattice X]
+  签名: (X : 类型) [格 X]
   定义体: ⟨X⟩
 -/
 abbrev of (X : Type*) [Lattice X] : Lat := ⟨X⟩
@@ -104,11 +104,11 @@ structure Hom
     - hom' : LatticeHom X Y
 
 中文:
-结构 Hom
-  参数: (X Y : Lat.{u})
+结构 态射
+  参数: (X Y : 格.{u})
   公理与运算 (2 个):
     - private(mk) : :
-    - hom' : LatticeHom X Y
+    - hom' : 格态射 X Y
 -/
 structure Hom (X Y : Lat.{u}) where
   private mk ::
@@ -129,7 +129,7 @@ instance :
 
 中文:
 实例 :
-  签名: Category Lat.{u}
+  签名: 范畴 格.{u}
   定义体: Hom X Y
   id X := ⟨LatticeHom.id X⟩
   comp f g := ⟨g.hom'.comp f.hom'⟩
@@ -152,7 +152,7 @@ instance :
 
 中文:
 实例 :
-  签名: ConcreteCategory Lat (LatticeHom · ·)
+  签名: 余ncrete范畴 格 (格态射 · ·)
   定义体: Hom.hom'
   ofHom := Hom.mk
 
@@ -171,8 +171,8 @@ abbreviation Hom.hom
   body: ConcreteCategory.hom (C := Lat) f
 
 中文:
-缩写 Hom.hom
-  签名: {X Y : Lat.{u}} (f : Hom X Y)
+缩写 态射.hom
+  签名: {X Y : 格.{u}} (f : 态射 X Y)
   定义体: ConcreteCategory.hom (C := Lat) f
 -/
 abbrev Hom.hom {X Y : Lat.{u}} (f : Hom X Y) :=
@@ -188,7 +188,7 @@ abbreviation ofHom
 
 中文:
 缩写 ofHom
-  签名: {X Y : 类型u} [Lattice X] [Lattice Y] (f : LatticeHom X Y)
+  签名: {X Y : 类型u} [格 X] [格 Y] (f : 格态射 X Y)
   定义体: ConcreteCategory.ofHom (C := Lat) f
 
 Depends on / 依赖: ConcreteCategory, ConcreteCategory.ofHom
@@ -208,8 +208,8 @@ definition Hom.Simps.hom
 initialize_simps_projections Hom (hom' -> hom)
 
 中文:
-定义 Hom.Simps.hom
-  签名: (X Y : Lat.{u}) (f : Hom X Y)
+定义 态射.Simps.hom
+  签名: (X Y : 格.{u}) (f : 态射 X Y)
   定义体: f.hom
 
 initialize_simps_projections Hom (hom' -> hom)
@@ -237,7 +237,7 @@ lemma coe_id
 
 中文:
 引理 coe_id
-  条件: {X : Lat}
+  条件: {X : 格}
   结论: (𝟙 X : X -> X) = id
   证明: rfl
 
@@ -259,7 +259,7 @@ lemma coe_comp
 
 中文:
 引理 coe_comp
-  条件: {X Y Z : Lat} {f : X ⟶ Y} {g : Y ⟶ Z}
+  条件: {X Y Z : 格} {f : X ⟶ Y} {g : Y ⟶ Z}
   结论: (f ≫ g : X -> Z) = g ∘ f
   证明: rfl
 
@@ -280,7 +280,7 @@ lemma forget_map
 
 中文:
 引理 forget_map
-  条件: {X Y : Lat} (f : X ⟶ Y)
+  条件: {X Y : 格} (f : X ⟶ Y)
   证明: rfl
 
 @[ext]
@@ -300,7 +300,7 @@ lemma ext
 
 中文:
 引理 ext
-  条件: {X Y : Lat} {f g : X ⟶ Y} (w : 对任意 x : X, f x = g x)
+  条件: {X Y : 格} {f g : X ⟶ Y} (w : 对任意 x : X, f x = g x)
   结论: f = g
   证明: ConcreteCategory.hom_ext _ _ w
 
@@ -323,8 +323,8 @@ theorem coe_of
 
 中文:
 定理 coe_of
-  条件: (X : 类型u) [Lattice X]
-  结论: (Lat.of X : 类型u) = X
+  条件: (X : 类型u) [格 X]
+  结论: (格.of X : 类型u) = X
   证明: rfl
 
 @[simp]
@@ -343,8 +343,8 @@ lemma hom_id
 
 中文:
 引理 hom_id
-  条件: {X : Lat}
-  结论: (𝟙 X : X ⟶ X).hom = LatticeHom.id _
+  条件: {X : 格}
+  结论: (𝟙 X : X ⟶ X).hom = 格态射.id _
   证明: rfl
 -/
 lemma hom_id {X : Lat} : (𝟙 X : X ⟶ X).hom = LatticeHom.id _ := rfl
@@ -361,7 +361,7 @@ lemma id_apply
 
 中文:
 引理 id_apply
-  条件: (X : Lat) (x : X)
+  条件: (X : 格) (x : X)
   证明: by simp
 
 @[simp]
@@ -382,7 +382,7 @@ lemma hom_comp
 
 中文:
 引理 hom_comp
-  条件: {X Y Z : Lat} (f : X ⟶ Y) (g : Y ⟶ Z)
+  条件: {X Y Z : 格} (f : X ⟶ Y) (g : Y ⟶ Z)
   证明: rfl
 -/
 lemma hom_comp {X Y Z : Lat} (f : X ⟶ Y) (g : Y ⟶ Z) :
@@ -400,7 +400,7 @@ lemma comp_apply
 
 中文:
 引理 comp_apply
-  条件: {X Y Z : Lat} (f : X ⟶ Y) (g : Y ⟶ Z) (x : X)
+  条件: {X Y Z : 格} (f : X ⟶ Y) (g : Y ⟶ Z) (x : X)
   证明: by simp
 
 @[ext]
@@ -422,7 +422,7 @@ lemma hom_ext
 
 中文:
 引理 hom_ext
-  条件: {X Y : Lat} {f g : X ⟶ Y} (hf : f.hom = g.hom)
+  条件: {X Y : 格} {f g : X ⟶ Y} (hf : f.hom = g.hom)
   结论: f = g
   证明: Hom.ext hf
 
@@ -447,7 +447,7 @@ lemma hom_ofHom
 
 中文:
 引理 hom_ofHom
-  条件: {X Y : 类型u} [Lattice X] [Lattice Y] (f : LatticeHom X Y)
+  条件: {X Y : 类型u} [格 X] [格 Y] (f : 格态射 X Y)
   结论: (ofHom f).hom = f
   证明: rfl
 
@@ -469,7 +469,7 @@ lemma ofHom_hom
 
 中文:
 引理 ofHom_hom
-  条件: {X Y : Lat} (f : X ⟶ Y)
+  条件: {X Y : 格} (f : X ⟶ Y)
   证明: rfl
 
 @[simp]
@@ -491,8 +491,8 @@ lemma ofHom_id
 
 中文:
 引理 ofHom_id
-  条件: {X : 类型u} [Lattice X]
-  结论: ofHom (LatticeHom.id _) = 𝟙 (of X)
+  条件: {X : 类型u} [格 X]
+  结论: ofHom (格态射.id _) = 𝟙 (of X)
   证明: rfl
 
 @[simp]
@@ -510,7 +510,7 @@ lemma ofHom_comp
 
 中文:
 引理 ofHom_comp
-  结论: {X Y Z : 类型u} [Lattice X] [Lattice Y] [Lattice Z]
+  结论: {X Y Z : 类型u} [格 X] [格 Y] [格 Z]
   证明: rfl
 -/
 lemma ofHom_comp {X Y Z : Type u} [Lattice X] [Lattice Y] [Lattice Z]
@@ -528,7 +528,7 @@ lemma ofHom_apply
 
 中文:
 引理 ofHom_apply
-  条件: {X Y : 类型u} [Lattice X] [Lattice Y] (f : LatticeHom X Y) (x : X)
+  条件: {X Y : 类型u} [格 X] [格 Y] (f : 格态射 X Y) (x : X)
   证明: rfl
 -/
 lemma ofHom_apply {X Y : Type u} [Lattice X] [Lattice Y] (f : LatticeHom X Y) (x : X) :
@@ -546,7 +546,7 @@ lemma inv_hom_apply
 
 中文:
 引理 inv_hom_apply
-  条件: {X Y : Lat} (e : X ≅ Y) (x : X)
+  条件: {X Y : 格} (e : X ≅ Y) (x : X)
   结论: e.inv (e.hom x) = x
   证明: by
   simp
@@ -566,7 +566,7 @@ lemma hom_inv_apply
 
 中文:
 引理 hom_inv_apply
-  条件: {X Y : Lat} (e : X ≅ Y) (s : Y)
+  条件: {X Y : 格} (e : X ≅ Y) (s : Y)
   结论: e.hom (e.inv s) = s
   证明: by
   simp
@@ -585,7 +585,7 @@ instance hasForgetToPartOrd
 
 中文:
 实例 hasForgetToPartOrd
-  签名: : HasForget₂ Lat PartOrd where
+  签名: : 有Forget₂ 格 偏序 where
   定义体: .of X
   forget₂.map f := PartOrd.ofHom f.hom
 -/
@@ -605,8 +605,8 @@ definition Iso.mk
   inv := ofHom e.symm
 
 中文:
-定义 Iso.mk
-  签名: {α β : Lat.{u}} (e : α ≃o β)
+定义 同构.mk
+  签名: {α β : 格.{u}} (e : α ≃o β)
   定义体: ofHom e
   inv := ofHom e.symm
 -/
@@ -627,7 +627,7 @@ definition dual
 
 中文:
 定义 dual
-  签名: : Lat ⥤ Lat where
+  签名: : 格 ⥤ 格 where
   定义体: of Xᵒᵈ
   map f := ofHom f.hom.dual
 -/
@@ -650,7 +650,7 @@ counitIso := NatIso.ofComponents fun X => Iso.mk OrderIso.dualDual X
 
 中文:
 定义 dualEquiv
-  签名: : Lat ≌ Lat where
+  签名: : 格 ≌ 格 where
   定义体: dual
   inverse := dual
 unitIso := NatIso.ofComponents fun X => Iso.mk OrderIso.dualDual X

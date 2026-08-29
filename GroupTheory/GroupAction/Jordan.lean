@@ -147,7 +147,7 @@ have : Finite α := Nat.finite_of_card_ne_zero ne_zero_of_lt hsn'
     simp only [hsn, add_lt_add_iff_left, Nat.not_ofNat_lt
 
 中文:
-定理 MulAction.IsPreprimitive.is_two_motive_of_is_motive
+定理 乘法作用.是Preprimitive.is_two_motive_of_is_motive
   证明: by
   induction n using Nat.strong_induction_on generalizing α G with
   | h n hrec =>
@@ -282,7 +282,7 @@ theorem MulAction.IsPreprimitive.is_two_pretransitive
   proof: (hG.is_two_motive_of_is_motive hsn hsn').1 hs_trans
 
 中文:
-定理 MulAction.IsPreprimitive.is_two_pretransitive
+定理 乘法作用.是Preprimitive.is_two_pretransitive
   证明: (hG.is_two_motive_of_is_motive hsn hsn').1 hs_trans
 
 Depends on / 依赖: hG.is_two_motive_of_is_motive, hs_trans, is_two_motive_of_is_motive
@@ -302,7 +302,7 @@ theorem MulAction.IsPreprimitive.is_two_preprimitive
   proof: (hG.is_two_motive_of_is_motive hsn hsn').2 hs_prim
 
 中文:
-定理 MulAction.IsPreprimitive.is_two_preprimitive
+定理 乘法作用.是Preprimitive.is_two_preprimitive
   证明: (hG.is_two_motive_of_is_motive hsn hsn').2 hs_prim
 
 Depends on / 依赖: hG.is_two_motive_of_is_motive, hs_prim, is_two_motive_of_is_motive
@@ -337,7 +337,7 @@ theorem MulAction.IsPreprimitive.isMultiplyPreprimitive
     suffices ex
 
 中文:
-定理 MulAction.IsPreprimitive.isMultiplyPreprimitive
+定理 乘法作用.是Preprimitive.isMultiplyPreprimitive
   证明: by
   have hα : Finite α := Or.resolve_right (finite_or_infinite α) (fun _ => by
     simp [Nat.card_eq_zero_of_infinite] at hsn')
@@ -424,7 +424,7 @@ theorem subgroup_eq_top_of_nontrivial
 
 中文:
 定理 subgroup_eq_top_of_nontrivial
-  条件: [Finite α] (hα : 自然数.card α <= 2) (hG : Nontrivial G)
+  条件: [有限 α] (hα : 自然数.card α <= 2) (hG : 非平凡 G)
   证明: by
   apply Subgroup.eq_top_of_le_card
   rw [Nat.card_perm]
@@ -457,7 +457,7 @@ theorem isMultiplyPretransitive_of_nontrivial
 
 中文:
 定理 isMultiplyPretransitive_of_nontrivial
-  结论: {K : 类型} [Group K] [MulAction K α]
+  结论: {K : 类型} [群 K] [乘法作用 K α]
   证明: by
   have : Finite α := Or.resolve_right (finite_or_infinite α) (fun _ => by
     simp [Nat.card_eq_zero_of_infinite] at hα)
@@ -525,7 +525,7 @@ theorem isPretransitive_of_isCycle_mem
 
 中文:
 定理 isPretransitive_of_isCycle_mem
-  结论: {g : Perm α}
+  结论: {g : 置换 α}
   证明: by
   obtain ⟨a, _, hgc⟩ := hgc
   have hs : forall x : α, g • x != x ↔

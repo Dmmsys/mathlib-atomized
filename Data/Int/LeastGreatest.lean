@@ -109,7 +109,7 @@ theorem exists_least_of_bdd
   exact ⟨lb, H⟩
 
 中文:
-定理 exists_least_of_bdd
+定理 存在_least_of_bdd
   证明: by
   classical
   let ⟨b, Hb⟩ := Hbdd
@@ -210,7 +210,7 @@ theorem exists_greatest_of_bdd
   exact ⟨lb, H⟩
 
 中文:
-定理 exists_greatest_of_bdd
+定理 存在_greatest_of_bdd
   证明: by
   classical
   let ⟨b, Hb⟩ := Hbdd

@@ -180,11 +180,11 @@ structure Cert
 
 中文:
 结构 Cert
-  参数: {u : Level} {α : Q(类型u)} (rα : Q(CommRing $α))
+  参数: {u : Level} {α : Q(类型u)} (rα : Q(交换环 $α))
   公理与运算 (3 个):
     - {subject : Q($α)}
     - result : CertResult rα subject
-    - isZero : 布尔
+    - isZero : 布尔值
 -/
 structure Cert {u : Level} {α : Q(Type u)} (rα : Q(CommRing $α)) where
   /-- The expression being certified. -/
@@ -306,7 +306,7 @@ structure CertCache
 
 中文:
 结构 CertCache
-  参数: {u : Level} {α : Q(类型u)} (rα : Q(CommRing $α))
+  参数: {u : Level} {α : Q(类型u)} (rα : Q(交换环 $α))
   公理与运算 (3 个):
     - entryCache : Std.HashMap (自然数 × 自然数) (Cert rα)  [默认: {}]
     - iterStepEntryCache : Std.HashMap (自然数 × 自然数 × 自然数) (Cert rα)  [默认: {}]
@@ -330,7 +330,7 @@ abbreviation CertM
 
 中文:
 缩写 CertM
-  签名: {u : Level} {α : Q(类型u)} (rα : Q(CommRing $α))
+  签名: {u : Level} {α : Q(类型u)} (rα : Q(交换环 $α))
   定义体: StateT (CertCache rα) (ReaderT (Ctx rα) AtomM)
 
 Depends on / 依赖: CertCache, ReaderT, StateT

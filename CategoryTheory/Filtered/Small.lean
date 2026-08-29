@@ -45,10 +45,10 @@ inductive filteredClosure
 
 中文:
 归纳类型 filteredClosure
-  参数: : Object命题erty C
+  参数: : ObjectProperty C
   构造子 (3 个):
     - base: (x : α) -> filteredClosure (f x)
-    - max: {j j' : C} -> filteredClosure j -> filteredClosure j' -> filteredClosure (max j j')
+    - max: {j j' : C} -> filteredClosure j -> filteredClosure j' -> filteredClosure (最大值 j j')
     - coeq: {j j' : C} -> filteredClosure j -> filteredClosure j' -> (f f' : j ⟶ j') -> filteredClosure (coeq f f')
 -/
 inductive filteredClosure : ObjectProperty C
@@ -72,7 +72,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsFilteredOrEmpty (filteredClosure f).FullSubcategory
+  签名: 是FilteredOrEmpty (filteredClosure f).满子范畴
   定义体: ⟨⟨max j.1 j'.1, filteredClosure.max j.2 j'.2⟩, ObjectProperty.homMk (leftToMax _ _),
       ObjectProperty.homMk (rightToMax _ _), trivial⟩
   cocone_maps {j j'} f f' :=
@@ -116,7 +116,7 @@ inductive InductiveStep
 
 中文:
 归纳类型 InductiveStep
-  参数: (n : 自然数) (X : 对任意 (k : 自然数), k < n -> Σ t : Type (max v w), t -> C)
+  参数: (n : 自然数) (X : 对任意 (k : 自然数), k < n -> Σ t : 类型 (最大值 v w), t -> C)
 -/
 private inductive InductiveStep (n : Nat) (X : forall (k : Nat), k < n -> Σ t : Type (max v w), t -> C) :
     Type (max v w)
@@ -266,7 +266,7 @@ instance :
 
 中文:
 实例 :
-  签名: EssentiallySmall.{max v w} (filteredClosure f).FullSubcategory
+  签名: EssentiallySmall.{最大值 v w} (filteredClosure f).满子范畴
   定义体: have : LocallySmall.{max v w} (filteredClosure f).FullSubcategory := locallySmall_max.{w, v, u}
   have := small_fullSubcategory_filteredClosure f
   essentiallySmall_of_small_of_locallySmall _
@@ -293,8 +293,8 @@ definition SmallFilteredIntermediate
   body: SmallModel.{max u₁ v} (filteredClosure F.obj).FullSubcategory
 
 中文:
-定义 SmallFilteredIntermediate
-  签名: : Type (max u₁ v)
+定义 SmallFiltered整数ermediate
+  签名: : 类型 (最大值 u₁ v)
   定义体: SmallModel.{max u₁ v} (filteredClosure F.obj).FullSubcategory
 
 Depends on / 依赖: F.obj, FullSubcategory, SmallModel, filteredClosure
@@ -312,7 +312,7 @@ instance :
 
 中文:
 实例 :
-  签名: SmallCategory (SmallFiltered整数ermediate F)
+  签名: 小范畴 (SmallFiltered整数ermediate F)
   定义体: inferInstanceAs (SmallCategory (SmallModel (filteredClosure F.obj).FullSubcategory))
 
 Depends on / 依赖: F.obj, FullSubcategory, SmallCategory, SmallModel, filteredClosure
@@ -368,7 +368,7 @@ instance :
 
 中文:
 实例 :
-  签名: (inclusion F).Faithful
+  签名: (inclusion F).忠实
   定义体: inferInstanceAs ((equivSmallModel _).inverse ⋙ ObjectProperty.ι _).Faithful
 
 Depends on / 依赖: Faithful, ObjectProperty, equivSmallModel, inverse
@@ -386,7 +386,7 @@ instance :
 
 中文:
 实例 :
-  签名: (inclusion F).Full
+  签名: (inclusion F).满
   定义体: inferInstanceAs ((equivSmallModel _).inverse ⋙ ObjectProperty.ι _).Full
 
 Depends on / 依赖: ObjectProperty, equivSmallModel, inverse
@@ -422,7 +422,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsFilteredOrEmpty (SmallFiltered整数ermediate F)
+  签名: 是FilteredOrEmpty (SmallFiltered整数ermediate F)
   定义体: IsFilteredOrEmpty.of_equivalence (equivSmallModel _)
 
 Depends on / 依赖: IsFilteredOrEmpty, IsFilteredOrEmpty.of_equivalence, equivSmallModel, of_equivalence
@@ -440,8 +440,8 @@ instance [Nonempty
     nonempty := Nonempty.map (factoring F).obj inferInstance }
 
 中文:
-实例 [Nonempty
-  签名: D] : IsFiltered (SmallFiltered整数ermediate F)
+实例 [非空
+  签名: D] : 是Filtered (SmallFiltered整数ermediate F)
   定义体: { (inferInstance : IsFilteredOrEmpty _) with
     nonempty := Nonempty.map (factoring F).obj inferInstance }
 
@@ -476,10 +476,10 @@ inductive cofilteredClosure
 
 中文:
 归纳类型 cofilteredClosure
-  参数: : Object命题erty C
+  参数: : ObjectProperty C
   构造子 (3 个):
     - base: (x : α) -> cofilteredClosure (f x)
-    - min: {j j' : C} -> cofilteredClosure j -> cofilteredClosure j' -> cofilteredClosure (min j j')
+    - min: {j j' : C} -> cofilteredClosure j -> cofilteredClosure j' -> cofilteredClosure (最小值 j j')
     - eq: {j j' : C} -> cofilteredClosure j -> cofilteredClosure j' -> (f f' : j ⟶ j') -> cofilteredClosure (eq f f')
 -/
 inductive cofilteredClosure : ObjectProperty C
@@ -502,7 +502,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsCofilteredOrEmpty (cofilteredClosure f).FullSubcategory
+  签名: 是余filteredOrEmpty (cofilteredClosure f).满子范畴
   定义体: ⟨⟨min j.1 j'.1, cofilteredClosure.min j.2 j'.2⟩,
     ObjectProperty.homMk (minToLeft _ _), ObjectProperty.homMk (minToRight _ _), trivial⟩
   cone_maps {j j'} f f' :=
@@ -530,7 +530,7 @@ inductive InductiveStep
 
 中文:
 归纳类型 InductiveStep
-  参数: (n : 自然数) (X : 对任意 (k : 自然数), k < n -> Σ t : Type (max v w), t -> C)
+  参数: (n : 自然数) (X : 对任意 (k : 自然数), k < n -> Σ t : 类型 (最大值 v w), t -> C)
 -/
 private inductive InductiveStep (n : Nat) (X : forall (k : Nat), k < n -> Σ t : Type (max v w), t -> C) :
     Type (max v w)
@@ -683,7 +683,7 @@ instance :
 
 中文:
 实例 :
-  签名: EssentiallySmall.{max v w} (cofilteredClosure f).FullSubcategory
+  签名: EssentiallySmall.{最大值 v w} (cofilteredClosure f).满子范畴
   定义体: have : LocallySmall.{max v w} (cofilteredClosure f).FullSubcategory :=
     locallySmall_max.{w, v, u}
   have := small_fullSubcategory_cofilteredClosure f
@@ -712,8 +712,8 @@ definition SmallCofilteredIntermediate
   body: SmallModel.{max u₁ v} (cofilteredClosure F.obj).FullSubcategory
 
 中文:
-定义 SmallCofilteredIntermediate
-  签名: : Type (max u₁ v)
+定义 SmallCofiltered整数ermediate
+  签名: : 类型 (最大值 u₁ v)
   定义体: SmallModel.{max u₁ v} (cofilteredClosure F.obj).FullSubcategory
 
 Depends on / 依赖: F.obj, FullSubcategory, SmallModel, cofilteredClosure
@@ -731,7 +731,7 @@ instance :
 
 中文:
 实例 :
-  签名: SmallCategory (SmallCofiltered整数ermediate F)
+  签名: 小范畴 (SmallCofiltered整数ermediate F)
   定义体: inferInstanceAs (SmallCategory (SmallModel (cofilteredClosure F.obj).FullSubcategory))
 
 Depends on / 依赖: F.obj, FullSubcategory, SmallCategory, SmallModel, cofilteredClosure
@@ -787,7 +787,7 @@ instance :
 
 中文:
 实例 :
-  签名: (inclusion F).Faithful
+  签名: (inclusion F).忠实
   定义体: inferInstanceAs ((equivSmallModel _).inverse ⋙ ObjectProperty.ι _).Faithful
 
 Depends on / 依赖: Faithful, ObjectProperty, equivSmallModel, inverse
@@ -805,7 +805,7 @@ instance :
 
 中文:
 实例 :
-  签名: (inclusion F).Full
+  签名: (inclusion F).满
   定义体: inferInstanceAs ((equivSmallModel _).inverse ⋙ ObjectProperty.ι _).Full
 
 Depends on / 依赖: ObjectProperty, equivSmallModel, inverse
@@ -841,7 +841,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsCofilteredOrEmpty (SmallCofiltered整数ermediate F)
+  签名: 是余filteredOrEmpty (SmallCofiltered整数ermediate F)
   定义体: IsCofilteredOrEmpty.of_equivalence (equivSmallModel _)
 
 Depends on / 依赖: IsCofilteredOrEmpty, IsCofilteredOrEmpty.of_equivalence, equivSmallModel, of_equivalence
@@ -859,8 +859,8 @@ instance [Nonempty
     nonempty := Nonempty.map (factoring F).obj inferInstance }
 
 中文:
-实例 [Nonempty
-  签名: D] : IsCofiltered (SmallCofiltered整数ermediate F)
+实例 [非空
+  签名: D] : 是余filtered (SmallCofiltered整数ermediate F)
   定义体: { (inferInstance : IsCofilteredOrEmpty _) with
     nonempty := Nonempty.map (factoring F).obj inferInstance }
 

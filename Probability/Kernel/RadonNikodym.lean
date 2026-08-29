@@ -100,7 +100,7 @@ definition rnDerivAux
 
 中文:
 定义 rnDerivAux
-  签名: (κ η : Kernel α γ) (a : α) (x : γ)
+  签名: (κ η : 核 α γ) (a : α) (x : γ)
   定义体: if hα : Countable α then ((κ a).rnDeriv (η a) x).toReal
   else haveI := hαγ.countableOrCountablyGenerated.resolve_left hα
     density (map κ (fun a => (a, ()))) η a x univ
@@ -163,7 +163,7 @@ lemma rnDerivAux_le_one
 
 中文:
 引理 rnDerivAux_le_one
-  条件: [IsFiniteKernel η] (hκη : κ <= η) {a : α}
+  条件: [是FiniteKernel η] (hκη : κ <= η) {a : α}
   证明: by
   filter_upwards [Measure.rnDeriv_le_one_of_le (hκη a)] with x hx_le_one
   simp_rw [rnDerivAux]
@@ -204,7 +204,7 @@ lemma measurable_rnDerivAux
 
 中文:
 引理 measurable_rnDerivAux
-  条件: (κ η : Kernel α γ)
+  条件: (κ η : 核 α γ)
   证明: by
   simp_rw [rnDerivAux]
   split_ifs with hα
@@ -241,7 +241,7 @@ lemma measurable_rnDerivAux_right
 
 中文:
 引理 measurable_rnDerivAux_right
-  条件: (κ η : Kernel α γ) (a : α)
+  条件: (κ η : 核 α γ) (a : α)
   证明: by fun_prop
 
 Depends on / 依赖: fun_prop
@@ -265,8 +265,8 @@ lemma setLIntegral_rnDerivAux
     filter_upwards [Measure.r
 
 中文:
-引理 setLIntegral_rnDerivAux
-  结论: (κ η : Kernel α γ) [IsFiniteKernel κ] [IsFiniteKernel η]
+引理 setL整数egral_rnDerivAux
+  结论: (κ η : 核 α γ) [是FiniteKernel κ] [是FiniteKernel η]
   证明: by
   have h_le : κ <= κ + η := le_add_of_nonneg_right bot_le
   simp_rw [rnDerivAux]
@@ -310,7 +310,7 @@ lemma withDensity_rnDerivAux
 
 中文:
 引理 withDensity_rnDerivAux
-  条件: (κ η : Kernel α γ) [IsFiniteKernel κ] [IsFiniteKernel η]
+  条件: (κ η : 核 α γ) [是FiniteKernel κ] [是FiniteKernel η]
   证明: by
   ext a s hs
   rw [Kernel.withDensity_apply']
@@ -344,7 +344,7 @@ lemma withDensity_one_sub_rnDerivAux
 
 中文:
 引理 withDensity_one_sub_rnDerivAux
-  条件: (κ η : Kernel α γ) [IsFiniteKernel κ] [IsFiniteKernel η]
+  条件: (κ η : 核 α γ) [是FiniteKernel κ] [是FiniteKernel η]
   证明: by
   have h_le : κ <= κ + η := le_add_of_nonneg_right bot_le
   suffices withDensity (κ + η) (fun a x => Real.toNNReal (1 - rnDerivAux κ (κ + η) a x))
@@ -389,7 +389,7 @@ definition mutuallySingularSet
 
 中文:
 定义 mutuallySingularSet
-  签名: (κ η : Kernel α γ)
+  签名: (κ η : 核 α γ)
   定义体: {p | 1 <= rnDerivAux κ (κ + η) p.1 p.2}
 
 Depends on / 依赖: rnDerivAux
@@ -406,7 +406,7 @@ definition mutuallySingularSetSlice
 
 中文:
 定义 mutuallySingularSetSlice
-  签名: (κ η : Kernel α γ) (a : α)
+  签名: (κ η : 核 α γ) (a : α)
   定义体: {x | 1 <= rnDerivAux κ (κ + η) a x}
 
 Depends on / 依赖: rnDerivAux
@@ -425,7 +425,7 @@ lemma mem_mutuallySingularSetSlice
 
 中文:
 引理 mem_mutuallySingularSetSlice
-  条件: (κ η : Kernel α γ) (a : α) (x : γ)
+  条件: (κ η : 核 α γ) (a : α) (x : γ)
   证明: by
   rw [mutuallySingularSetSlice]; rw [mem_ofPred]
 
@@ -446,7 +446,7 @@ lemma notMem_mutuallySingularSetSlice
 
 中文:
 引理 notMem_mutuallySingularSetSlice
-  条件: (κ η : Kernel α γ) (a : α) (x : γ)
+  条件: (κ η : 核 α γ) (a : α) (x : γ)
   证明: by
   simp [mutuallySingularSetSlice]
 
@@ -466,7 +466,7 @@ lemma measurableSet_mutuallySingularSet
 
 中文:
 引理 measurableSet_mutuallySingularSet
-  条件: (κ η : Kernel α γ)
+  条件: (κ η : 核 α γ)
   证明: measurable_rnDerivAux κ (κ + η) measurableSet_Ici
 
 Depends on / 依赖: measurableSet_Ici, measurable_rnDerivAux
@@ -485,7 +485,7 @@ lemma measurableSet_mutuallySingularSetSlice
 
 中文:
 引理 measurableSet_mutuallySingularSetSlice
-  条件: (κ η : Kernel α γ) (a : α)
+  条件: (κ η : 核 α γ) (a : α)
   证明: measurable_prodMk_left (measurableSet_mutuallySingularSet κ η)
 
 Depends on / 依赖: measurableSet_mutuallySingularSet, measurable_prodMk_left
@@ -509,7 +509,7 @@ lemma measure_mutuallySingularSetSlice
 
 中文:
 引理 measure_mutuallySingularSetSlice
-  结论: (κ η : Kernel α γ) [IsFiniteKernel κ] [IsFiniteKernel η]
+  结论: (κ η : 核 α γ) [是FiniteKernel κ] [是FiniteKernel η]
   证明: by
   suffices withDensity (κ + η) (fun a x => Real.toNNReal
       (1 - rnDerivAux κ (κ + η) a x)) a {x | 1 <= rnDerivAux κ (κ + η) a x} = 0 by
@@ -552,7 +552,7 @@ lemma rnDeriv_def'
 
 中文:
 引理 rnDeriv_def'
-  条件: (κ η : Kernel α γ)
+  条件: (κ η : 核 α γ)
   证明: by ext; rw [rnDeriv_def]
 
 @[fun_prop]
@@ -579,7 +579,7 @@ lemma measurable_rnDeriv
 
 中文:
 引理 measurable_rnDeriv
-  条件: (κ η : Kernel α γ)
+  条件: (κ η : 核 α γ)
   证明: by
   simp_rw [rnDeriv_def]
   exact (measurable_rnDerivAux κ _).ennreal_ofReal.div
@@ -606,7 +606,7 @@ lemma measurable_rnDeriv_right
 
 中文:
 引理 measurable_rnDeriv_right
-  条件: (κ η : Kernel α γ) (a : α)
+  条件: (κ η : 核 α γ) (a : α)
   证明: by fun_prop
 
 Depends on / 依赖: fun_prop
@@ -628,7 +628,7 @@ lemma rnDeriv_eq_top_iff
 
 中文:
 引理 rnDeriv_eq_top_iff
-  条件: (κ η : Kernel α γ) (a : α) (x : γ)
+  条件: (κ η : 核 α γ) (a : α) (x : γ)
   证明: by
   simp only [rnDeriv, ENNReal.div_eq_top, ne_eq, ENNReal.ofReal_eq_zero, not_le,
     tsub_le_iff_right, zero_add, ENNReal.ofReal_ne_top, not_false_eq_true, and_true, or_false,
@@ -655,7 +655,7 @@ lemma rnDeriv_eq_top_iff'
 
 中文:
 引理 rnDeriv_eq_top_iff'
-  条件: (κ η : Kernel α γ) (a : α) (x : γ)
+  条件: (κ η : 核 α γ) (a : α) (x : γ)
   证明: by
   rw [rnDeriv_eq_top_iff]; rw [mutuallySingularSet]; rw [mutuallySingularSetSlice]; rw [mem_ofPred]; rw [mem_ofPred]
 
@@ -682,7 +682,7 @@ lemma measurable_singularPart_fun
 
 中文:
 引理 measurable_singularPart_fun
-  条件: (κ η : Kernel α γ)
+  条件: (κ η : 核 α γ)
   证明: by fun_prop
 
 Depends on / 依赖: fun_prop
@@ -705,7 +705,7 @@ lemma measurable_singularPart_fun_right
 
 中文:
 引理 measurable_singularPart_fun_right
-  条件: (κ η : Kernel α γ) (a : α)
+  条件: (κ η : 核 α γ) (a : α)
   证明: by
   change Measurable ((Function.uncurry fun a b =>
     ENNReal.ofReal (rnDerivAux κ (κ + η) a b)
@@ -738,7 +738,7 @@ lemma singularPart_compl_mutuallySingularSetSlice
 
 中文:
 引理 singularPart_compl_mutuallySingularSetSlice
-  结论: (κ η : Kernel α γ) [IsSFiniteKernel κ]
+  结论: (κ η : 核 α γ) [是SFiniteKernel κ]
   证明: by
   rw [singularPart]; rw [Kernel.withDensity_apply']; rw [lintegral_eq_zero_iff]; rw [EventuallyEq]; rw [ae_restrict_iff]
   all_goals simp_rw [ofNNReal_toNNReal]
@@ -777,7 +777,7 @@ lemma singularPart_of_subset_compl_mutuallySingularSetSlice
 
 中文:
 引理 singularPart_of_subset_compl_mutuallySingularSetSlice
-  结论: [IsSFiniteKernel κ]
+  结论: [是SFiniteKernel κ]
   证明: measure_mono_null hs (singularPart_compl_mutuallySingularSetSlice κ η a)
 
 Depends on / 依赖: measure_mono_null, singularPart_compl_mutuallySingularSetSlice
@@ -803,7 +803,7 @@ lemma singularPart_of_subset_mutuallySingularSetSlice
 
 中文:
 引理 singularPart_of_subset_mutuallySingularSetSlice
-  结论: [IsFiniteKernel κ]
+  结论: [是FiniteKernel κ]
   证明: by
   have hs' : forall x in s, 1 <= rnDerivAux κ (κ + η) a x := fun _ hx => hs hx
   rw [singularPart]; rw [Kernel.withDensity_apply']
@@ -849,7 +849,7 @@ lemma withDensity_rnDeriv_mutuallySingularSetSlice
 
 中文:
 引理 withDensity_rnDeriv_mutuallySingularSetSlice
-  结论: (κ η : Kernel α γ) [IsFiniteKernel κ]
+  结论: (κ η : 核 α γ) [是FiniteKernel κ]
   证明: by
   rw [Kernel.withDensity_apply']
   · exact setLIntegral_measure_zero _ _ (measure_mutuallySingularSetSlice κ η a)
@@ -874,7 +874,7 @@ lemma withDensity_rnDeriv_of_subset_mutuallySingularSetSlice
 
 中文:
 引理 withDensity_rnDeriv_of_subset_mutuallySingularSetSlice
-  结论: [IsFiniteKernel κ]
+  结论: [是FiniteKernel κ]
   证明: measure_mono_null hs (withDensity_rnDeriv_mutuallySingularSetSlice κ η a)
 
 Depends on / 依赖: measure_mono_null, withDensity_rnDeriv_mutuallySingularSetSlice
@@ -957,7 +957,7 @@ lemma mutuallySingular_singularPart
 
 中文:
 引理 mutuallySingular_singularPart
-  结论: (κ η : Kernel α γ) [IsFiniteKernel κ] [IsFiniteKernel η]
+  结论: (κ η : 核 α γ) [是FiniteKernel κ] [是FiniteKernel η]
   证明: by
   symm
   exact ⟨mutuallySingularSetSlice κ η a, measurableSet_mutuallySingularSetSlice κ η a,
@@ -988,7 +988,7 @@ lemma rnDeriv_add_singularPart
 
 中文:
 引理 rnDeriv_add_singularPart
-  条件: (κ η : Kernel α γ) [IsFiniteKernel κ] [IsFiniteKernel η]
+  条件: (κ η : 核 α γ) [是FiniteKernel κ] [是FiniteKernel η]
   证明: by
   ext a s hs
   rw [← inter_union_sdiff s (mutuallySingularSetSlice κ η a)]
@@ -1025,7 +1025,7 @@ lemma singularPart_eq_zero_iff_apply_eq_zero
 
 中文:
 引理 singularPart_eq_zero_iff_apply_eq_zero
-  结论: (κ η : Kernel α γ) [IsSFiniteKernel κ]
+  结论: (κ η : 核 α γ) [是SFiniteKernel κ]
   证明: by
   rw [← Measure.measure_univ_eq_zero]
   have : univ = (mutuallySingularSetSlice κ η a) union (mutuallySingularSetSlice κ η a)ᶜ := by simp
@@ -1053,7 +1053,7 @@ lemma withDensity_rnDeriv_eq_zero_iff_apply_eq_zero
 
 中文:
 引理 withDensity_rnDeriv_eq_zero_iff_apply_eq_zero
-  结论: (κ η : Kernel α γ) [IsFiniteKernel κ]
+  结论: (κ η : 核 α γ) [是FiniteKernel κ]
   证明: by
   rw [← Measure.measure_univ_eq_zero]
   have : univ = (mutuallySingularSetSlice κ η a) union (mutuallySingularSetSlice κ η a)ᶜ := by simp
@@ -1086,7 +1086,7 @@ lemma singularPart_eq_zero_iff_absolutelyContinuous
 
 中文:
 引理 singularPart_eq_zero_iff_absolutelyContinuous
-  结论: (κ η : Kernel α γ)
+  结论: (κ η : 核 α γ)
   证明: by
   conv_rhs => rw [← rnDeriv_add_singularPart κ η, add_apply]
   refine ⟨fun h => ?_, fun h => ?_⟩
@@ -1126,7 +1126,7 @@ lemma withDensity_rnDeriv_eq_zero_iff_mutuallySingular
 
 中文:
 引理 withDensity_rnDeriv_eq_zero_iff_mutuallySingular
-  结论: (κ η : Kernel α γ)
+  结论: (κ η : 核 α γ)
   证明: by
   conv_rhs => rw [← rnDeriv_add_singularPart κ η, add_apply]
   refine ⟨fun h => ?_, fun h => ?_⟩
@@ -1166,7 +1166,7 @@ lemma singularPart_eq_zero_iff_measure_eq_zero
 
 中文:
 引理 singularPart_eq_zero_iff_measure_eq_zero
-  结论: (κ η : Kernel α γ)
+  结论: (κ η : 核 α γ)
   证明: by
   have h_eq_add := rnDeriv_add_singularPart κ η
   simp_rw [Kernel.ext_iff, Measure.ext_iff] at h_eq_add
@@ -1205,7 +1205,7 @@ lemma withDensity_rnDeriv_eq_zero_iff_measure_eq_zero
 
 中文:
 引理 withDensity_rnDeriv_eq_zero_iff_measure_eq_zero
-  结论: (κ η : Kernel α γ)
+  结论: (κ η : 核 α γ)
   证明: by
   have h_eq_add := rnDeriv_add_singularPart κ η
   simp_rw [Kernel.ext_iff, Measure.ext_iff] at h_eq_add
@@ -1246,7 +1246,7 @@ lemma measurableSet_absolutelyContinuous
 
 中文:
 引理 measurableSet_absolutelyContinuous
-  条件: (κ η : Kernel α γ) [IsFiniteKernel κ] [IsFiniteKernel η]
+  条件: (κ η : 核 α γ) [是FiniteKernel κ] [是FiniteKernel η]
   证明: by
   simp_rw [← singularPart_eq_zero_iff_absolutelyContinuous,
     singularPart_eq_zero_iff_measure_eq_zero]
@@ -1280,7 +1280,7 @@ lemma measurableSet_mutuallySingular
 
 中文:
 引理 measurableSet_mutuallySingular
-  条件: (κ η : Kernel α γ) [IsFiniteKernel κ] [IsFiniteKernel η]
+  条件: (κ η : 核 α γ) [是FiniteKernel κ] [是FiniteKernel η]
   证明: by
   simp_rw [← withDensity_rnDeriv_eq_zero_iff_mutuallySingular,
     withDensity_rnDeriv_eq_zero_iff_measure_eq_zero]
@@ -1311,7 +1311,7 @@ lemma singularPart_self
 
 中文:
 引理 singularPart_self
-  条件: (κ : Kernel α γ) [IsFiniteKernel κ]
+  条件: (κ : 核 α γ) [是FiniteKernel κ]
   结论: κ.singularPart κ = 0
   证明: by
   ext : 1; rw [zero_apply, singularPart_eq_zero_iff_absolutelyContinuous]
@@ -1488,7 +1488,7 @@ instance [hκ
 
 中文:
 实例 [hκ
-  签名: : IsFiniteKernel κ] [IsFiniteKernel η] :
+  签名: : 是FiniteKernel κ] [是FiniteKernel η] :
   定义体: by
   refine ⟨κ.bound, κ.bound_lt_top, fun a => ?_⟩
   rw [Kernel.withDensity_apply']; rw [setLIntegral_univ]
@@ -1521,7 +1521,7 @@ instance [hκ
 
 中文:
 实例 [hκ
-  签名: : IsFiniteKernel κ] [IsFiniteKernel η] : IsFiniteKernel (singularPart κ η)
+  签名: : 是FiniteKernel κ] [是FiniteKernel η] : 是FiniteKernel (singularPart κ η)
   定义体: by
   refine ⟨κ.bound, κ.bound_lt_top, fun a => ?_⟩
   have h : withDensity η (rnDeriv κ η) a univ + singularPart κ η a univ = κ a univ := by
@@ -1551,7 +1551,7 @@ lemma measurable_singularPart
 
 中文:
 引理 measurable_singularPart
-  条件: (κ η : Kernel α γ) [IsFiniteKernel κ] [IsFiniteKernel η]
+  条件: (κ η : 核 α γ) [是FiniteKernel κ] [是FiniteKernel η]
   证明: by
   refine Measure.measurable_of_measurable_coe _ (fun s hs => ?_)
   simp_rw [← κ.singularPart_eq_singularPart_measure, κ.singularPart_def η]
@@ -1576,7 +1576,7 @@ lemma rnDeriv_self
 
 中文:
 引理 rnDeriv_self
-  条件: (κ : Kernel α γ) [IsFiniteKernel κ] (a : α)
+  条件: (κ : 核 α γ) [是FiniteKernel κ] (a : α)
   结论: rnDeriv κ κ a =ᵐ[κ a] 1
   证明: (κ.rnDeriv_eq_rnDeriv_measure).trans (κ a).rnDeriv_self
 
@@ -1598,7 +1598,7 @@ lemma rnDeriv_singularPart
 
 中文:
 引理 rnDeriv_singularPart
-  条件: (κ ν : Kernel α γ) [IsFiniteKernel κ] [IsFiniteKernel ν] (a : α)
+  条件: (κ ν : 核 α γ) [是FiniteKernel κ] [是FiniteKernel ν] (a : α)
   证明: by
   filter_upwards [(singularPart κ ν).rnDeriv_eq_rnDeriv_measure,
     (Measure.rnDeriv_eq_zero _ _).mpr (mutuallySingular_singularPart κ ν a)] with x h1 h2
@@ -1624,7 +1624,7 @@ lemma rnDeriv_lt_top
 
 中文:
 引理 rnDeriv_lt_top
-  条件: (κ η : Kernel α γ) [IsFiniteKernel κ] [IsFiniteKernel η] {a : α}
+  条件: (κ η : 核 α γ) [是FiniteKernel κ] [是FiniteKernel η] {a : α}
   证明: by
   filter_upwards [κ.rnDeriv_eq_rnDeriv_measure, (κ a).rnDeriv_ne_top _]
     with x heq htop using heq ▸ htop.lt_top
@@ -1647,7 +1647,7 @@ lemma rnDeriv_ne_top
 
 中文:
 引理 rnDeriv_ne_top
-  条件: (κ η : Kernel α γ) [IsFiniteKernel κ] [IsFiniteKernel η] {a : α}
+  条件: (κ η : 核 α γ) [是FiniteKernel κ] [是FiniteKernel η] {a : α}
   证明: by
   filter_upwards [κ.rnDeriv_lt_top η] with a h using h.ne
 
@@ -1669,7 +1669,7 @@ lemma rnDeriv_pos
 
 中文:
 引理 rnDeriv_pos
-  条件: [IsFiniteKernel κ] [IsFiniteKernel η] {a : α} (ha : κ a ≪ η a)
+  条件: [是FiniteKernel κ] [是FiniteKernel η] {a : α} (ha : κ a ≪ η a)
   证明: by
   filter_upwards [ha.ae_le κ.rnDeriv_eq_rnDeriv_measure, Measure.rnDeriv_pos ha]
     with x heq hpos using heq ▸ hpos
@@ -1692,8 +1692,8 @@ lemma rnDeriv_toReal_pos
   simp_all only [pos_iff_ne_zero, ne_eq, ENNReal.toReal_pos, not_false_eq_true]
 
 中文:
-引理 rnDeriv_toReal_pos
-  条件: [IsFiniteKernel κ] [IsFiniteKernel η] {a : α} (h : κ a ≪ η a)
+引理 rnDeriv_to实数_pos
+  条件: [是FiniteKernel κ] [是FiniteKernel η] {a : α} (h : κ a ≪ η a)
   证明: by
   filter_upwards [rnDeriv_pos h, h.ae_le (rnDeriv_ne_top κ _)] with x h0 htop
   simp_all only [pos_iff_ne_zero, ne_eq, ENNReal.toReal_pos, not_false_eq_true]
@@ -1718,7 +1718,7 @@ lemma rnDeriv_add
 
 中文:
 引理 rnDeriv_add
-  结论: (κ ν η : Kernel α γ) [IsFiniteKernel κ] [IsFiniteKernel ν] [IsFiniteKernel η]
+  结论: (κ ν η : 核 α γ) [是FiniteKernel κ] [是FiniteKernel ν] [是FiniteKernel η]
   证明: by
   filter_upwards [(κ + ν).rnDeriv_eq_rnDeriv_measure, κ.rnDeriv_eq_rnDeriv_measure,
     ν.rnDeriv_eq_rnDeriv_measure, (κ a).rnDeriv_add (ν a) (η a)] with x h1 h2 h3 h4
@@ -1744,8 +1744,8 @@ lemma setLIntegral_rnDeriv_le
   exact (κ a).withDensity_rnDeriv_le _ _
 
 中文:
-引理 setLIntegral_rnDeriv_le
-  结论: {κ η : Kernel α γ} [IsFiniteKernel κ] [IsFiniteKernel η]
+引理 setL整数egral_rnDeriv_le
+  结论: {κ η : 核 α γ} [是FiniteKernel κ] [是FiniteKernel η]
   证明: by
   rw [setLIntegral_congr_fun_ae hs ((κ.rnDeriv_eq_rnDeriv_measure).mono (fun x hx _ => hx))]; rw [← withDensity_apply' _ s]
   exact (κ a).withDensity_rnDeriv_le _ _
@@ -1768,8 +1768,8 @@ lemma setLIntegral_rnDeriv
   rw [setLIntegral_congr_fun_ae hs ((κ.rnDeriv_eq_rnDeriv_measure).mono (fun x hx _ => hx))]; rw [← withDensity_apply _ hs]; rw [(κ a).withDensity_rnDeriv_eq _ h]
 
 中文:
-引理 setLIntegral_rnDeriv
-  结论: {κ η : Kernel α γ} [IsFiniteKernel κ] [IsFiniteKernel η]
+引理 setL整数egral_rnDeriv
+  结论: {κ η : 核 α γ} [是FiniteKernel κ] [是FiniteKernel η]
   证明: by
   rw [setLIntegral_congr_fun_ae hs ((κ.rnDeriv_eq_rnDeriv_measure).mono (fun x hx _ => hx))]; rw [← withDensity_apply _ hs]; rw [(κ a).withDensity_rnDeriv_eq _ h]
 
@@ -1791,7 +1791,7 @@ lemma lintegral_rnDeriv
 
 中文:
 引理 lintegral_rnDeriv
-  结论: {κ η : Kernel α γ} [IsFiniteKernel κ] [IsFiniteKernel η]
+  结论: {κ η : 核 α γ} [是FiniteKernel κ] [是FiniteKernel η]
   证明: by
   rw [← setLIntegral_univ]; rw [setLIntegral_rnDeriv h MeasurableSet.univ]
 
@@ -1816,7 +1816,7 @@ lemma withDensity_rnDeriv_le
 
 中文:
 引理 withDensity_rnDeriv_le
-  条件: (κ η : Kernel α γ) [IsFiniteKernel κ] [IsFiniteKernel η] (a : α)
+  条件: (κ η : 核 α γ) [是FiniteKernel κ] [是FiniteKernel η] (a : α)
   证明: by
   refine Measure.le_intro (fun s hs _ => ?_)
   rw [Kernel.withDensity_apply']
@@ -1846,7 +1846,7 @@ lemma withDensity_rnDeriv_eq
 
 中文:
 引理 withDensity_rnDeriv_eq
-  条件: [IsFiniteKernel κ] [IsFiniteKernel η] {a : α} (h : κ a ≪ η a)
+  条件: [是FiniteKernel κ] [是FiniteKernel η] {a : α} (h : κ a ≪ η a)
   证明: by
   rw [Kernel.withDensity_apply]
   swap; · exact κ.measurable_rnDeriv _
@@ -1876,7 +1876,7 @@ lemma rnDeriv_withDensity
 
 中文:
 引理 rnDeriv_withDensity
-  结论: [IsFiniteKernel κ] {f : α -> γ -> 实数>=0∞} [IsFiniteKernel (withDensity κ f)]
+  结论: [是FiniteKernel κ] {f : α -> γ -> 实数>=0∞} [是FiniteKernel (withDensity κ f)]
   证明: by
   have h_ae := (κ.withDensity f).rnDeriv_eq_rnDeriv_measure (η := κ) (a := a)
   have hf' : forall a, Measurable (f a) := fun _ => hf.of_uncurry_left
@@ -1907,7 +1907,7 @@ lemma rnDeriv_eq_one_iff_eq
 
 中文:
 引理 rnDeriv_eq_one_iff_eq
-  结论: [IsFiniteKernel κ] [IsFiniteKernel η] {a : α}
+  结论: [是FiniteKernel κ] [是FiniteKernel η] {a : α}
   证明: by
   rw [← Measure.rnDeriv_eq_one_iff_eq h_ac]
   refine eventually_congr ?_

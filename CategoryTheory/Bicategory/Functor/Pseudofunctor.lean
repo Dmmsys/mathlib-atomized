@@ -62,8 +62,8 @@ structure Pseudofunctor
 
 中文:
 结构 Pseudofunctor
-  参数: (B : 类型u₁) [Bicategory.{w₁, v₁} B] (C : 类型u₂)
-  继承: PrelaxFunctor B C
+  参数: (B : 类型u₁) [双范畴.{w₁, v₁} B] (C : 类型u₂)
+  继承: 预松弛函子 B C
   公理与运算 (7 个):
     - mapId((a : B)) : map (𝟙 a) ≅ 𝟙 (obj a)
     - mapComp({a b c : B} (f : a ⟶ b) (g : b ⟶ c)) : map (f ≫ g) ≅ map f ≫ map g
@@ -254,7 +254,7 @@ definition id
 
 中文:
 定义 id
-  签名: (B : 类型u₁) [Bicategory.{w₁, v₁} B]
+  签名: (B : 类型u₁) [双范畴.{w₁, v₁} B]
   定义体: PrelaxFunctor.id B
   mapId := fun a => Iso.refl (𝟙 a)
   mapComp := fun f g => Iso.refl (f ≫ g)
@@ -276,7 +276,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (B ⥤ᵖ B)
+  签名: 可居 (B ⥤ᵖ B)
   定义体: ⟨id B⟩
 -/
 instance : Inhabited (B ⥤ᵖ B) :=
@@ -978,7 +978,7 @@ definition mkOfOplax'
 
 中文:
 定义 mkOfOplax'
-  签名: (F : B ⥤ᵒᵖᴸ C) [对任意 a, IsIso (F.mapId a)]
+  签名: (F : B ⥤ᵒᵖᴸ C) [对任意 a, 是同构 (F.mapId a)]
   定义体: F.toPrelaxFunctor
   mapId := fun a => asIso (F.mapId a)
   mapComp := fun f g => asIso (F.mapComp f g)
@@ -1065,7 +1065,7 @@ definition mkOfLax'
 
 中文:
 定义 mkOfLax'
-  签名: (F : B ⥤ᴸ C) [对任意 a, IsIso (F.mapId a)]
+  签名: (F : B ⥤ᴸ C) [对任意 a, 是同构 (F.mapId a)]
   定义体: mkOfLax F
   { mapIdIso := fun a => (asIso (F.mapId a)).symm
     mapCompIso := fun f g => (asIso (F.mapComp f g)).symm }

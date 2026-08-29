@@ -85,7 +85,7 @@ definition iwasawaStructure_two
 
 中文:
 定义 iwasawaStructure_two
-  签名: [对任意 s : Set α, DecidablePred fun x => x in s]
+  签名: [对任意 s : 集合 α, DecidablePred fun x => x in s]
   定义体: (ofSubtype : Perm (s : Set α) ->* Perm α).range
   is_comm s := by
     have : IsMulCommutative (Perm s) := isMulCommutative_iff_card_le_two.mpr (by simp)
@@ -169,7 +169,7 @@ definition iwasawaStructure_three
 
 中文:
 定义 iwasawaStructure_three
-  签名: : IwasawaStructure (alternatingGroup α) (Set.powersetCard α 3) where
+  签名: : IwasawaStructure (alternatingGroup α) (集合.powersetCard α 3) where
   定义体: (alternatingGroup.ofSubtype s).range
   is_comm s := by
     have : IsMulCommutative (alternatingGroup s) := isMulCommutative_of_card_le_three (by simp)
@@ -247,7 +247,7 @@ theorem mem_map_kleinFour_ofSubtype
 
 中文:
 定理 mem_map_kleinFour_ofSubtype
-  条件: {s : Finset α} (hs : s.card = 4) (k : alternatingGroup α)
+  条件: {s : 有限集 α} (hs : s.card = 4) (k : alternatingGroup α)
   证明: by
   have hs : Nat.card s = 4 := by simpa
   by_cases hk : (k : Perm α).support subseteq s
@@ -286,7 +286,7 @@ theorem map_kleinFour_conj
 
 中文:
 定理 map_kleinFour_conj
-  条件: (s : Finset α) (hs : s.card = 4) (g : alternatingGroup α)
+  条件: (s : 有限集 α) (hs : s.card = 4) (g : alternatingGroup α)
   证明: by
   rcases g with ⟨g, hg⟩
   ext ⟨k, hk⟩
@@ -461,7 +461,7 @@ theorem _root_.Equiv.Perm.IsThreeCycle.alternating_normalClosure
 @[deprecated "Use `alternatingGroup.isSimpleGroup` instead." (since := "2026-04-28")]
 
 中文:
-定理 _root_.Equiv.Perm.IsThreeCycle.alternating_normalClosure
+定理 _root_.等价.置换.IsThreeCycle.alternating_normalClosure
   证明: by
   have : IsSimpleGroup (alternatingGroup α) := isSimpleGroup h5
   apply normalClosure_normal.eq_bot_or_eq_top.resolve_left
@@ -553,7 +553,7 @@ instance isSimpleGroup_five
 
 中文:
 实例 isSimpleGroup_five
-  签名: : IsSimpleGroup (alternatingGroup (Fin 5))
+  签名: : 是单群 (alternatingGroup (有限集 5))
   定义体: isSimpleGroup (by simp)
 
 Depends on / 依赖: isSimpleGroup

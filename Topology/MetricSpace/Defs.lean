@@ -78,9 +78,9 @@ class MetricSpace
     - eq_of_dist_eq_zero : forall {x y : α}, dist x y = 0 -> x = y
 
 中文:
-类 MetricSpace
+类 度量空间
   参数: (α : 类型u)
-  继承: PseudoMetricSpace α
+  继承: 伪度量空间 α
   公理与运算 (1 个):
     - eq_of_dist_eq_zero : 对任意 {x y : α}, dist x y = 0 -> x = y
 -/
@@ -99,8 +99,8 @@ theorem MetricSpace.ext
   cases m; cases m'; congr; ext1; assumption
 
 中文:
-定理 MetricSpace.ext
-  条件: {α : 类型} {m m' : MetricSpace α} (h : m.toDist = m'.toDist)
+定理 度量空间.ext
+  条件: {α : 类型} {m m' : 度量空间 α} (h : m.toDist = m'.toDist)
   证明: by
   cases m; cases m'; congr; ext1; assumption
 -/
@@ -122,8 +122,8 @@ definition MetricSpace.ofDistTopology
     eq_of_dist_eq_zero := eq_of_dist_eq_zero _ _ }
 
 中文:
-定义 MetricSpace.ofDistTopology
-  签名: {α : 类型u} [TopologicalSpace α] (dist : α -> α -> 实数)
+定义 度量空间.ofDistTopology
+  签名: {α : 类型u} [拓扑空间 α] (dist : α -> α -> 实数)
   定义体: { PseudoMetricSpace.ofDistTopology dist dist_self dist_comm dist_triangle H with
     eq_of_dist_eq_zero := eq_of_dist_eq_zero _ _ }
 
@@ -294,7 +294,7 @@ theorem eq_of_forall_dist_le
   proof: eq_of_dist_eq_zero (eq_of_le_of_forall_lt_imp_le_of_dense dist_nonneg h)
 
 中文:
-定理 eq_of_forall_dist_le
+定理 eq_of_对任意_dist_le
   条件: {x y : γ} (h : 对任意 ε > 0, dist x y <= ε)
   结论: x = y
   证明: eq_of_dist_eq_zero (eq_of_le_of_forall_lt_imp_le_of_dense dist_nonneg h)
@@ -428,7 +428,7 @@ theorem subsingleton_closedBall
 中文:
 定理 subsingleton_closedBall
   条件: (x : γ) {r : 实数} (hr : r <= 0)
-  结论: (closedBall x r).Subsingleton
+  结论: (closedBall x r).子单例
   证明: by
   rcases hr.lt_or_eq with (hr | rfl)
   · rw [closedBall_eq_empty.2 hr]
@@ -457,7 +457,7 @@ theorem subsingleton_sphere
 中文:
 定理 subsingleton_sphere
   条件: (x : γ) {r : 实数} (hr : r <= 0)
-  结论: (sphere x r).Subsingleton
+  结论: (sphere x r).子单例
   证明: (subsingleton_closedBall x hr).anti sphere_subset_closedBall
 
 Depends on / 依赖: sphere_subset_closedBall, subsingleton_closedBall
@@ -477,8 +477,8 @@ abbreviation MetricSpace.replaceUniformity
   eq_of_dist_eq_zero := @eq_of_dist_eq_zero _ _
 
 中文:
-缩写 MetricSpace.replaceUniformity
-  签名: {γ} [U : UniformSpace γ] (m : MetricSpace γ)
+缩写 度量空间.replaceUniformity
+  签名: {γ} [U : 一致空间 γ] (m : 度量空间 γ)
   定义体: PseudoMetricSpace.replaceUniformity m.toPseudoMetricSpace H
   eq_of_dist_eq_zero := @eq_of_dist_eq_zero _ _
 
@@ -499,8 +499,8 @@ theorem MetricSpace.replaceUniformity_eq
   ext; rfl
 
 中文:
-定理 MetricSpace.replaceUniformity_eq
-  结论: {γ} [U : UniformSpace γ] (m : MetricSpace γ)
+定理 度量空间.replaceUniformity_eq
+  结论: {γ} [U : 一致空间 γ] (m : 度量空间 γ)
   证明: by
   ext; rfl
 -/
@@ -517,8 +517,8 @@ abbreviation MetricSpace.replaceTopology
   body: @MetricSpace.replaceUniformity γ (m.toUniformSpace.replaceTopology H) m rfl
 
 中文:
-缩写 MetricSpace.replaceTopology
-  签名: {γ} [U : TopologicalSpace γ] (m : MetricSpace γ)
+缩写 度量空间.replaceTopology
+  签名: {γ} [U : 拓扑空间 γ] (m : 度量空间 γ)
   定义体: @MetricSpace.replaceUniformity γ (m.toUniformSpace.replaceTopology H) m rfl
 
 Depends on / 依赖: MetricSpace, MetricSpace.replaceUniformity, m.toUniformSpace.replaceTopology, replaceTopology, replaceUniformity, toUniformSpace
@@ -537,8 +537,8 @@ theorem MetricSpace.replaceTopology_eq
   ext; rfl
 
 中文:
-定理 MetricSpace.replaceTopology_eq
-  结论: {γ} [U : TopologicalSpace γ] (m : MetricSpace γ)
+定理 度量空间.replaceTopology_eq
+  结论: {γ} [U : 拓扑空间 γ] (m : 度量空间 γ)
   证明: by
   ext; rfl
 -/
@@ -556,8 +556,8 @@ abbreviation MetricSpace.replaceBornology
   body: { PseudoMetricSpace.replaceBornology _ H, m with toBornology := B }
 
 中文:
-缩写 MetricSpace.replaceBornology
-  签名: {α} [B : Bornology α] (m : MetricSpace α)
+缩写 度量空间.replaceBornology
+  签名: {α} [B : 有界结构 α] (m : 度量空间 α)
   定义体: { PseudoMetricSpace.replaceBornology _ H, m with toBornology := B }
 
 Depends on / 依赖: PseudoMetricSpace, PseudoMetricSpace.replaceBornology, replaceBornology, toBornology
@@ -577,8 +577,8 @@ theorem MetricSpace.replaceBornology_eq
   rfl
 
 中文:
-定理 MetricSpace.replaceBornology_eq
-  结论: {α} [m : MetricSpace α] [B : Bornology α]
+定理 度量空间.replaceBornology_eq
+  结论: {α} [m : 度量空间 α] [B : 有界结构 α]
   证明: by
   ext
   rfl
@@ -606,7 +606,7 @@ instance :
 
 中文:
 实例 :
-  签名: MetricSpace Empty
+  签名: 度量空间 空
   定义体: 0
   dist_self _ := rfl
   dist_comm _ _ := rfl
@@ -644,7 +644,7 @@ instance :
 
 中文:
 实例 :
-  签名: MetricSpace PUnit.{u + 1}
+  签名: 度量空间 命题单元.{u + 1}
   定义体: 0
   dist_self _ := rfl
   dist_comm _ _ := rfl
@@ -689,7 +689,7 @@ instance :
 
 中文:
 实例 :
-  签名: Dist (Additive X)
+  签名: Dist (加性 X)
   定义体: ‹Dist X›
 -/
 instance : Dist (Additive X) := ‹Dist X›
@@ -753,7 +753,7 @@ theorem dist_toMul
 
 中文:
 定理 dist_toMul
-  条件: (a b : Additive X)
+  条件: (a b : 加性 X)
   结论: dist a.toMul b.toMul = dist a b
   证明: rfl
 -/
@@ -787,8 +787,8 @@ instance [MetricSpace
   body: ‹MetricSpace X›
 
 中文:
-实例 [MetricSpace
-  签名: X] : MetricSpace (Additive X)
+实例 [度量空间
+  签名: X] : 度量空间 (加性 X)
   定义体: ‹MetricSpace X›
 -/
 instance [MetricSpace X] : MetricSpace (Additive X) := ‹MetricSpace X›
@@ -801,8 +801,8 @@ instance [MetricSpace
   body: ‹MetricSpace X›
 
 中文:
-实例 [MetricSpace
-  签名: X] : MetricSpace (Multiplicative X)
+实例 [度量空间
+  签名: X] : 度量空间 (Multiplicative X)
   定义体: ‹MetricSpace X›
 
 Depends on / 依赖: MetricSpace
@@ -881,8 +881,8 @@ instance [MetricSpace
   body: ‹MetricSpace X›
 
 中文:
-实例 [MetricSpace
-  签名: X] : MetricSpace Xᵒᵈ
+实例 [度量空间
+  签名: X] : 度量空间 Xᵒᵈ
   定义体: ‹MetricSpace X›
 
 Depends on / 依赖: MetricSpace

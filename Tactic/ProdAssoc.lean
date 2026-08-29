@@ -87,7 +87,7 @@ definition ProdTree.components
 
 中文:
 定义 ProdTree.components
-  签名: : ProdTree -> List Expr
+  签名: : ProdTree -> 列表 Expr
 
 Depends on / 依赖: X.mkProdTree, Y.mkProdTree, consumeMData, e.consumeMData, indentExpr, inferType, mkProdTree, return, throwError
 -/
@@ -159,7 +159,7 @@ definition ProdTree.pack
 
 中文:
 定义 ProdTree.pack
-  签名: (ts : List Expr)
+  签名: (ts : 列表 Expr)
   定义体: fst.size
     let sndSize := snd.size
     unless ts.length == fstSize + sndSize do throwError "Failed due to size mismatch."

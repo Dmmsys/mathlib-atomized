@@ -64,8 +64,8 @@ definition Matrix.toLinearMap₂'Aux
       simp only [Pi.smul_ap
 
 中文:
-定义 Matrix.toLinearMap₂'Aux
-  签名: (f : Matrix n m N₂)
+定义 矩阵.toLinearMap₂'Aux
+  签名: (f : 矩阵 n m N₂)
   定义体: -- porting note: we don't seem to have `∑ i j` as valid notation yet
   mk₂'ₛₗ σ₁ σ₂ (fun (v : n -> R₁) (w : m -> R₂) => ∑ i, ∑ j, σ₂ (w j) • σ₁ (v i) • f i j)
     (fun _ _ _ => by simp only [Pi.add_apply, map_add, smul_add, sum_add_distrib, add_smul])
@@ -98,8 +98,8 @@ theorem Matrix.toLinearMap₂'Aux_single
     simp only [ite_smul, one_smul, zero_smul, sum_ite_eq, mem_univ, ↓red
 
 中文:
-定理 Matrix.toLinearMap₂'Aux_single
-  条件: (f : Matrix n m N₂) (i : n) (j : m)
+定理 矩阵.toLinearMap₂'Aux_single
+  条件: (f : 矩阵 n m N₂) (i : n) (j : m)
   证明: by
   rw [Matrix.toLinearMap₂'Aux]; rw [mk₂'ₛₗ_apply]
   have : (∑ i', ∑ j', (if i = i' then (1 : S₁) else (0 : S₁)) •
@@ -145,7 +145,7 @@ definition LinearMap.toMatrix₂Aux
 @[simp]
 
 中文:
-定义 LinearMap.toMatrix₂Aux
+定义 线性映射.toMatrix₂Aux
   签名: (b₁ : n -> M₁) (b₂ : m -> M₂)
   定义体: of fun i j => f (b₁ i) (b₂ j)
   map_add' _f _g := rfl
@@ -169,7 +169,7 @@ theorem LinearMap.toMatrix₂Aux_apply
   proof: rfl
 
 中文:
-定理 LinearMap.toMatrix₂Aux_apply
+定理 线性映射.toMatrix₂Aux_apply
   结论: (f : M₁ ->ₛₗ[σ₁] M₂ ->ₛₗ[σ₂] N₂) (b₁ : n -> M₁) (b₂ : m -> M₂)
   证明: rfl
 -/
@@ -191,7 +191,7 @@ theorem LinearMap.toLinearMap₂'Aux_toMatrix₂Aux
   simp_rw [Pi.basisFun_apply, Matrix.toLinearMap₂'Aux_single, LinearMap.toMatrix₂Aux_apply]
 
 中文:
-定理 LinearMap.toLinearMap₂'Aux_toMatrix₂Aux
+定理 线性映射.toLinearMap₂'Aux_toMatrix₂Aux
   条件: (f : (n -> R₁) ->ₛₗ[σ₁] (m -> R₂) ->ₛₗ[σ₂] N₂)
   证明: by
   refine ext_basis (Pi.basisFun R₁ n) (Pi.basisFun R₂ m) fun i j => ?_
@@ -217,8 +217,8 @@ theorem Matrix.toMatrix₂Aux_toLinearMap₂'Aux
   simp_rw [LinearMap.toMatrix₂Aux_apply, Matrix.toLinearMap₂'Aux_single]
 
 中文:
-定理 Matrix.toMatrix₂Aux_toLinearMap₂'Aux
-  条件: (f : Matrix n m N₂)
+定理 矩阵.toMatrix₂Aux_toLinearMap₂'Aux
+  条件: (f : 矩阵 n m N₂)
   证明: by
   ext i j
   simp_rw [LinearMap.toMatrix₂Aux_apply, Matrix.toLinearMap₂'Aux_single]
@@ -265,8 +265,8 @@ definition LinearMap.toMatrixₛₗ₂'
     right_inv := Matrix.toMatrix₂Aux_toLinearMap₂'Aux R }
 
 中文:
-定义 LinearMap.toMatrixₛₗ₂'
-  签名: : ((n -> R₁) ->ₛₗ[σ₁] (m -> R₂) ->ₛₗ[σ₂] N₂) ≃ₗ[R] Matrix n m N₂
+定义 线性映射.toMatrixₛₗ₂'
+  签名: : ((n -> R₁) ->ₛₗ[σ₁] (m -> R₂) ->ₛₗ[σ₂] N₂) ≃ₗ[R] 矩阵 n m N₂
   定义体: { LinearMap.toMatrix₂Aux R (fun i => Pi.single i 1) (fun j => Pi.single j 1) with
     toFun := LinearMap.toMatrix₂Aux R _ _
     invFun := Matrix.toLinearMap₂'Aux σ₁ σ₂
@@ -291,8 +291,8 @@ definition LinearMap.toMatrix₂'
   body: LinearMap.toMatrixₛₗ₂' R
 
 中文:
-定义 LinearMap.toMatrix₂'
-  签名: : ((n -> S₁) ->ₗ[S₁] (m -> S₂) ->ₗ[S₂] N₂) ≃ₗ[R] Matrix n m N₂
+定义 线性映射.toMatrix₂'
+  签名: : ((n -> S₁) ->ₗ[S₁] (m -> S₂) ->ₗ[S₂] N₂) ≃ₗ[R] 矩阵 n m N₂
   定义体: LinearMap.toMatrixₛₗ₂' R
 
 Depends on / 依赖: LinearMap, LinearMap.toMatrix
@@ -311,8 +311,8 @@ definition Matrix.toLinearMapₛₗ₂'
   body: (LinearMap.toMatrixₛₗ₂' R).symm
 
 中文:
-定义 Matrix.toLinearMapₛₗ₂'
-  签名: : Matrix n m N₂ ≃ₗ[R] (n -> R₁) ->ₛₗ[σ₁] (m -> R₂) ->ₛₗ[σ₂] N₂
+定义 矩阵.toLinearMapₛₗ₂'
+  签名: : 矩阵 n m N₂ ≃ₗ[R] (n -> R₁) ->ₛₗ[σ₁] (m -> R₂) ->ₛₗ[σ₂] N₂
   定义体: (LinearMap.toMatrixₛₗ₂' R).symm
 
 Depends on / 依赖: LinearMap, LinearMap.toMatrix
@@ -329,8 +329,8 @@ definition Matrix.toLinearMap₂'
   body: (LinearMap.toMatrix₂' R).symm
 
 中文:
-定义 Matrix.toLinearMap₂'
-  签名: : Matrix n m N₂ ≃ₗ[R] (n -> S₁) ->ₗ[S₁] (m -> S₂) ->ₗ[S₂] N₂
+定义 矩阵.toLinearMap₂'
+  签名: : 矩阵 n m N₂ ≃ₗ[R] (n -> S₁) ->ₗ[S₁] (m -> S₂) ->ₗ[S₂] N₂
   定义体: (LinearMap.toMatrix₂' R).symm
 -/
 def Matrix.toLinearMap₂' : Matrix n m N₂ ≃ₗ[R] (n -> S₁) ->ₗ[S₁] (m -> S₂) ->ₗ[S₂] N₂ :=
@@ -347,8 +347,8 @@ theorem Matrix.toLinearMapₛₗ₂'_aux_eq
   proof: rfl
 
 中文:
-定理 Matrix.toLinearMapₛₗ₂'_aux_eq
-  条件: (M : Matrix n m N₂)
+定理 矩阵.toLinearMapₛₗ₂'_aux_eq
+  条件: (M : 矩阵 n m N₂)
   证明: rfl
 -/
 theorem Matrix.toLinearMapₛₗ₂'_aux_eq (M : Matrix n m N₂) :
@@ -368,8 +368,8 @@ theorem Matrix.toLinearMapₛₗ₂'_apply
     rw [smul_comm]
 
 中文:
-定理 Matrix.toLinearMapₛₗ₂'_apply
-  条件: (M : Matrix n m N₂) (x : n -> R₁) (y : m -> R₂)
+定理 矩阵.toLinearMapₛₗ₂'_apply
+  条件: (M : 矩阵 n m N₂) (x : n -> R₁) (y : m -> R₂)
   证明: by
   rw [toLinearMapₛₗ₂']; rw [toMatrixₛₗ₂']; rw [LinearEquiv.coe_symm_mk]; rw [toLinearMap₂'Aux]; rw [mk₂'ₛₗ_apply]
   apply Finset.sum_congr rfl fun _ _ => Finset.sum_congr rfl fun _ _ => by
@@ -392,8 +392,8 @@ theorem Matrix.toLinearMap₂'_apply
     rw [RingHom.id_apply]; rw [RingHom.id_apply]; rw [smul_comm]
 
 中文:
-定理 Matrix.toLinearMap₂'_apply
-  条件: (M : Matrix n m N₂) (x : n -> S₁) (y : m -> S₂)
+定理 矩阵.toLinearMap₂'_apply
+  条件: (M : 矩阵 n m N₂) (x : n -> S₁) (y : m -> S₂)
   证明: Finset.sum_congr rfl fun _ _ => Finset.sum_congr rfl fun _ _ => by
     rw [RingHom.id_apply]; rw [RingHom.id_apply]; rw [smul_comm]
 -/
@@ -419,8 +419,8 @@ theorem Matrix.toLinearMap₂'_apply'
 @[simp]
 
 中文:
-定理 Matrix.toLinearMap₂'_apply'
-  结论: {T : 类型} [CommSemiring T] (M : Matrix n m T) (v : n -> T)
+定理 矩阵.toLinearMap₂'_apply'
+  结论: {T : 类型} [交换半环 T] (M : 矩阵 n m T) (v : n -> T)
   证明: by
   simp_rw [Matrix.toLinearMap₂'_apply, dotProduct, Matrix.mulVec, dotProduct]
   refine Finset.sum_congr rfl fun _ _ => ?_
@@ -450,8 +450,8 @@ theorem Matrix.toLinearMapₛₗ₂'_single
 @[simp]
 
 中文:
-定理 Matrix.toLinearMapₛₗ₂'_single
-  条件: (M : Matrix n m N₂) (i : n) (j : m)
+定理 矩阵.toLinearMapₛₗ₂'_single
+  条件: (M : 矩阵 n m N₂) (i : n) (j : m)
   证明: Matrix.toLinearMap₂'Aux_single σ₁ σ₂ M i j
 
 @[simp]
@@ -472,8 +472,8 @@ theorem Matrix.toLinearMap₂'_single
 @[simp]
 
 中文:
-定理 Matrix.toLinearMap₂'_single
-  条件: (M : Matrix n m N₂) (i : n) (j : m)
+定理 矩阵.toLinearMap₂'_single
+  条件: (M : 矩阵 n m N₂) (i : n) (j : m)
   证明: Matrix.toLinearMap₂'Aux_single _ _ M i j
 
 @[simp]
@@ -493,7 +493,7 @@ theorem LinearMap.toMatrixₛₗ₂'_symm
 @[simp]
 
 中文:
-定理 LinearMap.toMatrixₛₗ₂'_symm
+定理 线性映射.toMatrixₛₗ₂'_symm
   证明: rfl
 
 @[simp]
@@ -513,7 +513,7 @@ theorem Matrix.toLinearMapₛₗ₂'_symm
 @[simp]
 
 中文:
-定理 Matrix.toLinearMapₛₗ₂'_symm
+定理 矩阵.toLinearMapₛₗ₂'_symm
   证明: (LinearMap.toMatrixₛₗ₂' R).symm_symm
 
 @[simp]
@@ -534,7 +534,7 @@ theorem Matrix.toLinearMapₛₗ₂'_toMatrix'
 @[simp]
 
 中文:
-定理 Matrix.toLinearMapₛₗ₂'_toMatrix'
+定理 矩阵.toLinearMapₛₗ₂'_toMatrix'
   条件: (B : (n -> R₁) ->ₛₗ[σ₁] (m -> R₂) ->ₛₗ[σ₂] N₂)
   证明: (Matrix.toLinearMapₛₗ₂' R σ₁ σ₂).apply_symm_apply B
 
@@ -556,7 +556,7 @@ theorem Matrix.toLinearMap₂'_toMatrix'
 @[simp]
 
 中文:
-定理 Matrix.toLinearMap₂'_toMatrix'
+定理 矩阵.toLinearMap₂'_toMatrix'
   条件: (B : (n -> S₁) ->ₗ[S₁] (m -> S₂) ->ₗ[S₂] N₂)
   证明: (Matrix.toLinearMap₂' R).apply_symm_apply B
 
@@ -578,8 +578,8 @@ theorem LinearMap.toMatrix'_toLinearMapₛₗ₂'
 @[simp]
 
 中文:
-定理 LinearMap.toMatrix'_toLinearMapₛₗ₂'
-  条件: (M : Matrix n m N₂)
+定理 线性映射.toMatrix'_toLinearMapₛₗ₂'
+  条件: (M : 矩阵 n m N₂)
   证明: (LinearMap.toMatrixₛₗ₂' R).apply_symm_apply M
 
 @[simp]
@@ -600,8 +600,8 @@ theorem LinearMap.toMatrix'_toLinearMap₂'
 @[simp]
 
 中文:
-定理 LinearMap.toMatrix'_toLinearMap₂'
-  条件: (M : Matrix n m N₂)
+定理 线性映射.toMatrix'_toLinearMap₂'
+  条件: (M : 矩阵 n m N₂)
   证明: (LinearMap.toMatrixₛₗ₂' R).apply_symm_apply M
 
 @[simp]
@@ -622,7 +622,7 @@ theorem LinearMap.toMatrixₛₗ₂'_apply
 @[simp]
 
 中文:
-定理 LinearMap.toMatrixₛₗ₂'_apply
+定理 线性映射.toMatrixₛₗ₂'_apply
   条件: (B : (n -> R₁) ->ₛₗ[σ₁] (m -> R₂) ->ₛₗ[σ₂] N₂) (i : n) (j : m)
   证明: rfl
 
@@ -642,7 +642,7 @@ theorem LinearMap.toMatrix₂'_apply
   proof: rfl
 
 中文:
-定理 LinearMap.toMatrix₂'_apply
+定理 线性映射.toMatrix₂'_apply
   条件: (B : (n -> S₁) ->ₗ[S₁] (m -> S₂) ->ₗ[S₂] N₂) (i : n) (j : m)
   证明: rfl
 -/
@@ -678,7 +678,7 @@ theorem LinearMap.toMatrix₂'_compl₁₂
   conv_lhs => rw [← LinearMap.sum_repr_mul_repr_mul (Pi.basisFun R n) (Pi.basisFun 
 
 中文:
-定理 LinearMap.toMatrix₂'_compl₁₂
+定理 线性映射.toMatrix₂'_compl₁₂
   结论: (B : (n -> R) ->ₗ[R] (m -> R) ->ₗ[R] R) (l : (n' -> R) ->ₗ[R] n -> R)
   证明: by
   ext i j
@@ -719,7 +719,7 @@ theorem LinearMap.toMatrix₂'_comp
   simp
 
 中文:
-定理 LinearMap.toMatrix₂'_comp
+定理 线性映射.toMatrix₂'_comp
   条件: (B : (n -> R) ->ₗ[R] (m -> R) ->ₗ[R] R) (f : (n' -> R) ->ₗ[R] n -> R)
   证明: by
   rw [← LinearMap.compl₂_id (B.comp f)]; rw [← LinearMap.compl₁₂]
@@ -741,7 +741,7 @@ theorem LinearMap.toMatrix₂'_compl₂
   simp
 
 中文:
-定理 LinearMap.toMatrix₂'_compl₂
+定理 线性映射.toMatrix₂'_compl₂
   条件: (B : (n -> R) ->ₗ[R] (m -> R) ->ₗ[R] R) (f : (m' -> R) ->ₗ[R] m -> R)
   证明: by
   rw [← LinearMap.comp_id B]; rw [← LinearMap.compl₁₂]
@@ -762,8 +762,8 @@ theorem LinearMap.mul_toMatrix₂'_mul
   simp
 
 中文:
-定理 LinearMap.mul_toMatrix₂'_mul
-  结论: (B : (n -> R) ->ₗ[R] (m -> R) ->ₗ[R] R) (M : Matrix n' n R)
+定理 线性映射.mul_toMatrix₂'_mul
+  结论: (B : (n -> R) ->ₗ[R] (m -> R) ->ₗ[R] R) (M : 矩阵 n' n R)
   证明: by
   simp
 -/
@@ -782,8 +782,8 @@ theorem LinearMap.mul_toMatrix'
   simp only [B.toMatrix₂'_comp, transpose_transpose, toMatrix'_toLin']
 
 中文:
-定理 LinearMap.mul_toMatrix'
-  条件: (B : (n -> R) ->ₗ[R] (m -> R) ->ₗ[R] R) (M : Matrix n' n R)
+定理 线性映射.mul_toMatrix'
+  条件: (B : (n -> R) ->ₗ[R] (m -> R) ->ₗ[R] R) (M : 矩阵 n' n R)
   证明: by
   simp only [B.toMatrix₂'_comp, transpose_transpose, toMatrix'_toLin']
 
@@ -803,8 +803,8 @@ theorem LinearMap.toMatrix₂'_mul
   simp only [B.toMatrix₂'_compl₂, toMatrix'_toLin']
 
 中文:
-定理 LinearMap.toMatrix₂'_mul
-  条件: (B : (n -> R) ->ₗ[R] (m -> R) ->ₗ[R] R) (M : Matrix m m' R)
+定理 线性映射.toMatrix₂'_mul
+  条件: (B : (n -> R) ->ₗ[R] (m -> R) ->ₗ[R] R) (M : 矩阵 m m' R)
   证明: by
   simp only [B.toMatrix₂'_compl₂, toMatrix'_toLin']
 -/
@@ -821,8 +821,8 @@ theorem Matrix.toLinearMap₂'_comp
   proof: (LinearMap.toMatrix₂' R).injective (by simp)
 
 中文:
-定理 Matrix.toLinearMap₂'_comp
-  条件: (M : Matrix n m R) (P : Matrix n n' R) (Q : Matrix m m' R)
+定理 矩阵.toLinearMap₂'_comp
+  条件: (M : 矩阵 n m R) (P : 矩阵 n n' R) (Q : 矩阵 m m' R)
   证明: (LinearMap.toMatrix₂' R).injective (by simp)
 -/
 theorem Matrix.toLinearMap₂'_comp (M : Matrix n m R) (P : Matrix n n' R) (Q : Matrix m m' R) :
@@ -860,8 +860,8 @@ definition LinearMap.toMatrix₂
     (LinearMap.toMatrixₛₗ₂' R)
 
 中文:
-定义 LinearMap.toMatrix₂
-  签名: : (M₁ ->ₛₗ[σ₁] M₂ ->ₛₗ[σ₂] N₂) ≃ₗ[R] Matrix n m N₂
+定义 线性映射.toMatrix₂
+  签名: : (M₁ ->ₛₗ[σ₁] M₂ ->ₛₗ[σ₂] N₂) ≃ₗ[R] 矩阵 n m N₂
   定义体: (b₁.equivFun.arrowCongr (b₂.equivFun.arrowCongr (LinearEquiv.refl R N₂))).trans
     (LinearMap.toMatrixₛₗ₂' R)
 
@@ -881,8 +881,8 @@ definition Matrix.toLinearMapₛₗ₂
   body: (LinearMap.toMatrix₂ b₁ b₂).symm
 
 中文:
-定义 Matrix.toLinearMapₛₗ₂
-  签名: : Matrix n m N₂ ≃ₗ[R] M₁ ->ₛₗ[σ₁] M₂ ->ₗ[R] N₂
+定义 矩阵.toLinearMapₛₗ₂
+  签名: : 矩阵 n m N₂ ≃ₗ[R] M₁ ->ₛₗ[σ₁] M₂ ->ₗ[R] N₂
   定义体: (LinearMap.toMatrix₂ b₁ b₂).symm
 
 Depends on / 依赖: LinearMap, LinearMap.toMatrix
@@ -899,8 +899,8 @@ definition Matrix.toLinearMap₂
   body: toLinearMapₛₗ₂ (.id R) b₁ b₂
 
 中文:
-定义 Matrix.toLinearMap₂
-  签名: : Matrix n m N₂ ≃ₗ[R] M₁ ->ₗ[R] M₂ ->ₗ[R] N₂
+定义 矩阵.toLinearMap₂
+  签名: : 矩阵 n m N₂ ≃ₗ[R] M₁ ->ₗ[R] M₂ ->ₗ[R] N₂
   定义体: toLinearMapₛₗ₂ (.id R) b₁ b₂
 
 Depends on / 依赖: AEMeasurable, infer_instance, map_of_not_aemeasurable, map_sum, sum_sfiniteSeq
@@ -924,7 +924,7 @@ theorem LinearMap.toMatrix₂_apply
 @[simp]
 
 中文:
-定理 LinearMap.toMatrix₂_apply
+定理 线性映射.toMatrix₂_apply
   条件: (B : M₁ ->ₛₗ[σ₁] M₂ ->ₛₗ[σ₂] N₂) (i : n) (j : m)
   证明: by
   simp only [toMatrix₂, LinearEquiv.trans_apply, toMatrixₛₗ₂'_apply, LinearEquiv.arrowCongr_apply,
@@ -955,8 +955,8 @@ theorem Matrix.toLinearMapₛₗ₂_apply
 @[simp]
 
 中文:
-定理 Matrix.toLinearMapₛₗ₂_apply
-  条件: (M : Matrix n m N₂) (x : M₁) (y : M₂)
+定理 矩阵.toLinearMapₛₗ₂_apply
+  条件: (M : 矩阵 n m N₂) (x : M₁) (y : M₂)
   证明: Finset.sum_congr rfl fun _ _ => Finset.sum_congr rfl fun _ _ =>
     smul_algebra_smul_comm (σ₁ ((Basis.equivFun b₁) x _))
     ((RingHom.id R) ((Basis.equivFun b₂) y _)) (M _ _)
@@ -984,8 +984,8 @@ theorem Matrix.toLinearMap₂_apply
     ((RingHom.id R) ((Basis.equivFun b₂) y _)) (M _ _)
 
 中文:
-定理 Matrix.toLinearMap₂_apply
-  条件: (M : Matrix n m N₂) (x : M₁) (y : M₂)
+定理 矩阵.toLinearMap₂_apply
+  条件: (M : 矩阵 n m N₂) (x : M₁) (y : M₂)
   证明: Finset.sum_congr rfl fun _ _ => Finset.sum_congr rfl fun _ _ =>
     smul_algebra_smul_comm ((RingHom.id R) ((Basis.equivFun b₁) x _))
     ((RingHom.id R) ((Basis.equivFun b₂) y _)) (M _ _)
@@ -1012,8 +1012,8 @@ theorem Matrix.toLinearMapₛₗ₂_apply_basis
   simp
 
 中文:
-定理 Matrix.toLinearMapₛₗ₂_apply_basis
-  条件: (M : Matrix n m N₂) (i : n) (j : m)
+定理 矩阵.toLinearMapₛₗ₂_apply_basis
+  条件: (M : 矩阵 n m N₂) (i : n) (j : m)
   证明: by
   simp only [toLinearMapₛₗ₂_apply, Basis.repr_self]
   rw [Finset.sum_eq_single_of_mem i (by simp) fun k _ hk => by simp [hk],
@@ -1038,8 +1038,8 @@ theorem Matrix.toLinearMap₂_apply_basis
   proof: toLinearMapₛₗ₂_apply_basis ..
 
 中文:
-定理 Matrix.toLinearMap₂_apply_basis
-  条件: (M : Matrix n m N₂) (i : n) (j : m)
+定理 矩阵.toLinearMap₂_apply_basis
+  条件: (M : 矩阵 n m N₂) (i : n) (j : m)
   证明: toLinearMapₛₗ₂_apply_basis ..
 -/
 theorem Matrix.toLinearMap₂_apply_basis (M : Matrix n m N₂) (i : n) (j : m) :
@@ -1127,7 +1127,7 @@ theorem LinearMap.toMatrix₂Aux_eq
 @[simp]
 
 中文:
-定理 LinearMap.toMatrix₂Aux_eq
+定理 线性映射.toMatrix₂Aux_eq
   条件: (B : M₁ ->ₛₗ[σ₁] M₂ ->ₛₗ[σ₂] N₂)
   证明: Matrix.ext fun i j => by rw [LinearMap.toMatrix₂_apply, LinearMap.toMatrix₂Aux_apply]
 
@@ -1148,7 +1148,7 @@ theorem LinearMap.toMatrix₂_symm'
   proof: rfl
 
 中文:
-定理 LinearMap.toMatrix₂_symm'
+定理 线性映射.toMatrix₂_symm'
   证明: rfl
 -/
 theorem LinearMap.toMatrix₂_symm' :
@@ -1165,7 +1165,7 @@ theorem LinearMap.toMatrix₂_symm
 @[simp]
 
 中文:
-定理 LinearMap.toMatrix₂_symm
+定理 线性映射.toMatrix₂_symm
   证明: rfl
 
 @[simp]
@@ -1183,7 +1183,7 @@ theorem Matrix.toLinearMapₛₗ₂_symm
   proof: (LinearMap.toMatrix₂ b₁ b₂).symm_symm
 
 中文:
-定理 Matrix.toLinearMapₛₗ₂_symm
+定理 矩阵.toLinearMapₛₗ₂_symm
   证明: (LinearMap.toMatrix₂ b₁ b₂).symm_symm
 -/
 theorem Matrix.toLinearMapₛₗ₂_symm :
@@ -1198,7 +1198,7 @@ theorem Matrix.toLinearMap₂_symm
   proof: (LinearMap.toMatrix₂ b₁ b₂).symm_symm
 
 中文:
-定理 Matrix.toLinearMap₂_symm
+定理 矩阵.toLinearMap₂_symm
   证明: (LinearMap.toMatrix₂ b₁ b₂).symm_symm
 -/
 theorem Matrix.toLinearMap₂_symm :
@@ -1216,7 +1216,7 @@ theorem Matrix.toLinearMap₂_basisFun
     toLinearMap₂'_apply]
 
 中文:
-定理 Matrix.toLinearMap₂_basisFun
+定理 矩阵.toLinearMap₂_basisFun
   证明: by
   ext M
   simp only [coe_comp, coe_single, Function.comp_apply, toLinearMap₂_apply, Pi.basisFun_repr,
@@ -1243,7 +1243,7 @@ theorem LinearMap.toMatrix₂_basisFun
 @[simp]
 
 中文:
-定理 LinearMap.toMatrix₂_basisFun
+定理 线性映射.toMatrix₂_basisFun
   证明: by
   ext B
   rw [LinearMap.toMatrix₂_apply]; rw [LinearMap.toMatrix₂'_apply]; rw [Pi.basisFun_apply]; rw [Pi.basisFun_apply]
@@ -1268,7 +1268,7 @@ theorem Matrix.toLinearMapₛₗ₂_toMatrix₂
   proof: (Matrix.toLinearMapₛₗ₂ σ₁ b₁ b₂).apply_symm_apply B
 
 中文:
-定理 Matrix.toLinearMapₛₗ₂_toMatrix₂
+定理 矩阵.toLinearMapₛₗ₂_toMatrix₂
   条件: (B : M₁ ->ₛₗ[σ₁] M₂ ->ₗ[R] N₂)
   证明: (Matrix.toLinearMapₛₗ₂ σ₁ b₁ b₂).apply_symm_apply B
 
@@ -1289,7 +1289,7 @@ theorem Matrix.toLinearMap₂_toMatrix₂
 @[simp]
 
 中文:
-定理 Matrix.toLinearMap₂_toMatrix₂
+定理 矩阵.toLinearMap₂_toMatrix₂
   条件: (B : M₁ ->ₗ[R] M₂ ->ₗ[R] N₂)
   证明: (Matrix.toLinearMap₂ b₁ b₂).apply_symm_apply B
 
@@ -1311,8 +1311,8 @@ theorem LinearMap.toMatrix₂_toLinearMapₛₗ₂
   proof: (LinearMap.toMatrix₂ b₁ b₂).apply_symm_apply M
 
 中文:
-定理 LinearMap.toMatrix₂_toLinearMapₛₗ₂
-  条件: (M : Matrix n m N₂)
+定理 线性映射.toMatrix₂_toLinearMapₛₗ₂
+  条件: (M : 矩阵 n m N₂)
   证明: (LinearMap.toMatrix₂ b₁ b₂).apply_symm_apply M
 
 Depends on / 依赖: LinearMap, LinearMap.toMatrix, apply_symm_apply
@@ -1330,8 +1330,8 @@ theorem LinearMap.toMatrix₂_toLinearMap₂
   proof: (LinearMap.toMatrix₂ b₁ b₂).apply_symm_apply M
 
 中文:
-定理 LinearMap.toMatrix₂_toLinearMap₂
-  条件: (M : Matrix n m N₂)
+定理 线性映射.toMatrix₂_toLinearMap₂
+  条件: (M : 矩阵 n m N₂)
   证明: (LinearMap.toMatrix₂ b₁ b₂).apply_symm_apply M
 
 Depends on / 依赖: LinearMap, LinearMap.toMatrix, apply_symm_apply
@@ -1367,7 +1367,7 @@ theorem LinearMap.toMatrix₂_compl₁₂
     rw [Finsupp.
 
 中文:
-定理 LinearMap.toMatrix₂_compl₁₂
+定理 线性映射.toMatrix₂_compl₁₂
   结论: (B : M₁ ->ₗ[R] M₂ ->ₗ[R] R) (l : M₁' ->ₗ[R] M₁)
   证明: by
   ext i j
@@ -1415,7 +1415,7 @@ theorem LinearMap.toMatrix₂_comp
   simp
 
 中文:
-定理 LinearMap.toMatrix₂_comp
+定理 线性映射.toMatrix₂_comp
   条件: (B : M₁ ->ₗ[R] M₂ ->ₗ[R] R) (f : M₁' ->ₗ[R] M₁)
   证明: by
   rw [← LinearMap.compl₂_id (B.comp f)]; rw [← LinearMap.compl₁₂]; rw [LinearMap.toMatrix₂_compl₁₂ b₁ b₂]
@@ -1442,7 +1442,7 @@ theorem LinearMap.toMatrix₂_compl₂
 @[simp]
 
 中文:
-定理 LinearMap.toMatrix₂_compl₂
+定理 线性映射.toMatrix₂_compl₂
   条件: (B : M₁ ->ₗ[R] M₂ ->ₗ[R] R) (f : M₂' ->ₗ[R] M₂)
   证明: by
   rw [← LinearMap.comp_id B]; rw [← LinearMap.compl₁₂]; rw [LinearMap.toMatrix₂_compl₁₂ b₁ b₂]
@@ -1470,8 +1470,8 @@ theorem LinearMap.toMatrix₂_mul_basis_toMatrix
   rw [← LinearMap.toMatrix₂_compl₁₂]; rw [LinearMap.compl₁₂_id_id]
 
 中文:
-定理 LinearMap.toMatrix₂_mul_basis_toMatrix
-  结论: (c₁ : Basis n' R M₁) (c₂ : Basis m' R M₂)
+定理 线性映射.toMatrix₂_mul_basis_toMatrix
+  结论: (c₁ : 基 n' R M₁) (c₂ : 基 m' R M₂)
   证明: by
   simp_rw [← LinearMap.toMatrix_id_eq_basis_toMatrix]
   rw [← LinearMap.toMatrix₂_compl₁₂]; rw [LinearMap.compl₁₂_id_id]
@@ -1495,8 +1495,8 @@ theorem LinearMap.mul_toMatrix₂_mul
   simp_rw [LinearMap.toMatrix₂_compl₁₂ b₁ b₂, toMatrix_toLin, transpose_transpose]
 
 中文:
-定理 LinearMap.mul_toMatrix₂_mul
-  结论: (B : M₁ ->ₗ[R] M₂ ->ₗ[R] R) (M : Matrix n' n R)
+定理 线性映射.mul_toMatrix₂_mul
+  结论: (B : M₁ ->ₗ[R] M₂ ->ₗ[R] R) (M : 矩阵 n' n R)
   证明: by
   simp_rw [LinearMap.toMatrix₂_compl₁₂ b₁ b₂, toMatrix_toLin, transpose_transpose]
 
@@ -1518,8 +1518,8 @@ theorem LinearMap.mul_toMatrix₂
   rw [LinearMap.toMatrix₂_comp b₁]; rw [toMatrix_toLin]; rw [transpose_transpose]
 
 中文:
-定理 LinearMap.mul_toMatrix₂
-  条件: (B : M₁ ->ₗ[R] M₂ ->ₗ[R] R) (M : Matrix n' n R)
+定理 线性映射.mul_toMatrix₂
+  条件: (B : M₁ ->ₗ[R] M₂ ->ₗ[R] R) (M : 矩阵 n' n R)
   证明: by
   rw [LinearMap.toMatrix₂_comp b₁]; rw [toMatrix_toLin]; rw [transpose_transpose]
 
@@ -1540,8 +1540,8 @@ theorem LinearMap.toMatrix₂_mul
   rw [LinearMap.toMatrix₂_compl₂ b₁ b₂]; rw [toMatrix_toLin]
 
 中文:
-定理 LinearMap.toMatrix₂_mul
-  条件: (B : M₁ ->ₗ[R] M₂ ->ₗ[R] R) (M : Matrix m m' R)
+定理 线性映射.toMatrix₂_mul
+  条件: (B : M₁ ->ₗ[R] M₂ ->ₗ[R] R) (M : 矩阵 m m' R)
   证明: by
   rw [LinearMap.toMatrix₂_compl₂ b₁ b₂]; rw [toMatrix_toLin]
 
@@ -1564,8 +1564,8 @@ theorem Matrix.toLinearMap₂_compl₁₂
         toMatrix_toLin])
 
 中文:
-定理 Matrix.toLinearMap₂_compl₁₂
-  条件: (M : Matrix n m R) (P : Matrix n n' R) (Q : Matrix m m' R)
+定理 矩阵.toLinearMap₂_compl₁₂
+  条件: (M : 矩阵 n m R) (P : 矩阵 n n' R) (Q : 矩阵 m m' R)
   证明: (LinearMap.toMatrix₂ b₁' b₂').injective
     (by
       simp only [LinearMap.toMatrix₂_compl₁₂ b₁ b₂, LinearMap.toMatrix₂_toLinearMap₂,
@@ -1608,7 +1608,7 @@ definition Matrix.IsAdjointPair
   body: Aᵀ * J' = J * A'
 
 中文:
-定义 Matrix.IsAdjointPair
+定义 矩阵.IsAdjointPair
   定义体: Aᵀ * J' = J * A'
 -/
 def Matrix.IsAdjointPair :=
@@ -1622,7 +1622,7 @@ definition Matrix.IsSelfAdjoint
   body: Matrix.IsAdjointPair J J A₁ A₁
 
 中文:
-定义 Matrix.IsSelfAdjoint
+定义 矩阵.IsSelfAdjoint
   定义体: Matrix.IsAdjointPair J J A₁ A₁
 -/
 protected def Matrix.IsSelfAdjoint :=
@@ -1636,7 +1636,7 @@ definition Matrix.IsSkewAdjoint
   body: Matrix.IsAdjointPair J J A₁ (-A₁)
 
 中文:
-定义 Matrix.IsSkewAdjoint
+定义 矩阵.IsSkewAdjoint
   定义体: Matrix.IsAdjointPair J J A₁ (-A₁)
 -/
 protected def Matrix.IsSkewAdjoint :=
@@ -1757,8 +1757,8 @@ theorem Matrix.isAdjointPair_equiv
     simp only [Matri
 
 中文:
-定理 Matrix.isAdjointPair_equiv
-  条件: (P : Matrix n n R) (h : IsUnit P)
+定理 矩阵.isAdjointPair_equiv
+  条件: (P : 矩阵 n n R) (h : 是单位 P)
   证明: by
   have h' : IsUnit P.det := P.isUnit_iff_isUnit_det.mp h
   let u := P.nonsingInvUnit h'
@@ -1807,7 +1807,7 @@ definition pairSelfAdjointMatricesSubmodule
 
 中文:
 定义 pairSelfAdjointMatricesSubmodule
-  签名: : Submodule R (Matrix n n R)
+  签名: : 子模 R (矩阵 n n R)
   定义体: (isPairSelfAdjointSubmodule (Matrix.toLinearMap₂' R J)
     (Matrix.toLinearMap₂' R J₂)).map
     ((LinearMap.toMatrix' : ((n -> R) ->ₗ[R] n -> R) ≃ₗ[R] Matrix n n R) :
@@ -1861,7 +1861,7 @@ definition selfAdjointMatricesSubmodule
 
 中文:
 定义 selfAdjointMatricesSubmodule
-  签名: : Submodule R (Matrix n n R)
+  签名: : 子模 R (矩阵 n n R)
   定义体: pairSelfAdjointMatricesSubmodule J J
 
 @[simp]
@@ -1903,7 +1903,7 @@ definition skewAdjointMatricesSubmodule
 
 中文:
 定义 skewAdjointMatricesSubmodule
-  签名: : Submodule R (Matrix n n R)
+  签名: : 子模 R (矩阵 n n R)
   定义体: pairSelfAdjointMatricesSubmodule (-J) J
 
 @[simp]
@@ -1962,7 +1962,7 @@ theorem _root_.Matrix.SeparatingLeft.toLinearMap₂'
   simpa [SeparatingLeft, toLinearMap₂'_apply', separatingLeft_def] using h
 
 中文:
-定理 _root_.Matrix.SeparatingLeft.toLinearMap₂'
+定理 _root_.矩阵.SeparatingLeft.toLinearMap₂'
   条件: (h : M.SeparatingLeft)
   证明: by
   simpa [SeparatingLeft, toLinearMap₂'_apply', separatingLeft_def] using h
@@ -1983,7 +1983,7 @@ theorem _root_.Matrix.SeparatingRight.toLinearMap₂'
   simpa [SeparatingRight, toLinearMap₂'_apply', separatingRight_def] using h
 
 中文:
-定理 _root_.Matrix.SeparatingRight.toLinearMap₂'
+定理 _root_.矩阵.SeparatingRight.toLinearMap₂'
   条件: (h : M.SeparatingRight)
   证明: by
   simpa [SeparatingRight, toLinearMap₂'_apply', separatingRight_def] using h
@@ -2005,8 +2005,8 @@ theorem _root_.Matrix.Nondegenerate.toLinearMap₂'
 @[simp]
 
 中文:
-定理 _root_.Matrix.Nondegenerate.toLinearMap₂'
-  条件: (h : M.Nondegenerate)
+定理 _root_.矩阵.非退化.toLinearMap₂'
+  条件: (h : M.非退化)
   证明: ⟨h.1.toLinearMap₂', h.2.toLinearMap₂'⟩
 
 @[simp]
@@ -2028,7 +2028,7 @@ exact fun v hv => h v fun w => (M.toLinearMap₂'_apply' _ _).trans hv w
 @[simp]
 
 中文:
-定理 _root_.Matrix.separatingLeft_toLinearMap₂'_iff
+定理 _root_.矩阵.separatingLeft_toLinearMap₂'_iff
   证明: by
   refine ⟨fun h => separatingLeft_def.mpr ?_, SeparatingLeft.toLinearMap₂'⟩
 exact fun v hv => h v fun w => (M.toLinearMap₂'_apply' _ _).trans hv w
@@ -2055,7 +2055,7 @@ exact fun v hv => h v fun w => (M.toLinearMap₂'_apply' _ _).trans hv w
 @[simp]
 
 中文:
-定理 _root_.Matrix.separatingRight_toLinearMap₂'_iff
+定理 _root_.矩阵.separatingRight_toLinearMap₂'_iff
   证明: by
   refine ⟨fun h => separatingRight_def.mpr ?_, SeparatingRight.toLinearMap₂'⟩
 exact fun v hv => h v fun w => (M.toLinearMap₂'_apply' _ _).trans hv w
@@ -2081,7 +2081,7 @@ theorem _root_.Matrix.nondegenerate_toLinearMap₂'_iff
 @[simp]
 
 中文:
-定理 _root_.Matrix.nondegenerate_toLinearMap₂'_iff
+定理 _root_.矩阵.nondegenerate_toLinearMap₂'_iff
   证明: ⟨fun h => ⟨separatingLeft_toLinearMap₂'_iff.mp h.1, separatingRight_toLinearMap₂'_iff.mp h.2⟩,
    fun h => ⟨separatingLeft_toLinearMap₂'_iff.mpr h.1, separatingRight_toLinearMap₂'_iff.mpr h.2⟩⟩
 
@@ -2209,9 +2209,9 @@ theorem Nondegenerate.toMatrix₂'
   proof: nondegenerate_toMatrix₂'_iff.mpr h
 
 中文:
-定理 Nondegenerate.toMatrix₂'
-  条件: (h : B.Nondegenerate)
-  结论: (toMatrix₂' R B).Nondegenerate
+定理 非退化.toMatrix₂'
+  条件: (h : B.非退化)
+  结论: (toMatrix₂' R B).非退化
   证明: nondegenerate_toMatrix₂'_iff.mpr h
 
 Depends on / 依赖: _iff, _iff.mpr
@@ -2239,7 +2239,7 @@ theorem _root_.Matrix.separatingLeft_toLinearMap₂'_iff_separatingLeft_toLinear
   proof: (separatingLeft_congr_iff b₁.equivFun.symm b₂.equivFun.symm).symm
 
 中文:
-定理 _root_.Matrix.separatingLeft_toLinearMap₂'_iff_separatingLeft_toLinearMap₂
+定理 _root_.矩阵.separatingLeft_toLinearMap₂'_iff_separatingLeft_toLinearMap₂
   证明: (separatingLeft_congr_iff b₁.equivFun.symm b₂.equivFun.symm).symm
 -/
 theorem _root_.Matrix.separatingLeft_toLinearMap₂'_iff_separatingLeft_toLinearMap₂ :
@@ -2254,7 +2254,7 @@ theorem _root_.Matrix.separatingRight_toLinearMap₂'_iff_separatingRight_toLine
   proof: (separatingRight_congr_iff b₁.equivFun.symm b₂.equivFun.symm).symm
 
 中文:
-定理 _root_.Matrix.separatingRight_toLinearMap₂'_iff_separatingRight_toLinearMap₂
+定理 _root_.矩阵.separatingRight_toLinearMap₂'_iff_separatingRight_toLinearMap₂
   证明: (separatingRight_congr_iff b₁.equivFun.symm b₂.equivFun.symm).symm
 -/
 theorem _root_.Matrix.separatingRight_toLinearMap₂'_iff_separatingRight_toLinearMap₂ :
@@ -2271,7 +2271,7 @@ theorem _root_.Matrix.nondegenerate_toLinearMap₂'_iff_nondegenerate_toLinearMa
 @[simp]
 
 中文:
-定理 _root_.Matrix.nondegenerate_toLinearMap₂'_iff_nondegenerate_toLinearMap₂
+定理 _root_.矩阵.nondegenerate_toLinearMap₂'_iff_nondegenerate_toLinearMap₂
   证明: (nondegenerate_congr_iff b₁.equivFun.symm b₂.equivFun.symm).symm
 
 @[simp]
@@ -2292,7 +2292,7 @@ theorem _root_.Matrix.separatingLeft_toLinearMap₂_iff
 @[simp]
 
 中文:
-定理 _root_.Matrix.separatingLeft_toLinearMap₂_iff
+定理 _root_.矩阵.separatingLeft_toLinearMap₂_iff
   证明: by
   rw [← separatingLeft_toLinearMap₂'_iff_separatingLeft_toLinearMap₂]; rw [separatingLeft_toLinearMap₂'_iff]
 
@@ -2316,7 +2316,7 @@ theorem _root_.Matrix.separatingRight_toLinearMap₂_iff
 @[simp]
 
 中文:
-定理 _root_.Matrix.separatingRight_toLinearMap₂_iff
+定理 _root_.矩阵.separatingRight_toLinearMap₂_iff
   证明: by
   rw [← separatingRight_toLinearMap₂'_iff_separatingRight_toLinearMap₂]; rw [separatingRight_toLinearMap₂'_iff]
 
@@ -2338,7 +2338,7 @@ theorem _root_.Matrix.nondegenerate_toLinearMap₂_iff
   rw [← nondegenerate_toLinearMap₂'_iff_nondegenerate_toLinearMap₂]; rw [nondegenerate_toLinearMap₂'_iff]
 
 中文:
-定理 _root_.Matrix.nondegenerate_toLinearMap₂_iff
+定理 _root_.矩阵.nondegenerate_toLinearMap₂_iff
   证明: by
   rw [← nondegenerate_toLinearMap₂'_iff_nondegenerate_toLinearMap₂]; rw [nondegenerate_toLinearMap₂'_iff]
 
@@ -2357,7 +2357,7 @@ theorem _root_.Matrix.SeparatingLeft.toLinearMap₂
   proof: (separatingLeft_toLinearMap₂_iff b₁ b₂).mpr h
 
 中文:
-定理 _root_.Matrix.SeparatingLeft.toLinearMap₂
+定理 _root_.矩阵.SeparatingLeft.toLinearMap₂
   条件: (h : M.SeparatingLeft)
   证明: (separatingLeft_toLinearMap₂_iff b₁ b₂).mpr h
 -/
@@ -2374,7 +2374,7 @@ theorem _root_.Matrix.SeparatingRight.toLinearMap₂
   proof: (separatingRight_toLinearMap₂_iff b₁ b₂).mpr h
 
 中文:
-定理 _root_.Matrix.SeparatingRight.toLinearMap₂
+定理 _root_.矩阵.SeparatingRight.toLinearMap₂
   条件: (h : M.SeparatingRight)
   证明: (separatingRight_toLinearMap₂_iff b₁ b₂).mpr h
 -/
@@ -2393,8 +2393,8 @@ theorem _root_.Matrix.Nondegenerate.toLinearMap₂
 @[simp]
 
 中文:
-定理 _root_.Matrix.Nondegenerate.toLinearMap₂
-  条件: (h : M.Nondegenerate)
+定理 _root_.矩阵.非退化.toLinearMap₂
+  条件: (h : M.非退化)
   证明: (nondegenerate_toLinearMap₂_iff b₁ b₂).mpr h
 
 @[simp]
@@ -2517,8 +2517,8 @@ theorem Nondegenerate.toMatrix₂
   proof: (nondegenerate_toMatrix₂_iff b₁ b₂).mpr h
 
 中文:
-定理 Nondegenerate.toMatrix₂
-  条件: (h : B.Nondegenerate)
+定理 非退化.toMatrix₂
+  条件: (h : B.非退化)
   证明: (nondegenerate_toMatrix₂_iff b₁ b₂).mpr h
 -/
 theorem Nondegenerate.toMatrix₂ (h : B.Nondegenerate) :
@@ -2761,7 +2761,7 @@ theorem nondegenerate_of_det_ne_zero
 中文:
 定理 nondegenerate_of_det_ne_zero
   条件: (h : (toMatrix₂ b b B).det != 0)
-  结论: B.Nondegenerate
+  结论: B.非退化
   证明: (nondegenerate_iff_det_ne_zero b).mpr h
 
 Depends on / 依赖: nondegenerate_iff_det_ne_zero

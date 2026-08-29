@@ -47,11 +47,11 @@ structure SheafedSpace
     - IsSheaf : presheaf.IsSheaf
 
 中文:
-结构 SheafedSpace
-  参数: extends PresheafedSpace C
-  继承: PresheafedSpace C
+结构 Sheafed空间
+  参数: extends Presheafed空间 C
+  继承: Presheafed空间 C
   公理与运算 (1 个):
-    - IsSheaf : presheaf.IsSheaf
+    - IsSheaf : presheaf.是层
 -/
 structure SheafedSpace extends PresheafedSpace C where
   /-- A sheafed space is a presheafed space which happens to be a sheaf. -/
@@ -71,7 +71,7 @@ instance coeCarrier
 
 中文:
 实例 coeCarrier
-  签名: : CoeOut (SheafedSpace C) TopCat where coe X
+  签名: : CoeOut (Sheafed空间 C) 顶元素范畴 where coe X
   定义体: X.carrier
 
 Depends on / 依赖: X.carrier, carrier
@@ -88,7 +88,7 @@ instance coeSort
 
 中文:
 实例 coeSort
-  签名: : CoeSort (SheafedSpace C) 类型 where
+  签名: : CoeSort (Sheafed空间 C) 类型 where
   定义体: X.1
 -/
 instance coeSort : CoeSort (SheafedSpace C) Type* where
@@ -104,7 +104,7 @@ definition sheaf
 
 中文:
 定义 sheaf
-  签名: (X : SheafedSpace C)
+  签名: (X : Sheafed空间 C)
   定义体: ⟨X.presheaf, X.IsSheaf⟩
 
 Depends on / 依赖: IsSheaf, X.IsSheaf, X.presheaf, presheaf
@@ -146,7 +146,7 @@ definition unit
 
 中文:
 定义 unit
-  签名: (X : TopCat)
+  签名: (X : 顶元素范畴)
   定义体: { @PresheafedSpace.const (Discrete Unit) _ X ⟨⟨⟩⟩ with IsSheaf := Presheaf.isSheaf_unit _ }
 
 Depends on / 依赖: Discrete, IsSheaf, Presheaf, Presheaf.isSheaf_unit, PresheafedSpace, PresheafedSpace.const, isSheaf_unit
@@ -164,7 +164,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (SheafedSpace (Discrete Unit))
+  签名: 可居 (Sheafed空间 (离散 单元))
   定义体: ⟨unit (TopCat.of PEmpty)⟩
 
 Depends on / 依赖: PEmpty, TopCat, TopCat.of
@@ -184,7 +184,7 @@ instance :
 
 中文:
 实例 :
-  签名: Category (SheafedSpace C)
+  签名: 范畴 (Sheafed空间 C)
   定义体: inferInstanceAs Category (InducedCategory (PresheafedSpace C) SheafedSpace.toPresheafedSpace)
 
 @[ext (iff := false)]
@@ -205,7 +205,7 @@ theorem ext
 
 中文:
 定理 ext
-  结论: {X Y : SheafedSpace C} (α β : X ⟶ Y) (w : α.hom.base = β.hom.base)
+  结论: {X Y : Sheafed空间 C} (α β : X ⟶ Y) (w : α.hom.base = β.hom.base)
   证明: InducedCategory.hom_ext (PresheafedSpace.ext _ _ w h)
 
 Depends on / 依赖: InducedCategory, InducedCategory.hom_ext, PresheafedSpace, PresheafedSpace.ext, hom_ext
@@ -229,7 +229,7 @@ definition isoMk
 
 中文:
 定义 isoMk
-  签名: {X Y : SheafedSpace C} (e : X.toPresheafedSpace ≅ Y.toPresheafedSpace)
+  签名: {X Y : Sheafed空间 C} (e : X.toPresheafedSpace ≅ Y.toPresheafedSpace)
   定义体: InducedCategory.homMk e.hom
   inv := InducedCategory.homMk e.inv
   hom_inv_id := InducedCategory.hom_ext e.hom_inv_id
@@ -255,7 +255,7 @@ definition forgetToPresheafedSpace
 
 中文:
 定义 forgetToPresheafedSpace
-  签名: : SheafedSpace C ⥤ PresheafedSpace C
+  签名: : Sheafed空间 C ⥤ Presheafed空间 C
   定义体: inducedFunctor _
 
 Depends on / 依赖: inducedFunctor
@@ -299,7 +299,7 @@ lemma fullyFaithfulForgetToPresheafedSpace_preimage_hom
 
 中文:
 引理 fullyFaithfulForgetToPresheafedSpace_preimage_hom
-  结论: {X Y : SheafedSpace C}
+  结论: {X Y : Sheafed空间 C}
   证明: rfl
 -/
 lemma fullyFaithfulForgetToPresheafedSpace_preimage_hom {X Y : SheafedSpace C}
@@ -316,7 +316,7 @@ instance forgetToPresheafedSpace_full
 
 中文:
 实例 forgetToPresheafedSpace_full
-  签名: : (forgetToPresheafedSpace (C := C)).Full
+  签名: : (forgetToPresheafedSpace (C := C)).满
   定义体: fullyFaithfulForgetToPresheafedSpace.full
 -/
 instance forgetToPresheafedSpace_full : (forgetToPresheafedSpace (C := C)).Full :=
@@ -332,7 +332,7 @@ instance forgetToPresheafedSpace_faithful
 
 中文:
 实例 forgetToPresheafedSpace_faithful
-  签名: : (forgetToPresheafedSpace (C := C)).Faithful
+  签名: : (forgetToPresheafedSpace (C := C)).忠实
   定义体: fullyFaithfulForgetToPresheafedSpace.faithful
 
 Depends on / 依赖: Faithful
@@ -350,7 +350,7 @@ instance is_presheafedSpace_iso
 
 中文:
 实例 is_presheafedSpace_iso
-  签名: {X Y : SheafedSpace C} (f : X ⟶ Y) [IsIso f]
+  签名: {X Y : Sheafed空间 C} (f : X ⟶ Y) [是同构 f]
   定义体: SheafedSpace.forgetToPresheafedSpace.map_isIso f
 
 Depends on / 依赖: SheafedSpace, SheafedSpace.forgetToPresheafedSpace.map_isIso, forgetToPresheafedSpace, map_isIso
@@ -377,7 +377,7 @@ theorem id_hom
 
 中文:
 定理 id_hom
-  条件: (X : SheafedSpace C)
+  条件: (X : Sheafed空间 C)
   结论: (𝟙 X : X ⟶ X).hom = 𝟙 X.toPresheafedSpace
   证明: rfl
 
@@ -398,8 +398,8 @@ theorem id_hom_base
 
 中文:
 定理 id_hom_base
-  条件: (X : SheafedSpace C)
-  结论: (𝟙 X : X ⟶ X).hom.base = 𝟙 (X : TopCat)
+  条件: (X : Sheafed空间 C)
+  结论: (𝟙 X : X ⟶ X).hom.base = 𝟙 (X : 顶元素范畴)
   证明: rfl
 -/
 theorem id_hom_base (X : SheafedSpace C) : (𝟙 X : X ⟶ X).hom.base = 𝟙 (X : TopCat) :=
@@ -415,7 +415,7 @@ theorem id_hom_c
 
 中文:
 定理 id_hom_c
-  条件: (X : SheafedSpace C)
+  条件: (X : Sheafed空间 C)
   证明: rfl
 -/
 theorem id_hom_c (X : SheafedSpace C) :
@@ -434,7 +434,7 @@ theorem id_hom_c_app
 
 中文:
 定理 id_hom_c_app
-  条件: (X : SheafedSpace C) (U)
+  条件: (X : Sheafed空间 C) (U)
   证明: rfl
 
 @[simp]
@@ -455,7 +455,7 @@ theorem comp_hom_base
 
 中文:
 定理 comp_hom_base
-  条件: {X Y Z : SheafedSpace C} (f : X ⟶ Y) (g : Y ⟶ Z)
+  条件: {X Y Z : Sheafed空间 C} (f : X ⟶ Y) (g : Y ⟶ Z)
   证明: rfl
 
 @[simp]
@@ -475,7 +475,7 @@ theorem comp_hom_c_app
 
 中文:
 定理 comp_hom_c_app
-  条件: {X Y Z : SheafedSpace C} (α : X ⟶ Y) (β : Y ⟶ Z) (U)
+  条件: {X Y Z : Sheafed空间 C} (α : X ⟶ Y) (β : Y ⟶ Z) (U)
   证明: rfl
 -/
 theorem comp_hom_c_app {X Y Z : SheafedSpace C} (α : X ⟶ Y) (β : Y ⟶ Z) (U) :
@@ -493,7 +493,7 @@ theorem comp_hom_c_app'
 
 中文:
 定理 comp_hom_c_app'
-  条件: {X Y Z : SheafedSpace C} (α : X ⟶ Y) (β : Y ⟶ Z) (U)
+  条件: {X Y Z : Sheafed空间 C} (α : X ⟶ Y) (β : Y ⟶ Z) (U)
   证明: rfl
 -/
 theorem comp_hom_c_app' {X Y Z : SheafedSpace C} (α : X ⟶ Y) (β : Y ⟶ Z) (U) :
@@ -511,7 +511,7 @@ theorem congr_hom_app
 
 中文:
 定理 congr_hom_app
-  条件: {X Y : SheafedSpace C} {α β : X ⟶ Y} (h : α = β) (U)
+  条件: {X Y : Sheafed空间 C} {α β : X ⟶ Y} (h : α = β) (U)
   证明: (PresheafedSpace.congr_app (by rw [h]) U)
 
 Depends on / 依赖: PresheafedSpace, PresheafedSpace.congr_app, congr_app
@@ -533,7 +533,7 @@ definition forget
 
 中文:
 定义 forget
-  签名: : SheafedSpace C ⥤ TopCat where
+  签名: : Sheafed空间 C ⥤ 顶元素范畴 where
   定义体: (X : TopCat)
   map {_ _} f := f.hom.base
 
@@ -557,7 +557,7 @@ definition restrict
 
 中文:
 定义 restrict
-  签名: {U : TopCat} (X : SheafedSpace C) {f : U ⟶ (X : TopCat)} (h : IsOpenEmbedding f)
+  签名: {U : 顶元素范畴} (X : Sheafed空间 C) {f : U ⟶ (X : 顶元素范畴)} (h : 是开嵌入 f)
   定义体: { X.toPresheafedSpace.restrict h with IsSheaf := isSheaf_of_isOpenEmbedding h X.IsSheaf }
 
 Depends on / 依赖: IsSheaf, X.IsSheaf, X.toPresheafedSpace.restrict, isSheaf_of_isOpenEmbedding, restrict, toPresheafedSpace
@@ -579,7 +579,7 @@ definition ofRestrict
 
 中文:
 定义 ofRestrict
-  签名: {U : TopCat} (X : SheafedSpace C) {f : U ⟶ (X : TopCat)}
+  签名: {U : 顶元素范畴} (X : Sheafed空间 C) {f : U ⟶ (X : 顶元素范畴)}
   定义体: InducedCategory.homMk (X.toPresheafedSpace.ofRestrict h)
 
 Depends on / 依赖: InducedCategory, InducedCategory.homMk, X.toPresheafedSpace.ofRestrict, ofRestrict, toPresheafedSpace
@@ -601,7 +601,7 @@ definition restrictTopIso
 
 中文:
 定义 restrictTopIso
-  签名: (X : SheafedSpace C)
+  签名: (X : Sheafed空间 C)
   定义体: isoMk (X.toPresheafedSpace.restrictTopIso)
 
 Depends on / 依赖: X.toPresheafedSpace.restrictTopIso, restrictTopIso, toPresheafedSpace
@@ -619,7 +619,7 @@ definition Γ
 
 中文:
 定义 Γ
-  签名: : (SheafedSpace C)ᵒᵖ ⥤ C
+  签名: : (Sheafed空间 C)ᵒᵖ ⥤ C
   定义体: forgetToPresheafedSpace.op ⋙ PresheafedSpace.Γ
 
 Depends on / 依赖: PresheafedSpace, forgetToPresheafedSpace, forgetToPresheafedSpace.op
@@ -639,7 +639,7 @@ theorem Γ_def
 
 中文:
 定理 Γ_def
-  结论: (Γ : _ ⥤ C) = forgetToPresheafedSpace.op ⋙ PresheafedSpace.Γ
+  结论: (Γ : _ ⥤ C) = forgetToPresheafedSpace.op ⋙ Presheafed空间.Γ
   证明: rfl
 
 @[simp]
@@ -659,7 +659,7 @@ theorem Γ_obj
 
 中文:
 定理 Γ_obj
-  条件: (X : (SheafedSpace C)ᵒᵖ)
+  条件: (X : (Sheafed空间 C)ᵒᵖ)
   结论: Γ.obj X = (unop X).presheaf.obj (op ⊤)
   证明: rfl
 -/
@@ -679,7 +679,7 @@ theorem Γ_obj_op
 
 中文:
 定理 Γ_obj_op
-  条件: (X : SheafedSpace C)
+  条件: (X : Sheafed空间 C)
   结论: Γ.obj (op X) = X.presheaf.obj (op ⊤)
   证明: rfl
 
@@ -700,7 +700,7 @@ theorem Γ_map
 
 中文:
 定理 Γ_map
-  条件: {X Y : (SheafedSpace C)ᵒᵖ} (f : X ⟶ Y)
+  条件: {X Y : (Sheafed空间 C)ᵒᵖ} (f : X ⟶ Y)
   结论: Γ.map f = f.unop.hom.c.app (op ⊤)
   证明: rfl
 -/
@@ -718,7 +718,7 @@ theorem Γ_map_op
 
 中文:
 定理 Γ_map_op
-  条件: {X Y : SheafedSpace C} (f : X ⟶ Y)
+  条件: {X Y : Sheafed空间 C} (f : X ⟶ Y)
   结论: Γ.map f.op = f.hom.c.app (op ⊤)
   证明: rfl
 -/
@@ -741,7 +741,7 @@ instance [HasLimits
   signature: C] :
 
 中文:
-实例 [HasLimits
+实例 [有极限
   签名: C] :
 -/
 noncomputable instance [HasLimits C] :
@@ -759,8 +759,8 @@ instance [HasLimits
   signature: C] : HasColimits.{v} (SheafedSpace C) where
 
 中文:
-实例 [HasLimits
-  签名: C] : HasColimits.{v} (SheafedSpace C) where
+实例 [有极限
+  签名: C] : 有余极限.{v} (Sheafed空间 C) where
 -/
 instance [HasLimits C] : HasColimits.{v} (SheafedSpace C) where
 
@@ -776,7 +776,7 @@ instance [HasLimits
   signature: C] : PreservesColimits (forget.{_, _, v} C) where
 
 中文:
-实例 [HasLimits
+实例 [有极限
   签名: C] : PreservesColimits (forget.{_, _, v} C) where
 -/
 noncomputable instance [HasLimits C] : PreservesColimits (forget.{_, _, v} C) where
@@ -810,7 +810,7 @@ lemma hom_stalk_ext
 
 中文:
 引理 hom_stalk_ext
-  结论: {X Y : SheafedSpace C} (f g : X ⟶ Y) (h : f.hom.base = g.hom.base)
+  结论: {X Y : Sheafed空间 C} (f g : X ⟶ Y) (h : f.hom.base = g.hom.base)
   证明: by
   obtain ⟨f, fc⟩ := f
   obtain ⟨g, gc⟩ := g
@@ -853,7 +853,7 @@ lemma mono_of_base_injective_of_stalk_epi
 
 中文:
 引理 mono_of_base_injective_of_stalk_epi
-  结论: {X Y : SheafedSpace C} (f : X ⟶ Y)
+  结论: {X Y : Sheafed空间 C} (f : X ⟶ Y)
   证明: by
   constructor
   intro Z ⟨g, gc⟩ ⟨h, hc⟩ e
@@ -895,7 +895,7 @@ lemma epi_of_base_surjective_of_stalk_mono
 
 中文:
 引理 epi_of_base_surjective_of_stalk_mono
-  结论: {X Y : SheafedSpace C} (f : X ⟶ Y)
+  结论: {X Y : Sheafed空间 C} (f : X ⟶ Y)
   证明: by
   constructor
   intro Z ⟨g, gc⟩ ⟨h, hc⟩ e

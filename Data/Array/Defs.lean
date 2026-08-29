@@ -36,7 +36,7 @@ definition cyclicPermute!
 
 中文:
 定义 cyclicPermute!
-  签名: [Inhabited α]
+  签名: [可居 α]
 
 Depends on / 依赖: a.swapAt, swapAt
 -/
@@ -61,7 +61,7 @@ definition permute!
 
 中文:
 定义 permute!
-  签名: [Inhabited α] (a : Array α) (ls : List (List 自然数))
+  签名: [可居 α] (a : 数组 α) (ls : 列表 (列表 自然数))
   定义体: ls.foldl (init := a) (·.cyclicPermute! ·)
 
 Depends on / 依赖: cyclicPermute, ls.foldl

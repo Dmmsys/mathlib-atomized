@@ -40,10 +40,10 @@ structure FiniteInter
     - inter_mem : forall ⦃s⦄, s in S -> forall ⦃t⦄, t in S -> s inter t in S
 
 中文:
-结构 FiniteInter
+结构 Finite整数er
   参数: : 命题 where
   公理与运算 (2 个):
-    - univ_mem : Set.univ in S
+    - univ_mem : 集合.univ in S
     - inter_mem : 对任意 ⦃s⦄, s in S -> 对任意 ⦃t⦄, t in S -> s inter t in S
 -/
 structure FiniteInter : Prop where
@@ -66,11 +66,11 @@ inductive finiteInterClosure
     - inter: {s t} : finiteInterClosure s -> finiteInterClosure t -> finiteInterClosure (s inter t)
 
 中文:
-归纳类型 finiteInterClosure
-  参数: : Set (Set α)
+归纳类型 finite整数erClosure
+  参数: : 集合 (集合 α)
   构造子 (3 个):
     - basic: {s} : s in S -> finite整数erClosure s
-    - univ: finite整数erClosure Set.univ
+    - univ: finite整数erClosure 集合.univ
     - inter: {s t} : finite整数erClosure s -> finite整数erClosure t -> finite整数erClosure (s inter t)
 -/
 inductive finiteInterClosure : Set (Set α)
@@ -88,7 +88,7 @@ theorem finiteInterClosure_finiteInter
     inter_mem := fun _ h _ => finiteInterClosure.inter h }
 
 中文:
-定理 finiteInterClosure_finiteInter
+定理 finite整数erClosure_finite整数er
   结论: Finite整数er (finite整数erClosure S)
   证明: { univ_mem := finiteInterClosure.univ
     inter_mem := fun _ h _ => finiteInterClosure.inter h }
@@ -117,8 +117,8 @@ theorem finiteInter_mem
         (h1 fun x hx => h2 <| Finset.mem_insert_of_mem hx)
 
 中文:
-定理 finiteInter_mem
-  条件: (cond : Finite整数er S) (F : Finset (Set α))
+定理 finite整数er_mem
+  条件: (cond : Finite整数er S) (F : 有限集 (集合 α))
   证明: by
   refine Finset.induction_on F (fun _ => ?_) ?_
   · simp [cond.univ_mem]
@@ -158,8 +158,8 @@ theorem finiteInterClosure_insert
     · exact Or.i
 
 中文:
-定理 finiteInterClosure_insert
-  结论: {A : Set α} (cond : Finite整数er S) (P)
+定理 finite整数erClosure_insert
+  结论: {A : 集合 α} (cond : Finite整数er S) (P)
   证明: by
   induction H with
   | basic h =>
@@ -229,8 +229,8 @@ theorem Set.biUnion_empty_finset
   simp
 
 中文:
-定理 Set.biUnion_empty_finset
-  条件: {ι X : 类型} {s : ι -> Set X}
+定理 集合.biUnion_empty_finset
+  条件: {ι X : 类型} {s : ι -> 集合 X}
   证明: by
   simp
 -/

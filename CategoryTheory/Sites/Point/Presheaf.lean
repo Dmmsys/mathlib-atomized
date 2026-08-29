@@ -175,7 +175,7 @@ instance [Small.{w}
 
 中文:
 实例 [Small.{w}
-  签名: C] : Object命题erty.Small.{w} (pointsBot C)
+  签名: C] : ObjectProperty.Small.{w} (pointsBot C)
   定义体: by
   dsimp [pointsBot]
   infer_instance

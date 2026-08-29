@@ -308,7 +308,7 @@ definition cone
 
 中文:
 定义 cone
-  签名: : Cone (Functor.ofOpSequence (functorMap f)) where
+  签名: : 锥 (函子.ofOpSequence (functorMap f)) where
   定义体: ∏ᶜ M
   π := by
     refine NatTrans.ofOpSequence
@@ -396,7 +396,7 @@ lemma cone_π_app_comp_Pi_π_neg
 中文:
 引理 cone_π_app_comp_Pi_π_neg
   条件: (m n : 自然数) (h : ¬(n < m))
-  结论: (cone f).π.app ⟨m⟩ ≫ Pi.π _ n =
+  结论: (cone f).π.app ⟨m⟩ ≫ 依赖函数类型.π _ n =
   证明: by
   simp [cone_π_app, dif_neg h]
 
@@ -426,7 +426,7 @@ definition isLimit
 
 中文:
 定义 isLimit
-  签名: : IsLimit (cone f) where
+  签名: : 是极限 (cone f) where
   定义体: Pi.lift fun m =>
     s.π.app ⟨m + 1⟩ ≫ Pi.π (fun i => if _ : i < m + 1 then M i else N i) m ≫
       eqToHom (dif_pos (by lia : m < m + 1))
@@ -515,7 +515,7 @@ lemma functorMap_epi
 中文:
 引理 functorMap_epi
   条件: (n : 自然数)
-  结论: Epi (functorMap f n)
+  结论: 满态射 (functorMap f n)
   证明: by
   rw [functorMap]; rw [Pi.map_eq_prod_map (P := fun m : Nat => m < n + 1)]
   apply +allowSynthFailures epi_comp

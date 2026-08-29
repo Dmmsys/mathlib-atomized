@@ -35,11 +35,11 @@ structure BddDistLat
     - [isBoundedOrder : BoundedOrder toDistLat]
 
 中文:
-结构 BddDistLat
-  参数: extends DistLat
-  继承: DistLat
+结构 有界分配格
+  参数: extends 分配格
+  继承: 分配格
   公理与运算 (1 个):
-    - [isBoundedOrder : BoundedOrder toDistLat]
+    - [isBoundedOrder : 有界序 toDistLat]
 -/
 structure BddDistLat extends DistLat where
   [isBoundedOrder : BoundedOrder toDistLat]
@@ -59,7 +59,7 @@ instance :
 
 中文:
 实例 :
-  签名: CoeSort BddDistLat 类型
+  签名: CoeSort 有界分配格 类型
   定义体: ⟨fun X => X.toDistLat⟩
 
 Depends on / 依赖: X.toDistLat, toDistLat
@@ -82,7 +82,7 @@ abbreviation of
 
 中文:
 缩写 of
-  签名: (α : 类型) [DistribLattice α] [BoundedOrder α]
+  签名: (α : 类型) [Distrib格 α] [有界序 α]
   定义体: α
 -/
 abbrev of (α : Type*) [DistribLattice α] [BoundedOrder α] : BddDistLat where
@@ -99,7 +99,7 @@ theorem coe_of
 
 中文:
 定理 coe_of
-  条件: (α : 类型) [DistribLattice α] [BoundedOrder α]
+  条件: (α : 类型) [Distrib格 α] [有界序 α]
   结论: ↥(of α) = α
   证明: rfl
 -/
@@ -119,11 +119,11 @@ structure Hom
     - hom' : BoundedLatticeHom X Y
 
 中文:
-结构 Hom
-  参数: (X Y : BddDistLat.{u})
+结构 态射
+  参数: (X Y : 有界分配格.{u})
   公理与运算 (2 个):
     - private(mk) : :
-    - hom' : BoundedLatticeHom X Y
+    - hom' : 有界格态射 X Y
 -/
 structure Hom (X Y : BddDistLat.{u}) where
   private mk ::
@@ -144,7 +144,7 @@ instance :
 
 中文:
 实例 :
-  签名: Category BddDistLat.{u}
+  签名: 范畴 有界分配格.{u}
   定义体: Hom X Y
   id X := ⟨BoundedLatticeHom.id X⟩
   comp f g := ⟨g.hom'.comp f.hom'⟩
@@ -167,7 +167,7 @@ instance :
 
 中文:
 实例 :
-  签名: ConcreteCategory BddDistLat (BoundedLatticeHom · ·)
+  签名: 余ncrete范畴 有界分配格 (有界格态射 · ·)
   定义体: Hom.hom'
   ofHom := Hom.mk
 
@@ -186,8 +186,8 @@ abbreviation Hom.hom
   body: ConcreteCategory.hom (C := BddDistLat) f
 
 中文:
-缩写 Hom.hom
-  签名: {X Y : BddDistLat.{u}} (f : Hom X Y)
+缩写 态射.hom
+  签名: {X Y : 有界分配格.{u}} (f : 态射 X Y)
   定义体: ConcreteCategory.hom (C := BddDistLat) f
 -/
 abbrev Hom.hom {X Y : BddDistLat.{u}} (f : Hom X Y) :=
@@ -203,7 +203,7 @@ abbreviation ofHom
 
 中文:
 缩写 ofHom
-  签名: {X Y : 类型u} [DistribLattice X] [BoundedOrder X] [DistribLattice Y] [BoundedOrder Y]
+  签名: {X Y : 类型u} [Distrib格 X] [有界序 X] [Distrib格 Y] [有界序 Y]
   定义体: ConcreteCategory.ofHom (C := BddDistLat) f
 
 Depends on / 依赖: BddDistLat, ConcreteCategory, ConcreteCategory.ofHom
@@ -225,8 +225,8 @@ definition Hom.Simps.hom
 initialize_simps_projections Hom (hom' -> hom)
 
 中文:
-定义 Hom.Simps.hom
-  签名: (X Y : BddDistLat.{u}) (f : Hom X Y)
+定义 态射.Simps.hom
+  签名: (X Y : 有界分配格.{u}) (f : 态射 X Y)
   定义体: f.hom
 
 initialize_simps_projections Hom (hom' -> hom)
@@ -254,7 +254,7 @@ lemma coe_id
 
 中文:
 引理 coe_id
-  条件: {X : BddDistLat}
+  条件: {X : 有界分配格}
   结论: (𝟙 X : X -> X) = id
   证明: rfl
 
@@ -276,7 +276,7 @@ lemma coe_comp
 
 中文:
 引理 coe_comp
-  条件: {X Y Z : BddDistLat} {f : X ⟶ Y} {g : Y ⟶ Z}
+  条件: {X Y Z : 有界分配格} {f : X ⟶ Y} {g : Y ⟶ Z}
   结论: (f ≫ g : X -> Z) = g ∘ f
   证明: rfl
 
@@ -297,7 +297,7 @@ lemma forget_map
 
 中文:
 引理 forget_map
-  条件: {X Y : BddDistLat} (f : X ⟶ Y)
+  条件: {X Y : 有界分配格} (f : X ⟶ Y)
   证明: rfl
 
 @[ext]
@@ -319,7 +319,7 @@ lemma ext
 
 中文:
 引理 ext
-  条件: {X Y : BddDistLat} {f g : X ⟶ Y} (w : 对任意 x : X, f x = g x)
+  条件: {X Y : 有界分配格} {f g : X ⟶ Y} (w : 对任意 x : X, f x = g x)
   结论: f = g
   证明: ConcreteCategory.hom_ext _ _ w
 
@@ -342,8 +342,8 @@ lemma hom_id
 
 中文:
 引理 hom_id
-  条件: {X : BddDistLat}
-  结论: (𝟙 X : X ⟶ X).hom = BoundedLatticeHom.id _
+  条件: {X : 有界分配格}
+  结论: (𝟙 X : X ⟶ X).hom = 有界格态射.id _
   证明: rfl
 -/
 lemma hom_id {X : BddDistLat} : (𝟙 X : X ⟶ X).hom = BoundedLatticeHom.id _ := rfl
@@ -360,7 +360,7 @@ lemma id_apply
 
 中文:
 引理 id_apply
-  条件: (X : BddDistLat) (x : X)
+  条件: (X : 有界分配格) (x : X)
   证明: by simp
 
 @[simp]
@@ -379,7 +379,7 @@ lemma hom_comp
 
 中文:
 引理 hom_comp
-  条件: {X Y Z : BddDistLat} (f : X ⟶ Y) (g : Y ⟶ Z)
+  条件: {X Y Z : 有界分配格} (f : X ⟶ Y) (g : Y ⟶ Z)
   证明: rfl
 -/
 lemma hom_comp {X Y Z : BddDistLat} (f : X ⟶ Y) (g : Y ⟶ Z) :
@@ -397,7 +397,7 @@ lemma comp_apply
 
 中文:
 引理 comp_apply
-  条件: {X Y Z : BddDistLat} (f : X ⟶ Y) (g : Y ⟶ Z) (x : X)
+  条件: {X Y Z : 有界分配格} (f : X ⟶ Y) (g : Y ⟶ Z) (x : X)
   证明: by simp
 
 @[ext]
@@ -419,7 +419,7 @@ lemma hom_ext
 
 中文:
 引理 hom_ext
-  条件: {X Y : BddDistLat} {f g : X ⟶ Y} (hf : f.hom = g.hom)
+  条件: {X Y : 有界分配格} {f g : X ⟶ Y} (hf : f.hom = g.hom)
   结论: f = g
   证明: Hom.ext hf
 
@@ -443,7 +443,7 @@ lemma hom_ofHom
 
 中文:
 引理 hom_ofHom
-  结论: {X Y : 类型u} [DistribLattice X] [BoundedOrder X] [DistribLattice Y]
+  结论: {X Y : 类型u} [Distrib格 X] [有界序 X] [Distrib格 Y]
   证明: rfl
 
 @[simp]
@@ -466,7 +466,7 @@ lemma ofHom_hom
 
 中文:
 引理 ofHom_hom
-  条件: {X Y : BddDistLat} (f : X ⟶ Y)
+  条件: {X Y : 有界分配格} (f : X ⟶ Y)
   证明: rfl
 
 @[simp]
@@ -487,7 +487,7 @@ lemma ofHom_id
 
 中文:
 引理 ofHom_id
-  条件: {X : 类型u} [DistribLattice X] [BoundedOrder X]
+  条件: {X : 类型u} [Distrib格 X] [有界序 X]
   证明: rfl
 
 @[simp]
@@ -506,7 +506,7 @@ lemma ofHom_comp
 
 中文:
 引理 ofHom_comp
-  结论: {X Y Z : 类型u} [DistribLattice X] [BoundedOrder X] [DistribLattice Y]
+  结论: {X Y Z : 类型u} [Distrib格 X] [有界序 X] [Distrib格 Y]
   证明: rfl
 -/
 lemma ofHom_comp {X Y Z : Type u} [DistribLattice X] [BoundedOrder X] [DistribLattice Y]
@@ -525,7 +525,7 @@ lemma ofHom_apply
 
 中文:
 引理 ofHom_apply
-  结论: {X Y : 类型u} [DistribLattice X] [BoundedOrder X] [DistribLattice Y]
+  结论: {X Y : 类型u} [Distrib格 X] [有界序 X] [Distrib格 Y]
   证明: rfl
 -/
 lemma ofHom_apply {X Y : Type u} [DistribLattice X] [BoundedOrder X] [DistribLattice Y]
@@ -545,7 +545,7 @@ lemma inv_hom_apply
 
 中文:
 引理 inv_hom_apply
-  条件: {X Y : BddDistLat} (e : X ≅ Y) (x : X)
+  条件: {X Y : 有界分配格} (e : X ≅ Y) (x : X)
   结论: e.inv (e.hom x) = x
   证明: by
   simp
@@ -565,7 +565,7 @@ lemma hom_inv_apply
 
 中文:
 引理 hom_inv_apply
-  条件: {X Y : BddDistLat} (e : X ≅ Y) (s : Y)
+  条件: {X Y : 有界分配格} (e : X ≅ Y) (s : Y)
   结论: e.hom (e.inv s) = s
   证明: by
   simp
@@ -583,7 +583,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited BddDistLat
+  签名: 可居 有界分配格
   定义体: ⟨of PUnit⟩
 -/
 instance : Inhabited BddDistLat :=
@@ -601,7 +601,7 @@ definition toBddLat
 
 中文:
 定义 toBddLat
-  签名: (X : BddDistLat)
+  签名: (X : 有界分配格)
   定义体: .of X
 
 @[simp]
@@ -621,7 +621,7 @@ theorem coe_toBddLat
 
 中文:
 定理 coe_toBddLat
-  条件: (X : BddDistLat)
+  条件: (X : 有界分配格)
   结论: ↥X.toBddLat = ↥X
   证明: rfl
 -/
@@ -639,7 +639,7 @@ instance hasForgetToDistLat
 
 中文:
 实例 hasForgetToDistLat
-  签名: : HasForget₂ BddDistLat DistLat where
+  签名: : 有Forget₂ 有界分配格 分配格 where
   定义体: .of X
   forget₂.map f := DistLat.ofHom f.hom.toLatticeHom
 -/
@@ -658,7 +658,7 @@ instance hasForgetToBddLat
 
 中文:
 实例 hasForgetToBddLat
-  签名: : HasForget₂ BddDistLat BddLat where
+  签名: : 有Forget₂ 有界分配格 有界格 where
   定义体: .of X
   forget₂.map f := BddLat.ofHom f.hom
 -/
@@ -695,8 +695,8 @@ definition Iso.mk
   inv := BddDistLat.ofHom e.symm
 
 中文:
-定义 Iso.mk
-  签名: {α β : BddDistLat.{u}} (e : α ≃o β)
+定义 同构.mk
+  签名: {α β : 有界分配格.{u}} (e : α ≃o β)
   定义体: BddDistLat.ofHom e
   inv := BddDistLat.ofHom e.symm
 -/
@@ -717,7 +717,7 @@ definition dual
 
 中文:
 定义 dual
-  签名: : BddDistLat ⥤ BddDistLat where
+  签名: : 有界分配格 ⥤ 有界分配格 where
   定义体: of Xᵒᵈ
   map f := BddDistLat.ofHom f.hom.dual
 -/
@@ -740,7 +740,7 @@ counitIso := NatIso.ofComponents fun X => Iso.mk OrderIso.dualDual X
 
 中文:
 定义 dualEquiv
-  签名: : BddDistLat ≌ BddDistLat where
+  签名: : 有界分配格 ≌ 有界分配格 where
   定义体: dual
   inverse := dual
 unitIso := NatIso.ofComponents fun X => Iso.mk OrderIso.dualDual X

@@ -192,7 +192,7 @@ structure Hom
     - comm : R.w ≫ Φ.functor.map f = R'.w  [default: by cat_disch]
 
 中文:
-结构 Hom
+结构 态射
   参数: (R R' : Φ.RightResolution X₂)
   公理与运算 (2 个):
     - f : R.X₁ ⟶ R'.X₁
@@ -218,7 +218,7 @@ definition Hom.id
   body: 𝟙 _
 
 中文:
-定义 Hom.id
+定义 态射.id
   签名: (R : Φ.RightResolution X₂)
   定义体: 𝟙 _
 -/
@@ -236,7 +236,7 @@ definition Hom.comp
   body: φ.f ≫ ψ.f
 
 中文:
-定义 Hom.comp
+定义 态射.comp
   签名: {R R' R'' : Φ.RightResolution X₂}
   定义体: φ.f ≫ ψ.f
 -/
@@ -259,7 +259,7 @@ instance :
 
 中文:
 实例 :
-  签名: Category (Φ.RightResolution X₂)
+  签名: 范畴 (Φ.RightResolution X₂)
   定义体: Hom
   id := Hom.id
   comp := Hom.comp
@@ -286,7 +286,7 @@ lemma id_f
 中文:
 引理 id_f
   条件: (R : Φ.RightResolution X₂)
-  结论: Hom.f (𝟙 R) = 𝟙 R.X₁
+  结论: 态射.f (𝟙 R) = 𝟙 R.X₁
   证明: rfl
 
 @[simp, reassoc]
@@ -353,7 +353,7 @@ structure Hom
     - comm : Φ.functor.map f ≫ L'.w = L.w  [default: by cat_disch]
 
 中文:
-结构 Hom
+结构 态射
   参数: (L L' : Φ.LeftResolution X₂)
   公理与运算 (2 个):
     - f : L.X₁ ⟶ L'.X₁
@@ -379,7 +379,7 @@ definition Hom.id
   body: 𝟙 _
 
 中文:
-定义 Hom.id
+定义 态射.id
   签名: (L : Φ.LeftResolution X₂)
   定义体: 𝟙 _
 -/
@@ -397,7 +397,7 @@ definition Hom.comp
   body: φ.f ≫ ψ.f
 
 中文:
-定义 Hom.comp
+定义 态射.comp
   签名: {L L' L'' : Φ.LeftResolution X₂}
   定义体: φ.f ≫ ψ.f
 -/
@@ -420,7 +420,7 @@ instance :
 
 中文:
 实例 :
-  签名: Category (Φ.LeftResolution X₂)
+  签名: 范畴 (Φ.LeftResolution X₂)
   定义体: Hom
   id := Hom.id
   comp := Hom.comp
@@ -447,7 +447,7 @@ lemma id_f
 中文:
 引理 id_f
   条件: (L : Φ.LeftResolution X₂)
-  结论: Hom.f (𝟙 L) = 𝟙 L.X₁
+  结论: 态射.f (𝟙 L) = 𝟙 L.X₁
   证明: rfl
 
 @[simp, reassoc]
@@ -853,7 +853,7 @@ lemma essSurj_of_hasRightResolutions
 中文:
 引理 essSurj_of_hasRightResolutions
   条件: [Φ.HasRightResolutions]
-  结论: (Φ.functor ⋙ L₂).EssSurj where
+  结论: (Φ.functor ⋙ L₂).本质满射 where
   证明: by
     have := Localization.essSurj L₂ W₂
     have R : Φ.RightResolution (L₂.objPreimage X₂) := Classical.arbitrary _
@@ -927,7 +927,7 @@ lemma essSurj_of_hasLeftResolutions
 中文:
 引理 essSurj_of_hasLeftResolutions
   条件: [Φ.HasLeftResolutions]
-  结论: (Φ.functor ⋙ L₂).EssSurj where
+  结论: (Φ.functor ⋙ L₂).本质满射 where
   证明: by
     have := Localization.essSurj L₂ W₂
     have L : Φ.LeftResolution (L₂.objPreimage X₂) := Classical.arbitrary _

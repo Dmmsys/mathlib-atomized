@@ -82,7 +82,7 @@ definition weightedSMul
 
 中文:
 定义 weightedSMul
-  签名: {_ : MeasurableSpace α} (μ : Measure α) (s : Set α)
+  签名: {_ : 可测空间 α} (μ : 测度 α) (s : 集合 α)
   定义体: μ.real s • ContinuousLinearMap.id Real F
 
 Depends on / 依赖: ContinuousLinearMap, ContinuousLinearMap.id
@@ -102,7 +102,7 @@ theorem weightedSMul_apply
 
 中文:
 定理 weightedSMul_apply
-  条件: {m : MeasurableSpace α} (μ : Measure α) (s : Set α) (x : F)
+  条件: {m : 可测空间 α} (μ : 测度 α) (s : 集合 α) (x : F)
   证明: by simp [weightedSMul]
 
 @[simp]
@@ -125,7 +125,7 @@ theorem weightedSMul_zero_measure
 
 中文:
 定理 weightedSMul_zero_measure
-  条件: {m : MeasurableSpace α}
+  条件: {m : 可测空间 α}
   证明: by ext1; simp [weightedSMul]
 
 @[simp]
@@ -146,7 +146,7 @@ theorem weightedSMul_empty
 
 中文:
 定理 weightedSMul_empty
-  条件: {m : MeasurableSpace α} (μ : Measure α)
+  条件: {m : 可测空间 α} (μ : 测度 α)
   证明: by ext1 x; rw [weightedSMul_apply]; simp
 
 Depends on / 依赖: weightedSMul_apply
@@ -168,7 +168,7 @@ theorem weightedSMul_add_measure
 
 中文:
 定理 weightedSMul_add_measure
-  结论: {m : MeasurableSpace α} (μ ν : Measure α) {s : Set α}
+  结论: {m : 可测空间 α} (μ ν : 测度 α) {s : 集合 α}
   证明: by
   ext1 x
   push_cast
@@ -197,7 +197,7 @@ theorem weightedSMul_smul_measure
 
 中文:
 定理 weightedSMul_smul_measure
-  条件: {m : MeasurableSpace α} (μ : Measure α) (c : 实数>=0∞) {s : Set α}
+  条件: {m : 可测空间 α} (μ : 测度 α) (c : 实数>=0∞) {s : 集合 α}
   证明: by
   ext1 x
   simp [weightedSMul_apply, smul_smul]
@@ -220,7 +220,7 @@ theorem weightedSMul_congr
 
 中文:
 定理 weightedSMul_congr
-  条件: (s t : Set α) (hst : μ s = μ t)
+  条件: (s t : 集合 α) (hst : μ s = μ t)
   证明: by
   ext1 x; simp_rw [weightedSMul_apply, measureReal_def]; congr 2
 
@@ -242,7 +242,7 @@ theorem weightedSMul_null
 
 中文:
 定理 weightedSMul_null
-  条件: {s : Set α} (h_zero : μ s = 0)
+  条件: {s : 集合 α} (h_zero : μ s = 0)
   结论: (weightedSMul μ s : F ->L[实数] F) = 0
   证明: by
   ext1 x; rw [weightedSMul_apply, measureReal_def, h_zero]; simp
@@ -266,7 +266,7 @@ theorem weightedSMul_union'
 
 中文:
 定理 weightedSMul_union'
-  结论: (s t : Set α) (ht : MeasurableSet t) (hs_finite : μ s != ∞)
+  结论: (s t : 集合 α) (ht : 可测集 t) (hs_finite : μ s != ∞)
   证明: by
   ext1 x
   simp_rw [add_apply, weightedSMul_apply, measureReal_union hdisj ht, add_smul]
@@ -292,7 +292,7 @@ theorem weightedSMul_union
 
 中文:
 定理 weightedSMul_union
-  结论: (s t : Set α) (_hs : MeasurableSet s) (ht : MeasurableSet t)
+  结论: (s t : 集合 α) (_hs : 可测集 s) (ht : 可测集 t)
   证明: weightedSMul_union' s t ht hs_finite ht_finite hdisj
 
 Depends on / 依赖: hs_finite, ht_finite, weightedSMul_union
@@ -313,7 +313,7 @@ theorem weightedSMul_smul
 
 中文:
 定理 weightedSMul_smul
-  结论: [SMul 𝕜 F] [SMulCommClass 实数 𝕜 F] (c : 𝕜)
+  结论: [标量乘法 𝕜 F] [标量交换类 实数 𝕜 F] (c : 𝕜)
   证明: by
   simp_rw [weightedSMul_apply, smul_comm]
 
@@ -339,7 +339,7 @@ theorem norm_weightedSMul_le
 
 中文:
 定理 norm_weightedSMul_le
-  条件: (s : Set α)
+  条件: (s : 集合 α)
   结论: ‖(weightedSMul μ s : F ->L[实数] F)‖ <= μ.real s
   证明: calc
     ‖(weightedSMul μ s : F ->L[Real] F)‖ = ‖μ.real s‖ * ‖ContinuousLinearMap.id Real F‖ :=
@@ -369,7 +369,7 @@ theorem dominatedFinMeasAdditive_weightedSMul
 
 中文:
 定理 dominatedFinMeasAdditive_weightedSMul
-  条件: {_ : MeasurableSpace α} (μ : Measure α)
+  条件: {_ : 可测空间 α} (μ : 测度 α)
   证明: ⟨weightedSMul_union, fun s _ _ => (norm_weightedSMul_le s).trans (one_mul _).symm.le⟩
 
 Depends on / 依赖: norm_weightedSMul_le, one_mul, symm.le, weightedSMul_union
@@ -390,7 +390,7 @@ theorem weightedSMul_nonneg
 
 中文:
 定理 weightedSMul_nonneg
-  结论: [PartialOrder F] [IsOrderedModule 实数 F]
+  结论: [偏序 F] [是Ordered模 实数 F]
   证明: by
   simp only [weightedSMul, _root_.id, coe_id', smul_apply]
   exact smul_nonneg toReal_nonneg hx
@@ -440,7 +440,7 @@ definition negPart
 
 中文:
 定义 negPart
-  签名: [Neg E] (f : α ->ₛ E)
+  签名: [取负 E] (f : α ->ₛ E)
   定义体: posPart (-f)
 
 Depends on / 依赖: posPart
@@ -550,7 +550,7 @@ definition integral
 
 中文:
 定义 integral
-  签名: {_ : MeasurableSpace α} (μ : Measure α) (f : α ->ₛ F)
+  签名: {_ : 可测空间 α} (μ : 测度 α) (f : α ->ₛ F)
   定义体: f.setToSimpleFunc (weightedSMul μ)
 
 Depends on / 依赖: f.setToSimpleFunc, setToSimpleFunc, weightedSMul
@@ -568,7 +568,7 @@ theorem integral_def
 
 中文:
 定理 integral_def
-  条件: {_ : MeasurableSpace α} (μ : Measure α) (f : α ->ₛ F)
+  条件: {_ : 可测空间 α} (μ : 测度 α) (f : α ->ₛ F)
   证明: rfl
 -/
 theorem integral_def {_ : MeasurableSpace α} (μ : Measure α) (f : α ->ₛ F) :
@@ -585,7 +585,7 @@ theorem integral_eq
 
 中文:
 定理 integral_eq
-  条件: {m : MeasurableSpace α} (μ : Measure α) (f : α ->ₛ F)
+  条件: {m : 可测空间 α} (μ : 测度 α) (f : α ->ₛ F)
   证明: by
   simp [integral, setToSimpleFunc, weightedSMul_apply]
 
@@ -606,7 +606,7 @@ theorem integral_eq_sum_filter
 
 中文:
 定理 integral_eq_sum_filter
-  结论: [DecidablePred fun x : F => x != 0] {m : MeasurableSpace α}
+  结论: [DecidablePred fun x : F => x != 0] {m : 可测空间 α}
   证明: by
   simp_rw [integral_def, setToSimpleFunc_eq_sum_filter, weightedSMul_apply]
 
@@ -635,7 +635,7 @@ theorem integral_eq_sum_of_subset
 
 中文:
 定理 integral_eq_sum_of_subset
-  结论: [DecidablePred fun x : F => x != 0] {f : α ->ₛ F} {s : Finset F}
+  结论: [DecidablePred fun x : F => x != 0] {f : α ->ₛ F} {s : 有限集 F}
   证明: by
   rw [SimpleFunc.integral_eq_sum_filter]; rw [Finset.sum_subset hs]
   rintro x - hx; rw [Finset.mem_filter, not_and_or, Ne, Classical.not_not] at hx
@@ -674,7 +674,7 @@ integral_eq_sum_of_subset (filter_subset _ _).trans (range_const_subset _ _)
 
 中文:
 定理 integral_const
-  条件: {m : MeasurableSpace α} (μ : Measure α) (y : F)
+  条件: {m : 可测空间 α} (μ : 测度 α) (y : F)
   证明: by
   classical
   calc
@@ -711,7 +711,7 @@ theorem integral_piecewise_zero
 
 中文:
 定理 integral_piecewise_zero
-  结论: {m : MeasurableSpace α} (f : α ->ₛ F) (μ : Measure α) {s : Set α}
+  结论: {m : 可测空间 α} (f : α ->ₛ F) (μ : 测度 α) {s : 集合 α}
   证明: by
   classical
   refine (integral_eq_sum_of_subset ?_).trans
@@ -747,7 +747,7 @@ theorem map_integral
 
 中文:
 定理 map_integral
-  条件: (f : α ->ₛ E) (g : E -> F) (hf : 整数egrable f μ) (hg : g 0 = 0)
+  条件: (f : α ->ₛ E) (g : E -> F) (hf : 可积 f μ) (hg : g 0 = 0)
   证明: map_setToSimpleFunc _ weightedSMul_union hf hg
 
 Depends on / 依赖: map_setToSimpleFunc, weightedSMul_union
@@ -771,7 +771,7 @@ theorem integral_eq_lintegral'
 
 中文:
 定理 integral_eq_lintegral'
-  结论: {f : α ->ₛ E} {g : E -> 实数>=0∞} (hf : 整数egrable f μ) (hg0 : g 0 = 0)
+  结论: {f : α ->ₛ E} {g : E -> 实数>=0∞} (hf : 可积 f μ) (hg0 : g 0 = 0)
   证明: by
   have hf' : f.FinMeasSupp μ := integrable_iff_finMeasSupp.1 hf
   simp only [← map_apply g f, lintegral_eq_lintegral]
@@ -807,7 +807,7 @@ theorem integral_congr
 
 中文:
 定理 integral_congr
-  条件: {f g : α ->ₛ E} (hf : 整数egrable f μ) (h : f =ᵐ[μ] g)
+  条件: {f g : α ->ₛ E} (hf : 可积 f μ) (h : f =ᵐ[μ] g)
   证明: setToSimpleFunc_congr (weightedSMul μ) (fun _ _ => weightedSMul_null) weightedSMul_union hf h
 
 Depends on / 依赖: setToSimpleFunc_congr, weightedSMul, weightedSMul_null, weightedSMul_union
@@ -830,7 +830,7 @@ theorem integral_eq_lintegral
 
 中文:
 定理 integral_eq_lintegral
-  条件: {f : α ->ₛ 实数} (hf : 整数egrable f μ) (h_pos : 0 <=ᵐ[μ] f)
+  条件: {f : α ->ₛ 实数} (hf : 可积 f μ) (h_pos : 0 <=ᵐ[μ] f)
   证明: by
   have : f =ᵐ[μ] f.map (ENNReal.toReal ∘ ENNReal.ofReal) :=
     h_pos.mono fun a h => (ENNReal.toReal_ofReal h).symm
@@ -856,7 +856,7 @@ theorem integral_add
 
 中文:
 定理 integral_add
-  条件: {f g : α ->ₛ E} (hf : 整数egrable f μ) (hg : 整数egrable g μ)
+  条件: {f g : α ->ₛ E} (hf : 可积 f μ) (hg : 可积 g μ)
   证明: setToSimpleFunc_add _ weightedSMul_union hf hg
 
 Depends on / 依赖: setToSimpleFunc_add, weightedSMul_union
@@ -876,7 +876,7 @@ theorem integral_neg
 
 中文:
 定理 integral_neg
-  条件: {f : α ->ₛ E} (hf : 整数egrable f μ)
+  条件: {f : α ->ₛ E} (hf : 可积 f μ)
   结论: integral μ (-f) = -integral μ f
   证明: setToSimpleFunc_neg _ weightedSMul_union hf
 
@@ -895,7 +895,7 @@ theorem integral_sub
 
 中文:
 定理 integral_sub
-  条件: {f g : α ->ₛ E} (hf : 整数egrable f μ) (hg : 整数egrable g μ)
+  条件: {f g : α ->ₛ E} (hf : 可积 f μ) (hg : 可积 g μ)
   证明: setToSimpleFunc_sub _ weightedSMul_union hf hg
 
 Depends on / 依赖: setToSimpleFunc_sub, weightedSMul_union
@@ -914,7 +914,7 @@ theorem integral_smul
 
 中文:
 定理 integral_smul
-  结论: [DistribSMul 𝕜 E] [SMulCommClass 实数 𝕜 E]
+  结论: [分配标量乘法 𝕜 E] [标量交换类 实数 𝕜 E]
   证明: setToSimpleFunc_smul _ weightedSMul_union weightedSMul_smul c hf
 
 Depends on / 依赖: setToSimpleFunc_smul, weightedSMul_smul, weightedSMul_union
@@ -938,7 +938,7 @@ theorem norm_setToSimpleFunc_le_integral_norm
 
 中文:
 定理 norm_setToSimpleFunc_le_integral_norm
-  结论: (T : Set α -> E ->L[实数] F) {C : 实数}
+  结论: (T : 集合 α -> E ->L[实数] F) {C : 实数}
   证明: calc
     ‖f.setToSimpleFunc T‖ <= C * ∑ x in f.range, μ.real (f ⁻¹' {x}) * ‖x‖ :=
       norm_setToSimpleFunc_le_sum_mul_norm_of_integrable T hT_norm f hf
@@ -968,7 +968,7 @@ theorem norm_integral_le_integral_norm
 
 中文:
 定理 norm_integral_le_integral_norm
-  条件: (f : α ->ₛ E) (hf : 整数egrable f μ)
+  条件: (f : α ->ₛ E) (hf : 可积 f μ)
   证明: by
   refine (norm_setToSimpleFunc_le_integral_norm _ (fun s _ _ => ?_) hf).trans (one_mul _).le
   exact (norm_weightedSMul_le s).trans (one_mul _).symm.le
@@ -995,7 +995,7 @@ theorem integral_add_measure
 
 中文:
 定理 integral_add_measure
-  条件: {ν} (f : α ->ₛ E) (hf : 整数egrable f (μ + ν))
+  条件: {ν} (f : α ->ₛ E) (hf : 可积 f (μ + ν))
   证明: by
   simp_rw [integral_def]
   refine setToSimpleFunc_add_left'
@@ -1079,7 +1079,7 @@ lemma integral_mono
 
 中文:
 引理 integral_mono
-  条件: {f g : α ->ₛ F} (h : f <=ᵐ[μ] g) (hf : 整数egrable f μ) (hg : 整数egrable g μ)
+  条件: {f g : α ->ₛ F} (h : f <=ᵐ[μ] g) (hf : 可积 f μ) (hg : 可积 g μ)
   证明: by
   rw [← sub_nonneg]; rw [← integral_sub hg hf]
   rw [← sub_nonneg_ae] at h
@@ -1115,7 +1115,7 @@ lemma integral_mono_measure
 
 中文:
 引理 integral_mono_measure
-  条件: {ν} {f : α ->ₛ F} (hf : 0 <=ᵐ[ν] f) (hμν : μ <= ν) (hfν : 整数egrable f ν)
+  条件: {ν} {f : α ->ₛ F} (hf : 0 <=ᵐ[ν] f) (hμν : μ <= ν) (hfν : 可积 f ν)
   证明: by
   simp only [integral_eq]
   apply Finset.sum_le_sum
@@ -1474,8 +1474,8 @@ theorem norm_Integral_le_one
     simpa [one_mul] using norm_integral_le_norm f
 
 中文:
-定理 norm_Integral_le_one
-  结论: ‖整数egral‖ <= 1
+定理 norm_整数egral_le_one
+  结论: ‖积分‖ <= 1
   证明: LinearMap.mkContinuous_norm_le _ zero_le_one fun f => by
     simpa [one_mul] using norm_integral_le_norm f
 
@@ -1941,7 +1941,7 @@ theorem norm_Integral_le_one
   proof: norm_setToL1_le (dominatedFinMeasAdditive_weightedSMul μ) zero_le_one
 
 中文:
-定理 norm_Integral_le_one
+定理 norm_整数egral_le_one
   结论: ‖integralCLM (α := α) (E := E) (μ := μ)‖ <= 1
   证明: norm_setToL1_le (dominatedFinMeasAdditive_weightedSMul μ) zero_le_one
 -/
@@ -1957,7 +1957,7 @@ theorem nnnorm_Integral_le_one
   proof: norm_Integral_le_one
 
 中文:
-定理 nnnorm_Integral_le_one
+定理 nnnorm_整数egral_le_one
   结论: ‖integralCLM (α := α) (E := E) (μ := μ)‖₊ <= 1
   证明: norm_Integral_le_one
 -/
@@ -2033,7 +2033,7 @@ theorem continuous_integral
 
 中文:
 定理 continuous_integral
-  结论: Continuous fun f : α ->₁[μ] E => integral f
+  结论: 连续 fun f : α ->₁[μ] E => integral f
   证明: by
   simp only [integral]
   exact L1.integralCLM.continuous

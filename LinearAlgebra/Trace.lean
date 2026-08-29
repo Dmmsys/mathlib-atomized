@@ -73,7 +73,7 @@ theorem traceAux_def
 
 中文:
 定理 traceAux_def
-  条件: (b : Basis ι R M) (f : M ->ₗ[R] M)
+  条件: (b : 基 ι R M) (f : M ->ₗ[R] M)
   证明: rfl
 -/
 theorem traceAux_def (b : Basis ι R M) (f : M ->ₗ[R] M) :
@@ -156,7 +156,7 @@ theorem trace_eq_matrix_trace_of_finset
 
 中文:
 定理 trace_eq_matrix_trace_of_finset
-  条件: {s : Finset M} (b : Basis s R M) (f : M ->ₗ[R] M)
+  条件: {s : 有限集 M} (b : 基 s R M) (f : M ->ₗ[R] M)
   证明: by
   have : exists s : Finset M, Nonempty (Basis s R M) := ⟨s, ⟨b⟩⟩
   rw [trace]; rw [dif_pos this]; rw [← traceAux_def]
@@ -207,8 +207,8 @@ theorem _root_.Matrix.trace_toLin_eq
   simp [trace_eq_matrix_trace R b]
 
 中文:
-定理 _root_.Matrix.trace_toLin_eq
-  条件: (A : Matrix ι ι R) (b : Basis ι R M)
+定理 _root_.矩阵.trace_toLin_eq
+  条件: (A : 矩阵 ι ι R) (b : 基 ι R M)
   证明: by
   simp [trace_eq_matrix_trace R b]
 -/
@@ -226,8 +226,8 @@ theorem _root_.Matrix.trace_toLin'_eq
   proof: A.trace_toLin_eq (Pi.basisFun R ι)
 
 中文:
-定理 _root_.Matrix.trace_toLin'_eq
-  条件: (A : Matrix ι ι R)
+定理 _root_.矩阵.trace_toLin'_eq
+  条件: (A : 矩阵 ι ι R)
   证明: A.trace_toLin_eq (Pi.basisFun R ι)
 
 Depends on / 依赖: Infinite, Infinite.of_injective, cg_of_countable, dlo_isExtensionPair, embedding_from_cg, f.injective, injective, of_injective, orderStructure
@@ -327,7 +327,7 @@ lemma trace_lie_mul_eq
 
 中文:
 引理 trace_lie_mul_eq
-  结论: {R M : 类型} [CommRing R] [AddCommGroup M] [Module R M]
+  结论: {R M : 类型} [交换环 R] [加法交换群 M] [模 R M]
   证明: by
   simp only [Ring.lie_def, sub_mul, mul_sub, map_sub, mul_assoc]
   rw [trace_mul_comm R g (f * h)]; rw [mul_assoc]
@@ -382,7 +382,7 @@ lemma trace_lie
 
 中文:
 引理 trace_lie
-  条件: {R M : 类型} [CommRing R] [AddCommGroup M] [Module R M] (f g : Module.End R M)
+  条件: {R M : 类型} [交换环 R] [加法交换群 M] [模 R M] (f g : 模.End R M)
   证明: by
   rw [Ring.lie_def]; rw [map_sub]; rw [trace_mul_comm]
   exact sub_self _
@@ -419,7 +419,7 @@ theorem trace_eq_contract_of_basis
 
 中文:
 定理 trace_eq_contract_of_basis
-  条件: [Finite ι] (b : Basis ι R M)
+  条件: [有限 ι] (b : 基 ι R M)
   证明: by
   classical
     cases nonempty_fintype ι
@@ -455,7 +455,7 @@ theorem trace_eq_contract_of_basis'
 
 中文:
 定理 trace_eq_contract_of_basis'
-  条件: [Fintype ι] [DecidableEq ι] (b : Basis ι R M)
+  条件: [有限类型 ι] [DecidableEq ι] (b : 基 ι R M)
   证明: by
   simp [LinearEquiv.eq_comp_toLinearMap_symm, trace_eq_contract_of_basis b]
 
@@ -484,7 +484,7 @@ theorem trace_eq_contract
 
 中文:
 定理 trace_eq_contract
-  结论: LinearMap.trace R M ∘ₗ dualTensorHom R M M = contractLeft R M
+  结论: 线性映射.trace R M ∘ₗ dualTensorHom R M M = contractLeft R M
   证明: trace_eq_contract_of_basis (Module.Free.chooseBasis R M)
 
 @[simp]
@@ -506,7 +506,7 @@ theorem trace_eq_contract_apply
 
 中文:
 定理 trace_eq_contract_apply
-  条件: (x : Module.Dual R M otimes[R] M)
+  条件: (x : 模.对偶 R M otimes[R] M)
   证明: by
   rw [← comp_apply]; rw [trace_eq_contract]
 
@@ -610,7 +610,7 @@ theorem trace_transpose
 
 中文:
 定理 trace_transpose
-  结论: trace R (Module.Dual R M) ∘ₗ Module.Dual.transpose = trace R M
+  结论: trace R (模.对偶 R M) ∘ₗ 模.对偶.transpose = trace R M
   证明: by
   let e := dualTensorHomEquiv R M M
   have h : Function.Surjective e.toLinearMap := e.surjective
@@ -983,7 +983,7 @@ theorem trace_map
 
 中文:
 定理 trace_map
-  结论: {K V W : 类型} [Field K] [AddCommGroup V] [Module K V] [AddCommGroup W]
+  结论: {K V W : 类型} [域 K] [加法交换群 V] [模 K V] [加法交换群 W]
   证明: have ⟨_, h⟩ := (AlgEquivClass.toAlgEquiv f).eq_linearEquivConjAlgEquiv
   (by simpa using congr($h x)) ▸ trace_conj' _ _
 -/
@@ -1005,8 +1005,8 @@ theorem _root_.Matrix.trace_map
       (AlgEquivClass.toAlgEquiv f)).trans Matrix.toLinAlgEquiv') x.toLin'
 
 中文:
-定理 _root_.Matrix.trace_map
-  结论: {K m n : 类型} [Field K] [Fintype m] [Fintype n]
+定理 _root_.矩阵.trace_map
+  结论: {K m n : 类型} [域 K] [有限类型 m] [有限类型 n]
   证明: by
   simpa [toMatrixAlgEquiv', Matrix.toLinAlgEquiv'] using
     LinearMap.trace_map ((Matrix.toLinAlgEquiv'.symm.trans
@@ -1031,8 +1031,8 @@ theorem _root_.Matrix.trace_map'
   · simp
 
 中文:
-定理 _root_.Matrix.trace_map'
-  结论: {K m F : 类型} [Field K] [Fintype m] [DecidableEq m]
+定理 _root_.矩阵.trace_map'
+  结论: {K m F : 类型} [域 K] [有限类型 m] [DecidableEq m]
   证明: by
   by_cases! Nonempty m
   · exact Matrix.trace_map (AlgEquiv.ofBijective _ (AlgHomClass.toAlgHom f).bijective) x
@@ -1055,8 +1055,8 @@ theorem IsProj.trace
   rw [h.eq_conj_prodMap]; rw [trace_conj']; rw [trace_prodMap']; rw [trace_id]; rw [map_zero]; rw [add_zero]
 
 中文:
-定理 IsProj.trace
-  结论: {p : Submodule R M} {f : M ->ₗ[R] M} (h : IsProj p f) [Module.Free R p]
+定理 是Proj.trace
+  结论: {p : 子模 R M} {f : M ->ₗ[R] M} (h : 是Proj p f) [模.自由 R p]
   证明: by
   rw [h.eq_conj_prodMap]; rw [trace_conj']; rw [trace_prodMap']; rw [trace_id]; rw [map_zero]; rw [add_zero]
 
@@ -1081,7 +1081,7 @@ alias ⟨IsIdempotentElem.eq_zero_of_trace_eq_zero, _⟩ := IsIdempotentElem.tra
 
 中文:
 定理 IsIdempotentElem.trace_eq_zero_iff
-  结论: {R : 类型} [CommRing R] [CharZero R]
+  结论: {R : 类型} [交换环 R] [特征零 R]
   证明: by
   rw [he.isProj_range.trace]; rw [Nat.cast_eq_zero]; rw [finrank_eq_zero_iff_of_free]; rw [Submodule.subsingleton_iff_eq_bot]; rw [range_eq_bot]
 
@@ -1118,7 +1118,7 @@ lemma isNilpotent_trace_of_isNilpotent
 
 中文:
 引理 isNilpotent_trace_of_isNilpotent
-  条件: {f : M ->ₗ[R] M} (hf : IsNilpotent f)
+  条件: {f : M ->ₗ[R] M} (hf : 是幂零 f)
   证明: by
   by_cases H : exists s : Finset M, Nonempty (Basis s R M)
   swap
@@ -1160,7 +1160,7 @@ lemma trace_comp_eq_mul_of_commute_of_isNilpotent
 
 中文:
 引理 trace_comp_eq_mul_of_commute_of_isNilpotent
-  结论: [IsReduced R] {f g : Module.End R M}
+  结论: [是既约 R] {f g : 模.End R M}
   证明: by
   set n := g - algebraMap R _ μ
   replace hg : trace R M (f ∘ₗ n) = 0 := by
@@ -1200,7 +1200,7 @@ lemma trace_baseChange
 
 中文:
 引理 trace_baseChange
-  结论: [Module.Free R M] [Module.Finite R M]
+  结论: [模.自由 R M] [模.有限 R M]
   证明: by
   let b := Module.Free.chooseBasis R M
   let b' := Algebra.TensorProduct.basis A b
@@ -1235,8 +1235,8 @@ lemma Module.Free.bijective_algebraMap_of_finrank_eq_one
   let b : Ba
 
 中文:
-引理 Module.Free.bijective_algebraMap_of_finrank_eq_one
-  结论: {R S : 类型} [CommRing R] [Ring S]
+引理 模.自由.bijective_algebraMap_of_finrank_eq_one
+  结论: {R S : 类型} [交换环 R] [环 S]
   证明: by
   have : Module.Finite R S := finite_of_finrank_pos (by grind)
   have : Free R (Module.End R S) := .of_equiv (dualTensorHomEquiv R S S)
